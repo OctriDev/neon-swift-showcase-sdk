@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Project domain models
+/// Project domain models
 /// Typed representation of the `Project` API schema.
 public struct Project: Codable {
     /// Deprecated: always returns 0. Use the consumption history v2 endpoints (`/consumption_history/v2/projects`,
@@ -139,53 +139,90 @@ public struct Project: Codable {
         case effectiveProjectPermission = "effective_project_permission"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension Project {
-    public init(from decoder: Decoder) throws {
+public extension Project {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.dataStorageBytesHour = try container.sdkDecodeRequired(.dataStorageBytesHour)
-        self.dataTransferBytes = try container.sdkDecodeRequired(.dataTransferBytes)
-        self.writtenDataBytes = try container.sdkDecodeRequired(.writtenDataBytes)
-        self.computeTimeSeconds = try container.sdkDecodeRequired(.computeTimeSeconds)
-        self.activeTimeSeconds = try container.sdkDecodeRequired(.activeTimeSeconds)
-        self.cpuUsedSec = try container.sdkDecodeRequired(.cpuUsedSec)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.platformId = try container.sdkDecodeRequired(.platformId)
-        self.regionId = try container.sdkDecodeRequired(.regionId)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.provisioner = try container.sdkDecodeRequired(.provisioner)
-        self.pgVersion = try container.sdkDecodeRequired(.pgVersion)
-        self.proxyHost = try container.sdkDecodeRequired(.proxyHost)
-        self.branchLogicalSizeLimit = try container.sdkDecodeRequired(.branchLogicalSizeLimit)
-        self.branchLogicalSizeLimitBytes = try container.sdkDecodeRequired(.branchLogicalSizeLimitBytes)
-        self.storePasswords = try container.sdkDecodeRequired(.storePasswords)
-        self.creationSource = try container.sdkDecodeRequired(.creationSource)
-        self.historyRetentionSeconds = try container.sdkDecodeRequired(.historyRetentionSeconds)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.updatedAt = try container.sdkDecodeRequired(.updatedAt)
-        self.consumptionPeriodStart = try container.sdkDecodeRequired(.consumptionPeriodStart)
-        self.consumptionPeriodEnd = try container.sdkDecodeRequired(.consumptionPeriodEnd)
-        self.ownerId = try container.sdkDecodeRequired(.ownerId)
-        self.defaultEndpointSettings = try container.sdkDecodeIfPresent(.defaultEndpointSettings)
-        self.settings = try container.sdkDecodeIfPresent(.settings)
-        self.maintenanceStartsAt = try container.sdkDecodeIfPresent(.maintenanceStartsAt)
-        self.syntheticStorageSize = try container.sdkDecodeIfPresent(.syntheticStorageSize)
-        self.quotaResetAt = try container.sdkDecodeIfPresent(.quotaResetAt)
-        self.owner = try container.sdkDecodeIfPresent(.owner)
-        self.computeLastActiveAt = try container.sdkDecodeIfPresent(.computeLastActiveAt)
-        self.orgId = try container.sdkDecodeIfPresent(.orgId)
-        self.maintenanceScheduledFor = try container.sdkDecodeIfPresent(.maintenanceScheduledFor)
-        self.hipaaEnabledAt = try container.sdkDecodeIfPresent(.hipaaEnabledAt)
-        self.effectiveProjectPermission = try container.sdkDecodeIfPresent(.effectiveProjectPermission)
+        dataStorageBytesHour = try container.sdkDecodeRequired(.dataStorageBytesHour)
+        dataTransferBytes = try container.sdkDecodeRequired(.dataTransferBytes)
+        writtenDataBytes = try container.sdkDecodeRequired(.writtenDataBytes)
+        computeTimeSeconds = try container.sdkDecodeRequired(.computeTimeSeconds)
+        activeTimeSeconds = try container.sdkDecodeRequired(.activeTimeSeconds)
+        cpuUsedSec = try container.sdkDecodeRequired(.cpuUsedSec)
+        id = try container.sdkDecodeRequired(.id)
+        platformId = try container.sdkDecodeRequired(.platformId)
+        regionId = try container.sdkDecodeRequired(.regionId)
+        name = try container.sdkDecodeRequired(.name)
+        provisioner = try container.sdkDecodeRequired(.provisioner)
+        pgVersion = try container.sdkDecodeRequired(.pgVersion)
+        proxyHost = try container.sdkDecodeRequired(.proxyHost)
+        branchLogicalSizeLimit = try container.sdkDecodeRequired(.branchLogicalSizeLimit)
+        branchLogicalSizeLimitBytes = try container.sdkDecodeRequired(.branchLogicalSizeLimitBytes)
+        storePasswords = try container.sdkDecodeRequired(.storePasswords)
+        creationSource = try container.sdkDecodeRequired(.creationSource)
+        historyRetentionSeconds = try container.sdkDecodeRequired(.historyRetentionSeconds)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        updatedAt = try container.sdkDecodeRequired(.updatedAt)
+        consumptionPeriodStart = try container.sdkDecodeRequired(.consumptionPeriodStart)
+        consumptionPeriodEnd = try container.sdkDecodeRequired(.consumptionPeriodEnd)
+        ownerId = try container.sdkDecodeRequired(.ownerId)
+        defaultEndpointSettings = try container.sdkDecodeIfPresent(.defaultEndpointSettings)
+        settings = try container.sdkDecodeIfPresent(.settings)
+        maintenanceStartsAt = try container.sdkDecodeIfPresent(.maintenanceStartsAt)
+        syntheticStorageSize = try container.sdkDecodeIfPresent(.syntheticStorageSize)
+        quotaResetAt = try container.sdkDecodeIfPresent(.quotaResetAt)
+        owner = try container.sdkDecodeIfPresent(.owner)
+        computeLastActiveAt = try container.sdkDecodeIfPresent(.computeLastActiveAt)
+        orgId = try container.sdkDecodeIfPresent(.orgId)
+        maintenanceScheduledFor = try container.sdkDecodeIfPresent(.maintenanceScheduledFor)
+        hipaaEnabledAt = try container.sdkDecodeIfPresent(.hipaaEnabledAt)
+        effectiveProjectPermission = try container.sdkDecodeIfPresent(.effectiveProjectPermission)
         try sdkValidateConstraintsPart1()
         try sdkValidateConstraintsPart2()
     }
 }
 
-extension Project {
-    public init(dataStorageBytesHour: Int, dataTransferBytes: Int, writtenDataBytes: Int, computeTimeSeconds: Int, activeTimeSeconds: Int, cpuUsedSec: Int, id: String, platformId: String, regionId: String, name: String, provisioner: Provisioner, pgVersion: PgVersion, proxyHost: String, branchLogicalSizeLimit: Int, branchLogicalSizeLimitBytes: Int, storePasswords: Bool, creationSource: String, historyRetentionSeconds: Int, createdAt: Date, updatedAt: Date, consumptionPeriodStart: Date, consumptionPeriodEnd: Date, ownerId: String, defaultEndpointSettings: DefaultEndpointSettings? = nil, settings: ProjectSettingsData? = nil, maintenanceStartsAt: Date? = nil, syntheticStorageSize: Int? = nil, quotaResetAt: Date? = nil, owner: ProjectOwnerData? = nil, computeLastActiveAt: Date? = nil, orgId: String? = nil, maintenanceScheduledFor: Date? = nil, hipaaEnabledAt: Date? = nil, effectiveProjectPermission: ProjectPermissionLevel? = nil) throws {
+public extension Project {
+    init(
+        dataStorageBytesHour: Int,
+        dataTransferBytes: Int,
+        writtenDataBytes: Int,
+        computeTimeSeconds: Int,
+        activeTimeSeconds: Int,
+        cpuUsedSec: Int,
+        id: String,
+        platformId: String,
+        regionId: String,
+        name: String,
+        provisioner: Provisioner,
+        pgVersion: PgVersion,
+        proxyHost: String,
+        branchLogicalSizeLimit: Int,
+        branchLogicalSizeLimitBytes: Int,
+        storePasswords: Bool,
+        creationSource: String,
+        historyRetentionSeconds: Int,
+        createdAt: Date,
+        updatedAt: Date,
+        consumptionPeriodStart: Date,
+        consumptionPeriodEnd: Date,
+        ownerId: String,
+        defaultEndpointSettings: DefaultEndpointSettings? = nil,
+        settings: ProjectSettingsData? = nil,
+        maintenanceStartsAt: Date? = nil,
+        syntheticStorageSize: Int? = nil,
+        quotaResetAt: Date? = nil,
+        owner: ProjectOwnerData? = nil,
+        computeLastActiveAt: Date? = nil,
+        orgId: String? = nil,
+        maintenanceScheduledFor: Date? = nil,
+        hipaaEnabledAt: Date? = nil,
+        effectiveProjectPermission: ProjectPermissionLevel? = nil
+    ) throws {
         (self.dataStorageBytesHour, self.dataTransferBytes) = (dataStorageBytesHour, dataTransferBytes)
         (self.writtenDataBytes, self.computeTimeSeconds) = (writtenDataBytes, computeTimeSeconds)
         (self.activeTimeSeconds, self.cpuUsedSec) = (activeTimeSeconds, cpuUsedSec)
@@ -211,18 +248,66 @@ extension Project {
 
 extension Project {
     func sdkValidateConstraintsPart1() throws {
-            try validateRange("data_storage_bytes_hour", Double(self.dataStorageBytesHour), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-            try validateRange("data_transfer_bytes", Double(self.dataTransferBytes), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-            try validateRange("written_data_bytes", Double(self.writtenDataBytes), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-            try validateRange("compute_time_seconds", Double(self.computeTimeSeconds), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-            try validateRange("active_time_seconds", Double(self.activeTimeSeconds), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-            try sdkValidatePattern("id", self.id, sdkPatternead2b03f7a95)
-            try validateRange("pg_version", Double(self.pgVersion), min: 14, max: 19, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-            try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
-            try sdkValidateDateTime("consumption_period_start", sdkWireString(self.consumptionPeriodStart))
-            try sdkValidateDateTime("consumption_period_end", sdkWireString(self.consumptionPeriodEnd))
-        if let value = self.maintenanceStartsAt {
+        try validateRange(
+            "data_storage_bytes_hour",
+            Double(dataStorageBytesHour),
+            min: 0,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+        try validateRange(
+            "data_transfer_bytes",
+            Double(dataTransferBytes),
+            min: 0,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+        try validateRange(
+            "written_data_bytes",
+            Double(writtenDataBytes),
+            min: 0,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+        try validateRange(
+            "compute_time_seconds",
+            Double(computeTimeSeconds),
+            min: 0,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+        try validateRange(
+            "active_time_seconds",
+            Double(activeTimeSeconds),
+            min: 0,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+        try sdkValidatePattern("id", id, sdkPatternead2b03f7a95)
+        try validateRange(
+            "pg_version",
+            Double(pgVersion),
+            min: 14,
+            max: 19,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
+        try sdkValidateDateTime("updated_at", sdkWireString(updatedAt))
+        try sdkValidateDateTime("consumption_period_start", sdkWireString(consumptionPeriodStart))
+        try sdkValidateDateTime("consumption_period_end", sdkWireString(consumptionPeriodEnd))
+        if let value = maintenanceStartsAt {
             try sdkValidateDateTime("maintenance_starts_at", sdkWireString(value))
         }
     }
@@ -230,19 +315,19 @@ extension Project {
 
 extension Project {
     func sdkValidateConstraintsPart2() throws {
-        if let value = self.quotaResetAt {
+        if let value = quotaResetAt {
             try sdkValidateDateTime("quota_reset_at", sdkWireString(value))
         }
-        if let value = self.computeLastActiveAt {
+        if let value = computeLastActiveAt {
             try sdkValidateDateTime("compute_last_active_at", sdkWireString(value))
         }
-        if let value = self.orgId {
+        if let value = orgId {
             try sdkValidatePattern("org_id", value, sdkPatternead2b03f7a95)
         }
-        if let value = self.maintenanceScheduledFor {
+        if let value = maintenanceScheduledFor {
             try sdkValidateDateTime("maintenance_scheduled_for", sdkWireString(value))
         }
-        if let value = self.hipaaEnabledAt {
+        if let value = hipaaEnabledAt {
             try sdkValidateDateTime("hipaa_enabled_at", sdkWireString(value))
         }
     }
@@ -257,21 +342,27 @@ public struct SetProjectMemberRoleRequest: Codable {
         case role
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SetProjectMemberRoleRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.role) else {
-            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
-        }
-        self.role = try container.sdkDecodeRequired(.role)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SetProjectMemberRoleRequest {
-    public init(role: ProjectRole) {
+public extension SetProjectMemberRoleRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.role) else {
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
+        }
+        role = try container.sdkDecodeRequired(.role)
+    }
+}
+
+public extension SetProjectMemberRoleRequest {
+    init(role: ProjectRole) {
         self.role = role
     }
 }
@@ -291,20 +382,20 @@ public struct AllowedIps: Codable {
     }
 
     init() {
-        (self.ips, self.protectedBranchesOnly) = (nil, nil)
+        (ips, protectedBranchesOnly) = (nil, nil)
     }
 }
 
-extension AllowedIps {
-    public init(from decoder: Decoder) throws {
+public extension AllowedIps {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.ips = try container.sdkDecodeIfPresent(.ips)
-        self.protectedBranchesOnly = try container.sdkDecodeIfPresent(.protectedBranchesOnly)
+        ips = try container.sdkDecodeIfPresent(.ips)
+        protectedBranchesOnly = try container.sdkDecodeIfPresent(.protectedBranchesOnly)
     }
 }
 
-extension AllowedIps {
-    public init(ips: [String]? = nil, protectedBranchesOnly: Bool? = nil) {
+public extension AllowedIps {
+    init(ips: [String]? = nil, protectedBranchesOnly: Bool? = nil) {
         self.init()
         (self.ips, self.protectedBranchesOnly) = (ips, protectedBranchesOnly)
     }
@@ -336,45 +427,105 @@ public struct DefaultEndpointSettings: Codable {
     }
 
     init() {
-        (self.pgSettings, self.pgbouncerSettings, self.autoscalingLimitMinCu, self.autoscalingLimitMaxCu, self.suspendTimeoutSeconds) = (nil, nil, nil, nil, nil)
+        (pgSettings, pgbouncerSettings, autoscalingLimitMinCu, autoscalingLimitMaxCu, suspendTimeoutSeconds) = (
+            nil,
+            nil,
+            nil,
+            nil,
+            nil
+        )
     }
 }
 
-extension DefaultEndpointSettings {
-    public init(from decoder: Decoder) throws {
+public extension DefaultEndpointSettings {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.pgSettings = try container.sdkDecodeIfPresent(.pgSettings)
-        self.pgbouncerSettings = try container.sdkDecodeIfPresent(.pgbouncerSettings)
-        self.autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
-        self.autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
-        self.suspendTimeoutSeconds = try container.sdkDecodeIfPresent(.suspendTimeoutSeconds)
-        if let value = self.autoscalingLimitMinCu {
-            try validateRange("autoscaling_limit_min_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        pgSettings = try container.sdkDecodeIfPresent(.pgSettings)
+        pgbouncerSettings = try container.sdkDecodeIfPresent(.pgbouncerSettings)
+        autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
+        autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
+        suspendTimeoutSeconds = try container.sdkDecodeIfPresent(.suspendTimeoutSeconds)
+        if let value = autoscalingLimitMinCu {
+            try validateRange(
+                "autoscaling_limit_min_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.autoscalingLimitMaxCu {
-            try validateRange("autoscaling_limit_max_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = autoscalingLimitMaxCu {
+            try validateRange(
+                "autoscaling_limit_max_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.suspendTimeoutSeconds {
-            try validateRange("suspend_timeout_seconds", Double(value), min: -1, max: 604800, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = suspendTimeoutSeconds {
+            try validateRange(
+                "suspend_timeout_seconds",
+                Double(value),
+                min: -1,
+                max: 604_800,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension DefaultEndpointSettings {
-    public init(pgSettings: PgSettingsData? = nil, pgbouncerSettings: PgbouncerSettingsData? = nil, autoscalingLimitMinCu: ComputeUnit? = nil, autoscalingLimitMaxCu: ComputeUnit? = nil, suspendTimeoutSeconds: SuspendTimeoutSeconds? = nil) throws {
+public extension DefaultEndpointSettings {
+    init(
+        pgSettings: PgSettingsData? = nil,
+        pgbouncerSettings: PgbouncerSettingsData? = nil,
+        autoscalingLimitMinCu: ComputeUnit? = nil,
+        autoscalingLimitMaxCu: ComputeUnit? = nil,
+        suspendTimeoutSeconds: SuspendTimeoutSeconds? = nil
+    ) throws {
         self.init()
         (self.pgSettings, self.pgbouncerSettings) = (pgSettings, pgbouncerSettings)
         self.autoscalingLimitMinCu = autoscalingLimitMinCu
         self.autoscalingLimitMaxCu = autoscalingLimitMaxCu
         self.suspendTimeoutSeconds = suspendTimeoutSeconds
         if let value = self.autoscalingLimitMinCu {
-            try validateRange("autoscaling_limit_min_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "autoscaling_limit_min_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.autoscalingLimitMaxCu {
-            try validateRange("autoscaling_limit_max_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "autoscaling_limit_max_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.suspendTimeoutSeconds {
-            try validateRange("suspend_timeout_seconds", Double(value), min: -1, max: 604800, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "suspend_timeout_seconds",
+                Double(value),
+                min: -1,
+                max: 604_800,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -428,5 +579,7 @@ public struct ProjectMemberRoleResponse: Codable {
         case orgApiKeyRotationRecommended = "org_api_key_rotation_recommended"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }

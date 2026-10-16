@@ -17,13 +17,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.updateOauthProvider(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            oauthProviderId: decoded("\"google\""),
-            clientId: decoded("\"client-1\""),
-            clientSecret: decoded("\"client_secret\""),
-            microsoftTenantId: decoded("\"microsoft_tenant-1\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                oauthProviderId: decoded("\"google\""),
+                clientId: decoded("\"client-1\""),
+                clientSecret: decoded("\"client_secret\""),
+                microsoftTenantId: decoded("\"microsoft_tenant-1\"")
+            )
             XCTFail("updateAuthOauthProvider did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -76,14 +76,14 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.updateOAuthProviderPlugin(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            enabled: decoded("false"),
-            loginPage: decoded("\"login_page\""),
-            consentPage: decoded("\"consent_page\""),
-            mcp: decoded("{\"resource\":\"resource\",\"dynamic_registration\":false}"),
-            resources: decoded("[{\"identifier\":\"identifier\"}]")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                enabled: decoded("false"),
+                loginPage: decoded("\"login_page\""),
+                consentPage: decoded("\"consent_page\""),
+                mcp: decoded("{\"resource\":\"resource\",\"dynamic_registration\":false}"),
+                resources: decoded("[{\"identifier\":\"identifier\"}]")
+            )
             XCTFail("updateAuthOAuthProviderPlugin did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -136,14 +136,14 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.updateOrganizationPlugin(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            enabled: decoded("false"),
-            organizationLimit: decoded("1"),
-            membershipLimit: decoded("1"),
-            creatorRole: decoded("\"admin\""),
-            sendInvitationEmail: decoded("false")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                enabled: decoded("false"),
+                organizationLimit: decoded("1"),
+                membershipLimit: decoded("1"),
+                creatorRole: decoded("\"admin\""),
+                sendInvitationEmail: decoded("false")
+            )
             XCTFail("updateAuthOrganizationPlugin did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -193,11 +193,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.updatePhoneNumberPlugin(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            enabled: decoded("false"),
-            otpExpiresIn: decoded("60")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                enabled: decoded("false"),
+                otpExpiresIn: decoded("60")
+            )
             XCTFail("updateAuthPhoneNumberPlugin did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -247,11 +247,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.updateUserRole(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            authUserId: decoded("\"auth_user-1\""),
-            roles: decoded("[\"admin\"]")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                authUserId: decoded("\"auth_user-1\""),
+                roles: decoded("[\"admin\"]")
+            )
             XCTFail("updateAuthUserRole did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -303,13 +303,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.updateWebhookConfig(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            enabled: decoded("false"),
-            webhookUrl: decoded("\"https://example.com\""),
-            enabledEvents: decoded("[\"user.before_create\"]"),
-            timeoutSeconds: decoded("5")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                enabled: decoded("false"),
+                webhookUrl: decoded("\"https://example.com\""),
+                enabledEvents: decoded("[\"user.before_create\"]"),
+                timeoutSeconds: decoded("5")
+            )
             XCTFail("updateAuthWebhookConfig did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -358,10 +358,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.update(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            branch: decoded("{\"name\":\"mybranch\"}")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                branch: decoded("{\"name\":\"mybranch\"}")
+            )
             XCTFail("updateBranch did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -411,11 +411,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.updateDatabase(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            databaseName: decoded("\"Example Name\""),
-            database: decoded("{\"name\":\"mydb\",\"owner_name\":\"sally\"}")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                databaseName: decoded("\"Example Name\""),
+                database: decoded("{\"name\":\"mydb\",\"owner_name\":\"sally\"}")
+            )
             XCTFail("updateBranchDatabase did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -465,11 +465,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.dataApi.update(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            databaseName: decoded("\"Example Name\""),
-            settings: decoded(sdkMethodFixture370Value1)
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                databaseName: decoded("\"Example Name\""),
+                settings: decoded(sdkMethodFixture370Value1)
+            )
             XCTFail("updateDataApi did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -518,10 +518,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.endpoint.update(
-            projectId: decoded("\"a\""),
-            endpointId: decoded("\"a\""),
-            endpoint: decoded("{\"suspend_timeout_seconds\":300}")
-        )
+                projectId: decoded("\"a\""),
+                endpointId: decoded("\"a\""),
+                endpoint: decoded("{\"suspend_timeout_seconds\":300}")
+            )
             XCTFail("updateEndpoint did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -571,11 +571,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.functions.update(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            slug: decoded("\"a\""),
-            name: decoded("\"Example Name\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                slug: decoded("\"a\""),
+                name: decoded("\"Example Name\"")
+            )
             XCTFail("updateFunctions did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)

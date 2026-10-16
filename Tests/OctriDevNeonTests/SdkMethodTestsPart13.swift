@@ -41,13 +41,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.list(
-            cursor: decoded("\"cursor\""),
-            limit: decoded("10"),
-            search: decoded("\"search\""),
-            orgId: decoded("\"a\""),
-            timeout: decoded("100"),
-            recoverable: decoded("false")
-        )
+                cursor: decoded("\"cursor\""),
+                limit: decoded("10"),
+                search: decoded("\"search\""),
+                orgId: decoded("\"a\""),
+                timeout: decoded("100"),
+                recoverable: decoded("false")
+            )
             XCTFail("listProjects did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -94,8 +94,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.listVpcEndpoints(
-            projectId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\"")
+            )
             XCTFail("listProjectVpcEndpoints did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -145,11 +145,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.listShared(
-            cursor: decoded("\"cursor\""),
-            limit: decoded("10"),
-            search: decoded("\"search\""),
-            timeout: decoded("100")
-        )
+                cursor: decoded("\"cursor\""),
+                limit: decoded("10"),
+                search: decoded("\"search\""),
+                timeout: decoded("100")
+            )
             XCTFail("listSharedProjects did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -196,8 +196,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.snapshot.list(
-            projectId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\"")
+            )
             XCTFail("listSnapshots did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -250,14 +250,14 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.buckets.presignObject(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            bucketName: decoded("\"Example Name\""),
-            objectKey: decoded("\"x\""),
-            operation: decoded("\"upload\""),
-            contentType: decoded("\"content_type\""),
-            expiresInSeconds: decoded("900")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                bucketName: decoded("\"Example Name\""),
+                objectKey: decoded("\"x\""),
+                operation: decoded("\"upload\""),
+                contentType: decoded("\"content_type\""),
+                expiresInSeconds: decoded("900")
+            )
             XCTFail("presignBucketsObject did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -334,8 +334,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.logs.query(
-            options: options
-        )
+                options: options
+            )
             XCTFail("queryLogs did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -382,8 +382,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.recover(
-            projectId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\"")
+            )
             XCTFail("recoverProject did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -434,12 +434,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.functions.registerCustomDomain(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            domain: decoded("\"xxx\""),
-            entityType: decoded("\"function\""),
-            entityId: decoded("\"entity-1\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                domain: decoded("\"xxx\""),
+                entityType: decoded("\"function\""),
+                entityId: decoded("\"entity-1\"")
+            )
             XCTFail("registerFunctionsCustomDomain did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -487,9 +487,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.organizations.removeMember(
-            orgId: decoded("\"a\""),
-            memberId: decoded("\"00000000-0000-4000-8000-000000000000\"")
-        )
+                orgId: decoded("\"a\""),
+                memberId: decoded("\"00000000-0000-4000-8000-000000000000\"")
+            )
             XCTFail("removeOrganizationMember did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -538,10 +538,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.removeMemberRole(
-            projectId: decoded("\"a\""),
-            memberId: decoded("\"00000000-0000-4000-8000-000000000000\""),
-            confirmSelfLockout: decoded("false")
-        )
+                projectId: decoded("\"a\""),
+                memberId: decoded("\"00000000-0000-4000-8000-000000000000\""),
+                confirmSelfLockout: decoded("false")
+            )
             XCTFail("removeProjectMemberRole did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)

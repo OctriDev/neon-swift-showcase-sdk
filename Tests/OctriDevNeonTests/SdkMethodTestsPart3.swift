@@ -17,11 +17,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.buckets.create(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            name: decoded("\"Example Name\""),
-            accessLevel: decoded("\"private\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                name: decoded("\"Example Name\""),
+                accessLevel: decoded("\"private\"")
+            )
             XCTFail("createBuckets did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 410)
@@ -72,12 +72,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.credentials.create(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            scopes: decoded("[\"storage:read\"]"),
-            principalType: decoded("\"user\""),
-            name: decoded("\"Example Name\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                scopes: decoded("[\"storage:read\"]"),
+                principalType: decoded("\"user\""),
+                name: decoded("\"Example Name\"")
+            )
             XCTFail("createCredential did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -99,7 +99,11 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try DataApiMethods.CreateDataApiOptions(projectId: decoded("\"a\""), branchId: decoded("\"a\""), databaseName: decoded("\"Example Name\""))
+        var options = try DataApiMethods.CreateDataApiOptions(
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\""),
+            databaseName: decoded("\"Example Name\"")
+        )
         options.authProvider = try decoded("\"neon_auth\"")
         options.jwksUrl = try decoded("\"https://example.com\"")
         options.providerName = try decoded("\"Example Name\"")
@@ -126,7 +130,11 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try DataApiMethods.CreateDataApiOptions(projectId: decoded("\"a\""), branchId: decoded("\"a\""), databaseName: decoded("\"Example Name\""))
+        var options = try DataApiMethods.CreateDataApiOptions(
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\""),
+            databaseName: decoded("\"Example Name\"")
+        )
         options.authProvider = try decoded("\"neon_auth\"")
         options.jwksUrl = try decoded("\"https://example.com\"")
         options.providerName = try decoded("\"Example Name\"")
@@ -140,8 +148,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.dataApi.create(
-            options: options
-        )
+                options: options
+            )
             XCTFail("createDataApi did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -189,9 +197,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.endpoint.create(
-            projectId: decoded("\"a\""),
-            endpoint: decoded("{\"branch_id\":\"br-floral-mountain-251143\",\"type\":\"read_write\"}")
-        )
+                projectId: decoded("\"a\""),
+                endpoint: decoded("{\"branch_id\":\"br-floral-mountain-251143\",\"type\":\"read_write\"}")
+            )
             XCTFail("createEndpoint did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -243,13 +251,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.functions.createDeployment(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            slug: decoded("\"a\""),
-            zip: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
-            runtime: decoded("\"nodejs24\""),
-            environment: decoded("\"environment\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                slug: decoded("\"a\""),
+                zip: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
+                runtime: decoded("\"nodejs24\""),
+                environment: decoded("\"environment\"")
+            )
             XCTFail("createFunctionsDeployment did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -298,10 +306,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.functions.createTrigger(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            body: decoded(sdkMethodFixture54Value1)
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                body: decoded(sdkMethodFixture54Value1)
+            )
             XCTFail("createFunctionsTrigger did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -349,9 +357,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.organizations.createInvitations(
-            orgId: decoded("\"a\""),
-            invitations: decoded("[{\"email\":\"invited-user@email.com\",\"role\":\"member\"}]")
-        )
+                orgId: decoded("\"a\""),
+                invitations: decoded("[{\"email\":\"invited-user@email.com\",\"role\":\"member\"}]")
+            )
             XCTFail("createOrganizationInvitations did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -399,9 +407,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.organizations.createApiKey(
-            orgId: decoded("\"a\""),
-            body: decoded("{\"key_name\":\"orgkey\"}")
-        )
+                orgId: decoded("\"a\""),
+                body: decoded("{\"key_name\":\"orgkey\"}")
+            )
             XCTFail("createOrganizationsApiKey did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -448,8 +456,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.create(
-            project: decoded("{\"name\":\"myproject\"}")
-        )
+                project: decoded("{\"name\":\"myproject\"}")
+            )
             XCTFail("createProject did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -497,9 +505,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.createTransferRequest(
-            projectId: decoded("\"a\""),
-            ttlSeconds: decoded("86400")
-        )
+                projectId: decoded("\"a\""),
+                ttlSeconds: decoded("86400")
+            )
             XCTFail("createProjectTransferRequest did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -551,13 +559,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.snapshot.create(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            lsn: decoded("\"lsn\""),
-            timestamp: decoded("\"2025-08-05T22:00:00Z\""),
-            name: decoded("\"Example Name\""),
-            expiresAt: decoded("\"2025-08-05T22:00:00Z\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                lsn: decoded("\"lsn\""),
+                timestamp: decoded("\"2025-08-05T22:00:00Z\""),
+                name: decoded("\"Example Name\""),
+                expiresAt: decoded("\"2025-08-05T22:00:00Z\"")
+            )
             XCTFail("createSnapshot did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)

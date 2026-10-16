@@ -6,33 +6,75 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AuthMethods {
-    /// Retrieves the localhost allow setting for the specified branch's Neon Auth integration. When enabled, authentication flows work from `localhost` without adding it to the redirect URI whitelist.
+public extension AuthMethods {
+    /// Retrieves the localhost allow setting for the specified branch's Neon Auth integration. When enabled,
+    /// authentication flows work from `localhost` without adding it to the redirect URI whitelist.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
-    public static func getAuthAllowLocalhost(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthAllowLocalhostResponse {
+    static func getAuthAllowLocalhost(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthAllowLocalhostResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/allow_localhost"].joined(), config: config, decoder: .json, operationId: "getAuthAllowLocalhost", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/auth/allow_localhost",
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getAuthAllowLocalhost",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
-    /// Updates the localhost allow setting for the specified branch's Neon Auth integration. When enabled, authentication flows work from `localhost` without adding it to the redirect URI whitelist.
+    /// Updates the localhost allow setting for the specified branch's Neon Auth integration. When enabled,
+    /// authentication flows work from `localhost` without adding it to the redirect URI whitelist.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
     /// - allowLocalhost: Whether to allow localhost connections
-    public static func updateAuthAllowLocalhost(config: ClientConfig, projectId: String, branchId: String, allowLocalhost: Bool, requestOptions: RequestOptions? = nil) async throws -> NeonAuthAllowLocalhostResponse {
+    static func updateAuthAllowLocalhost(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        allowLocalhost: Bool,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthAllowLocalhostResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
         let requestBody = UpdateAuthAllowLocalhostRequestBody(allowLocalhost: allowLocalhost)
 
-        return try (await sdkRequest("PATCH", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/allow_localhost"].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateAuthAllowLocalhost", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "PATCH",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/auth/allow_localhost",
+            ].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "updateAuthAllowLocalhost",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

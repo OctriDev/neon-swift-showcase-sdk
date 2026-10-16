@@ -30,10 +30,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.acceptTransferRequest(
-            projectId: decoded("\"a\""),
-            requestId: decoded("\"a\""),
-            orgId: decoded("\"org-cool-darkness-12345678\"")
-        )
+                projectId: decoded("\"a\""),
+                requestId: decoded("\"a\""),
+                orgId: decoded("\"org-cool-darkness-12345678\"")
+            )
             XCTFail("acceptProjectTransferRequest did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 406)
@@ -50,7 +50,8 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testAddAuthLegacyDomainToRedirectUriAllowlistAddAuthLegacyDomainTXb88ebc3343ReachesMockAndDecodesResponse() async throws {
+    func testAddAuthLegacyDomainToRedirectUriAllowlistAddAuthLegacyDomainTXb88ebc3343ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -63,7 +64,8 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testAddAuthLegacyDomainToRedirectUriAllowlistAddAuthLegacyDomainTXb8f8fe507cReachesMockAndDecodesResponse() async throws {
+    func testAddAuthLegacyDomainToRedirectUriAllowlistAddAuthLegacyDomainTXb8f8fe507cReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/418") else {
             return
         }
@@ -74,10 +76,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.authLegacy.addDomainToRedirectUriAllowlist(
-            projectId: decoded("\"a\""),
-            domain: decoded("\"https://example.com\""),
-            authProvider: decoded("\"mock\"")
-        )
+                projectId: decoded("\"a\""),
+                domain: decoded("\"https://example.com\""),
+                authProvider: decoded("\"mock\"")
+            )
             XCTFail("addAuthLegacyDomainToRedirectUriWhitelist did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -128,12 +130,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.authLegacy.addOauthProvider(
-            projectId: decoded("\"a\""),
-            id: decoded("\"google\""),
-            clientId: decoded("\"client-1\""),
-            clientSecret: decoded("\"client_secret\""),
-            microsoftTenantId: decoded("\"microsoft_tenant-1\"")
-        )
+                projectId: decoded("\"a\""),
+                id: decoded("\"google\""),
+                clientId: decoded("\"client-1\""),
+                clientSecret: decoded("\"client_secret\""),
+                microsoftTenantId: decoded("\"microsoft_tenant-1\"")
+            )
             XCTFail("addAuthLegacyOauthProvider did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -185,13 +187,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.addOauthProvider(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            id: decoded("\"google\""),
-            clientId: decoded("\"client-1\""),
-            clientSecret: decoded("\"client_secret\""),
-            microsoftTenantId: decoded("\"microsoft_tenant-1\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                id: decoded("\"google\""),
+                clientId: decoded("\"client-1\""),
+                clientSecret: decoded("\"client_secret\""),
+                microsoftTenantId: decoded("\"microsoft_tenant-1\"")
+            )
             XCTFail("addAuthOauthProvider did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -233,11 +235,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.addTrustedDomain(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            domain: decoded("\"https://example.com\""),
-            authProvider: decoded("\"mock\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                domain: decoded("\"https://example.com\""),
+                authProvider: decoded("\"mock\"")
+            )
             XCTFail("addAuthTrustedDomain did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -290,14 +292,14 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.addJwks(
-            projectId: decoded("\"a\""),
-            jwksUrl: decoded("\"https://example.com\""),
-            providerName: decoded("\"Example Name\""),
-            branchId: decoded("\"a\""),
-            jwtAudience: decoded("\"jwt_audience\""),
-            roleNames: decoded("[\"Example Name\"]"),
-            skipRoleCreation: decoded("false")
-        )
+                projectId: decoded("\"a\""),
+                jwksUrl: decoded("\"https://example.com\""),
+                providerName: decoded("\"Example Name\""),
+                branchId: decoded("\"a\""),
+                jwtAudience: decoded("\"jwt_audience\""),
+                roleNames: decoded("[\"Example Name\"]"),
+                skipRoleCreation: decoded("false")
+            )
             XCTFail("addProjectJwks did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -339,11 +341,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.organizations.assignVpcEndpoint(
-            orgId: decoded("\"a\""),
-            regionId: decoded("\"region-1\""),
-            vpcEndpointId: decoded("\"vpc_endpoint-1\""),
-            label: decoded("\"label\"")
-        )
+                orgId: decoded("\"a\""),
+                regionId: decoded("\"region-1\""),
+                vpcEndpointId: decoded("\"vpc_endpoint-1\""),
+                label: decoded("\"label\"")
+            )
             XCTFail("assignOrganizationVpcEndpoint did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -384,10 +386,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.assignVpcEndpoint(
-            projectId: decoded("\"a\""),
-            vpcEndpointId: decoded("\"vpc_endpoint-1\""),
-            label: decoded("\"label\"")
-        )
+                projectId: decoded("\"a\""),
+                vpcEndpointId: decoded("\"vpc_endpoint-1\""),
+                label: decoded("\"label\"")
+            )
             XCTFail("assignProjectVpcEndpoint did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -409,7 +411,11 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try BranchMethods.CompareBranchSchemaOptions(projectId: decoded("\"a\""), branchId: decoded("\"a\""), dbName: decoded("\"Example Name\""))
+        var options = try BranchMethods.CompareBranchSchemaOptions(
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\""),
+            dbName: decoded("\"Example Name\"")
+        )
         options.baseBranchId = try decoded("\"a\"")
         options.lsn = try decoded("\"lsn\"")
         options.timestamp = try decoded("\"2022-11-30T20:09:48Z\"")
@@ -434,7 +440,11 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try BranchMethods.CompareBranchSchemaOptions(projectId: decoded("\"a\""), branchId: decoded("\"a\""), dbName: decoded("\"Example Name\""))
+        var options = try BranchMethods.CompareBranchSchemaOptions(
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\""),
+            dbName: decoded("\"Example Name\"")
+        )
         options.baseBranchId = try decoded("\"a\"")
         options.lsn = try decoded("\"lsn\"")
         options.timestamp = try decoded("\"2022-11-30T20:09:48Z\"")
@@ -446,8 +456,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.compareSchema(
-            options: options
-        )
+                options: options
+            )
             XCTFail("compareBranchSchema did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -495,9 +505,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.count(
-            projectId: decoded("\"a\""),
-            search: decoded("\"search\"")
-        )
+                projectId: decoded("\"a\""),
+                search: decoded("\"search\"")
+            )
             XCTFail("countBranch did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -544,8 +554,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.apiKey.create(
-            keyName: decoded("\"mykey\"")
-        )
+                keyName: decoded("\"mykey\"")
+            )
             XCTFail("createApiKey did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)

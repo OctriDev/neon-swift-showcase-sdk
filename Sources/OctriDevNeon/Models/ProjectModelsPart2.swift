@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Project domain models
+/// Project domain models
 /// Configuration for the new project, including name, region, and Postgres compute and storage settings.
 public struct ProjectCreateRequestProject: Codable {
     /// Project-level settings applied at creation.
@@ -61,51 +61,97 @@ public struct ProjectCreateRequestProject: Codable {
     }
 
     init() {
-        (self.settings, self.name, self.realtime, self.branch, self.autoscalingLimitMinCu) = (nil, nil, nil, nil, nil)
-        (self.autoscalingLimitMaxCu, self.provisioner, self.regionId, self.defaultEndpointSettings, self.pgVersion) = (nil, nil, nil, nil, nil)
-        (self.storePasswords, self.historyRetentionSeconds, self.orgId) = (nil, nil, nil)
+        (settings, name, realtime, branch, autoscalingLimitMinCu) = (nil, nil, nil, nil, nil)
+        (autoscalingLimitMaxCu, provisioner, regionId, defaultEndpointSettings, pgVersion) = (nil, nil, nil, nil, nil)
+        (storePasswords, historyRetentionSeconds, orgId) = (nil, nil, nil)
     }
 }
 
-extension ProjectCreateRequestProject {
-    public init(from decoder: Decoder) throws {
+public extension ProjectCreateRequestProject {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.settings = try container.sdkDecodeIfPresent(.settings)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.realtime = try container.sdkDecodeIfPresent(.realtime)
-        self.branch = try container.sdkDecodeIfPresent(.branch)
-        self.autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
-        self.autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
-        self.provisioner = try container.sdkDecodeIfPresent(.provisioner)
-        self.regionId = try container.sdkDecodeIfPresent(.regionId)
-        self.defaultEndpointSettings = try container.sdkDecodeIfPresent(.defaultEndpointSettings)
-        self.pgVersion = try container.sdkDecodeIfPresent(.pgVersion)
-        self.storePasswords = try container.sdkDecodeIfPresent(.storePasswords)
-        self.historyRetentionSeconds = try container.sdkDecodeIfPresent(.historyRetentionSeconds)
-        self.orgId = try container.sdkDecodeIfPresent(.orgId)
-        if let value = self.name {
+        settings = try container.sdkDecodeIfPresent(.settings)
+        name = try container.sdkDecodeIfPresent(.name)
+        realtime = try container.sdkDecodeIfPresent(.realtime)
+        branch = try container.sdkDecodeIfPresent(.branch)
+        autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
+        autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
+        provisioner = try container.sdkDecodeIfPresent(.provisioner)
+        regionId = try container.sdkDecodeIfPresent(.regionId)
+        defaultEndpointSettings = try container.sdkDecodeIfPresent(.defaultEndpointSettings)
+        pgVersion = try container.sdkDecodeIfPresent(.pgVersion)
+        storePasswords = try container.sdkDecodeIfPresent(.storePasswords)
+        historyRetentionSeconds = try container.sdkDecodeIfPresent(.historyRetentionSeconds)
+        orgId = try container.sdkDecodeIfPresent(.orgId)
+        if let value = name {
             try validateLength("name", value, min: 1, max: 256)
         }
-        if let value = self.autoscalingLimitMinCu {
-            try validateRange("autoscaling_limit_min_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = autoscalingLimitMinCu {
+            try validateRange(
+                "autoscaling_limit_min_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.autoscalingLimitMaxCu {
-            try validateRange("autoscaling_limit_max_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = autoscalingLimitMaxCu {
+            try validateRange(
+                "autoscaling_limit_max_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.pgVersion {
-            try validateRange("pg_version", Double(value), min: 14, max: 19, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = pgVersion {
+            try validateRange(
+                "pg_version",
+                Double(value),
+                min: 14,
+                max: 19,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.historyRetentionSeconds {
-            try validateRange("history_retention_seconds", Double(value), min: 0, max: 2592000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = historyRetentionSeconds {
+            try validateRange(
+                "history_retention_seconds",
+                Double(value),
+                min: 0,
+                max: 2_592_000,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.orgId {
+        if let value = orgId {
             try sdkValidatePattern("org_id", value, sdkPatternead2b03f7a95)
         }
     }
 }
 
-extension ProjectCreateRequestProject {
-    public init(settings: ProjectSettingsData? = nil, name: String? = nil, realtime: RealtimeOptions? = nil, branch: ProjectCreateRequestProjectBranch? = nil, autoscalingLimitMinCu: ComputeUnit? = nil, autoscalingLimitMaxCu: ComputeUnit? = nil, provisioner: Provisioner? = nil, regionId: String? = nil, defaultEndpointSettings: DefaultEndpointSettings? = nil, pgVersion: PgVersion? = nil, storePasswords: Bool? = nil, historyRetentionSeconds: Int? = nil, orgId: String? = nil) throws {
+public extension ProjectCreateRequestProject {
+    init(
+        settings: ProjectSettingsData? = nil,
+        name: String? = nil,
+        realtime: RealtimeOptions? = nil,
+        branch: ProjectCreateRequestProjectBranch? = nil,
+        autoscalingLimitMinCu: ComputeUnit? = nil,
+        autoscalingLimitMaxCu: ComputeUnit? = nil,
+        provisioner: Provisioner? = nil,
+        regionId: String? = nil,
+        defaultEndpointSettings: DefaultEndpointSettings? = nil,
+        pgVersion: PgVersion? = nil,
+        storePasswords: Bool? = nil,
+        historyRetentionSeconds: Int? = nil,
+        orgId: String? = nil
+    ) throws {
         self.init()
         (self.settings, self.name) = (settings, name)
         (self.realtime, self.branch) = (realtime, branch)
@@ -118,16 +164,48 @@ extension ProjectCreateRequestProject {
             try validateLength("name", value, min: 1, max: 256)
         }
         if let value = self.autoscalingLimitMinCu {
-            try validateRange("autoscaling_limit_min_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "autoscaling_limit_min_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.autoscalingLimitMaxCu {
-            try validateRange("autoscaling_limit_max_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "autoscaling_limit_max_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.pgVersion {
-            try validateRange("pg_version", Double(value), min: 14, max: 19, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "pg_version",
+                Double(value),
+                min: 14,
+                max: 19,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.historyRetentionSeconds {
-            try validateRange("history_retention_seconds", Double(value), min: 0, max: 2592000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "history_retention_seconds",
+                Double(value),
+                min: 0,
+                max: 2_592_000,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.orgId {
             try sdkValidatePattern("org_id", value, sdkPatternead2b03f7a95)
@@ -161,35 +239,52 @@ public struct AddProjectJWKSRequest: Codable {
         case skipRoleCreation = "skip_role_creation"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension AddProjectJWKSRequest {
-    public init(from decoder: Decoder) throws {
+public extension AddProjectJWKSRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.jwksUrl) else {
-            throw SdkValidationError(field: "jwks_url", code: "required", message: "Validation failed for 'jwks_url': value is required")
+            throw SdkValidationError(
+                field: "jwks_url",
+                code: "required",
+                message: "Validation failed for 'jwks_url': value is required"
+            )
         }
         guard container.contains(.providerName) else {
-            throw SdkValidationError(field: "provider_name", code: "required", message: "Validation failed for 'provider_name': value is required")
+            throw SdkValidationError(
+                field: "provider_name",
+                code: "required",
+                message: "Validation failed for 'provider_name': value is required"
+            )
         }
-        self.jwksUrl = try container.sdkDecodeRequired(.jwksUrl)
-        self.providerName = try container.sdkDecodeRequired(.providerName)
-        self.branchId = try container.sdkDecodeIfPresent(.branchId)
-        self.jwtAudience = try container.sdkDecodeIfPresent(.jwtAudience)
-        self.roleNames = try container.sdkDecodeIfPresent(.roleNames)
-        self.skipRoleCreation = try container.sdkDecodeIfPresent(.skipRoleCreation)
-        if let value = self.branchId {
+        jwksUrl = try container.sdkDecodeRequired(.jwksUrl)
+        providerName = try container.sdkDecodeRequired(.providerName)
+        branchId = try container.sdkDecodeIfPresent(.branchId)
+        jwtAudience = try container.sdkDecodeIfPresent(.jwtAudience)
+        roleNames = try container.sdkDecodeIfPresent(.roleNames)
+        skipRoleCreation = try container.sdkDecodeIfPresent(.skipRoleCreation)
+        if let value = branchId {
             try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
         }
-        if let value = self.roleNames {
+        if let value = roleNames {
             try validateItems("role_names", value, min: 0, max: 10)
         }
     }
 }
 
-extension AddProjectJWKSRequest {
-    public init(jwksUrl: String, providerName: String, branchId: String? = nil, jwtAudience: String? = nil, roleNames: [String]? = nil, skipRoleCreation: Bool? = nil) throws {
+public extension AddProjectJWKSRequest {
+    init(
+        jwksUrl: String,
+        providerName: String,
+        branchId: String? = nil,
+        jwtAudience: String? = nil,
+        roleNames: [String]? = nil,
+        skipRoleCreation: Bool? = nil
+    ) throws {
         (self.jwksUrl, self.providerName) = (jwksUrl, providerName)
         (self.branchId, self.jwtAudience) = (branchId, jwtAudience)
         (self.roleNames, self.skipRoleCreation) = (roleNames, skipRoleCreation)
@@ -216,22 +311,28 @@ public struct ProjectsResponse: Codable {
         case unavailableProjectIds = "unavailable_project_ids"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectsResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projects) else {
-            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
-        }
-        self.projects = try container.sdkDecodeRequired(.projects)
-        self.unavailableProjectIds = try container.sdkDecodeIfPresent(.unavailableProjectIds)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectsResponse {
-    public init(projects: [ProjectListItem], unavailableProjectIds: [String]? = nil) {
+public extension ProjectsResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.projects) else {
+            throw SdkValidationError(
+                field: "projects",
+                code: "required",
+                message: "Validation failed for 'projects': value is required"
+            )
+        }
+        projects = try container.sdkDecodeRequired(.projects)
+        unavailableProjectIds = try container.sdkDecodeIfPresent(.unavailableProjectIds)
+    }
+}
+
+public extension ProjectsResponse {
+    init(projects: [ProjectListItem], unavailableProjectIds: [String]? = nil) {
         (self.projects, self.unavailableProjectIds) = (projects, unavailableProjectIds)
     }
 }
@@ -248,25 +349,35 @@ public struct JWKSCreationOperation: Codable {
         case operations
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension JWKSCreationOperation {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.jwks) else {
-            throw SdkValidationError(field: "jwks", code: "required", message: "Validation failed for 'jwks': value is required")
-        }
-        guard container.contains(.operations) else {
-            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
-        }
-        self.jwks = try container.sdkDecodeRequired(.jwks)
-        self.operations = try container.sdkDecodeRequired(.operations)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension JWKSCreationOperation {
-    public init(jwks: JWKS, operations: [Operation]) {
+public extension JWKSCreationOperation {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.jwks) else {
+            throw SdkValidationError(
+                field: "jwks",
+                code: "required",
+                message: "Validation failed for 'jwks': value is required"
+            )
+        }
+        guard container.contains(.operations) else {
+            throw SdkValidationError(
+                field: "operations",
+                code: "required",
+                message: "Validation failed for 'operations': value is required"
+            )
+        }
+        jwks = try container.sdkDecodeRequired(.jwks)
+        operations = try container.sdkDecodeRequired(.operations)
+    }
+}
+
+public extension JWKSCreationOperation {
+    init(jwks: JWKS, operations: [Operation]) {
         (self.jwks, self.operations) = (jwks, operations)
     }
 }
@@ -280,21 +391,27 @@ public struct ProjectPermissions: Codable {
         case projectPermissions = "project_permissions"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectPermissions {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projectPermissions) else {
-            throw SdkValidationError(field: "project_permissions", code: "required", message: "Validation failed for 'project_permissions': value is required")
-        }
-        self.projectPermissions = try container.sdkDecodeRequired(.projectPermissions)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectPermissions {
-    public init(projectPermissions: [ProjectPermission]) {
+public extension ProjectPermissions {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.projectPermissions) else {
+            throw SdkValidationError(
+                field: "project_permissions",
+                code: "required",
+                message: "Validation failed for 'project_permissions': value is required"
+            )
+        }
+        projectPermissions = try container.sdkDecodeRequired(.projectPermissions)
+    }
+}
+
+public extension ProjectPermissions {
+    init(projectPermissions: [ProjectPermission]) {
         self.projectPermissions = projectPermissions
     }
 }
@@ -310,19 +427,19 @@ public struct AvailablePreloadLibraries: Codable {
     }
 
     init() {
-        self.libraries = nil
+        libraries = nil
     }
 }
 
-extension AvailablePreloadLibraries {
-    public init(from decoder: Decoder) throws {
+public extension AvailablePreloadLibraries {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.libraries = try container.sdkDecodeIfPresent(.libraries)
+        libraries = try container.sdkDecodeIfPresent(.libraries)
     }
 }
 
-extension AvailablePreloadLibraries {
-    public init(libraries: [AvailablePreloadLibrary]? = nil) {
+public extension AvailablePreloadLibraries {
+    init(libraries: [AvailablePreloadLibrary]? = nil) {
         self.init()
         self.libraries = libraries
     }
@@ -361,58 +478,94 @@ public struct JWKS: Codable {
         case roleNames = "role_names"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension JWKS {
-    public init(from decoder: Decoder) throws {
+public extension JWKS {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
         }
         guard container.contains(.projectId) else {
-            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
+            throw SdkValidationError(
+                field: "project_id",
+                code: "required",
+                message: "Validation failed for 'project_id': value is required"
+            )
         }
         guard container.contains(.jwksUrl) else {
-            throw SdkValidationError(field: "jwks_url", code: "required", message: "Validation failed for 'jwks_url': value is required")
+            throw SdkValidationError(
+                field: "jwks_url",
+                code: "required",
+                message: "Validation failed for 'jwks_url': value is required"
+            )
         }
         guard container.contains(.providerName) else {
-            throw SdkValidationError(field: "provider_name", code: "required", message: "Validation failed for 'provider_name': value is required")
+            throw SdkValidationError(
+                field: "provider_name",
+                code: "required",
+                message: "Validation failed for 'provider_name': value is required"
+            )
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
         }
         guard container.contains(.updatedAt) else {
-            throw SdkValidationError(field: "updated_at", code: "required", message: "Validation failed for 'updated_at': value is required")
+            throw SdkValidationError(
+                field: "updated_at",
+                code: "required",
+                message: "Validation failed for 'updated_at': value is required"
+            )
         }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.projectId = try container.sdkDecodeRequired(.projectId)
-        self.jwksUrl = try container.sdkDecodeRequired(.jwksUrl)
-        self.providerName = try container.sdkDecodeRequired(.providerName)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.updatedAt = try container.sdkDecodeRequired(.updatedAt)
-        self.branchId = try container.sdkDecodeIfPresent(.branchId)
-        self.jwtAudience = try container.sdkDecodeIfPresent(.jwtAudience)
-        self.roleNames = try container.sdkDecodeIfPresent(.roleNames)
-            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-            try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
-        if let value = self.branchId {
+        id = try container.sdkDecodeRequired(.id)
+        projectId = try container.sdkDecodeRequired(.projectId)
+        jwksUrl = try container.sdkDecodeRequired(.jwksUrl)
+        providerName = try container.sdkDecodeRequired(.providerName)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        updatedAt = try container.sdkDecodeRequired(.updatedAt)
+        branchId = try container.sdkDecodeIfPresent(.branchId)
+        jwtAudience = try container.sdkDecodeIfPresent(.jwtAudience)
+        roleNames = try container.sdkDecodeIfPresent(.roleNames)
+        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
+        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
+        try sdkValidateDateTime("updated_at", sdkWireString(updatedAt))
+        if let value = branchId {
             try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
         }
     }
 }
 
-extension JWKS {
-    public init(id: String, projectId: String, jwksUrl: String, providerName: String, createdAt: Date, updatedAt: Date, branchId: String? = nil, jwtAudience: String? = nil, roleNames: [String]? = nil) throws {
+public extension JWKS {
+    init(
+        id: String,
+        projectId: String,
+        jwksUrl: String,
+        providerName: String,
+        createdAt: Date,
+        updatedAt: Date,
+        branchId: String? = nil,
+        jwtAudience: String? = nil,
+        roleNames: [String]? = nil
+    ) throws {
         (self.id, self.projectId) = (id, projectId)
         (self.jwksUrl, self.providerName) = (jwksUrl, providerName)
         (self.createdAt, self.updatedAt) = (createdAt, updatedAt)
         (self.branchId, self.jwtAudience) = (branchId, jwtAudience)
         self.roleNames = roleNames
-            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-            try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
+        try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+        try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+        try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
         if let value = self.branchId {
             try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
         }

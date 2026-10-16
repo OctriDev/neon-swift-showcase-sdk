@@ -17,10 +17,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.getRolePassword(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            roleName: decoded("\"Example Name\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                roleName: decoded("\"Example Name\"")
+            )
             XCTFail("getBranchRolePassword did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -72,13 +72,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.getSchema(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            dbName: decoded("\"Example Name\""),
-            lsn: decoded("\"lsn\""),
-            timestamp: decoded("\"2022-11-30T20:09:48Z\""),
-            format: decoded("\"2024-01-01T00:00:00Z\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                dbName: decoded("\"Example Name\""),
+                lsn: decoded("\"lsn\""),
+                timestamp: decoded("\"2022-11-30T20:09:48Z\""),
+                format: decoded("\"2024-01-01T00:00:00Z\"")
+            )
             XCTFail("getBranchSchema did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -120,11 +120,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.buckets.getObject(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            bucketName: decoded("\"Example Name\""),
-            objectKey: decoded("\"x\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                bucketName: decoded("\"Example Name\""),
+                objectKey: decoded("\"x\"")
+            )
             XCTFail("getBucketsObject did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -176,13 +176,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.getConnectionUri(
-            projectId: decoded("\"a\""),
-            databaseName: decoded("\"Example Name\""),
-            roleName: decoded("\"Example Name\""),
-            branchId: decoded("\"a\""),
-            endpointId: decoded("\"a\""),
-            pooled: decoded("false")
-        )
+                projectId: decoded("\"a\""),
+                databaseName: decoded("\"Example Name\""),
+                roleName: decoded("\"Example Name\""),
+                branchId: decoded("\"a\""),
+                endpointId: decoded("\"a\""),
+                pooled: decoded("false")
+            )
             XCTFail("getConnectionUri did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -199,12 +199,20 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testGetConsumptionHistoryPerBranchV2GetConsumptionHistoryPerBranchV2ReachesMockAndDecodesResponse() async throws {
+    func testGetConsumptionHistoryPerBranchV2GetConsumptionHistoryPerBranchV2ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
         _ = client
-        var options = try ConsumptionMethods.GetConsumptionHistoryPerBranchV2Options(projectIds: decoded("[\"\"]"), from: decoded("\"2024-01-01T00:00:00Z\""), to: decoded("\"2024-01-01T00:00:00Z\""), granularity: decoded("\"hourly\""), orgId: decoded("\"a\""), metrics: decoded("[\"metrics\"]"))
+        var options = try ConsumptionMethods.GetConsumptionHistoryPerBranchV2Options(
+            projectIds: decoded("[\"\"]"),
+            from: decoded("\"2024-01-01T00:00:00Z\""),
+            to: decoded("\"2024-01-01T00:00:00Z\""),
+            granularity: decoded("\"hourly\""),
+            orgId: decoded("\"a\""),
+            metrics: decoded("[\"metrics\"]")
+        )
         options.cursor = try decoded("\"cursor\"")
         options.limit = try decoded("100")
         options.branchIds = try decoded("[\"\"]")
@@ -222,12 +230,20 @@ extension SdkMethodTests {
         )
     }
 
-    func testGetConsumptionHistoryPerBranchV2GetConsumptionHistoryPerBranchV2403ReachesMockAndDecodesResponse() async throws {
+    func testGetConsumptionHistoryPerBranchV2GetConsumptionHistoryPerBranchV2403ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/403") else {
             return
         }
         _ = client
-        var options = try ConsumptionMethods.GetConsumptionHistoryPerBranchV2Options(projectIds: decoded("[\"\"]"), from: decoded("\"2024-01-01T00:00:00Z\""), to: decoded("\"2024-01-01T00:00:00Z\""), granularity: decoded("\"hourly\""), orgId: decoded("\"a\""), metrics: decoded("[\"metrics\"]"))
+        var options = try ConsumptionMethods.GetConsumptionHistoryPerBranchV2Options(
+            projectIds: decoded("[\"\"]"),
+            from: decoded("\"2024-01-01T00:00:00Z\""),
+            to: decoded("\"2024-01-01T00:00:00Z\""),
+            granularity: decoded("\"hourly\""),
+            orgId: decoded("\"a\""),
+            metrics: decoded("[\"metrics\"]")
+        )
         options.cursor = try decoded("\"cursor\"")
         options.limit = try decoded("100")
         options.branchIds = try decoded("[\"\"]")
@@ -237,8 +253,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.consumption.getHistoryPerBranchV2(
-            options: options
-        )
+                options: options
+            )
             XCTFail("getConsumptionHistoryPerBranchV2 did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 403)
@@ -260,7 +276,11 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try ConsumptionMethods.GetConsumptionHistoryPerProjectOptions(from: decoded("\"2024-01-01T00:00:00Z\""), to: decoded("\"2024-01-01T00:00:00Z\""), granularity: decoded("\"hourly\""))
+        var options = try ConsumptionMethods.GetConsumptionHistoryPerProjectOptions(
+            from: decoded("\"2024-01-01T00:00:00Z\""),
+            to: decoded("\"2024-01-01T00:00:00Z\""),
+            granularity: decoded("\"hourly\"")
+        )
         options.cursor = try decoded("\"cursor\"")
         options.limit = try decoded("10")
         options.projectIds = try decoded("[\"\"]")
@@ -281,12 +301,17 @@ extension SdkMethodTests {
         )
     }
 
-    func testGetConsumptionHistoryPerProjectGetConsumptionHistoryPerProject403ReachesMockAndDecodesResponse() async throws {
+    func testGetConsumptionHistoryPerProjectGetConsumptionHistoryPerProject403ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/403") else {
             return
         }
         _ = client
-        var options = try ConsumptionMethods.GetConsumptionHistoryPerProjectOptions(from: decoded("\"2024-01-01T00:00:00Z\""), to: decoded("\"2024-01-01T00:00:00Z\""), granularity: decoded("\"hourly\""))
+        var options = try ConsumptionMethods.GetConsumptionHistoryPerProjectOptions(
+            from: decoded("\"2024-01-01T00:00:00Z\""),
+            to: decoded("\"2024-01-01T00:00:00Z\""),
+            granularity: decoded("\"hourly\"")
+        )
         options.cursor = try decoded("\"cursor\"")
         options.limit = try decoded("10")
         options.projectIds = try decoded("[\"\"]")
@@ -299,8 +324,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.consumption.getHistoryPerProject(
-            options: options
-        )
+                options: options
+            )
             XCTFail("getConsumptionHistoryPerProject did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 403)
@@ -317,12 +342,19 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testGetConsumptionHistoryPerProjectV2GetConsumptionHistoryPerProjectV2ReachesMockAndDecodesResponse() async throws {
+    func testGetConsumptionHistoryPerProjectV2GetConsumptionHistoryPerProjectV2ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
         _ = client
-        var options = try ConsumptionMethods.GetConsumptionHistoryPerProjectV2Options(from: decoded("\"2024-01-01T00:00:00Z\""), to: decoded("\"2024-01-01T00:00:00Z\""), granularity: decoded("\"hourly\""), orgId: decoded("\"a\""), metrics: decoded("[\"metrics\"]"))
+        var options = try ConsumptionMethods.GetConsumptionHistoryPerProjectV2Options(
+            from: decoded("\"2024-01-01T00:00:00Z\""),
+            to: decoded("\"2024-01-01T00:00:00Z\""),
+            granularity: decoded("\"hourly\""),
+            orgId: decoded("\"a\""),
+            metrics: decoded("[\"metrics\"]")
+        )
         options.cursor = try decoded("\"cursor\"")
         options.limit = try decoded("10")
         options.projectIds = try decoded("[\"\"]")
@@ -340,12 +372,19 @@ extension SdkMethodTests {
         )
     }
 
-    func testGetConsumptionHistoryPerProjectV2GetConsumptionHistoryPerProjectV2403ReachesMockAndDecodesResponse() async throws {
+    func testGetConsumptionHistoryPerProjectV2GetConsumptionHistoryPerProjectV2403ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/403") else {
             return
         }
         _ = client
-        var options = try ConsumptionMethods.GetConsumptionHistoryPerProjectV2Options(from: decoded("\"2024-01-01T00:00:00Z\""), to: decoded("\"2024-01-01T00:00:00Z\""), granularity: decoded("\"hourly\""), orgId: decoded("\"a\""), metrics: decoded("[\"metrics\"]"))
+        var options = try ConsumptionMethods.GetConsumptionHistoryPerProjectV2Options(
+            from: decoded("\"2024-01-01T00:00:00Z\""),
+            to: decoded("\"2024-01-01T00:00:00Z\""),
+            granularity: decoded("\"hourly\""),
+            orgId: decoded("\"a\""),
+            metrics: decoded("[\"metrics\"]")
+        )
         options.cursor = try decoded("\"cursor\"")
         options.limit = try decoded("10")
         options.projectIds = try decoded("[\"\"]")
@@ -355,8 +394,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.consumption.getHistoryPerProjectV2(
-            options: options
-        )
+                options: options
+            )
             XCTFail("getConsumptionHistoryPerProjectV2 did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 403)
@@ -493,10 +532,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.dataApi.get(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            databaseName: decoded("\"Example Name\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                databaseName: decoded("\"Example Name\"")
+            )
             XCTFail("getDataApi did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)

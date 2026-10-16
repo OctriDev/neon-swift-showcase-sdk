@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension SnapshotMethods {
-    /// Restores the specified snapshot to a new branch, and optionally finalizes the restore operation to replace the original branch.
+public extension SnapshotMethods {
+    /// Restores the specified snapshot to a new branch, and optionally finalizes the restore operation to replace the
+    /// original branch.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -24,15 +25,44 @@ extension SnapshotMethods {
     ///   immediately. This will complete the restore and move any associated computes
     ///   to the new branch, similar to the `finalizeRestoreBranch` operation.
     ///   Defaults to `false` to allow previewing the restored snapshot data first.
-    public static func restoreSnapshot(config: ClientConfig, projectId: String, snapshotId: String, name: String? = nil, name2: String? = nil, targetBranchId: String? = nil, finalizeRestore: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> RestoreSnapshotResponse {
+    static func restoreSnapshot(
+        config: ClientConfig,
+        projectId: String,
+        snapshotId: String,
+        name: String? = nil,
+        name2: String? = nil,
+        targetBranchId: String? = nil,
+        finalizeRestore: Bool? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> RestoreSnapshotResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("snapshot_id", snapshotId, sdkPatternead2b03f7a95)
 
-        let requestBody = RestoreSnapshotRequestBody(name2: name2, targetBranchId: targetBranchId, finalizeRestore: finalizeRestore)
+        let requestBody = RestoreSnapshotRequestBody(
+            name2: name2,
+            targetBranchId: targetBranchId,
+            finalizeRestore: finalizeRestore
+        )
 
-        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/snapshots/", sdkEncodePathSegment(sdkWireString(snapshotId)), "/restore"].joined(), config: config, query: [
-            SdkQueryParameter("name", value: name),
-        ], body: requestBody, decoder: .json, operationId: "restoreSnapshot", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "POST",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/snapshots/",
+                sdkEncodePathSegment(sdkWireString(snapshotId)),
+                "/restore",
+            ].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("name", value: name),
+            ],
+            body: requestBody,
+            decoder: .json,
+            operationId: "restoreSnapshot",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

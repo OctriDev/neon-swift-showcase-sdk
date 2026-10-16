@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Consumption domain models
+/// Consumption domain models
 /// Typed representation of the `ConsumptionHistoryPerProjectResponse` API schema.
 public struct ConsumptionHistoryPerProjectResponse: Codable {
     /// Per-project consumption history records included in the response.
@@ -13,21 +13,27 @@ public struct ConsumptionHistoryPerProjectResponse: Codable {
         case projects
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ConsumptionHistoryPerProjectResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projects) else {
-            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
-        }
-        self.projects = try container.sdkDecodeRequired(.projects)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ConsumptionHistoryPerProjectResponse {
-    public init(projects: [ConsumptionHistoryPerProject]) {
+public extension ConsumptionHistoryPerProjectResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.projects) else {
+            throw SdkValidationError(
+                field: "projects",
+                code: "required",
+                message: "Validation failed for 'projects': value is required"
+            )
+        }
+        projects = try container.sdkDecodeRequired(.projects)
+    }
+}
+
+public extension ConsumptionHistoryPerProjectResponse {
+    init(projects: [ConsumptionHistoryPerProject]) {
         self.projects = projects
     }
 }
@@ -36,14 +42,17 @@ extension ConsumptionHistoryPerProjectResponse {
 public struct ConsumptionHistoryGranularity: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let hourly = ConsumptionHistoryGranularity(rawValue: "hourly")
     public static let daily = ConsumptionHistoryGranularity(rawValue: "daily")
     public static let monthly = ConsumptionHistoryGranularity(rawValue: "monthly")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

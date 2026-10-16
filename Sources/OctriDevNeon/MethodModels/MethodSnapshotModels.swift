@@ -7,7 +7,7 @@ import Foundation
     import FoundationNetworking
 #endif
 
-// Canonical snapshot operation model declarations
+/// Canonical snapshot operation model declarations
 public struct ListSnapshotsResponse: Codable {
     public var snapshots: [Snapshot]
 
@@ -15,21 +15,27 @@ public struct ListSnapshotsResponse: Codable {
         case snapshots
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ListSnapshotsResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.snapshots) else {
-            throw SdkValidationError(field: "snapshots", code: "required", message: "Validation failed for 'snapshots': value is required")
-        }
-        self.snapshots = try container.sdkDecodeRequired(.snapshots)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ListSnapshotsResponse {
-    public init(snapshots: [Snapshot]) {
+public extension ListSnapshotsResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.snapshots) else {
+            throw SdkValidationError(
+                field: "snapshots",
+                code: "required",
+                message: "Validation failed for 'snapshots': value is required"
+            )
+        }
+        snapshots = try container.sdkDecodeRequired(.snapshots)
+    }
+}
+
+public extension ListSnapshotsResponse {
+    init(snapshots: [Snapshot]) {
         self.snapshots = snapshots
     }
 }
@@ -43,25 +49,35 @@ public struct CreateSnapshotResponse: Codable {
         case operations
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateSnapshotResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.snapshot) else {
-            throw SdkValidationError(field: "snapshot", code: "required", message: "Validation failed for 'snapshot': value is required")
-        }
-        guard container.contains(.operations) else {
-            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
-        }
-        self.snapshot = try container.sdkDecodeRequired(.snapshot)
-        self.operations = try container.sdkDecodeRequired(.operations)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateSnapshotResponse {
-    public init(snapshot: Snapshot, operations: [Operation]) {
+public extension CreateSnapshotResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.snapshot) else {
+            throw SdkValidationError(
+                field: "snapshot",
+                code: "required",
+                message: "Validation failed for 'snapshot': value is required"
+            )
+        }
+        guard container.contains(.operations) else {
+            throw SdkValidationError(
+                field: "operations",
+                code: "required",
+                message: "Validation failed for 'operations': value is required"
+            )
+        }
+        snapshot = try container.sdkDecodeRequired(.snapshot)
+        operations = try container.sdkDecodeRequired(.operations)
+    }
+}
+
+public extension CreateSnapshotResponse {
+    init(snapshot: Snapshot, operations: [Operation]) {
         (self.snapshot, self.operations) = (snapshot, operations)
     }
 }
@@ -86,26 +102,36 @@ public struct RestoreSnapshotResponse: Codable {
         case endpoints
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RestoreSnapshotResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.branch) else {
-            throw SdkValidationError(field: "branch", code: "required", message: "Validation failed for 'branch': value is required")
-        }
-        guard container.contains(.operations) else {
-            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
-        }
-        self.branch = try container.sdkDecodeRequired(.branch)
-        self.operations = try container.sdkDecodeRequired(.operations)
-        self.endpoints = try container.sdkDecodeIfPresent(.endpoints)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RestoreSnapshotResponse {
-    public init(branch: Branch, operations: [Operation], endpoints: [Endpoint]? = nil) {
+public extension RestoreSnapshotResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.branch) else {
+            throw SdkValidationError(
+                field: "branch",
+                code: "required",
+                message: "Validation failed for 'branch': value is required"
+            )
+        }
+        guard container.contains(.operations) else {
+            throw SdkValidationError(
+                field: "operations",
+                code: "required",
+                message: "Validation failed for 'operations': value is required"
+            )
+        }
+        branch = try container.sdkDecodeRequired(.branch)
+        operations = try container.sdkDecodeRequired(.operations)
+        endpoints = try container.sdkDecodeIfPresent(.endpoints)
+    }
+}
+
+public extension RestoreSnapshotResponse {
+    init(branch: Branch, operations: [Operation], endpoints: [Endpoint]? = nil) {
         (self.branch, self.operations) = (branch, operations)
         self.endpoints = endpoints
     }
@@ -118,21 +144,27 @@ public struct UpdateSnapshotResponse: Codable {
         case snapshot
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension UpdateSnapshotResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.snapshot) else {
-            throw SdkValidationError(field: "snapshot", code: "required", message: "Validation failed for 'snapshot': value is required")
-        }
-        self.snapshot = try container.sdkDecodeRequired(.snapshot)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension UpdateSnapshotResponse {
-    public init(snapshot: Snapshot) {
+public extension UpdateSnapshotResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.snapshot) else {
+            throw SdkValidationError(
+                field: "snapshot",
+                code: "required",
+                message: "Validation failed for 'snapshot': value is required"
+            )
+        }
+        snapshot = try container.sdkDecodeRequired(.snapshot)
+    }
+}
+
+public extension UpdateSnapshotResponse {
+    init(snapshot: Snapshot) {
         self.snapshot = snapshot
     }
 }

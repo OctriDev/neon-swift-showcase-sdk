@@ -6,20 +6,34 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AuthLegacyMethods {
-    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/domains` instead. Removal scheduled for March 1, 2026.
+public extension AuthLegacyMethods {
+    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/domains` instead. Removal scheduled for March
+    /// 1, 2026.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public static func listAuthLegacyRedirectUriAllowlistDomains(config: ClientConfig, projectId: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthRedirectURIAllowlistResponse {
+    static func listAuthLegacyRedirectUriAllowlistDomains(
+        config: ClientConfig,
+        projectId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthRedirectURIAllowlistResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/domains"].joined(), config: config, decoder: .json, operationId: "listAuthLegacyRedirectUriWhitelistDomains", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/domains"].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "listAuthLegacyRedirectUriWhitelistDomains",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
-    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/domains` instead. Removal scheduled for March 1, 2026.
+    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/domains` instead. Removal scheduled for March
+    /// 1, 2026.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -30,13 +44,31 @@ extension AuthLegacyMethods {
     ///   `mock` is a simulated provider for local development and testing only.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public static func addAuthLegacyDomainToRedirectUriAllowlist(config: ClientConfig, projectId: String, domain: String, authProvider: NeonAuthSupportedAuthProvider, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+    static func addAuthLegacyDomainToRedirectUriAllowlist(
+        config: ClientConfig,
+        projectId: String,
+        domain: String,
+        authProvider: NeonAuthSupportedAuthProvider,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidateUri("domain", domain)
 
-        let requestBody = AddAuthLegacyDomainToRedirectUriAllowlistRequestBody(domain: domain, authProvider: authProvider)
+        let requestBody = AddAuthLegacyDomainToRedirectUriAllowlistRequestBody(
+            domain: domain,
+            authProvider: authProvider
+        )
 
-        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/domains"].joined(), config: config, body: requestBody, decoder: .empty, operationId: "addAuthLegacyDomainToRedirectUriWhitelist", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/domains"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .empty,
+            operationId: "addAuthLegacyDomainToRedirectUriWhitelist",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

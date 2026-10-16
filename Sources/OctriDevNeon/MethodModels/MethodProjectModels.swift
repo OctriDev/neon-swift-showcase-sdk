@@ -7,7 +7,7 @@ import Foundation
     import FoundationNetworking
 #endif
 
-// Canonical project operation model declarations
+/// Canonical project operation model declarations
 public struct ListSharedProjectsResponse: Codable {
     /// List of projects accessible to the caller. Projects that exist but could not be retrieved are identified in
     /// `unavailable_project_ids`.
@@ -26,23 +26,29 @@ public struct ListSharedProjectsResponse: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ListSharedProjectsResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projects) else {
-            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
-        }
-        self.projects = try container.sdkDecodeRequired(.projects)
-        self.unavailableProjectIds = try container.sdkDecodeIfPresent(.unavailableProjectIds)
-        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ListSharedProjectsResponse {
-    public init(projects: [ProjectListItem], unavailableProjectIds: [String]? = nil, pagination: Pagination? = nil) {
+public extension ListSharedProjectsResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.projects) else {
+            throw SdkValidationError(
+                field: "projects",
+                code: "required",
+                message: "Validation failed for 'projects': value is required"
+            )
+        }
+        projects = try container.sdkDecodeRequired(.projects)
+        unavailableProjectIds = try container.sdkDecodeIfPresent(.unavailableProjectIds)
+        pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+public extension ListSharedProjectsResponse {
+    init(projects: [ProjectListItem], unavailableProjectIds: [String]? = nil, pagination: Pagination? = nil) {
         (self.projects, self.unavailableProjectIds) = (projects, unavailableProjectIds)
         self.pagination = pagination
     }
@@ -73,31 +79,51 @@ public struct ListProjectsResponse: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ListProjectsResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projects) else {
-            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
-        }
-        guard container.contains(.applications) else {
-            throw SdkValidationError(field: "applications", code: "required", message: "Validation failed for 'applications': value is required")
-        }
-        guard container.contains(.integrations) else {
-            throw SdkValidationError(field: "integrations", code: "required", message: "Validation failed for 'integrations': value is required")
-        }
-        self.projects = try container.sdkDecodeRequired(.projects)
-        self.applications = try container.sdkDecodeRequired(.applications)
-        self.integrations = try container.sdkDecodeRequired(.integrations)
-        self.unavailableProjectIds = try container.sdkDecodeIfPresent(.unavailableProjectIds)
-        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ListProjectsResponse {
-    public init(projects: [ProjectListItem], applications: [String: [ApplicationType]], integrations: [String: [ApplicationType]], unavailableProjectIds: [String]? = nil, pagination: Pagination? = nil) {
+public extension ListProjectsResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.projects) else {
+            throw SdkValidationError(
+                field: "projects",
+                code: "required",
+                message: "Validation failed for 'projects': value is required"
+            )
+        }
+        guard container.contains(.applications) else {
+            throw SdkValidationError(
+                field: "applications",
+                code: "required",
+                message: "Validation failed for 'applications': value is required"
+            )
+        }
+        guard container.contains(.integrations) else {
+            throw SdkValidationError(
+                field: "integrations",
+                code: "required",
+                message: "Validation failed for 'integrations': value is required"
+            )
+        }
+        projects = try container.sdkDecodeRequired(.projects)
+        applications = try container.sdkDecodeRequired(.applications)
+        integrations = try container.sdkDecodeRequired(.integrations)
+        unavailableProjectIds = try container.sdkDecodeIfPresent(.unavailableProjectIds)
+        pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+public extension ListProjectsResponse {
+    init(
+        projects: [ProjectListItem],
+        applications: [String: [ApplicationType]],
+        integrations: [String: [ApplicationType]],
+        unavailableProjectIds: [String]? = nil,
+        pagination: Pagination? = nil
+    ) {
         (self.projects, self.applications) = (projects, applications)
         (self.integrations, self.unavailableProjectIds) = (integrations, unavailableProjectIds)
         self.pagination = pagination
@@ -125,25 +151,35 @@ public struct UpdateProjectResponse: Codable {
         case operations
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension UpdateProjectResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.project) else {
-            throw SdkValidationError(field: "project", code: "required", message: "Validation failed for 'project': value is required")
-        }
-        guard container.contains(.operations) else {
-            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
-        }
-        self.project = try container.sdkDecodeRequired(.project)
-        self.operations = try container.sdkDecodeRequired(.operations)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension UpdateProjectResponse {
-    public init(project: Project, operations: [Operation]) {
+public extension UpdateProjectResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.project) else {
+            throw SdkValidationError(
+                field: "project",
+                code: "required",
+                message: "Validation failed for 'project': value is required"
+            )
+        }
+        guard container.contains(.operations) else {
+            throw SdkValidationError(
+                field: "operations",
+                code: "required",
+                message: "Validation failed for 'operations': value is required"
+            )
+        }
+        project = try container.sdkDecodeRequired(.project)
+        operations = try container.sdkDecodeRequired(.operations)
+    }
+}
+
+public extension UpdateProjectResponse {
+    init(project: Project, operations: [Operation]) {
         (self.project, self.operations) = (project, operations)
     }
 }
@@ -155,21 +191,27 @@ public struct GetProjectAdvisorSecurityIssuesResponse: Codable {
         case issues
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension GetProjectAdvisorSecurityIssuesResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.issues) else {
-            throw SdkValidationError(field: "issues", code: "required", message: "Validation failed for 'issues': value is required")
-        }
-        self.issues = try container.sdkDecodeRequired(.issues)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension GetProjectAdvisorSecurityIssuesResponse {
-    public init(issues: [AdvisorIssue]) {
+public extension GetProjectAdvisorSecurityIssuesResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.issues) else {
+            throw SdkValidationError(
+                field: "issues",
+                code: "required",
+                message: "Validation failed for 'issues': value is required"
+            )
+        }
+        issues = try container.sdkDecodeRequired(.issues)
+    }
+}
+
+public extension GetProjectAdvisorSecurityIssuesResponse {
+    init(issues: [AdvisorIssue]) {
         self.issues = issues
     }
 }
@@ -217,45 +259,83 @@ public struct CreateProjectResponse: Codable {
         case endpoints
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateProjectResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.project) else {
-            throw SdkValidationError(field: "project", code: "required", message: "Validation failed for 'project': value is required")
-        }
-        guard container.contains(.connectionUris) else {
-            throw SdkValidationError(field: "connection_uris", code: "required", message: "Validation failed for 'connection_uris': value is required")
-        }
-        guard container.contains(.roles) else {
-            throw SdkValidationError(field: "roles", code: "required", message: "Validation failed for 'roles': value is required")
-        }
-        guard container.contains(.databases) else {
-            throw SdkValidationError(field: "databases", code: "required", message: "Validation failed for 'databases': value is required")
-        }
-        guard container.contains(.operations) else {
-            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
-        }
-        guard container.contains(.branch) else {
-            throw SdkValidationError(field: "branch", code: "required", message: "Validation failed for 'branch': value is required")
-        }
-        guard container.contains(.endpoints) else {
-            throw SdkValidationError(field: "endpoints", code: "required", message: "Validation failed for 'endpoints': value is required")
-        }
-        self.project = try container.sdkDecodeRequired(.project)
-        self.connectionUris = try container.sdkDecodeRequired(.connectionUris)
-        self.roles = try container.sdkDecodeRequired(.roles)
-        self.databases = try container.sdkDecodeRequired(.databases)
-        self.operations = try container.sdkDecodeRequired(.operations)
-        self.branch = try container.sdkDecodeRequired(.branch)
-        self.endpoints = try container.sdkDecodeRequired(.endpoints)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateProjectResponse {
-    public init(project: Project, connectionUris: [ConnectionDetails], roles: [Role], databases: [Database], operations: [Operation], branch: Branch, endpoints: [Endpoint]) {
+public extension CreateProjectResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.project) else {
+            throw SdkValidationError(
+                field: "project",
+                code: "required",
+                message: "Validation failed for 'project': value is required"
+            )
+        }
+        guard container.contains(.connectionUris) else {
+            throw SdkValidationError(
+                field: "connection_uris",
+                code: "required",
+                message: "Validation failed for 'connection_uris': value is required"
+            )
+        }
+        guard container.contains(.roles) else {
+            throw SdkValidationError(
+                field: "roles",
+                code: "required",
+                message: "Validation failed for 'roles': value is required"
+            )
+        }
+        guard container.contains(.databases) else {
+            throw SdkValidationError(
+                field: "databases",
+                code: "required",
+                message: "Validation failed for 'databases': value is required"
+            )
+        }
+        guard container.contains(.operations) else {
+            throw SdkValidationError(
+                field: "operations",
+                code: "required",
+                message: "Validation failed for 'operations': value is required"
+            )
+        }
+        guard container.contains(.branch) else {
+            throw SdkValidationError(
+                field: "branch",
+                code: "required",
+                message: "Validation failed for 'branch': value is required"
+            )
+        }
+        guard container.contains(.endpoints) else {
+            throw SdkValidationError(
+                field: "endpoints",
+                code: "required",
+                message: "Validation failed for 'endpoints': value is required"
+            )
+        }
+        project = try container.sdkDecodeRequired(.project)
+        connectionUris = try container.sdkDecodeRequired(.connectionUris)
+        roles = try container.sdkDecodeRequired(.roles)
+        databases = try container.sdkDecodeRequired(.databases)
+        operations = try container.sdkDecodeRequired(.operations)
+        branch = try container.sdkDecodeRequired(.branch)
+        endpoints = try container.sdkDecodeRequired(.endpoints)
+    }
+}
+
+public extension CreateProjectResponse {
+    init(
+        project: Project,
+        connectionUris: [ConnectionDetails],
+        roles: [Role],
+        databases: [Database],
+        operations: [Operation],
+        branch: Branch,
+        endpoints: [Endpoint]
+    ) {
         (self.project, self.connectionUris) = (project, connectionUris)
         (self.roles, self.databases) = (roles, databases)
         (self.operations, self.branch) = (operations, branch)

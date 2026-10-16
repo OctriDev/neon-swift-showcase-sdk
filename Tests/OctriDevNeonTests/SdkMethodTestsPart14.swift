@@ -17,10 +17,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.resetRolePassword(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            roleName: decoded("\"Example Name\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                roleName: decoded("\"Example Name\"")
+            )
             XCTFail("resetBranchRolePassword did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -68,9 +68,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.endpoint.restart(
-            projectId: decoded("\"a\""),
-            endpointId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                endpointId: decoded("\"a\"")
+            )
             XCTFail("restartEndpoint did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -122,13 +122,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.restore(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            sourceBranchId: decoded("\"a\""),
-            sourceLsn: decoded("\"source_lsn\""),
-            sourceTimestamp: decoded("\"2024-02-26T12:00:00Z\""),
-            preserveUnderName: decoded("\"Example Name\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                sourceBranchId: decoded("\"a\""),
+                sourceLsn: decoded("\"source_lsn\""),
+                sourceTimestamp: decoded("\"2024-02-26T12:00:00Z\""),
+                preserveUnderName: decoded("\"Example Name\"")
+            )
             XCTFail("restoreBranch did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -180,13 +180,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.snapshot.restore(
-            projectId: decoded("\"a\""),
-            snapshotId: decoded("\"a\""),
-            name: decoded("\"Example Name\""),
-            name2: decoded("\"Example Name\""),
-            targetBranchId: decoded("\"target_branch-1\""),
-            finalizeRestore: decoded("false")
-        )
+                projectId: decoded("\"a\""),
+                snapshotId: decoded("\"a\""),
+                name: decoded("\"Example Name\""),
+                name2: decoded("\"Example Name\""),
+                targetBranchId: decoded("\"target_branch-1\""),
+                finalizeRestore: decoded("false")
+            )
             XCTFail("restoreSnapshot did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -235,10 +235,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.credentials.reveal(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            tokenId: decoded("\"token-1\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                tokenId: decoded("\"token-1\"")
+            )
             XCTFail("revealCredential did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -285,8 +285,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.apiKey.revoke(
-            keyId: decoded("1")
-        )
+                keyId: decoded("1")
+            )
             XCTFail("revokeApiKey did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -327,10 +327,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.credentials.revoke(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            tokenId: decoded("\"token-1\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                tokenId: decoded("\"token-1\"")
+            )
             XCTFail("revokeCredential did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -378,9 +378,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.organizations.revokeApiKey(
-            orgId: decoded("\"a\""),
-            keyId: decoded("1")
-        )
+                orgId: decoded("\"a\""),
+                keyId: decoded("1")
+            )
             XCTFail("revokeOrganizationsApiKey did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -428,9 +428,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.revokePermission(
-            projectId: decoded("\"a\""),
-            permissionId: decoded("\"permission-1\"")
-        )
+                projectId: decoded("\"a\""),
+                permissionId: decoded("\"permission-1\"")
+            )
             XCTFail("revokeProjectPermission did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -479,10 +479,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.rotateOAuthClientSecret(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            clientId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                clientId: decoded("\"a\"")
+            )
             XCTFail("rotateAuthOAuthClientSecret did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -531,10 +531,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.credentials.rotate(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            tokenId: decoded("\"token-1\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                tokenId: decoded("\"token-1\"")
+            )
             XCTFail("rotateCredential did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)

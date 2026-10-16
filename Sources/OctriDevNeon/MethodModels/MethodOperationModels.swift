@@ -7,7 +7,7 @@ import Foundation
     import FoundationNetworking
 #endif
 
-// Canonical operation operation model declarations
+/// Canonical operation operation model declarations
 public struct ListOperationResponse: Codable {
     /// Required array value serialized in the `operations` wire field.
     public var operations: [Operation]
@@ -21,22 +21,28 @@ public struct ListOperationResponse: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ListOperationResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.operations) else {
-            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
-        }
-        self.operations = try container.sdkDecodeRequired(.operations)
-        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ListOperationResponse {
-    public init(operations: [Operation], pagination: Pagination? = nil) {
+public extension ListOperationResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.operations) else {
+            throw SdkValidationError(
+                field: "operations",
+                code: "required",
+                message: "Validation failed for 'operations': value is required"
+            )
+        }
+        operations = try container.sdkDecodeRequired(.operations)
+        pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+public extension ListOperationResponse {
+    init(operations: [Operation], pagination: Pagination? = nil) {
         (self.operations, self.pagination) = (operations, pagination)
     }
 }

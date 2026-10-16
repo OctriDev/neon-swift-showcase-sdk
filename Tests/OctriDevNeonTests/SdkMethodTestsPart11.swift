@@ -37,9 +37,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.listTrustedDomains(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\"")
+            )
             XCTFail("listAuthTrustedDomains did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -92,14 +92,14 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.list(
-            projectId: decoded("\"a\""),
-            search: decoded("\"search\""),
-            sortBy: decoded("\"updated_at\""),
-            cursor: decoded("\"cursor\""),
-            sortOrder: decoded("\"desc\""),
-            limit: decoded("1"),
-            includeDeleted: decoded("false")
-        )
+                projectId: decoded("\"a\""),
+                search: decoded("\"search\""),
+                sortBy: decoded("\"updated_at\""),
+                cursor: decoded("\"cursor\""),
+                sortOrder: decoded("\"desc\""),
+                limit: decoded("1"),
+                includeDeleted: decoded("false")
+            )
             XCTFail("listBranch did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -147,9 +147,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.listDatabases(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\"")
+            )
             XCTFail("listBranchDatabases did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -197,9 +197,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.listEndpoints(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\"")
+            )
             XCTFail("listBranchEndpoints did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -247,9 +247,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.listRoles(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\"")
+            )
             XCTFail("listBranchRoles did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -297,9 +297,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.buckets.list(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\"")
+            )
             XCTFail("listBuckets did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -352,14 +352,14 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.buckets.listObjects(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            bucketName: decoded("\"Example Name\""),
-            prefix: decoded("\"prefix\""),
-            delimiter: decoded("\"delimiter\""),
-            cursor: decoded("\"cursor\""),
-            limit: decoded("1000")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                bucketName: decoded("\"Example Name\""),
+                prefix: decoded("\"prefix\""),
+                delimiter: decoded("\"delimiter\""),
+                cursor: decoded("\"cursor\""),
+                limit: decoded("1000")
+            )
             XCTFail("listBucketsObjects did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -407,9 +407,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.credentials.list(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\"")
+            )
             XCTFail("listCredentials did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -456,8 +456,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.endpoint.list(
-            projectId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\"")
+            )
             XCTFail("listEndpoint did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -507,11 +507,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.functions.list(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            cursor: decoded("\"cursor\""),
-            limit: decoded("1")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                cursor: decoded("\"cursor\""),
+                limit: decoded("1")
+            )
             XCTFail("listFunctions did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -561,11 +561,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.functions.listCustomDomains(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            cursor: decoded("\"cursor\""),
-            limit: decoded("1")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                cursor: decoded("\"cursor\""),
+                limit: decoded("1")
+            )
             XCTFail("listFunctionsCustomDomains did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)

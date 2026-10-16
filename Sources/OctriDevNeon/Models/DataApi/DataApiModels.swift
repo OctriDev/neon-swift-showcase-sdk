@@ -3,7 +3,7 @@
 
 import Foundation
 
-// TaggedModelsDataApi domain models
+/// TaggedModelsDataApi domain models
 /// Update Neon Data API
 public struct DataAPIUpdateRequest: Codable {
     /// Configuration settings for the Neon Data API.
@@ -14,19 +14,19 @@ public struct DataAPIUpdateRequest: Codable {
     }
 
     init() {
-        self.settings = nil
+        settings = nil
     }
 }
 
-extension DataAPIUpdateRequest {
-    public init(from decoder: Decoder) throws {
+public extension DataAPIUpdateRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.settings = try container.sdkDecodeIfPresent(.settings)
+        settings = try container.sdkDecodeIfPresent(.settings)
     }
 }
 
-extension DataAPIUpdateRequest {
-    public init(settings: DataAPISettings? = nil) {
+public extension DataAPIUpdateRequest {
+    init(settings: DataAPISettings? = nil) {
         self.init()
         self.settings = settings
     }
@@ -65,29 +65,37 @@ public struct DataAPICreateRequest: Codable {
     }
 
     init() {
-        (self.authProvider, self.jwksUrl, self.providerName, self.jwtAudience, self.addDefaultGrants) = (nil, nil, nil, nil, nil)
-        (self.skipAuthSchema, self.settings) = (nil, nil)
+        (authProvider, jwksUrl, providerName, jwtAudience, addDefaultGrants) = (nil, nil, nil, nil, nil)
+        (skipAuthSchema, settings) = (nil, nil)
     }
 }
 
-extension DataAPICreateRequest {
-    public init(from decoder: Decoder) throws {
+public extension DataAPICreateRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.authProvider = try container.sdkDecodeIfPresent(.authProvider)
-        self.jwksUrl = try container.sdkDecodeIfPresent(.jwksUrl)
-        self.providerName = try container.sdkDecodeIfPresent(.providerName)
-        self.jwtAudience = try container.sdkDecodeIfPresent(.jwtAudience)
-        self.addDefaultGrants = try container.sdkDecodeIfPresent(.addDefaultGrants)
-        self.skipAuthSchema = try container.sdkDecodeIfPresent(.skipAuthSchema)
-        self.settings = try container.sdkDecodeIfPresent(.settings)
-        if let value = self.jwksUrl {
+        authProvider = try container.sdkDecodeIfPresent(.authProvider)
+        jwksUrl = try container.sdkDecodeIfPresent(.jwksUrl)
+        providerName = try container.sdkDecodeIfPresent(.providerName)
+        jwtAudience = try container.sdkDecodeIfPresent(.jwtAudience)
+        addDefaultGrants = try container.sdkDecodeIfPresent(.addDefaultGrants)
+        skipAuthSchema = try container.sdkDecodeIfPresent(.skipAuthSchema)
+        settings = try container.sdkDecodeIfPresent(.settings)
+        if let value = jwksUrl {
             try sdkValidateUri("jwks_url", value)
         }
     }
 }
 
-extension DataAPICreateRequest {
-    public init(authProvider: DataAPICreateRequestAuthProvider? = nil, jwksUrl: String? = nil, providerName: String? = nil, jwtAudience: String? = nil, addDefaultGrants: Bool? = nil, skipAuthSchema: Bool? = nil, settings: DataAPISettings? = nil) throws {
+public extension DataAPICreateRequest {
+    init(
+        authProvider: DataAPICreateRequestAuthProvider? = nil,
+        jwksUrl: String? = nil,
+        providerName: String? = nil,
+        jwtAudience: String? = nil,
+        addDefaultGrants: Bool? = nil,
+        skipAuthSchema: Bool? = nil,
+        settings: DataAPISettings? = nil
+    ) throws {
         self.init()
         (self.authProvider, self.jwksUrl) = (authProvider, jwksUrl)
         (self.providerName, self.jwtAudience) = (providerName, jwtAudience)
@@ -108,24 +116,30 @@ public struct DataAPICreateResponse: Codable {
         case url
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DataAPICreateResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.url) else {
-            throw SdkValidationError(field: "url", code: "required", message: "Validation failed for 'url': value is required")
-        }
-        self.url = try container.sdkDecodeRequired(.url)
-            try sdkValidateUri("url", self.url)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DataAPICreateResponse {
-    public init(url: String) throws {
+public extension DataAPICreateResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.url) else {
+            throw SdkValidationError(
+                field: "url",
+                code: "required",
+                message: "Validation failed for 'url': value is required"
+            )
+        }
+        url = try container.sdkDecodeRequired(.url)
+        try sdkValidateUri("url", url)
+    }
+}
+
+public extension DataAPICreateResponse {
+    init(url: String) throws {
         self.url = url
-            try sdkValidateUri("url", self.url)
+        try sdkValidateUri("url", self.url)
     }
 }
 
@@ -152,36 +166,52 @@ public struct DataAPIReponse: Codable {
         case observedAt = "observed_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension DataAPIReponse {
-    public init(from decoder: Decoder) throws {
+public extension DataAPIReponse {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.url) else {
-            throw SdkValidationError(field: "url", code: "required", message: "Validation failed for 'url': value is required")
+            throw SdkValidationError(
+                field: "url",
+                code: "required",
+                message: "Validation failed for 'url': value is required"
+            )
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
         }
-        self.url = try container.sdkDecodeRequired(.url)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.settings = try container.sdkDecodeIfPresent(.settings)
-        self.availableSchemas = try container.sdkDecodeIfPresent(.availableSchemas)
-        self.observedAt = try container.sdkDecodeIfPresent(.observedAt)
-            try sdkValidateUri("url", self.url)
-        if let value = self.observedAt {
+        url = try container.sdkDecodeRequired(.url)
+        status = try container.sdkDecodeRequired(.status)
+        settings = try container.sdkDecodeIfPresent(.settings)
+        availableSchemas = try container.sdkDecodeIfPresent(.availableSchemas)
+        observedAt = try container.sdkDecodeIfPresent(.observedAt)
+        try sdkValidateUri("url", url)
+        if let value = observedAt {
             try sdkValidateDateTime("observed_at", sdkWireString(value))
         }
     }
 }
 
-extension DataAPIReponse {
-    public init(url: String, status: String, settings: [String: JSONValue]? = nil, availableSchemas: [String]? = nil, observedAt: Date? = nil) throws {
+public extension DataAPIReponse {
+    init(
+        url: String,
+        status: String,
+        settings: [String: JSONValue]? = nil,
+        availableSchemas: [String]? = nil,
+        observedAt: Date? = nil
+    ) throws {
         (self.url, self.status) = (url, status)
         (self.settings, self.availableSchemas) = (settings, availableSchemas)
         self.observedAt = observedAt
-            try sdkValidateUri("url", self.url)
+        try sdkValidateUri("url", self.url)
         if let value = self.observedAt {
             try sdkValidateDateTime("observed_at", sdkWireString(value))
         }
@@ -226,29 +256,46 @@ public struct DataAPISettings: Codable {
     }
 
     init() {
-        (self.dbAggregatesEnabled, self.dbAnonRole, self.dbExtraSearchPath, self.dbMaxRows, self.dbSchemas) = (nil, nil, nil, nil, nil)
-        (self.jwtRoleClaimKey, self.jwtCacheMaxLifetime, self.openapiMode, self.serverCorsAllowedOrigins, self.serverTimingEnabled) = (nil, nil, nil, nil, nil)
+        (dbAggregatesEnabled, dbAnonRole, dbExtraSearchPath, dbMaxRows, dbSchemas) = (nil, nil, nil, nil, nil)
+        (jwtRoleClaimKey, jwtCacheMaxLifetime, openapiMode, serverCorsAllowedOrigins, serverTimingEnabled) = (
+            nil,
+            nil,
+            nil,
+            nil,
+            nil
+        )
     }
 }
 
-extension DataAPISettings {
-    public init(from decoder: Decoder) throws {
+public extension DataAPISettings {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.dbAggregatesEnabled = try container.sdkDecodeIfPresent(.dbAggregatesEnabled)
-        self.dbAnonRole = try container.sdkDecodeIfPresent(.dbAnonRole)
-        self.dbExtraSearchPath = try container.sdkDecodeIfPresent(.dbExtraSearchPath)
-        self.dbMaxRows = try container.sdkDecodeIfPresent(.dbMaxRows)
-        self.dbSchemas = try container.sdkDecodeIfPresent(.dbSchemas)
-        self.jwtRoleClaimKey = try container.sdkDecodeIfPresent(.jwtRoleClaimKey)
-        self.jwtCacheMaxLifetime = try container.sdkDecodeIfPresent(.jwtCacheMaxLifetime)
-        self.openapiMode = try container.sdkDecodeIfPresent(.openapiMode)
-        self.serverCorsAllowedOrigins = try container.sdkDecodeIfPresent(.serverCorsAllowedOrigins)
-        self.serverTimingEnabled = try container.sdkDecodeIfPresent(.serverTimingEnabled)
+        dbAggregatesEnabled = try container.sdkDecodeIfPresent(.dbAggregatesEnabled)
+        dbAnonRole = try container.sdkDecodeIfPresent(.dbAnonRole)
+        dbExtraSearchPath = try container.sdkDecodeIfPresent(.dbExtraSearchPath)
+        dbMaxRows = try container.sdkDecodeIfPresent(.dbMaxRows)
+        dbSchemas = try container.sdkDecodeIfPresent(.dbSchemas)
+        jwtRoleClaimKey = try container.sdkDecodeIfPresent(.jwtRoleClaimKey)
+        jwtCacheMaxLifetime = try container.sdkDecodeIfPresent(.jwtCacheMaxLifetime)
+        openapiMode = try container.sdkDecodeIfPresent(.openapiMode)
+        serverCorsAllowedOrigins = try container.sdkDecodeIfPresent(.serverCorsAllowedOrigins)
+        serverTimingEnabled = try container.sdkDecodeIfPresent(.serverTimingEnabled)
     }
 }
 
-extension DataAPISettings {
-    public init(dbAggregatesEnabled: Bool? = nil, dbAnonRole: String? = nil, dbExtraSearchPath: String? = nil, dbMaxRows: Int? = nil, dbSchemas: [String]? = nil, jwtRoleClaimKey: String? = nil, jwtCacheMaxLifetime: Int? = nil, openapiMode: String? = nil, serverCorsAllowedOrigins: String? = nil, serverTimingEnabled: Bool? = nil) {
+public extension DataAPISettings {
+    init(
+        dbAggregatesEnabled: Bool? = nil,
+        dbAnonRole: String? = nil,
+        dbExtraSearchPath: String? = nil,
+        dbMaxRows: Int? = nil,
+        dbSchemas: [String]? = nil,
+        jwtRoleClaimKey: String? = nil,
+        jwtCacheMaxLifetime: Int? = nil,
+        openapiMode: String? = nil,
+        serverCorsAllowedOrigins: String? = nil,
+        serverTimingEnabled: Bool? = nil
+    ) {
         self.init()
         (self.dbAggregatesEnabled, self.dbAnonRole) = (dbAggregatesEnabled, dbAnonRole)
         (self.dbExtraSearchPath, self.dbMaxRows) = (dbExtraSearchPath, dbMaxRows)
@@ -297,29 +344,46 @@ public struct DataAPIReponseSettings: Codable {
     }
 
     init() {
-        (self.dbAggregatesEnabled, self.dbAnonRole, self.dbExtraSearchPath, self.dbMaxRows, self.dbSchemas) = (nil, nil, nil, nil, nil)
-        (self.jwtRoleClaimKey, self.jwtCacheMaxLifetime, self.openapiMode, self.serverCorsAllowedOrigins, self.serverTimingEnabled) = (nil, nil, nil, nil, nil)
+        (dbAggregatesEnabled, dbAnonRole, dbExtraSearchPath, dbMaxRows, dbSchemas) = (nil, nil, nil, nil, nil)
+        (jwtRoleClaimKey, jwtCacheMaxLifetime, openapiMode, serverCorsAllowedOrigins, serverTimingEnabled) = (
+            nil,
+            nil,
+            nil,
+            nil,
+            nil
+        )
     }
 }
 
-extension DataAPIReponseSettings {
-    public init(from decoder: Decoder) throws {
+public extension DataAPIReponseSettings {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.dbAggregatesEnabled = try container.sdkDecodeIfPresent(.dbAggregatesEnabled)
-        self.dbAnonRole = try container.sdkDecodeIfPresent(.dbAnonRole)
-        self.dbExtraSearchPath = try container.sdkDecodeIfPresent(.dbExtraSearchPath)
-        self.dbMaxRows = try container.sdkDecodeIfPresent(.dbMaxRows)
-        self.dbSchemas = try container.sdkDecodeIfPresent(.dbSchemas)
-        self.jwtRoleClaimKey = try container.sdkDecodeIfPresent(.jwtRoleClaimKey)
-        self.jwtCacheMaxLifetime = try container.sdkDecodeIfPresent(.jwtCacheMaxLifetime)
-        self.openapiMode = try container.sdkDecodeIfPresent(.openapiMode)
-        self.serverCorsAllowedOrigins = try container.sdkDecodeIfPresent(.serverCorsAllowedOrigins)
-        self.serverTimingEnabled = try container.sdkDecodeIfPresent(.serverTimingEnabled)
+        dbAggregatesEnabled = try container.sdkDecodeIfPresent(.dbAggregatesEnabled)
+        dbAnonRole = try container.sdkDecodeIfPresent(.dbAnonRole)
+        dbExtraSearchPath = try container.sdkDecodeIfPresent(.dbExtraSearchPath)
+        dbMaxRows = try container.sdkDecodeIfPresent(.dbMaxRows)
+        dbSchemas = try container.sdkDecodeIfPresent(.dbSchemas)
+        jwtRoleClaimKey = try container.sdkDecodeIfPresent(.jwtRoleClaimKey)
+        jwtCacheMaxLifetime = try container.sdkDecodeIfPresent(.jwtCacheMaxLifetime)
+        openapiMode = try container.sdkDecodeIfPresent(.openapiMode)
+        serverCorsAllowedOrigins = try container.sdkDecodeIfPresent(.serverCorsAllowedOrigins)
+        serverTimingEnabled = try container.sdkDecodeIfPresent(.serverTimingEnabled)
     }
 }
 
-extension DataAPIReponseSettings {
-    public init(dbAggregatesEnabled: Bool? = nil, dbAnonRole: String? = nil, dbExtraSearchPath: String? = nil, dbMaxRows: Int? = nil, dbSchemas: [String]? = nil, jwtRoleClaimKey: String? = nil, jwtCacheMaxLifetime: Int? = nil, openapiMode: String? = nil, serverCorsAllowedOrigins: String? = nil, serverTimingEnabled: Bool? = nil) {
+public extension DataAPIReponseSettings {
+    init(
+        dbAggregatesEnabled: Bool? = nil,
+        dbAnonRole: String? = nil,
+        dbExtraSearchPath: String? = nil,
+        dbMaxRows: Int? = nil,
+        dbSchemas: [String]? = nil,
+        jwtRoleClaimKey: String? = nil,
+        jwtCacheMaxLifetime: Int? = nil,
+        openapiMode: String? = nil,
+        serverCorsAllowedOrigins: String? = nil,
+        serverTimingEnabled: Bool? = nil
+    ) {
         self.init()
         (self.dbAggregatesEnabled, self.dbAnonRole) = (dbAggregatesEnabled, dbAnonRole)
         (self.dbExtraSearchPath, self.dbMaxRows) = (dbExtraSearchPath, dbMaxRows)
@@ -336,13 +400,16 @@ extension DataAPIReponseSettings {
 public struct DataAPICreateRequestAuthProvider: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let neonAuth = DataAPICreateRequestAuthProvider(rawValue: "neon_auth")
     public static let external = DataAPICreateRequestAuthProvider(rawValue: "external")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

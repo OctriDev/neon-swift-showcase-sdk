@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Shared domain models
+/// Shared domain models
 /// Typed representation of the `GeneralError` API schema.
 public struct GeneralError: Codable {
     /// Machine-readable code classifying the error type. See `message` for a human-readable explanation.
@@ -20,26 +20,36 @@ public struct GeneralError: Codable {
         case requestId = "request_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension GeneralError {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        self.code = try container.sdkDecodeRequired(.code)
-        self.message = try container.sdkDecodeRequired(.message)
-        self.requestId = try container.sdkDecodeIfPresent(.requestId)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension GeneralError {
-    public init(code: ErrorCode, message: String, requestId: String? = nil) {
+public extension GeneralError {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        code = try container.sdkDecodeRequired(.code)
+        message = try container.sdkDecodeRequired(.message)
+        requestId = try container.sdkDecodeIfPresent(.requestId)
+    }
+}
+
+public extension GeneralError {
+    init(code: ErrorCode, message: String, requestId: String? = nil) {
         (self.code, self.message) = (code, message)
         self.requestId = requestId
     }
@@ -55,21 +65,27 @@ public struct RolesResponse: Codable {
         case roles
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RolesResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.roles) else {
-            throw SdkValidationError(field: "roles", code: "required", message: "Validation failed for 'roles': value is required")
-        }
-        self.roles = try container.sdkDecodeRequired(.roles)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RolesResponse {
-    public init(roles: [Role]) {
+public extension RolesResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.roles) else {
+            throw SdkValidationError(
+                field: "roles",
+                code: "required",
+                message: "Validation failed for 'roles': value is required"
+            )
+        }
+        roles = try container.sdkDecodeRequired(.roles)
+    }
+}
+
+public extension RolesResponse {
+    init(roles: [Role]) {
         self.roles = roles
     }
 }
@@ -90,29 +106,43 @@ public struct LimitsUnsatisfiedResponseLimitsItem: Codable {
         case actual
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LimitsUnsatisfiedResponseLimitsItem {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.expected) else {
-            throw SdkValidationError(field: "expected", code: "required", message: "Validation failed for 'expected': value is required")
-        }
-        guard container.contains(.actual) else {
-            throw SdkValidationError(field: "actual", code: "required", message: "Validation failed for 'actual': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.expected = try container.sdkDecodeRequired(.expected)
-        self.actual = try container.sdkDecodeRequired(.actual)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LimitsUnsatisfiedResponseLimitsItem {
-    public init(name: String, expected: String, actual: String) {
+public extension LimitsUnsatisfiedResponseLimitsItem {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.expected) else {
+            throw SdkValidationError(
+                field: "expected",
+                code: "required",
+                message: "Validation failed for 'expected': value is required"
+            )
+        }
+        guard container.contains(.actual) else {
+            throw SdkValidationError(
+                field: "actual",
+                code: "required",
+                message: "Validation failed for 'actual': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+        expected = try container.sdkDecodeRequired(.expected)
+        actual = try container.sdkDecodeRequired(.actual)
+    }
+}
+
+public extension LimitsUnsatisfiedResponseLimitsItem {
+    init(name: String, expected: String, actual: String) {
         (self.name, self.expected) = (name, expected)
         self.actual = actual
     }
@@ -127,21 +157,27 @@ public struct EndpointsResponse: Codable {
         case endpoints
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension EndpointsResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.endpoints) else {
-            throw SdkValidationError(field: "endpoints", code: "required", message: "Validation failed for 'endpoints': value is required")
-        }
-        self.endpoints = try container.sdkDecodeRequired(.endpoints)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension EndpointsResponse {
-    public init(endpoints: [Endpoint]) {
+public extension EndpointsResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.endpoints) else {
+            throw SdkValidationError(
+                field: "endpoints",
+                code: "required",
+                message: "Validation failed for 'endpoints': value is required"
+            )
+        }
+        endpoints = try container.sdkDecodeRequired(.endpoints)
+    }
+}
+
+public extension EndpointsResponse {
+    init(endpoints: [Endpoint]) {
         self.endpoints = endpoints
     }
 }
@@ -155,21 +191,27 @@ public struct VPCEndpointsResponse: Codable {
         case endpoints
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension VPCEndpointsResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.endpoints) else {
-            throw SdkValidationError(field: "endpoints", code: "required", message: "Validation failed for 'endpoints': value is required")
-        }
-        self.endpoints = try container.sdkDecodeRequired(.endpoints)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension VPCEndpointsResponse {
-    public init(endpoints: [VPCEndpoint]) {
+public extension VPCEndpointsResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.endpoints) else {
+            throw SdkValidationError(
+                field: "endpoints",
+                code: "required",
+                message: "Validation failed for 'endpoints': value is required"
+            )
+        }
+        endpoints = try container.sdkDecodeRequired(.endpoints)
+    }
+}
+
+public extension VPCEndpointsResponse {
+    init(endpoints: [VPCEndpoint]) {
         self.endpoints = endpoints
     }
 }
@@ -188,20 +230,20 @@ public struct PreloadLibraries: Codable {
     }
 
     init() {
-        (self.useDefaults, self.enabledLibraries) = (nil, nil)
+        (useDefaults, enabledLibraries) = (nil, nil)
     }
 }
 
-extension PreloadLibraries {
-    public init(from decoder: Decoder) throws {
+public extension PreloadLibraries {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.useDefaults = try container.sdkDecodeIfPresent(.useDefaults)
-        self.enabledLibraries = try container.sdkDecodeIfPresent(.enabledLibraries)
+        useDefaults = try container.sdkDecodeIfPresent(.useDefaults)
+        enabledLibraries = try container.sdkDecodeIfPresent(.enabledLibraries)
     }
 }
 
-extension PreloadLibraries {
-    public init(useDefaults: Bool? = nil, enabledLibraries: [String]? = nil) {
+public extension PreloadLibraries {
+    init(useDefaults: Bool? = nil, enabledLibraries: [String]? = nil) {
         self.init()
         (self.useDefaults, self.enabledLibraries) = (useDefaults, enabledLibraries)
     }
@@ -217,21 +259,27 @@ public struct ProjectsWithIntegrationResponse: Codable {
         case projects
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectsWithIntegrationResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projects) else {
-            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
-        }
-        self.projects = try container.sdkDecodeRequired(.projects)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectsWithIntegrationResponse {
-    public init(projects: [ProjectsWithIntegrationResponseProjectsItem]) {
+public extension ProjectsWithIntegrationResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.projects) else {
+            throw SdkValidationError(
+                field: "projects",
+                code: "required",
+                message: "Validation failed for 'projects': value is required"
+            )
+        }
+        projects = try container.sdkDecodeRequired(.projects)
+    }
+}
+
+public extension ProjectsWithIntegrationResponse {
+    init(projects: [ProjectsWithIntegrationResponseProjectsItem]) {
         self.projects = projects
     }
 }
@@ -245,21 +293,27 @@ public struct BranchesResponse: Codable {
         case branches
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchesResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.branches) else {
-            throw SdkValidationError(field: "branches", code: "required", message: "Validation failed for 'branches': value is required")
-        }
-        self.branches = try container.sdkDecodeRequired(.branches)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchesResponse {
-    public init(branches: [Branch]) {
+public extension BranchesResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.branches) else {
+            throw SdkValidationError(
+                field: "branches",
+                code: "required",
+                message: "Validation failed for 'branches': value is required"
+            )
+        }
+        branches = try container.sdkDecodeRequired(.branches)
+    }
+}
+
+public extension BranchesResponse {
+    init(branches: [Branch]) {
         self.branches = branches
     }
 }
@@ -268,7 +322,10 @@ extension BranchesResponse {
 public struct BillingSubscriptionType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let unknown = BillingSubscriptionType(rawValue: "UNKNOWN")
     public static let directSales = BillingSubscriptionType(rawValue: "direct_sales")
     public static let directSalesV3 = BillingSubscriptionType(rawValue: "direct_sales_v3")
@@ -285,7 +342,7 @@ public struct BillingSubscriptionType: RawRepresentable, Hashable, Codable, Send
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

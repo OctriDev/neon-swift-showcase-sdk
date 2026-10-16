@@ -7,7 +7,7 @@ import Foundation
     import FoundationNetworking
 #endif
 
-// Canonical branch operation model declarations
+/// Canonical branch operation model declarations
 public struct CreateBranchRequestBody: Codable {
     /// Compute endpoints to create together with the branch. If omitted, the branch is created without any compute
     /// endpoint. Endpoints can be added to the branch separately after creation.
@@ -27,21 +27,25 @@ public struct CreateBranchRequestBody: Codable {
     }
 
     init() {
-        (self.endpoints, self.branch, self.annotationValue) = (nil, nil, nil)
+        (endpoints, branch, annotationValue) = (nil, nil, nil)
     }
 }
 
-extension CreateBranchRequestBody {
-    public init(from decoder: Decoder) throws {
+public extension CreateBranchRequestBody {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.endpoints = try container.sdkDecodeIfPresent(.endpoints)
-        self.branch = try container.sdkDecodeIfPresent(.branch)
-        self.annotationValue = try container.sdkDecodeIfPresent(.annotationValue)
+        endpoints = try container.sdkDecodeIfPresent(.endpoints)
+        branch = try container.sdkDecodeIfPresent(.branch)
+        annotationValue = try container.sdkDecodeIfPresent(.annotationValue)
     }
 }
 
-extension CreateBranchRequestBody {
-    public init(endpoints: [BranchCreateRequestEndpointOptions]? = nil, branch: BranchCreateRequestBranch? = nil, annotationValue: AnnotationValueData? = nil) {
+public extension CreateBranchRequestBody {
+    init(
+        endpoints: [BranchCreateRequestEndpointOptions]? = nil,
+        branch: BranchCreateRequestBranch? = nil,
+        annotationValue: AnnotationValueData? = nil
+    ) {
         self.init()
         (self.endpoints, self.branch) = (endpoints, branch)
         self.annotationValue = annotationValue
@@ -78,38 +82,67 @@ public struct CreateBranchAnonymizedResponse: Codable {
         case connectionUris = "connection_uris"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateBranchAnonymizedResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.branch) else {
-            throw SdkValidationError(field: "branch", code: "required", message: "Validation failed for 'branch': value is required")
-        }
-        guard container.contains(.endpoints) else {
-            throw SdkValidationError(field: "endpoints", code: "required", message: "Validation failed for 'endpoints': value is required")
-        }
-        guard container.contains(.operations) else {
-            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
-        }
-        guard container.contains(.roles) else {
-            throw SdkValidationError(field: "roles", code: "required", message: "Validation failed for 'roles': value is required")
-        }
-        guard container.contains(.databases) else {
-            throw SdkValidationError(field: "databases", code: "required", message: "Validation failed for 'databases': value is required")
-        }
-        self.branch = try container.sdkDecodeRequired(.branch)
-        self.endpoints = try container.sdkDecodeRequired(.endpoints)
-        self.operations = try container.sdkDecodeRequired(.operations)
-        self.roles = try container.sdkDecodeRequired(.roles)
-        self.databases = try container.sdkDecodeRequired(.databases)
-        self.connectionUris = try container.sdkDecodeIfPresent(.connectionUris)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateBranchAnonymizedResponse {
-    public init(branch: Branch, endpoints: [Endpoint], operations: [Operation], roles: [Role], databases: [Database], connectionUris: [ConnectionDetails]? = nil) {
+public extension CreateBranchAnonymizedResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.branch) else {
+            throw SdkValidationError(
+                field: "branch",
+                code: "required",
+                message: "Validation failed for 'branch': value is required"
+            )
+        }
+        guard container.contains(.endpoints) else {
+            throw SdkValidationError(
+                field: "endpoints",
+                code: "required",
+                message: "Validation failed for 'endpoints': value is required"
+            )
+        }
+        guard container.contains(.operations) else {
+            throw SdkValidationError(
+                field: "operations",
+                code: "required",
+                message: "Validation failed for 'operations': value is required"
+            )
+        }
+        guard container.contains(.roles) else {
+            throw SdkValidationError(
+                field: "roles",
+                code: "required",
+                message: "Validation failed for 'roles': value is required"
+            )
+        }
+        guard container.contains(.databases) else {
+            throw SdkValidationError(
+                field: "databases",
+                code: "required",
+                message: "Validation failed for 'databases': value is required"
+            )
+        }
+        branch = try container.sdkDecodeRequired(.branch)
+        endpoints = try container.sdkDecodeRequired(.endpoints)
+        operations = try container.sdkDecodeRequired(.operations)
+        roles = try container.sdkDecodeRequired(.roles)
+        databases = try container.sdkDecodeRequired(.databases)
+        connectionUris = try container.sdkDecodeIfPresent(.connectionUris)
+    }
+}
+
+public extension CreateBranchAnonymizedResponse {
+    init(
+        branch: Branch,
+        endpoints: [Endpoint],
+        operations: [Operation],
+        roles: [Role],
+        databases: [Database],
+        connectionUris: [ConnectionDetails]? = nil
+    ) {
         (self.branch, self.endpoints) = (branch, endpoints)
         (self.operations, self.roles) = (operations, roles)
         (self.databases, self.connectionUris) = (databases, connectionUris)
@@ -134,26 +167,36 @@ public struct ListBranchResponse: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ListBranchResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.branches) else {
-            throw SdkValidationError(field: "branches", code: "required", message: "Validation failed for 'branches': value is required")
-        }
-        guard container.contains(.annotations) else {
-            throw SdkValidationError(field: "annotations", code: "required", message: "Validation failed for 'annotations': value is required")
-        }
-        self.branches = try container.sdkDecodeRequired(.branches)
-        self.annotations = try container.sdkDecodeRequired(.annotations)
-        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ListBranchResponse {
-    public init(branches: [Branch], annotations: [String: AnnotationData], pagination: CursorPagination? = nil) {
+public extension ListBranchResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.branches) else {
+            throw SdkValidationError(
+                field: "branches",
+                code: "required",
+                message: "Validation failed for 'branches': value is required"
+            )
+        }
+        guard container.contains(.annotations) else {
+            throw SdkValidationError(
+                field: "annotations",
+                code: "required",
+                message: "Validation failed for 'annotations': value is required"
+            )
+        }
+        branches = try container.sdkDecodeRequired(.branches)
+        annotations = try container.sdkDecodeRequired(.annotations)
+        pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+public extension ListBranchResponse {
+    init(branches: [Branch], annotations: [String: AnnotationData], pagination: CursorPagination? = nil) {
         (self.branches, self.annotations) = (branches, annotations)
         self.pagination = pagination
     }
@@ -167,21 +210,27 @@ public struct CountBranchResponse: Codable {
         case count
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CountBranchResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.count) else {
-            throw SdkValidationError(field: "count", code: "required", message: "Validation failed for 'count': value is required")
-        }
-        self.count = try container.sdkDecodeRequired(.count)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CountBranchResponse {
-    public init(count: Int) {
+public extension CountBranchResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.count) else {
+            throw SdkValidationError(
+                field: "count",
+                code: "required",
+                message: "Validation failed for 'count': value is required"
+            )
+        }
+        count = try container.sdkDecodeRequired(.count)
+    }
+}
+
+public extension CountBranchResponse {
+    init(count: Int) {
         self.count = count
     }
 }
@@ -203,25 +252,35 @@ public struct GetBranchResponse: Codable {
         case annotation
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension GetBranchResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.branch) else {
-            throw SdkValidationError(field: "branch", code: "required", message: "Validation failed for 'branch': value is required")
-        }
-        guard container.contains(.annotation) else {
-            throw SdkValidationError(field: "annotation", code: "required", message: "Validation failed for 'annotation': value is required")
-        }
-        self.branch = try container.sdkDecodeRequired(.branch)
-        self.annotation = try container.sdkDecodeRequired(.annotation)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension GetBranchResponse {
-    public init(branch: Branch, annotation: AnnotationData) {
+public extension GetBranchResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.branch) else {
+            throw SdkValidationError(
+                field: "branch",
+                code: "required",
+                message: "Validation failed for 'branch': value is required"
+            )
+        }
+        guard container.contains(.annotation) else {
+            throw SdkValidationError(
+                field: "annotation",
+                code: "required",
+                message: "Validation failed for 'annotation': value is required"
+            )
+        }
+        branch = try container.sdkDecodeRequired(.branch)
+        annotation = try container.sdkDecodeRequired(.annotation)
+    }
+}
+
+public extension GetBranchResponse {
+    init(branch: Branch, annotation: AnnotationData) {
         (self.branch, self.annotation) = (branch, annotation)
     }
 }

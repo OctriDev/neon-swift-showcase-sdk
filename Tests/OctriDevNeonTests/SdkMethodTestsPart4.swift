@@ -6,7 +6,8 @@ import Foundation
 import XCTest
 
 extension SdkMethodTests {
-    func testDeleteAuthLegacyDomainFromRedirectUriAllowlistDeleteAuthLegacX02489fc1c5ReachesMockAndDecodesResponse() async throws {
+    func testDeleteAuthLegacyDomainFromRedirectUriAllowlistDeleteAuthLegacX02489fc1c5ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -19,7 +20,8 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testDeleteAuthLegacyDomainFromRedirectUriAllowlistDeleteAuthLegacX43e41c0d2bReachesMockAndDecodesResponse() async throws {
+    func testDeleteAuthLegacyDomainFromRedirectUriAllowlistDeleteAuthLegacX43e41c0d2bReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/418") else {
             return
         }
@@ -30,10 +32,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.authLegacy.deleteDomainFromRedirectUriAllowlist(
-            projectId: decoded("\"a\""),
-            authProvider: decoded("\"mock\""),
-            domains: decoded("[{\"domain\":\"https://example.com\"}]")
-        )
+                projectId: decoded("\"a\""),
+                authProvider: decoded("\"mock\""),
+                domains: decoded("[{\"domain\":\"https://example.com\"}]")
+            )
             XCTFail("deleteAuthLegacyDomainFromRedirectUriWhitelist did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -74,10 +76,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.authLegacy.deleteIntegration(
-            projectId: decoded("\"a\""),
-            authProvider: decoded("\"mock\""),
-            deleteData: decoded("false")
-        )
+                projectId: decoded("\"a\""),
+                authProvider: decoded("\"mock\""),
+                deleteData: decoded("false")
+            )
             XCTFail("deleteAuthLegacyIntegration did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -117,9 +119,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.authLegacy.deleteOauthProvider(
-            projectId: decoded("\"a\""),
-            oauthProviderId: decoded("\"google\"")
-        )
+                projectId: decoded("\"a\""),
+                oauthProviderId: decoded("\"google\"")
+            )
             XCTFail("deleteAuthLegacyOauthProvider did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -159,9 +161,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.authLegacy.deleteUser(
-            projectId: decoded("\"a\""),
-            authUserId: decoded("\"auth_user-1\"")
-        )
+                projectId: decoded("\"a\""),
+                authUserId: decoded("\"auth_user-1\"")
+            )
             XCTFail("deleteAuthLegacyUser did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -202,10 +204,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.deleteOAuthClient(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            clientId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                clientId: decoded("\"a\"")
+            )
             XCTFail("deleteAuthOAuthClient did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -246,10 +248,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.deleteOauthProvider(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            oauthProviderId: decoded("\"google\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                oauthProviderId: decoded("\"google\"")
+            )
             XCTFail("deleteAuthOauthProvider did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -291,11 +293,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.deleteTrustedDomain(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            authProvider: decoded("\"mock\""),
-            domains: decoded("[{\"domain\":\"https://example.com\"}]")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                authProvider: decoded("\"mock\""),
+                domains: decoded("[{\"domain\":\"https://example.com\"}]")
+            )
             XCTFail("deleteAuthTrustedDomain did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -336,10 +338,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.deleteUser(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            authUserId: decoded("\"auth_user-1\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                authUserId: decoded("\"auth_user-1\"")
+            )
             XCTFail("deleteAuthUser did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -387,9 +389,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.delete(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\"")
+            )
             XCTFail("deleteBranch did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -438,10 +440,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.deleteDatabase(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            databaseName: decoded("\"Example Name\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                databaseName: decoded("\"Example Name\"")
+            )
             XCTFail("deleteBranchDatabase did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -490,10 +492,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.deleteRole(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            roleName: decoded("\"Example Name\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                roleName: decoded("\"Example Name\"")
+            )
             XCTFail("deleteBranchRole did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -534,10 +536,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.buckets.delete(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            bucketName: decoded("\"Example Name\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                bucketName: decoded("\"Example Name\"")
+            )
             XCTFail("deleteBuckets did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)

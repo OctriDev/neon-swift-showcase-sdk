@@ -3,46 +3,75 @@
 
 import Foundation
 
-// Project domain models
-extension ProjectMemberRoleResponse {
-    public init(from decoder: Decoder) throws {
+/// Project domain models
+public extension ProjectMemberRoleResponse {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.projectId) else {
-            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
+            throw SdkValidationError(
+                field: "project_id",
+                code: "required",
+                message: "Validation failed for 'project_id': value is required"
+            )
         }
         guard container.contains(.memberId) else {
-            throw SdkValidationError(field: "member_id", code: "required", message: "Validation failed for 'member_id': value is required")
+            throw SdkValidationError(
+                field: "member_id",
+                code: "required",
+                message: "Validation failed for 'member_id': value is required"
+            )
         }
         guard container.contains(.userId) else {
-            throw SdkValidationError(field: "user_id", code: "required", message: "Validation failed for 'user_id': value is required")
+            throw SdkValidationError(
+                field: "user_id",
+                code: "required",
+                message: "Validation failed for 'user_id': value is required"
+            )
         }
         guard container.contains(.orgRole) else {
-            throw SdkValidationError(field: "org_role", code: "required", message: "Validation failed for 'org_role': value is required")
+            throw SdkValidationError(
+                field: "org_role",
+                code: "required",
+                message: "Validation failed for 'org_role': value is required"
+            )
         }
-        self.projectId = try container.sdkDecodeRequired(.projectId)
-        self.memberId = try container.sdkDecodeRequired(.memberId)
-        self.userId = try container.sdkDecodeRequired(.userId)
-        self.orgRole = try container.sdkDecodeRequired(.orgRole)
-        self.email = try container.sdkDecodeIfPresent(.email)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.projectRole = try container.sdkDecodeIfPresent(.projectRole)
-        self.orgDefaultProjectPermission = try container.sdkDecodeIfPresent(.orgDefaultProjectPermission)
-        self.explicitProjectPermission = try container.sdkDecodeIfPresent(.explicitProjectPermission)
-        self.effectiveProjectPermission = try container.sdkDecodeIfPresent(.effectiveProjectPermission)
-        self.credentialRotationRecommended = try container.sdkDecodeIfPresent(.credentialRotationRecommended)
-        self.orgApiKeyRotationRecommended = try container.sdkDecodeIfPresent(.orgApiKeyRotationRecommended)
-            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-            try sdkValidateUuid("member_id", self.memberId)
-            try sdkValidateUuid("user_id", self.userId)
-        if let value = self.email {
+        projectId = try container.sdkDecodeRequired(.projectId)
+        memberId = try container.sdkDecodeRequired(.memberId)
+        userId = try container.sdkDecodeRequired(.userId)
+        orgRole = try container.sdkDecodeRequired(.orgRole)
+        email = try container.sdkDecodeIfPresent(.email)
+        name = try container.sdkDecodeIfPresent(.name)
+        projectRole = try container.sdkDecodeIfPresent(.projectRole)
+        orgDefaultProjectPermission = try container.sdkDecodeIfPresent(.orgDefaultProjectPermission)
+        explicitProjectPermission = try container.sdkDecodeIfPresent(.explicitProjectPermission)
+        effectiveProjectPermission = try container.sdkDecodeIfPresent(.effectiveProjectPermission)
+        credentialRotationRecommended = try container.sdkDecodeIfPresent(.credentialRotationRecommended)
+        orgApiKeyRotationRecommended = try container.sdkDecodeIfPresent(.orgApiKeyRotationRecommended)
+        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
+        try sdkValidateUuid("member_id", memberId)
+        try sdkValidateUuid("user_id", userId)
+        if let value = email {
             try validateLength("email", value, min: 1, max: 256)
             try sdkValidateEmail("email", value)
         }
     }
 }
 
-extension ProjectMemberRoleResponse {
-    public init(projectId: String, memberId: String, userId: String, orgRole: ProjectMemberOrgRole, email: String? = nil, name: String? = nil, projectRole: ProjectRole? = nil, orgDefaultProjectPermission: ProjectPermissionLevel? = nil, explicitProjectPermission: ProjectPermissionLevel? = nil, effectiveProjectPermission: ProjectPermissionLevel? = nil, credentialRotationRecommended: Bool? = nil, orgApiKeyRotationRecommended: Bool? = nil) throws {
+public extension ProjectMemberRoleResponse {
+    init(
+        projectId: String,
+        memberId: String,
+        userId: String,
+        orgRole: ProjectMemberOrgRole,
+        email: String? = nil,
+        name: String? = nil,
+        projectRole: ProjectRole? = nil,
+        orgDefaultProjectPermission: ProjectPermissionLevel? = nil,
+        explicitProjectPermission: ProjectPermissionLevel? = nil,
+        effectiveProjectPermission: ProjectPermissionLevel? = nil,
+        credentialRotationRecommended: Bool? = nil,
+        orgApiKeyRotationRecommended: Bool? = nil
+    ) throws {
         (self.projectId, self.memberId) = (projectId, memberId)
         (self.userId, self.orgRole) = (userId, orgRole)
         (self.email, self.name) = (email, name)
@@ -51,9 +80,9 @@ extension ProjectMemberRoleResponse {
         self.effectiveProjectPermission = effectiveProjectPermission
         self.credentialRotationRecommended = credentialRotationRecommended
         self.orgApiKeyRotationRecommended = orgApiKeyRotationRecommended
-            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-            try sdkValidateUuid("member_id", self.memberId)
-            try sdkValidateUuid("user_id", self.userId)
+        try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+        try sdkValidateUuid("member_id", self.memberId)
+        try sdkValidateUuid("user_id", self.userId)
         if let value = self.email {
             try validateLength("email", value, min: 1, max: 256)
             try sdkValidateEmail("email", value)
@@ -83,28 +112,41 @@ public struct ProjectUpdateRequestProject: Codable {
     }
 
     init() {
-        (self.settings, self.name, self.defaultEndpointSettings, self.historyRetentionSeconds) = (nil, nil, nil, nil)
+        (settings, name, defaultEndpointSettings, historyRetentionSeconds) = (nil, nil, nil, nil)
     }
 }
 
-extension ProjectUpdateRequestProject {
-    public init(from decoder: Decoder) throws {
+public extension ProjectUpdateRequestProject {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.settings = try container.sdkDecodeIfPresent(.settings)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.defaultEndpointSettings = try container.sdkDecodeIfPresent(.defaultEndpointSettings)
-        self.historyRetentionSeconds = try container.sdkDecodeIfPresent(.historyRetentionSeconds)
-        if let value = self.name {
+        settings = try container.sdkDecodeIfPresent(.settings)
+        name = try container.sdkDecodeIfPresent(.name)
+        defaultEndpointSettings = try container.sdkDecodeIfPresent(.defaultEndpointSettings)
+        historyRetentionSeconds = try container.sdkDecodeIfPresent(.historyRetentionSeconds)
+        if let value = name {
             try validateLength("name", value, min: 1, max: 256)
         }
-        if let value = self.historyRetentionSeconds {
-            try validateRange("history_retention_seconds", Double(value), min: 0, max: 2592000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = historyRetentionSeconds {
+            try validateRange(
+                "history_retention_seconds",
+                Double(value),
+                min: 0,
+                max: 2_592_000,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension ProjectUpdateRequestProject {
-    public init(settings: ProjectSettingsData? = nil, name: String? = nil, defaultEndpointSettings: DefaultEndpointSettings? = nil, historyRetentionSeconds: Int? = nil) throws {
+public extension ProjectUpdateRequestProject {
+    init(
+        settings: ProjectSettingsData? = nil,
+        name: String? = nil,
+        defaultEndpointSettings: DefaultEndpointSettings? = nil,
+        historyRetentionSeconds: Int? = nil
+    ) throws {
         self.init()
         (self.settings, self.name) = (settings, name)
         self.defaultEndpointSettings = defaultEndpointSettings
@@ -113,7 +155,15 @@ extension ProjectUpdateRequestProject {
             try validateLength("name", value, min: 1, max: 256)
         }
         if let value = self.historyRetentionSeconds {
-            try validateRange("history_retention_seconds", Double(value), min: 0, max: 2592000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "history_retention_seconds",
+                Double(value),
+                min: 0,
+                max: 2_592_000,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -127,21 +177,27 @@ public struct ProjectUpdateRequest: Codable {
         case project
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectUpdateRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.project) else {
-            throw SdkValidationError(field: "project", code: "required", message: "Validation failed for 'project': value is required")
-        }
-        self.project = try container.sdkDecodeRequired(.project)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectUpdateRequest {
-    public init(project: ProjectUpdateRequestProject) {
+public extension ProjectUpdateRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.project) else {
+            throw SdkValidationError(
+                field: "project",
+                code: "required",
+                message: "Validation failed for 'project': value is required"
+            )
+        }
+        project = try container.sdkDecodeRequired(.project)
+    }
+}
+
+public extension ProjectUpdateRequest {
+    init(project: ProjectUpdateRequestProject) {
         self.project = project
     }
 }
@@ -155,21 +211,27 @@ public struct ConnectionURIsResponse: Codable {
         case connectionUris = "connection_uris"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ConnectionURIsResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.connectionUris) else {
-            throw SdkValidationError(field: "connection_uris", code: "required", message: "Validation failed for 'connection_uris': value is required")
-        }
-        self.connectionUris = try container.sdkDecodeRequired(.connectionUris)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ConnectionURIsResponse {
-    public init(connectionUris: [ConnectionDetails]) {
+public extension ConnectionURIsResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.connectionUris) else {
+            throw SdkValidationError(
+                field: "connection_uris",
+                code: "required",
+                message: "Validation failed for 'connection_uris': value is required"
+            )
+        }
+        connectionUris = try container.sdkDecodeRequired(.connectionUris)
+    }
+}
+
+public extension ConnectionURIsResponse {
+    init(connectionUris: [ConnectionDetails]) {
         self.connectionUris = connectionUris
     }
 }
@@ -186,25 +248,35 @@ public struct AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem: Codable
         case code
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        self.message = try container.sdkDecodeRequired(.message)
-        self.code = try container.sdkDecodeRequired(.code)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem {
-    public init(message: String, code: String) {
+public extension AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        message = try container.sdkDecodeRequired(.message)
+        code = try container.sdkDecodeRequired(.code)
+    }
+}
+
+public extension AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem {
+    init(message: String, code: String) {
         (self.message, self.code) = (message, code)
     }
 }
@@ -219,21 +291,27 @@ public struct AcceptProjectTransferRequestSatisfiesPlanError: Codable {
         case reasons
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AcceptProjectTransferRequestSatisfiesPlanError {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.reasons) else {
-            throw SdkValidationError(field: "reasons", code: "required", message: "Validation failed for 'reasons': value is required")
-        }
-        self.reasons = try container.sdkDecodeRequired(.reasons)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AcceptProjectTransferRequestSatisfiesPlanError {
-    public init(reasons: [AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem]) {
+public extension AcceptProjectTransferRequestSatisfiesPlanError {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.reasons) else {
+            throw SdkValidationError(
+                field: "reasons",
+                code: "required",
+                message: "Validation failed for 'reasons': value is required"
+            )
+        }
+        reasons = try container.sdkDecodeRequired(.reasons)
+    }
+}
+
+public extension AcceptProjectTransferRequestSatisfiesPlanError {
+    init(reasons: [AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem]) {
         self.reasons = reasons
     }
 }
@@ -281,27 +359,40 @@ public struct AdvisorIssue: Codable {
         case cacheKey = "cache_key"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AdvisorIssue {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.title = try container.sdkDecodeRequired(.title)
-        self.level = try container.sdkDecodeRequired(.level)
-        self.facing = try container.sdkDecodeRequired(.facing)
-        self.categories = try container.sdkDecodeRequired(.categories)
-        self.description = try container.sdkDecodeRequired(.description)
-        self.detail = try container.sdkDecodeRequired(.detail)
-        self.remediation = try container.sdkDecodeRequired(.remediation)
-        self.metadata = try container.sdkDecodeRequired(.metadata)
-        self.cacheKey = try container.sdkDecodeRequired(.cacheKey)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AdvisorIssue {
-    public init(name: String, title: String, level: String, facing: AdvisorIssueFacing, categories: [AdvisorCategory], description: String, detail: String, remediation: String, metadata: [String: JSONValue], cacheKey: String) {
+public extension AdvisorIssue {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        name = try container.sdkDecodeRequired(.name)
+        title = try container.sdkDecodeRequired(.title)
+        level = try container.sdkDecodeRequired(.level)
+        facing = try container.sdkDecodeRequired(.facing)
+        categories = try container.sdkDecodeRequired(.categories)
+        description = try container.sdkDecodeRequired(.description)
+        detail = try container.sdkDecodeRequired(.detail)
+        remediation = try container.sdkDecodeRequired(.remediation)
+        metadata = try container.sdkDecodeRequired(.metadata)
+        cacheKey = try container.sdkDecodeRequired(.cacheKey)
+    }
+}
+
+public extension AdvisorIssue {
+    init(
+        name: String,
+        title: String,
+        level: String,
+        facing: AdvisorIssueFacing,
+        categories: [AdvisorCategory],
+        description: String,
+        detail: String,
+        remediation: String,
+        metadata: [String: JSONValue],
+        cacheKey: String
+    ) {
         (self.name, self.title) = (name, title)
         (self.level, self.facing) = (level, facing)
         (self.categories, self.description) = (categories, description)
@@ -319,21 +410,27 @@ public struct ProjectCreateRequest: Codable {
         case project
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectCreateRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.project) else {
-            throw SdkValidationError(field: "project", code: "required", message: "Validation failed for 'project': value is required")
-        }
-        self.project = try container.sdkDecodeRequired(.project)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectCreateRequest {
-    public init(project: ProjectCreateRequestProject) {
+public extension ProjectCreateRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.project) else {
+            throw SdkValidationError(
+                field: "project",
+                code: "required",
+                message: "Validation failed for 'project': value is required"
+            )
+        }
+        project = try container.sdkDecodeRequired(.project)
+    }
+}
+
+public extension ProjectCreateRequest {
+    init(project: ProjectCreateRequestProject) {
         self.project = project
     }
 }
@@ -362,37 +459,59 @@ public struct AvailablePreloadLibrary: Codable {
         case version
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AvailablePreloadLibrary {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.libraryName) else {
-            throw SdkValidationError(field: "library_name", code: "required", message: "Validation failed for 'library_name': value is required")
-        }
-        guard container.contains(.description) else {
-            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
-        }
-        guard container.contains(.isDefault) else {
-            throw SdkValidationError(field: "is_default", code: "required", message: "Validation failed for 'is_default': value is required")
-        }
-        guard container.contains(.isExperimental) else {
-            throw SdkValidationError(field: "is_experimental", code: "required", message: "Validation failed for 'is_experimental': value is required")
-        }
-        guard container.contains(.version) else {
-            throw SdkValidationError(field: "version", code: "required", message: "Validation failed for 'version': value is required")
-        }
-        self.libraryName = try container.sdkDecodeRequired(.libraryName)
-        self.description = try container.sdkDecodeRequired(.description)
-        self.isDefault = try container.sdkDecodeRequired(.isDefault)
-        self.isExperimental = try container.sdkDecodeRequired(.isExperimental)
-        self.version = try container.sdkDecodeRequired(.version)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AvailablePreloadLibrary {
-    public init(libraryName: String, description: String, isDefault: Bool, isExperimental: Bool, version: String) {
+public extension AvailablePreloadLibrary {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.libraryName) else {
+            throw SdkValidationError(
+                field: "library_name",
+                code: "required",
+                message: "Validation failed for 'library_name': value is required"
+            )
+        }
+        guard container.contains(.description) else {
+            throw SdkValidationError(
+                field: "description",
+                code: "required",
+                message: "Validation failed for 'description': value is required"
+            )
+        }
+        guard container.contains(.isDefault) else {
+            throw SdkValidationError(
+                field: "is_default",
+                code: "required",
+                message: "Validation failed for 'is_default': value is required"
+            )
+        }
+        guard container.contains(.isExperimental) else {
+            throw SdkValidationError(
+                field: "is_experimental",
+                code: "required",
+                message: "Validation failed for 'is_experimental': value is required"
+            )
+        }
+        guard container.contains(.version) else {
+            throw SdkValidationError(
+                field: "version",
+                code: "required",
+                message: "Validation failed for 'version': value is required"
+            )
+        }
+        libraryName = try container.sdkDecodeRequired(.libraryName)
+        description = try container.sdkDecodeRequired(.description)
+        isDefault = try container.sdkDecodeRequired(.isDefault)
+        isExperimental = try container.sdkDecodeRequired(.isExperimental)
+        version = try container.sdkDecodeRequired(.version)
+    }
+}
+
+public extension AvailablePreloadLibrary {
+    init(libraryName: String, description: String, isDefault: Bool, isExperimental: Bool, version: String) {
         (self.libraryName, self.description) = (libraryName, description)
         (self.isDefault, self.isExperimental) = (isDefault, isExperimental)
         self.version = version
@@ -428,32 +547,78 @@ public struct ProjectQuota: Codable {
     }
 
     init() {
-        (self.activeTimeSeconds, self.computeTimeSeconds, self.writtenDataBytes, self.dataTransferBytes, self.logicalSizeBytes) = (nil, nil, nil, nil, nil)
+        (activeTimeSeconds, computeTimeSeconds, writtenDataBytes, dataTransferBytes, logicalSizeBytes) = (
+            nil,
+            nil,
+            nil,
+            nil,
+            nil
+        )
     }
 }
 
-extension ProjectQuota {
-    public init(from decoder: Decoder) throws {
+public extension ProjectQuota {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.activeTimeSeconds = try container.sdkDecodeIfPresent(.activeTimeSeconds)
-        self.computeTimeSeconds = try container.sdkDecodeIfPresent(.computeTimeSeconds)
-        self.writtenDataBytes = try container.sdkDecodeIfPresent(.writtenDataBytes)
-        self.dataTransferBytes = try container.sdkDecodeIfPresent(.dataTransferBytes)
-        self.logicalSizeBytes = try container.sdkDecodeIfPresent(.logicalSizeBytes)
-        if let value = self.activeTimeSeconds {
-            try validateRange("active_time_seconds", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        activeTimeSeconds = try container.sdkDecodeIfPresent(.activeTimeSeconds)
+        computeTimeSeconds = try container.sdkDecodeIfPresent(.computeTimeSeconds)
+        writtenDataBytes = try container.sdkDecodeIfPresent(.writtenDataBytes)
+        dataTransferBytes = try container.sdkDecodeIfPresent(.dataTransferBytes)
+        logicalSizeBytes = try container.sdkDecodeIfPresent(.logicalSizeBytes)
+        if let value = activeTimeSeconds {
+            try validateRange(
+                "active_time_seconds",
+                Double(value),
+                min: 0,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.computeTimeSeconds {
-            try validateRange("compute_time_seconds", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = computeTimeSeconds {
+            try validateRange(
+                "compute_time_seconds",
+                Double(value),
+                min: 0,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.writtenDataBytes {
-            try validateRange("written_data_bytes", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = writtenDataBytes {
+            try validateRange(
+                "written_data_bytes",
+                Double(value),
+                min: 0,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.dataTransferBytes {
-            try validateRange("data_transfer_bytes", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = dataTransferBytes {
+            try validateRange(
+                "data_transfer_bytes",
+                Double(value),
+                min: 0,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.logicalSizeBytes {
-            try validateRange("logical_size_bytes", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = logicalSizeBytes {
+            try validateRange(
+                "logical_size_bytes",
+                Double(value),
+                min: 0,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }

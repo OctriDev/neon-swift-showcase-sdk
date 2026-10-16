@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Snapshot domain models
+/// Snapshot domain models
 /// Typed representation of the `SnapshotUpdateRequest` API schema.
 public struct SnapshotUpdateRequest: Codable {
     /// Fields to update on the snapshot. Updatable fields include `name` and `expires_at`.
@@ -13,21 +13,27 @@ public struct SnapshotUpdateRequest: Codable {
         case snapshot
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SnapshotUpdateRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.snapshot) else {
-            throw SdkValidationError(field: "snapshot", code: "required", message: "Validation failed for 'snapshot': value is required")
-        }
-        self.snapshot = try container.sdkDecodeRequired(.snapshot)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SnapshotUpdateRequest {
-    public init(snapshot: SnapshotUpdateRequestSnapshot) {
+public extension SnapshotUpdateRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.snapshot) else {
+            throw SdkValidationError(
+                field: "snapshot",
+                code: "required",
+                message: "Validation failed for 'snapshot': value is required"
+            )
+        }
+        snapshot = try container.sdkDecodeRequired(.snapshot)
+    }
+}
+
+public extension SnapshotUpdateRequest {
+    init(snapshot: SnapshotUpdateRequestSnapshot) {
         self.snapshot = snapshot
     }
 }
@@ -42,19 +48,19 @@ public struct EndpointsOptionalResponse: Codable {
     }
 
     init() {
-        self.endpoints = nil
+        endpoints = nil
     }
 }
 
-extension EndpointsOptionalResponse {
-    public init(from decoder: Decoder) throws {
+public extension EndpointsOptionalResponse {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.endpoints = try container.sdkDecodeIfPresent(.endpoints)
+        endpoints = try container.sdkDecodeIfPresent(.endpoints)
     }
 }
 
-extension EndpointsOptionalResponse {
-    public init(endpoints: [Endpoint]? = nil) {
+public extension EndpointsOptionalResponse {
+    init(endpoints: [Endpoint]? = nil) {
         self.init()
         self.endpoints = endpoints
     }
@@ -69,21 +75,27 @@ public struct BackupSchedule: Codable {
         case schedule
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BackupSchedule {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.schedule) else {
-            throw SdkValidationError(field: "schedule", code: "required", message: "Validation failed for 'schedule': value is required")
-        }
-        self.schedule = try container.sdkDecodeRequired(.schedule)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BackupSchedule {
-    public init(schedule: [BackupScheduleItem]) {
+public extension BackupSchedule {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.schedule) else {
+            throw SdkValidationError(
+                field: "schedule",
+                code: "required",
+                message: "Validation failed for 'schedule': value is required"
+            )
+        }
+        schedule = try container.sdkDecodeRequired(.schedule)
+    }
+}
+
+public extension BackupSchedule {
+    init(schedule: [BackupScheduleItem]) {
         self.schedule = schedule
     }
 }
@@ -132,46 +144,71 @@ public struct Snapshot: Codable {
         case diffSize = "diff_size"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension Snapshot {
-    public init(from decoder: Decoder) throws {
+public extension Snapshot {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
         }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.lsn = try container.sdkDecodeIfPresent(.lsn)
-        self.timestamp = try container.sdkDecodeIfPresent(.timestamp)
-        self.sourceBranchId = try container.sdkDecodeIfPresent(.sourceBranchId)
-        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
-        self.manual = try container.sdkDecodeIfPresent(.manual)
-        self.fullSize = try container.sdkDecodeIfPresent(.fullSize)
-        self.diffSize = try container.sdkDecodeIfPresent(.diffSize)
-            try sdkValidatePattern("id", self.id, sdkPatternead2b03f7a95)
-        if let value = self.sourceBranchId {
+        id = try container.sdkDecodeRequired(.id)
+        name = try container.sdkDecodeRequired(.name)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        lsn = try container.sdkDecodeIfPresent(.lsn)
+        timestamp = try container.sdkDecodeIfPresent(.timestamp)
+        sourceBranchId = try container.sdkDecodeIfPresent(.sourceBranchId)
+        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        manual = try container.sdkDecodeIfPresent(.manual)
+        fullSize = try container.sdkDecodeIfPresent(.fullSize)
+        diffSize = try container.sdkDecodeIfPresent(.diffSize)
+        try sdkValidatePattern("id", id, sdkPatternead2b03f7a95)
+        if let value = sourceBranchId {
             try sdkValidatePattern("source_branch_id", value, sdkPatternead2b03f7a95)
         }
     }
 }
 
-extension Snapshot {
-    public init(id: String, name: String, createdAt: String, lsn: String? = nil, timestamp: String? = nil, sourceBranchId: String? = nil, expiresAt: String? = nil, manual: Bool? = nil, fullSize: Int? = nil, diffSize: Int? = nil) throws {
+public extension Snapshot {
+    init(
+        id: String,
+        name: String,
+        createdAt: String,
+        lsn: String? = nil,
+        timestamp: String? = nil,
+        sourceBranchId: String? = nil,
+        expiresAt: String? = nil,
+        manual: Bool? = nil,
+        fullSize: Int? = nil,
+        diffSize: Int? = nil
+    ) throws {
         (self.id, self.name) = (id, name)
         (self.createdAt, self.lsn) = (createdAt, lsn)
         (self.timestamp, self.sourceBranchId) = (timestamp, sourceBranchId)
         (self.expiresAt, self.manual) = (expiresAt, manual)
         (self.fullSize, self.diffSize) = (fullSize, diffSize)
-            try sdkValidatePattern("id", self.id, sdkPatternead2b03f7a95)
+        try sdkValidatePattern("id", self.id, sdkPatternead2b03f7a95)
         if let value = self.sourceBranchId {
             try sdkValidatePattern("source_branch_id", value, sdkPatternead2b03f7a95)
         }
@@ -202,51 +239,121 @@ public struct BackupScheduleItem: Codable {
         case retentionSeconds = "retention_seconds"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension BackupScheduleItem {
-    public init(from decoder: Decoder) throws {
+public extension BackupScheduleItem {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.frequency) else {
-            throw SdkValidationError(field: "frequency", code: "required", message: "Validation failed for 'frequency': value is required")
+            throw SdkValidationError(
+                field: "frequency",
+                code: "required",
+                message: "Validation failed for 'frequency': value is required"
+            )
         }
-        self.frequency = try container.sdkDecodeRequired(.frequency)
-        self.hour = try container.sdkDecodeIfPresent(.hour)
-        self.day = try container.sdkDecodeIfPresent(.day)
-        self.month = try container.sdkDecodeIfPresent(.month)
-        self.retentionSeconds = try container.sdkDecodeIfPresent(.retentionSeconds)
-        if let value = self.hour {
-            try validateRange("hour", Double(value), min: 0, max: 23, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        frequency = try container.sdkDecodeRequired(.frequency)
+        hour = try container.sdkDecodeIfPresent(.hour)
+        day = try container.sdkDecodeIfPresent(.day)
+        month = try container.sdkDecodeIfPresent(.month)
+        retentionSeconds = try container.sdkDecodeIfPresent(.retentionSeconds)
+        if let value = hour {
+            try validateRange(
+                "hour",
+                Double(value),
+                min: 0,
+                max: 23,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.day {
-            try validateRange("day", Double(value), min: 1, max: 31, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = day {
+            try validateRange(
+                "day",
+                Double(value),
+                min: 1,
+                max: 31,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.month {
-            try validateRange("month", Double(value), min: 1, max: 12, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = month {
+            try validateRange(
+                "month",
+                Double(value),
+                min: 1,
+                max: 12,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.retentionSeconds {
-            try validateRange("retention_seconds", Double(value), min: 3600, max: 3024000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = retentionSeconds {
+            try validateRange(
+                "retention_seconds",
+                Double(value),
+                min: 3600,
+                max: 3_024_000,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension BackupScheduleItem {
-    public init(frequency: String, hour: Int? = nil, day: Int? = nil, month: Int? = nil, retentionSeconds: Int? = nil) throws {
+public extension BackupScheduleItem {
+    init(frequency: String, hour: Int? = nil, day: Int? = nil, month: Int? = nil, retentionSeconds: Int? = nil) throws {
         (self.frequency, self.hour) = (frequency, hour)
         (self.day, self.month) = (day, month)
         self.retentionSeconds = retentionSeconds
         if let value = self.hour {
-            try validateRange("hour", Double(value), min: 0, max: 23, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "hour",
+                Double(value),
+                min: 0,
+                max: 23,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.day {
-            try validateRange("day", Double(value), min: 1, max: 31, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "day",
+                Double(value),
+                min: 1,
+                max: 31,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.month {
-            try validateRange("month", Double(value), min: 1, max: 12, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "month",
+                Double(value),
+                min: 1,
+                max: 12,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.retentionSeconds {
-            try validateRange("retention_seconds", Double(value), min: 3600, max: 3024000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "retention_seconds",
+                Double(value),
+                min: 3600,
+                max: 3_024_000,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -266,23 +373,23 @@ public struct SnapshotUpdateRequestSnapshot: Codable {
     }
 
     init() {
-        (self.name, self.expiresAt) = (nil, nil)
+        (name, expiresAt) = (nil, nil)
     }
 }
 
-extension SnapshotUpdateRequestSnapshot {
-    public init(from decoder: Decoder) throws {
+public extension SnapshotUpdateRequestSnapshot {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
-        if let value = self.expiresAt {
+        name = try container.sdkDecodeIfPresent(.name)
+        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        if let value = expiresAt {
             try sdkValidateDateTime("expires_at", sdkWireString(value))
         }
     }
 }
 
-extension SnapshotUpdateRequestSnapshot {
-    public init(name: String? = nil, expiresAt: Date? = nil) throws {
+public extension SnapshotUpdateRequestSnapshot {
+    init(name: String? = nil, expiresAt: Date? = nil) throws {
         self.init()
         (self.name, self.expiresAt) = (name, expiresAt)
         if let value = self.expiresAt {

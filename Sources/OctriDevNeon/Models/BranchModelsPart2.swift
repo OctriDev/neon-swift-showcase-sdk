@@ -3,19 +3,24 @@
 
 import Foundation
 
-// Branch domain models
-extension BranchAnonymizedCreateRequest {
-    public init(from decoder: Decoder) throws {
+/// Branch domain models
+public extension BranchAnonymizedCreateRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.annotationValue = try container.sdkDecodeIfPresent(.annotationValue)
-        self.branchCreate = try container.sdkDecodeIfPresent(.branchCreate)
-        self.maskingRules = try container.sdkDecodeIfPresent(.maskingRules)
-        self.startAnonymization = try container.sdkDecodeIfPresent(.startAnonymization)
+        annotationValue = try container.sdkDecodeIfPresent(.annotationValue)
+        branchCreate = try container.sdkDecodeIfPresent(.branchCreate)
+        maskingRules = try container.sdkDecodeIfPresent(.maskingRules)
+        startAnonymization = try container.sdkDecodeIfPresent(.startAnonymization)
     }
 }
 
-extension BranchAnonymizedCreateRequest {
-    public init(annotationValue: AnnotationValueData? = nil, branchCreate: BranchCreateRequest? = nil, maskingRules: [MaskingRule]? = nil, startAnonymization: Bool? = nil) {
+public extension BranchAnonymizedCreateRequest {
+    init(
+        annotationValue: AnnotationValueData? = nil,
+        branchCreate: BranchCreateRequest? = nil,
+        maskingRules: [MaskingRule]? = nil,
+        startAnonymization: Bool? = nil
+    ) {
         self.init()
         (self.annotationValue, self.branchCreate) = (annotationValue, branchCreate)
         (self.maskingRules, self.startAnonymization) = (maskingRules, startAnonymization)
@@ -40,22 +45,28 @@ public struct BranchRecoverResponse: Codable {
         case endpoints
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchRecoverResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.branch) else {
-            throw SdkValidationError(field: "branch", code: "required", message: "Validation failed for 'branch': value is required")
-        }
-        self.branch = try container.sdkDecodeRequired(.branch)
-        self.endpoints = try container.sdkDecodeIfPresent(.endpoints)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchRecoverResponse {
-    public init(branch: Branch, endpoints: [Endpoint]? = nil) {
+public extension BranchRecoverResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.branch) else {
+            throw SdkValidationError(
+                field: "branch",
+                code: "required",
+                message: "Validation failed for 'branch': value is required"
+            )
+        }
+        branch = try container.sdkDecodeRequired(.branch)
+        endpoints = try container.sdkDecodeIfPresent(.endpoints)
+    }
+}
+
+public extension BranchRecoverResponse {
+    init(branch: Branch, endpoints: [Endpoint]? = nil) {
         (self.branch, self.endpoints) = (branch, endpoints)
     }
 }
@@ -82,32 +93,38 @@ public struct AnonymizationRunMetadata: Codable {
     }
 
     init() {
-        (self.startedAt, self.completedAt, self.triggeredBy, self.triggeredByUsername, self.maskedColumns) = (nil, nil, nil, nil, nil)
+        (startedAt, completedAt, triggeredBy, triggeredByUsername, maskedColumns) = (nil, nil, nil, nil, nil)
     }
 }
 
-extension AnonymizationRunMetadata {
-    public init(from decoder: Decoder) throws {
+public extension AnonymizationRunMetadata {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.startedAt = try container.sdkDecodeIfPresent(.startedAt)
-        self.completedAt = try container.sdkDecodeIfPresent(.completedAt)
-        self.triggeredBy = try container.sdkDecodeIfPresent(.triggeredBy)
-        self.triggeredByUsername = try container.sdkDecodeIfPresent(.triggeredByUsername)
-        self.maskedColumns = try container.sdkDecodeIfPresent(.maskedColumns)
-        if let value = self.startedAt {
+        startedAt = try container.sdkDecodeIfPresent(.startedAt)
+        completedAt = try container.sdkDecodeIfPresent(.completedAt)
+        triggeredBy = try container.sdkDecodeIfPresent(.triggeredBy)
+        triggeredByUsername = try container.sdkDecodeIfPresent(.triggeredByUsername)
+        maskedColumns = try container.sdkDecodeIfPresent(.maskedColumns)
+        if let value = startedAt {
             try sdkValidateDateTime("started_at", sdkWireString(value))
         }
-        if let value = self.completedAt {
+        if let value = completedAt {
             try sdkValidateDateTime("completed_at", sdkWireString(value))
         }
-        if let value = self.triggeredBy {
+        if let value = triggeredBy {
             try sdkValidateUuid("triggered_by", value)
         }
     }
 }
 
-extension AnonymizationRunMetadata {
-    public init(startedAt: Date? = nil, completedAt: Date? = nil, triggeredBy: String? = nil, triggeredByUsername: String? = nil, maskedColumns: Int? = nil) throws {
+public extension AnonymizationRunMetadata {
+    init(
+        startedAt: Date? = nil,
+        completedAt: Date? = nil,
+        triggeredBy: String? = nil,
+        triggeredByUsername: String? = nil,
+        maskedColumns: Int? = nil
+    ) throws {
         self.init()
         (self.startedAt, self.completedAt) = (startedAt, completedAt)
         (self.triggeredBy, self.triggeredByUsername) = (triggeredBy, triggeredByUsername)
@@ -133,21 +150,27 @@ public struct RoleCreateRequest: Codable {
         case role
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RoleCreateRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.role) else {
-            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
-        }
-        self.role = try container.sdkDecodeRequired(.role)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RoleCreateRequest {
-    public init(role: RoleCreateRequestRole) {
+public extension RoleCreateRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.role) else {
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
+        }
+        role = try container.sdkDecodeRequired(.role)
+    }
+}
+
+public extension RoleCreateRequest {
+    init(role: RoleCreateRequestRole) {
         self.role = role
     }
 }
@@ -161,21 +184,27 @@ public struct DatabaseCreateRequest: Codable {
         case database
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DatabaseCreateRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.database) else {
-            throw SdkValidationError(field: "database", code: "required", message: "Validation failed for 'database': value is required")
-        }
-        self.database = try container.sdkDecodeRequired(.database)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DatabaseCreateRequest {
-    public init(database: DatabaseCreateRequestDatabase) {
+public extension DatabaseCreateRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.database) else {
+            throw SdkValidationError(
+                field: "database",
+                code: "required",
+                message: "Validation failed for 'database': value is required"
+            )
+        }
+        database = try container.sdkDecodeRequired(.database)
+    }
+}
+
+public extension DatabaseCreateRequest {
+    init(database: DatabaseCreateRequestDatabase) {
         self.database = database
     }
 }
@@ -195,20 +224,20 @@ public struct BranchCreateRequest: Codable {
     }
 
     init() {
-        (self.endpoints, self.branch) = (nil, nil)
+        (endpoints, branch) = (nil, nil)
     }
 }
 
-extension BranchCreateRequest {
-    public init(from decoder: Decoder) throws {
+public extension BranchCreateRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.endpoints = try container.sdkDecodeIfPresent(.endpoints)
-        self.branch = try container.sdkDecodeIfPresent(.branch)
+        endpoints = try container.sdkDecodeIfPresent(.endpoints)
+        branch = try container.sdkDecodeIfPresent(.branch)
     }
 }
 
-extension BranchCreateRequest {
-    public init(endpoints: [BranchCreateRequestEndpointOptions]? = nil, branch: BranchCreateRequestBranch? = nil) {
+public extension BranchCreateRequest {
+    init(endpoints: [BranchCreateRequestEndpointOptions]? = nil, branch: BranchCreateRequestBranch? = nil) {
         self.init()
         (self.endpoints, self.branch) = (endpoints, branch)
     }
@@ -229,25 +258,35 @@ public struct DatabaseOperations: Codable {
         case operations
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DatabaseOperations {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.database) else {
-            throw SdkValidationError(field: "database", code: "required", message: "Validation failed for 'database': value is required")
-        }
-        guard container.contains(.operations) else {
-            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
-        }
-        self.database = try container.sdkDecodeRequired(.database)
-        self.operations = try container.sdkDecodeRequired(.operations)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DatabaseOperations {
-    public init(database: Database, operations: [Operation]) {
+public extension DatabaseOperations {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.database) else {
+            throw SdkValidationError(
+                field: "database",
+                code: "required",
+                message: "Validation failed for 'database': value is required"
+            )
+        }
+        guard container.contains(.operations) else {
+            throw SdkValidationError(
+                field: "operations",
+                code: "required",
+                message: "Validation failed for 'operations': value is required"
+            )
+        }
+        database = try container.sdkDecodeRequired(.database)
+        operations = try container.sdkDecodeRequired(.operations)
+    }
+}
+
+public extension DatabaseOperations {
+    init(database: Database, operations: [Operation]) {
         (self.database, self.operations) = (database, operations)
     }
 }
@@ -270,25 +309,35 @@ public struct BranchOperations: Codable {
         case operations
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchOperations {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.branch) else {
-            throw SdkValidationError(field: "branch", code: "required", message: "Validation failed for 'branch': value is required")
-        }
-        guard container.contains(.operations) else {
-            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
-        }
-        self.branch = try container.sdkDecodeRequired(.branch)
-        self.operations = try container.sdkDecodeRequired(.operations)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchOperations {
-    public init(branch: Branch, operations: [Operation]) {
+public extension BranchOperations {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.branch) else {
+            throw SdkValidationError(
+                field: "branch",
+                code: "required",
+                message: "Validation failed for 'branch': value is required"
+            )
+        }
+        guard container.contains(.operations) else {
+            throw SdkValidationError(
+                field: "operations",
+                code: "required",
+                message: "Validation failed for 'operations': value is required"
+            )
+        }
+        branch = try container.sdkDecodeRequired(.branch)
+        operations = try container.sdkDecodeRequired(.operations)
+    }
+}
+
+public extension BranchOperations {
+    init(branch: Branch, operations: [Operation]) {
         (self.branch, self.operations) = (branch, operations)
     }
 }
@@ -312,30 +361,49 @@ public struct BranchSchemaJSONTablesItem: Codable {
         case constraints
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchSchemaJSONTablesItem {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.schema) else {
-            throw SdkValidationError(field: "schema", code: "required", message: "Validation failed for 'schema': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.columns) else {
-            throw SdkValidationError(field: "columns", code: "required", message: "Validation failed for 'columns': value is required")
-        }
-        self.schema = try container.sdkDecodeRequired(.schema)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.columns = try container.sdkDecodeRequired(.columns)
-        self.constraints = try container.sdkDecodeIfPresent(.constraints)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchSchemaJSONTablesItem {
-    public init(schema: String, name: String, columns: [BranchSchemaJSONTablesItemColumnsItem], constraints: [BranchSchemaJSONTablesItemConstraintsItem]? = nil) {
+public extension BranchSchemaJSONTablesItem {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.schema) else {
+            throw SdkValidationError(
+                field: "schema",
+                code: "required",
+                message: "Validation failed for 'schema': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.columns) else {
+            throw SdkValidationError(
+                field: "columns",
+                code: "required",
+                message: "Validation failed for 'columns': value is required"
+            )
+        }
+        schema = try container.sdkDecodeRequired(.schema)
+        name = try container.sdkDecodeRequired(.name)
+        columns = try container.sdkDecodeRequired(.columns)
+        constraints = try container.sdkDecodeIfPresent(.constraints)
+    }
+}
+
+public extension BranchSchemaJSONTablesItem {
+    init(
+        schema: String,
+        name: String,
+        columns: [BranchSchemaJSONTablesItemColumnsItem],
+        constraints: [BranchSchemaJSONTablesItemConstraintsItem]? = nil
+    ) {
         (self.schema, self.name) = (schema, name)
         (self.columns, self.constraints) = (columns, constraints)
     }
@@ -356,29 +424,43 @@ public struct BranchSchemaJSONTablesItemConstraintsItemReferencedTable: Codable 
         case columns
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchSchemaJSONTablesItemConstraintsItemReferencedTable {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.schema) else {
-            throw SdkValidationError(field: "schema", code: "required", message: "Validation failed for 'schema': value is required")
-        }
-        guard container.contains(.table) else {
-            throw SdkValidationError(field: "table", code: "required", message: "Validation failed for 'table': value is required")
-        }
-        guard container.contains(.columns) else {
-            throw SdkValidationError(field: "columns", code: "required", message: "Validation failed for 'columns': value is required")
-        }
-        self.schema = try container.sdkDecodeRequired(.schema)
-        self.table = try container.sdkDecodeRequired(.table)
-        self.columns = try container.sdkDecodeRequired(.columns)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchSchemaJSONTablesItemConstraintsItemReferencedTable {
-    public init(schema: String, table: String, columns: [String]) {
+public extension BranchSchemaJSONTablesItemConstraintsItemReferencedTable {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.schema) else {
+            throw SdkValidationError(
+                field: "schema",
+                code: "required",
+                message: "Validation failed for 'schema': value is required"
+            )
+        }
+        guard container.contains(.table) else {
+            throw SdkValidationError(
+                field: "table",
+                code: "required",
+                message: "Validation failed for 'table': value is required"
+            )
+        }
+        guard container.contains(.columns) else {
+            throw SdkValidationError(
+                field: "columns",
+                code: "required",
+                message: "Validation failed for 'columns': value is required"
+            )
+        }
+        schema = try container.sdkDecodeRequired(.schema)
+        table = try container.sdkDecodeRequired(.table)
+        columns = try container.sdkDecodeRequired(.columns)
+    }
+}
+
+public extension BranchSchemaJSONTablesItemConstraintsItemReferencedTable {
+    init(schema: String, table: String, columns: [String]) {
         (self.schema, self.table) = (schema, table)
         self.columns = columns
     }
@@ -393,21 +475,27 @@ public struct BranchUpdateRequest: Codable {
         case branch
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchUpdateRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.branch) else {
-            throw SdkValidationError(field: "branch", code: "required", message: "Validation failed for 'branch': value is required")
-        }
-        self.branch = try container.sdkDecodeRequired(.branch)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchUpdateRequest {
-    public init(branch: BranchUpdateRequestBranch) {
+public extension BranchUpdateRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.branch) else {
+            throw SdkValidationError(
+                field: "branch",
+                code: "required",
+                message: "Validation failed for 'branch': value is required"
+            )
+        }
+        branch = try container.sdkDecodeRequired(.branch)
+    }
+}
+
+public extension BranchUpdateRequest {
+    init(branch: BranchUpdateRequestBranch) {
         self.branch = branch
     }
 }
@@ -421,21 +509,27 @@ public struct BranchesCountResponse: Codable {
         case count
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchesCountResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.count) else {
-            throw SdkValidationError(field: "count", code: "required", message: "Validation failed for 'count': value is required")
-        }
-        self.count = try container.sdkDecodeRequired(.count)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchesCountResponse {
-    public init(count: Int) {
+public extension BranchesCountResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.count) else {
+            throw SdkValidationError(
+                field: "count",
+                code: "required",
+                message: "Validation failed for 'count': value is required"
+            )
+        }
+        count = try container.sdkDecodeRequired(.count)
+    }
+}
+
+public extension BranchesCountResponse {
+    init(count: Int) {
         self.count = count
     }
 }
@@ -490,33 +584,33 @@ public struct BranchCreateRequestBranch: Codable {
     }
 
     init() {
-        (self.parentId, self.name, self.parentLsn, self.parentTimestamp, self.protected) = (nil, nil, nil, nil, nil)
-        (self.realtime, self.archived, self.initSource, self.expiresAt) = (nil, nil, nil, nil)
+        (parentId, name, parentLsn, parentTimestamp, protected) = (nil, nil, nil, nil, nil)
+        (realtime, archived, initSource, expiresAt) = (nil, nil, nil, nil)
     }
 }
 
-extension BranchCreateRequestBranch {
-    public init(from decoder: Decoder) throws {
+public extension BranchCreateRequestBranch {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.parentId = try container.sdkDecodeIfPresent(.parentId)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.parentLsn = try container.sdkDecodeIfPresent(.parentLsn)
-        self.parentTimestamp = try container.sdkDecodeIfPresent(.parentTimestamp)
-        self.protected = try container.sdkDecodeIfPresent(.protected)
-        self.realtime = try container.sdkDecodeIfPresent(.realtime)
-        self.archived = try container.sdkDecodeIfPresent(.archived)
-        self.initSource = try container.sdkDecodeIfPresent(.initSource)
-        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
-        if let value = self.parentId {
+        parentId = try container.sdkDecodeIfPresent(.parentId)
+        name = try container.sdkDecodeIfPresent(.name)
+        parentLsn = try container.sdkDecodeIfPresent(.parentLsn)
+        parentTimestamp = try container.sdkDecodeIfPresent(.parentTimestamp)
+        protected = try container.sdkDecodeIfPresent(.protected)
+        realtime = try container.sdkDecodeIfPresent(.realtime)
+        archived = try container.sdkDecodeIfPresent(.archived)
+        initSource = try container.sdkDecodeIfPresent(.initSource)
+        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        if let value = parentId {
             try sdkValidatePattern("parent_id", value, sdkPatternead2b03f7a95)
         }
-        if let value = self.name {
+        if let value = name {
             try validateLength("name", value, min: 1, max: 256)
         }
-        if let value = self.parentTimestamp {
+        if let value = parentTimestamp {
             try sdkValidateDateTime("parent_timestamp", sdkWireString(value))
         }
-        if let value = self.expiresAt {
+        if let value = expiresAt {
             try sdkValidateDateTime("expires_at", sdkWireString(value))
         }
     }

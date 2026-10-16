@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Organizations domain models
+/// Organizations domain models
 public struct OrgApiKeysListResponseItemVariant1: Codable {
     /// If set, the API key can access only this project
     public var projectId: String?
@@ -13,22 +13,22 @@ public struct OrgApiKeysListResponseItemVariant1: Codable {
     }
 
     init() {
-        self.projectId = nil
+        projectId = nil
     }
 }
 
-extension OrgApiKeysListResponseItemVariant1 {
-    public init(from decoder: Decoder) throws {
+public extension OrgApiKeysListResponseItemVariant1 {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.projectId = try container.sdkDecodeIfPresent(.projectId)
-        if let value = self.projectId {
+        projectId = try container.sdkDecodeIfPresent(.projectId)
+        if let value = projectId {
             try sdkValidatePattern("project_id", value, sdkPatternead2b03f7a95)
         }
     }
 }
 
-extension OrgApiKeysListResponseItemVariant1 {
-    public init(projectId: String? = nil) throws {
+public extension OrgApiKeysListResponseItemVariant1 {
+    init(projectId: String? = nil) throws {
         self.init()
         self.projectId = projectId
         if let value = self.projectId {
@@ -43,7 +43,10 @@ extension OrgApiKeysListResponseItemVariant1 {
 public struct MemberRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let admin = MemberRole(rawValue: "admin")
     public static let member = MemberRole(rawValue: "member")
     public static let editor = MemberRole(rawValue: "editor")
@@ -52,7 +55,7 @@ public struct MemberRole: RawRepresentable, Hashable, Codable, Sendable, SdkWire
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

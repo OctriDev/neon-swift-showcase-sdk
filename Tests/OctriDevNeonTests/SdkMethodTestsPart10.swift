@@ -17,8 +17,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.getJwks(
-            projectId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\"")
+            )
             XCTFail("getProjectJwks did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -66,9 +66,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.realtime.get(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\"")
+            )
             XCTFail("getRealtime did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -116,9 +116,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.realtime.getSecret(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\"")
+            )
             XCTFail("getRealtimeSecret did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -166,9 +166,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.snapshot.getSchedule(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\"")
+            )
             XCTFail("getSnapshotSchedule did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -216,9 +216,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.storage.get(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\"")
+            )
             XCTFail("getStorage did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -266,9 +266,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.grantPermission(
-            projectId: decoded("\"a\""),
-            email: decoded("\"user@example.com\"")
-        )
+                projectId: decoded("\"a\""),
+                email: decoded("\"user@example.com\"")
+            )
             XCTFail("grantProjectPermission did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -359,8 +359,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.authLegacy.listIntegrations(
-            projectId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\"")
+            )
             XCTFail("listAuthLegacyIntegrations did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -407,8 +407,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.authLegacy.listOauthProviders(
-            projectId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\"")
+            )
             XCTFail("listAuthLegacyOauthProviders did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -425,7 +425,8 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testListAuthLegacyRedirectUriAllowlistDomainsListAuthLegacyRedireX44120e64eaReachesMockAndDecodesResponse() async throws {
+    func testListAuthLegacyRedirectUriAllowlistDomainsListAuthLegacyRedireX44120e64eaReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -444,7 +445,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testListAuthLegacyRedirectUriAllowlistDomainsListAuthLegacyRedireXb2d9746f1eReachesMockAndDecodesResponse() async throws {
+    func testListAuthLegacyRedirectUriAllowlistDomainsListAuthLegacyRedireXb2d9746f1eReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/418") else {
             return
         }
@@ -455,8 +457,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.authLegacy.listRedirectUriAllowlistDomains(
-            projectId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\"")
+            )
             XCTFail("listAuthLegacyRedirectUriWhitelistDomains did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -504,9 +506,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.listOAuthClients(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\"")
+            )
             XCTFail("listAuthOAuthClients did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -554,9 +556,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.listOauthProviders(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\"")
+            )
             XCTFail("listAuthOauthProviders did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
