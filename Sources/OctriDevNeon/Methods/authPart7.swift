@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AuthMethods {
-    /// Updates the role of a user in the Neon Auth user directory for the specified branch. The role controls the user's level of access within the Neon Auth integration.
+public extension AuthMethods {
+    /// Updates the role of a user in the Neon Auth user directory for the specified branch. The role controls the
+    /// user's level of access within the Neon Auth integration.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -16,7 +17,14 @@ extension AuthMethods {
     /// - roles: Roles to assign to the user in the Neon Auth (Better Auth)
     ///   directory. `user` and `admin` are the built-in roles; custom role strings
     ///   are also supported.
-    public static func updateAuthUserRole(config: ClientConfig, projectId: String, branchId: String, authUserId: String, roles: [String], requestOptions: RequestOptions? = nil) async throws -> UpdateNeonAuthUserRoleResponse {
+    static func updateAuthUserRole(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        authUserId: String,
+        roles: [String],
+        requestOptions: RequestOptions? = nil
+    ) async throws -> UpdateNeonAuthUserRoleResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -25,7 +33,24 @@ extension AuthMethods {
 
         let requestBody = UpdateAuthUserRoleRequestBody(roles: roles)
 
-        return try (await sdkRequest("PUT", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/users/", sdkEncodePathSegment(sdkWireString(authUserId)), "/role"].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateAuthUserRole", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "PUT",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/auth/users/",
+                sdkEncodePathSegment(sdkWireString(authUserId)),
+                "/role",
+            ].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "updateAuthUserRole",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
     /// Lists the OAuth providers configured for the specified branch's Neon Auth integration.
@@ -33,11 +58,30 @@ extension AuthMethods {
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
-    public static func listAuthOauthProviders(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> ListNeonAuthOauthProvidersResponse {
+    static func listAuthOauthProviders(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListNeonAuthOauthProvidersResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/oauth_providers"].joined(), config: config, decoder: .json, operationId: "listAuthOauthProviders", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/auth/oauth_providers",
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "listAuthOauthProviders",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

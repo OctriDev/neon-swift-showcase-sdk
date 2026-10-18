@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ConsumptionMethods {
-    public struct GetConsumptionHistoryPerProjectV2Options: Codable {
+public extension ConsumptionMethods {
+    struct GetConsumptionHistoryPerProjectV2Options: Codable {
         public var from: Date
         public var to: Date
         public var granularity: ConsumptionHistoryGranularity
@@ -17,7 +17,13 @@ extension ConsumptionMethods {
         public var limit: Int?
         public var projectIds: [String]?
 
-        public init(from: Date, to: Date, granularity: ConsumptionHistoryGranularity, orgId: String, metrics: ConsumptionHistoryQueryMetrics) {
+        public init(
+            from: Date,
+            to: Date,
+            granularity: ConsumptionHistoryGranularity,
+            orgId: String,
+            metrics: ConsumptionHistoryQueryMetrics
+        ) {
             self.from = from
             self.to = to
             self.granularity = granularity
@@ -26,7 +32,14 @@ extension ConsumptionMethods {
         }
     }
 
-    /// Returns consumption metrics for up to `limit` projects per page. If `project_ids` is omitted, projects in the organization are included across pages (use `cursor`). If `project_ids` is provided, the response is limited to those projects (up to 100). Available for accounts on Launch, Scale, Agent, Business, and Enterprise plans. History starts when the account upgrades to an eligible plan. The `metrics` query parameter is required. Supported values: `compute_unit_seconds`, `root_branch_bytes_month`, `child_branch_bytes_month`, `instant_restore_bytes_month`, `public_network_transfer_bytes`, `private_network_transfer_bytes`, `extra_branches_month`, `snapshot_storage_bytes_month`. Consumption metrics within each project are returned in ascending time order (oldest first). This request does not wake project computes.
+    /// Returns consumption metrics for up to `limit` projects per page. If `project_ids` is omitted, projects in the
+    /// organization are included across pages (use `cursor`). If `project_ids` is provided, the response is limited to
+    /// those projects (up to 100). Available for accounts on Launch, Scale, Agent, Business, and Enterprise plans.
+    /// History starts when the account upgrades to an eligible plan. The `metrics` query parameter is required.
+    /// Supported values: `compute_unit_seconds`, `root_branch_bytes_month`, `child_branch_bytes_month`,
+    /// `instant_restore_bytes_month`, `public_network_transfer_bytes`, `private_network_transfer_bytes`,
+    /// `extra_branches_month`, `snapshot_storage_bytes_month`. Consumption metrics within each project are returned in
+    /// ascending time order (oldest first). This request does not wake project computes.
     ///
     /// - Parameters:
     /// - from: Specify the start `date-time` for the consumption period. The
@@ -71,7 +84,11 @@ extension ConsumptionMethods {
     ///   comma-separated list: -
     ///   `project_ids=cold-poetry-09157238&project_ids=quiet-snow-71788278` -
     ///   `project_ids=cold-poetry-09157238,quiet-snow-71788278`
-    public static func getConsumptionHistoryPerProjectV2(config: ClientConfig, options: GetConsumptionHistoryPerProjectV2Options, requestOptions: RequestOptions? = nil) async throws -> GetConsumptionHistoryPerProjectV2Response {
+    static func getConsumptionHistoryPerProjectV2(
+        config: ClientConfig,
+        options: GetConsumptionHistoryPerProjectV2Options,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> GetConsumptionHistoryPerProjectV2Response {
         try sdkValidateDateTime("from", options.from)
 
         try sdkValidateDateTime("to", options.to)
@@ -86,15 +103,30 @@ extension ConsumptionMethods {
             try validateItems("project_ids", projectIds, min: 0, max: 100)
         }
 
-        return try (await sdkRequest("GET", "/consumption_history/v2/projects", config: config, query: [
-            SdkQueryParameter("from", value: options.from),
-            SdkQueryParameter("to", value: options.to),
-            SdkQueryParameter("granularity", value: options.granularity),
-            SdkQueryParameter("org_id", value: options.orgId),
-            SdkQueryParameter("metrics", values: options.metrics, style: "form", explode: true),
-            SdkQueryParameter("cursor", value: options.cursor),
-            SdkQueryParameter("limit", value: options.limit),
-            SdkQueryParameter("project_ids", values: options.projectIds, style: "form", explode: true),
-        ], decoder: .json, operationId: "getConsumptionHistoryPerProjectV2", options: requestOptions, errors: ["403": GeneralError.self, "404": GeneralError.self, "406": GeneralError.self, "429": GeneralError.self, "default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            "/consumption_history/v2/projects",
+            config: config,
+            query: [
+                SdkQueryParameter("from", value: options.from),
+                SdkQueryParameter("to", value: options.to),
+                SdkQueryParameter("granularity", value: options.granularity),
+                SdkQueryParameter("org_id", value: options.orgId),
+                SdkQueryParameter("metrics", values: options.metrics, style: "form", explode: true),
+                SdkQueryParameter("cursor", value: options.cursor),
+                SdkQueryParameter("limit", value: options.limit),
+                SdkQueryParameter("project_ids", values: options.projectIds, style: "form", explode: true),
+            ],
+            decoder: .json,
+            operationId: "getConsumptionHistoryPerProjectV2",
+            options: requestOptions,
+            errors: [
+                "403": GeneralError.self,
+                "404": GeneralError.self,
+                "406": GeneralError.self,
+                "429": GeneralError.self,
+                "default": GeneralError.self,
+            ]
+        )).data
     }
 }

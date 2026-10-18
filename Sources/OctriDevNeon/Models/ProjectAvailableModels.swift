@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ProjectAvailable domain models
+/// ProjectAvailable domain models
 /// Typed representation of the `AvailablePreloadLibraries` API schema.
 public struct AvailablePreloadLibraries: Codable {
     /// Preload libraries available for the project's Postgres version. Each entry includes `library_name`,
@@ -15,19 +15,19 @@ public struct AvailablePreloadLibraries: Codable {
     }
 
     init() {
-        self.libraries = nil
+        libraries = nil
     }
 }
 
-extension AvailablePreloadLibraries {
-    public init(from decoder: Decoder) throws {
+public extension AvailablePreloadLibraries {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.libraries = try container.sdkDecodeIfPresent(.libraries)
+        libraries = try container.sdkDecodeIfPresent(.libraries)
     }
 }
 
-extension AvailablePreloadLibraries {
-    public init(libraries: [AvailablePreloadLibrary]? = nil) {
+public extension AvailablePreloadLibraries {
+    init(libraries: [AvailablePreloadLibrary]? = nil) {
         self.init()
         self.libraries = libraries
     }
@@ -57,37 +57,59 @@ public struct AvailablePreloadLibrary: Codable {
         case version
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AvailablePreloadLibrary {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.libraryName) else {
-            throw SdkValidationError(field: "library_name", code: "required", message: "Validation failed for 'library_name': value is required")
-        }
-        guard container.contains(.description) else {
-            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
-        }
-        guard container.contains(.isDefault) else {
-            throw SdkValidationError(field: "is_default", code: "required", message: "Validation failed for 'is_default': value is required")
-        }
-        guard container.contains(.isExperimental) else {
-            throw SdkValidationError(field: "is_experimental", code: "required", message: "Validation failed for 'is_experimental': value is required")
-        }
-        guard container.contains(.version) else {
-            throw SdkValidationError(field: "version", code: "required", message: "Validation failed for 'version': value is required")
-        }
-        self.libraryName = try container.sdkDecodeRequired(.libraryName)
-        self.description = try container.sdkDecodeRequired(.description)
-        self.isDefault = try container.sdkDecodeRequired(.isDefault)
-        self.isExperimental = try container.sdkDecodeRequired(.isExperimental)
-        self.version = try container.sdkDecodeRequired(.version)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AvailablePreloadLibrary {
-    public init(libraryName: String, description: String, isDefault: Bool, isExperimental: Bool, version: String) {
+public extension AvailablePreloadLibrary {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.libraryName) else {
+            throw SdkValidationError(
+                field: "library_name",
+                code: "required",
+                message: "Validation failed for 'library_name': value is required"
+            )
+        }
+        guard container.contains(.description) else {
+            throw SdkValidationError(
+                field: "description",
+                code: "required",
+                message: "Validation failed for 'description': value is required"
+            )
+        }
+        guard container.contains(.isDefault) else {
+            throw SdkValidationError(
+                field: "is_default",
+                code: "required",
+                message: "Validation failed for 'is_default': value is required"
+            )
+        }
+        guard container.contains(.isExperimental) else {
+            throw SdkValidationError(
+                field: "is_experimental",
+                code: "required",
+                message: "Validation failed for 'is_experimental': value is required"
+            )
+        }
+        guard container.contains(.version) else {
+            throw SdkValidationError(
+                field: "version",
+                code: "required",
+                message: "Validation failed for 'version': value is required"
+            )
+        }
+        libraryName = try container.sdkDecodeRequired(.libraryName)
+        description = try container.sdkDecodeRequired(.description)
+        isDefault = try container.sdkDecodeRequired(.isDefault)
+        isExperimental = try container.sdkDecodeRequired(.isExperimental)
+        version = try container.sdkDecodeRequired(.version)
+    }
+}
+
+public extension AvailablePreloadLibrary {
+    init(libraryName: String, description: String, isDefault: Bool, isExperimental: Bool, version: String) {
         (self.libraryName, self.description) = (libraryName, description)
         (self.isDefault, self.isExperimental) = (isDefault, isExperimental)
         self.version = version

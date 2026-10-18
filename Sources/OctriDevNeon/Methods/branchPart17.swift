@@ -6,32 +6,77 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension BranchMethods {
-    /// Deletes the specified Postgres role from the branch. For related information, see [Manage roles](https://neon.com/docs/manage/roles/).
+public extension BranchMethods {
+    /// Deletes the specified Postgres role from the branch. For related information, see [Manage
+    /// roles](https://neon.com/docs/manage/roles/).
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The branch ID
     /// - roleName: The role name
-    public static func deleteBranchRole(config: ClientConfig, projectId: String, branchId: String, roleName: String, requestOptions: RequestOptions? = nil) async throws -> RoleOperations {
+    static func deleteBranchRole(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        roleName: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> RoleOperations {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/roles/", sdkEncodePathSegment(sdkWireString(roleName))].joined(), config: config, decoder: .json, operationId: "deleteBranchRole", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "DELETE",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/roles/",
+                sdkEncodePathSegment(sdkWireString(roleName)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "deleteBranchRole",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
-    /// Retrieves the password for the specified Postgres role, if possible. For related information, see [Manage roles](https://neon.com/docs/manage/roles/).
+    /// Retrieves the password for the specified Postgres role, if possible. For related information, see [Manage
+    /// roles](https://neon.com/docs/manage/roles/).
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The branch ID
     /// - roleName: The role name
-    public static func getBranchRolePassword(config: ClientConfig, projectId: String, branchId: String, roleName: String, requestOptions: RequestOptions? = nil) async throws -> RolePasswordResponse {
+    static func getBranchRolePassword(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        roleName: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> RolePasswordResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/roles/", sdkEncodePathSegment(sdkWireString(roleName)), "/reveal_password"].joined(), config: config, decoder: .json, operationId: "getBranchRolePassword", options: requestOptions, errors: ["404": GeneralError.self, "412": GeneralError.self, "default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/roles/",
+                sdkEncodePathSegment(sdkWireString(roleName)),
+                "/reveal_password",
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getBranchRolePassword",
+            options: requestOptions,
+            errors: ["404": GeneralError.self, "412": GeneralError.self, "default": GeneralError.self]
+        )).data
     }
 }

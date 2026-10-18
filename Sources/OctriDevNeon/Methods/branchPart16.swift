@@ -6,34 +6,80 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension BranchMethods {
-    /// Creates a Postgres role in the specified branch. For related information, see [Manage roles](https://neon.com/docs/manage/roles/). Connections established to the active compute endpoint will be dropped. If the compute endpoint is idle, the endpoint becomes active for a short period of time and is suspended afterward.
+public extension BranchMethods {
+    /// Creates a Postgres role in the specified branch. For related information, see [Manage
+    /// roles](https://neon.com/docs/manage/roles/). Connections established to the active compute endpoint will be
+    /// dropped. If the compute endpoint is idle, the endpoint becomes active for a short period of time and is
+    /// suspended afterward.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The branch ID
     /// - role: Properties of the role to create.
-    public static func createBranchRole(config: ClientConfig, projectId: String, branchId: String, role: RoleCreateRequestRole, requestOptions: RequestOptions? = nil) async throws -> RoleOperations {
+    static func createBranchRole(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        role: RoleCreateRequestRole,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> RoleOperations {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
         let requestBody = CreateBranchRoleRequestBody(role: role)
 
-        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/roles"].joined(), config: config, body: requestBody, decoder: .json, operationId: "createBranchRole", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "POST",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/roles",
+            ].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createBranchRole",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
-    /// Retrieves details about the specified role. In Neon, the terms "role" and "user" are synonymous. For related information, see [Manage roles](https://neon.com/docs/manage/roles/).
+    /// Retrieves details about the specified role. In Neon, the terms "role" and "user" are synonymous. For related
+    /// information, see [Manage roles](https://neon.com/docs/manage/roles/).
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The branch ID
     /// - roleName: The role name
-    public static func getBranchRole(config: ClientConfig, projectId: String, branchId: String, roleName: String, requestOptions: RequestOptions? = nil) async throws -> RoleResponse {
+    static func getBranchRole(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        roleName: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> RoleResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/roles/", sdkEncodePathSegment(sdkWireString(roleName))].joined(), config: config, decoder: .json, operationId: "getBranchRole", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/roles/",
+                sdkEncodePathSegment(sdkWireString(roleName)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getBranchRole",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

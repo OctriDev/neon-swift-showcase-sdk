@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Credentials domain models
+/// Credentials domain models
 /// Typed representation of the `ListCredentialsResponse` API schema.
 public struct ListCredentialsResponse: Codable {
     /// Required array value serialized in the `credentials` wire field.
@@ -13,21 +13,27 @@ public struct ListCredentialsResponse: Codable {
         case credentials
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ListCredentialsResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.credentials) else {
-            throw SdkValidationError(field: "credentials", code: "required", message: "Validation failed for 'credentials': value is required")
-        }
-        self.credentials = try container.sdkDecodeRequired(.credentials)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ListCredentialsResponse {
-    public init(credentials: [CredentialMeta]) {
+public extension ListCredentialsResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.credentials) else {
+            throw SdkValidationError(
+                field: "credentials",
+                code: "required",
+                message: "Validation failed for 'credentials': value is required"
+            )
+        }
+        credentials = try container.sdkDecodeRequired(.credentials)
+    }
+}
+
+public extension ListCredentialsResponse {
+    init(credentials: [CredentialMeta]) {
         self.credentials = credentials
     }
 }
@@ -72,63 +78,97 @@ public struct CredentialMeta: Codable {
         case expiresAt = "expires_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CredentialMeta {
-    public init(from decoder: Decoder) throws {
+public extension CredentialMeta {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.tokenId) else {
-            throw SdkValidationError(field: "token_id", code: "required", message: "Validation failed for 'token_id': value is required")
+            throw SdkValidationError(
+                field: "token_id",
+                code: "required",
+                message: "Validation failed for 'token_id': value is required"
+            )
         }
         guard container.contains(.tokenIdShort) else {
-            throw SdkValidationError(field: "token_id_short", code: "required", message: "Validation failed for 'token_id_short': value is required")
+            throw SdkValidationError(
+                field: "token_id_short",
+                code: "required",
+                message: "Validation failed for 'token_id_short': value is required"
+            )
         }
         guard container.contains(.scopes) else {
-            throw SdkValidationError(field: "scopes", code: "required", message: "Validation failed for 'scopes': value is required")
+            throw SdkValidationError(
+                field: "scopes",
+                code: "required",
+                message: "Validation failed for 'scopes': value is required"
+            )
         }
         guard container.contains(.principalType) else {
-            throw SdkValidationError(field: "principal_type", code: "required", message: "Validation failed for 'principal_type': value is required")
+            throw SdkValidationError(
+                field: "principal_type",
+                code: "required",
+                message: "Validation failed for 'principal_type': value is required"
+            )
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
         }
-        self.tokenId = try container.sdkDecodeRequired(.tokenId)
-        self.tokenIdShort = try container.sdkDecodeRequired(.tokenIdShort)
-        self.scopes = try container.sdkDecodeRequired(.scopes)
-        self.principalType = try container.sdkDecodeRequired(.principalType)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.branchId = try container.sdkDecodeIfPresent(.branchId)
-        self.functionId = try container.sdkDecodeIfPresent(.functionId)
-        self.lastUsedAt = try container.sdkDecodeIfPresent(.lastUsedAt)
-        self.revokedAt = try container.sdkDecodeIfPresent(.revokedAt)
-        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-        if let value = self.branchId {
+        tokenId = try container.sdkDecodeRequired(.tokenId)
+        tokenIdShort = try container.sdkDecodeRequired(.tokenIdShort)
+        scopes = try container.sdkDecodeRequired(.scopes)
+        principalType = try container.sdkDecodeRequired(.principalType)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        name = try container.sdkDecodeIfPresent(.name)
+        branchId = try container.sdkDecodeIfPresent(.branchId)
+        functionId = try container.sdkDecodeIfPresent(.functionId)
+        lastUsedAt = try container.sdkDecodeIfPresent(.lastUsedAt)
+        revokedAt = try container.sdkDecodeIfPresent(.revokedAt)
+        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
+        if let value = branchId {
             try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
         }
-        if let value = self.lastUsedAt {
+        if let value = lastUsedAt {
             try sdkValidateDateTime("last_used_at", sdkWireString(value))
         }
-        if let value = self.revokedAt {
+        if let value = revokedAt {
             try sdkValidateDateTime("revoked_at", sdkWireString(value))
         }
-        if let value = self.expiresAt {
+        if let value = expiresAt {
             try sdkValidateDateTime("expires_at", sdkWireString(value))
         }
     }
 }
 
-extension CredentialMeta {
-    public init(tokenId: String, tokenIdShort: String, scopes: [GrantedCredentialScope], principalType: String, createdAt: Date, name: String? = nil, branchId: String? = nil, functionId: String? = nil, lastUsedAt: Date? = nil, revokedAt: Date? = nil, expiresAt: Date? = nil) throws {
+public extension CredentialMeta {
+    init(
+        tokenId: String,
+        tokenIdShort: String,
+        scopes: [GrantedCredentialScope],
+        principalType: String,
+        createdAt: Date,
+        name: String? = nil,
+        branchId: String? = nil,
+        functionId: String? = nil,
+        lastUsedAt: Date? = nil,
+        revokedAt: Date? = nil,
+        expiresAt: Date? = nil
+    ) throws {
         (self.tokenId, self.tokenIdShort) = (tokenId, tokenIdShort)
         (self.scopes, self.principalType) = (scopes, principalType)
         (self.createdAt, self.name) = (createdAt, name)
         (self.branchId, self.functionId) = (branchId, functionId)
         (self.lastUsedAt, self.revokedAt) = (lastUsedAt, revokedAt)
         self.expiresAt = expiresAt
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+        try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
         if let value = self.branchId {
             try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
         }
@@ -183,39 +223,52 @@ public struct RotateCredentialResponse: Codable {
         case expiresAt = "expires_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension RotateCredentialResponse {
-    public init(from decoder: Decoder) throws {
+public extension RotateCredentialResponse {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.tokenId = try container.sdkDecodeRequired(.tokenId)
-        self.tokenIdShort = try container.sdkDecodeRequired(.tokenIdShort)
-        self.apiToken = try container.sdkDecodeRequired(.apiToken)
-        self.s3SecretAccessKey = try container.sdkDecodeRequired(.s3SecretAccessKey)
-        self.scopes = try container.sdkDecodeRequired(.scopes)
-        self.branchId = try container.sdkDecodeRequired(.branchId)
-        self.principalType = try container.sdkDecodeRequired(.principalType)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
-            try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-        if let value = self.expiresAt {
+        tokenId = try container.sdkDecodeRequired(.tokenId)
+        tokenIdShort = try container.sdkDecodeRequired(.tokenIdShort)
+        apiToken = try container.sdkDecodeRequired(.apiToken)
+        s3SecretAccessKey = try container.sdkDecodeRequired(.s3SecretAccessKey)
+        scopes = try container.sdkDecodeRequired(.scopes)
+        branchId = try container.sdkDecodeRequired(.branchId)
+        principalType = try container.sdkDecodeRequired(.principalType)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        name = try container.sdkDecodeIfPresent(.name)
+        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
+        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
+        if let value = expiresAt {
             try sdkValidateDateTime("expires_at", sdkWireString(value))
         }
     }
 }
 
-extension RotateCredentialResponse {
-    public init(tokenId: String, tokenIdShort: String, apiToken: String, s3SecretAccessKey: String, scopes: [GrantedCredentialScope], branchId: String, principalType: RotateCredentialResponsePrincipalType, createdAt: Date, name: String? = nil, expiresAt: Date? = nil) throws {
+public extension RotateCredentialResponse {
+    init(
+        tokenId: String,
+        tokenIdShort: String,
+        apiToken: String,
+        s3SecretAccessKey: String,
+        scopes: [GrantedCredentialScope],
+        branchId: String,
+        principalType: RotateCredentialResponsePrincipalType,
+        createdAt: Date,
+        name: String? = nil,
+        expiresAt: Date? = nil
+    ) throws {
         (self.tokenId, self.tokenIdShort) = (tokenId, tokenIdShort)
         (self.apiToken, self.s3SecretAccessKey) = (apiToken, s3SecretAccessKey)
         (self.scopes, self.branchId) = (scopes, branchId)
         (self.principalType, self.createdAt) = (principalType, createdAt)
         (self.name, self.expiresAt) = (name, expiresAt)
-            try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+        try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
+        try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
         if let value = self.expiresAt {
             try sdkValidateDateTime("expires_at", sdkWireString(value))
         }
@@ -255,59 +308,99 @@ public struct CreateCredentialResponse: Codable {
         case expiresAt = "expires_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CreateCredentialResponse {
-    public init(from decoder: Decoder) throws {
+public extension CreateCredentialResponse {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.tokenId) else {
-            throw SdkValidationError(field: "token_id", code: "required", message: "Validation failed for 'token_id': value is required")
+            throw SdkValidationError(
+                field: "token_id",
+                code: "required",
+                message: "Validation failed for 'token_id': value is required"
+            )
         }
         guard container.contains(.tokenIdShort) else {
-            throw SdkValidationError(field: "token_id_short", code: "required", message: "Validation failed for 'token_id_short': value is required")
+            throw SdkValidationError(
+                field: "token_id_short",
+                code: "required",
+                message: "Validation failed for 'token_id_short': value is required"
+            )
         }
         guard container.contains(.apiToken) else {
-            throw SdkValidationError(field: "api_token", code: "required", message: "Validation failed for 'api_token': value is required")
+            throw SdkValidationError(
+                field: "api_token",
+                code: "required",
+                message: "Validation failed for 'api_token': value is required"
+            )
         }
         guard container.contains(.s3SecretAccessKey) else {
-            throw SdkValidationError(field: "s3_secret_access_key", code: "required", message: "Validation failed for 's3_secret_access_key': value is required")
+            throw SdkValidationError(
+                field: "s3_secret_access_key",
+                code: "required",
+                message: "Validation failed for 's3_secret_access_key': value is required"
+            )
         }
         guard container.contains(.scopes) else {
-            throw SdkValidationError(field: "scopes", code: "required", message: "Validation failed for 'scopes': value is required")
+            throw SdkValidationError(
+                field: "scopes",
+                code: "required",
+                message: "Validation failed for 'scopes': value is required"
+            )
         }
         guard container.contains(.branchId) else {
-            throw SdkValidationError(field: "branch_id", code: "required", message: "Validation failed for 'branch_id': value is required")
+            throw SdkValidationError(
+                field: "branch_id",
+                code: "required",
+                message: "Validation failed for 'branch_id': value is required"
+            )
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
         }
-        self.tokenId = try container.sdkDecodeRequired(.tokenId)
-        self.tokenIdShort = try container.sdkDecodeRequired(.tokenIdShort)
-        self.apiToken = try container.sdkDecodeRequired(.apiToken)
-        self.s3SecretAccessKey = try container.sdkDecodeRequired(.s3SecretAccessKey)
-        self.scopes = try container.sdkDecodeRequired(.scopes)
-        self.branchId = try container.sdkDecodeRequired(.branchId)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
-            try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-        if let value = self.expiresAt {
+        tokenId = try container.sdkDecodeRequired(.tokenId)
+        tokenIdShort = try container.sdkDecodeRequired(.tokenIdShort)
+        apiToken = try container.sdkDecodeRequired(.apiToken)
+        s3SecretAccessKey = try container.sdkDecodeRequired(.s3SecretAccessKey)
+        scopes = try container.sdkDecodeRequired(.scopes)
+        branchId = try container.sdkDecodeRequired(.branchId)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        name = try container.sdkDecodeIfPresent(.name)
+        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
+        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
+        if let value = expiresAt {
             try sdkValidateDateTime("expires_at", sdkWireString(value))
         }
     }
 }
 
-extension CreateCredentialResponse {
-    public init(tokenId: String, tokenIdShort: String, apiToken: String, s3SecretAccessKey: String, scopes: [GrantedCredentialScope], branchId: String, createdAt: Date, name: String? = nil, expiresAt: Date? = nil) throws {
+public extension CreateCredentialResponse {
+    init(
+        tokenId: String,
+        tokenIdShort: String,
+        apiToken: String,
+        s3SecretAccessKey: String,
+        scopes: [GrantedCredentialScope],
+        branchId: String,
+        createdAt: Date,
+        name: String? = nil,
+        expiresAt: Date? = nil
+    ) throws {
         (self.tokenId, self.tokenIdShort) = (tokenId, tokenIdShort)
         (self.apiToken, self.s3SecretAccessKey) = (apiToken, s3SecretAccessKey)
         (self.scopes, self.branchId) = (scopes, branchId)
         (self.createdAt, self.name) = (createdAt, name)
         self.expiresAt = expiresAt
-            try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+        try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
+        try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
         if let value = self.expiresAt {
             try sdkValidateDateTime("expires_at", sdkWireString(value))
         }
@@ -333,29 +426,43 @@ public struct CredentialSecret: Codable {
         case s3SecretAccessKey = "s3_secret_access_key"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CredentialSecret {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.tokenId) else {
-            throw SdkValidationError(field: "token_id", code: "required", message: "Validation failed for 'token_id': value is required")
-        }
-        guard container.contains(.apiToken) else {
-            throw SdkValidationError(field: "api_token", code: "required", message: "Validation failed for 'api_token': value is required")
-        }
-        guard container.contains(.s3SecretAccessKey) else {
-            throw SdkValidationError(field: "s3_secret_access_key", code: "required", message: "Validation failed for 's3_secret_access_key': value is required")
-        }
-        self.tokenId = try container.sdkDecodeRequired(.tokenId)
-        self.apiToken = try container.sdkDecodeRequired(.apiToken)
-        self.s3SecretAccessKey = try container.sdkDecodeRequired(.s3SecretAccessKey)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CredentialSecret {
-    public init(tokenId: String, apiToken: String, s3SecretAccessKey: String) {
+public extension CredentialSecret {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.tokenId) else {
+            throw SdkValidationError(
+                field: "token_id",
+                code: "required",
+                message: "Validation failed for 'token_id': value is required"
+            )
+        }
+        guard container.contains(.apiToken) else {
+            throw SdkValidationError(
+                field: "api_token",
+                code: "required",
+                message: "Validation failed for 'api_token': value is required"
+            )
+        }
+        guard container.contains(.s3SecretAccessKey) else {
+            throw SdkValidationError(
+                field: "s3_secret_access_key",
+                code: "required",
+                message: "Validation failed for 's3_secret_access_key': value is required"
+            )
+        }
+        tokenId = try container.sdkDecodeRequired(.tokenId)
+        apiToken = try container.sdkDecodeRequired(.apiToken)
+        s3SecretAccessKey = try container.sdkDecodeRequired(.s3SecretAccessKey)
+    }
+}
+
+public extension CredentialSecret {
+    init(tokenId: String, apiToken: String, s3SecretAccessKey: String) {
         (self.tokenId, self.apiToken) = (tokenId, apiToken)
         self.s3SecretAccessKey = s3SecretAccessKey
     }
@@ -378,33 +485,43 @@ public struct CreateCredentialRequest: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CreateCredentialRequest {
-    public init(from decoder: Decoder) throws {
+public extension CreateCredentialRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.scopes) else {
-            throw SdkValidationError(field: "scopes", code: "required", message: "Validation failed for 'scopes': value is required")
+            throw SdkValidationError(
+                field: "scopes",
+                code: "required",
+                message: "Validation failed for 'scopes': value is required"
+            )
         }
         guard container.contains(.principalType) else {
-            throw SdkValidationError(field: "principal_type", code: "required", message: "Validation failed for 'principal_type': value is required")
+            throw SdkValidationError(
+                field: "principal_type",
+                code: "required",
+                message: "Validation failed for 'principal_type': value is required"
+            )
         }
-        self.scopes = try container.sdkDecodeRequired(.scopes)
-        self.principalType = try container.sdkDecodeRequired(.principalType)
-        self.name = try container.sdkDecodeIfPresent(.name)
-            try validateItems("scopes", self.scopes, min: 1, max: 16)
-        if let value = self.name {
+        scopes = try container.sdkDecodeRequired(.scopes)
+        principalType = try container.sdkDecodeRequired(.principalType)
+        name = try container.sdkDecodeIfPresent(.name)
+        try validateItems("scopes", scopes, min: 1, max: 16)
+        if let value = name {
             try validateLength("name", value, min: nil, max: 256)
         }
     }
 }
 
-extension CreateCredentialRequest {
-    public init(scopes: [CredentialScope], principalType: CreateCredentialRequestPrincipalType, name: String? = nil) throws {
+public extension CreateCredentialRequest {
+    init(scopes: [CredentialScope], principalType: CreateCredentialRequestPrincipalType, name: String? = nil) throws {
         (self.scopes, self.principalType) = (scopes, principalType)
         self.name = name
-            try validateItems("scopes", self.scopes, min: 1, max: 16)
+        try validateItems("scopes", self.scopes, min: 1, max: 16)
         if let value = self.name {
             try validateLength("name", value, min: nil, max: 256)
         }
@@ -415,12 +532,15 @@ extension CreateCredentialRequest {
 public struct RotateCredentialResponsePrincipalType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let user = RotateCredentialResponsePrincipalType(rawValue: "user")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -437,7 +557,10 @@ public struct RotateCredentialResponsePrincipalType: RawRepresentable, Hashable,
 public struct GrantedCredentialScope: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let storageRead = GrantedCredentialScope(rawValue: "storage:read")
     public static let storageWrite = GrantedCredentialScope(rawValue: "storage:write")
     public static let aiGatewayInvoke = GrantedCredentialScope(rawValue: "ai_gateway:invoke")
@@ -446,7 +569,7 @@ public struct GrantedCredentialScope: RawRepresentable, Hashable, Codable, Senda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -461,12 +584,15 @@ public struct GrantedCredentialScope: RawRepresentable, Hashable, Codable, Senda
 public struct CreateCredentialRequestPrincipalType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let user = CreateCredentialRequestPrincipalType(rawValue: "user")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -482,7 +608,10 @@ public struct CreateCredentialRequestPrincipalType: RawRepresentable, Hashable, 
 public struct CredentialScope: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let storageRead = CredentialScope(rawValue: "storage:read")
     public static let storageWrite = CredentialScope(rawValue: "storage:write")
     public static let aiGatewayInvoke = CredentialScope(rawValue: "ai_gateway:invoke")
@@ -490,7 +619,7 @@ public struct CredentialScope: RawRepresentable, Hashable, Codable, Sendable, Sd
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,25 +3,38 @@
 
 import Foundation
 
-// SharedNeon domain models
-extension NeonAuthOauthProvider {
-    public init(from decoder: Decoder) throws {
+/// SharedNeon domain models
+public extension NeonAuthOauthProvider {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.clientId = try container.sdkDecodeIfPresent(.clientId)
-        self.clientSecret = try container.sdkDecodeIfPresent(.clientSecret)
+        id = try container.sdkDecodeRequired(.id)
+        type = try container.sdkDecodeRequired(.type)
+        clientId = try container.sdkDecodeIfPresent(.clientId)
+        clientSecret = try container.sdkDecodeIfPresent(.clientSecret)
     }
 }
 
-extension NeonAuthOauthProvider {
-    public init(id: NeonAuthOauthProviderId, type: NeonAuthOauthProviderType, clientId: String? = nil, clientSecret: String? = nil) {
+public extension NeonAuthOauthProvider {
+    init(
+        id: NeonAuthOauthProviderId,
+        type: NeonAuthOauthProviderType,
+        clientId: String? = nil,
+        clientSecret: String? = nil
+    ) {
         (self.id, self.type) = (id, type)
         (self.clientId, self.clientSecret) = (clientId, clientSecret)
     }
@@ -44,21 +57,21 @@ public struct NeonAuthUpdateOAuthProviderRequest: Codable {
     }
 
     init() {
-        (self.clientId, self.clientSecret, self.microsoftTenantId) = (nil, nil, nil)
+        (clientId, clientSecret, microsoftTenantId) = (nil, nil, nil)
     }
 }
 
-extension NeonAuthUpdateOAuthProviderRequest {
-    public init(from decoder: Decoder) throws {
+public extension NeonAuthUpdateOAuthProviderRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.clientId = try container.sdkDecodeIfPresent(.clientId)
-        self.clientSecret = try container.sdkDecodeIfPresent(.clientSecret)
-        self.microsoftTenantId = try container.sdkDecodeIfPresent(.microsoftTenantId)
+        clientId = try container.sdkDecodeIfPresent(.clientId)
+        clientSecret = try container.sdkDecodeIfPresent(.clientSecret)
+        microsoftTenantId = try container.sdkDecodeIfPresent(.microsoftTenantId)
     }
 }
 
-extension NeonAuthUpdateOAuthProviderRequest {
-    public init(clientId: String? = nil, clientSecret: String? = nil, microsoftTenantId: String? = nil) {
+public extension NeonAuthUpdateOAuthProviderRequest {
+    init(clientId: String? = nil, clientSecret: String? = nil, microsoftTenantId: String? = nil) {
         self.init()
         (self.clientId, self.clientSecret) = (clientId, clientSecret)
         self.microsoftTenantId = microsoftTenantId
@@ -100,46 +113,85 @@ public struct NeonAuthCreateIntegrationResponse: Codable {
         case baseUrl = "base_url"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension NeonAuthCreateIntegrationResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.authProvider) else {
-            throw SdkValidationError(field: "auth_provider", code: "required", message: "Validation failed for 'auth_provider': value is required")
-        }
-        guard container.contains(.authProviderProjectId) else {
-            throw SdkValidationError(field: "auth_provider_project_id", code: "required", message: "Validation failed for 'auth_provider_project_id': value is required")
-        }
-        guard container.contains(.pubClientKey) else {
-            throw SdkValidationError(field: "pub_client_key", code: "required", message: "Validation failed for 'pub_client_key': value is required")
-        }
-        guard container.contains(.secretServerKey) else {
-            throw SdkValidationError(field: "secret_server_key", code: "required", message: "Validation failed for 'secret_server_key': value is required")
-        }
-        guard container.contains(.jwksUrl) else {
-            throw SdkValidationError(field: "jwks_url", code: "required", message: "Validation failed for 'jwks_url': value is required")
-        }
-        guard container.contains(.schemaName) else {
-            throw SdkValidationError(field: "schema_name", code: "required", message: "Validation failed for 'schema_name': value is required")
-        }
-        guard container.contains(.tableName) else {
-            throw SdkValidationError(field: "table_name", code: "required", message: "Validation failed for 'table_name': value is required")
-        }
-        self.authProvider = try container.sdkDecodeRequired(.authProvider)
-        self.authProviderProjectId = try container.sdkDecodeRequired(.authProviderProjectId)
-        self.pubClientKey = try container.sdkDecodeRequired(.pubClientKey)
-        self.secretServerKey = try container.sdkDecodeRequired(.secretServerKey)
-        self.jwksUrl = try container.sdkDecodeRequired(.jwksUrl)
-        self.schemaName = try container.sdkDecodeRequired(.schemaName)
-        self.tableName = try container.sdkDecodeRequired(.tableName)
-        self.baseUrl = try container.sdkDecodeIfPresent(.baseUrl)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension NeonAuthCreateIntegrationResponse {
-    public init(authProvider: NeonAuthSupportedAuthProvider, authProviderProjectId: String, pubClientKey: String, secretServerKey: String, jwksUrl: String, schemaName: String, tableName: String, baseUrl: String? = nil) {
+public extension NeonAuthCreateIntegrationResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.authProvider) else {
+            throw SdkValidationError(
+                field: "auth_provider",
+                code: "required",
+                message: "Validation failed for 'auth_provider': value is required"
+            )
+        }
+        guard container.contains(.authProviderProjectId) else {
+            throw SdkValidationError(
+                field: "auth_provider_project_id",
+                code: "required",
+                message: "Validation failed for 'auth_provider_project_id': value is required"
+            )
+        }
+        guard container.contains(.pubClientKey) else {
+            throw SdkValidationError(
+                field: "pub_client_key",
+                code: "required",
+                message: "Validation failed for 'pub_client_key': value is required"
+            )
+        }
+        guard container.contains(.secretServerKey) else {
+            throw SdkValidationError(
+                field: "secret_server_key",
+                code: "required",
+                message: "Validation failed for 'secret_server_key': value is required"
+            )
+        }
+        guard container.contains(.jwksUrl) else {
+            throw SdkValidationError(
+                field: "jwks_url",
+                code: "required",
+                message: "Validation failed for 'jwks_url': value is required"
+            )
+        }
+        guard container.contains(.schemaName) else {
+            throw SdkValidationError(
+                field: "schema_name",
+                code: "required",
+                message: "Validation failed for 'schema_name': value is required"
+            )
+        }
+        guard container.contains(.tableName) else {
+            throw SdkValidationError(
+                field: "table_name",
+                code: "required",
+                message: "Validation failed for 'table_name': value is required"
+            )
+        }
+        authProvider = try container.sdkDecodeRequired(.authProvider)
+        authProviderProjectId = try container.sdkDecodeRequired(.authProviderProjectId)
+        pubClientKey = try container.sdkDecodeRequired(.pubClientKey)
+        secretServerKey = try container.sdkDecodeRequired(.secretServerKey)
+        jwksUrl = try container.sdkDecodeRequired(.jwksUrl)
+        schemaName = try container.sdkDecodeRequired(.schemaName)
+        tableName = try container.sdkDecodeRequired(.tableName)
+        baseUrl = try container.sdkDecodeIfPresent(.baseUrl)
+    }
+}
+
+public extension NeonAuthCreateIntegrationResponse {
+    init(
+        authProvider: NeonAuthSupportedAuthProvider,
+        authProviderProjectId: String,
+        pubClientKey: String,
+        secretServerKey: String,
+        jwksUrl: String,
+        schemaName: String,
+        tableName: String,
+        baseUrl: String? = nil
+    ) {
         (self.authProvider, self.authProviderProjectId) = (authProvider, authProviderProjectId)
         (self.pubClientKey, self.secretServerKey) = (pubClientKey, secretServerKey)
         (self.jwksUrl, self.schemaName) = (jwksUrl, schemaName)
@@ -151,13 +203,16 @@ extension NeonAuthCreateIntegrationResponse {
 public struct NeonAuthOauthProviderType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let standard = NeonAuthOauthProviderType(rawValue: "standard")
     public static let shared = NeonAuthOauthProviderType(rawValue: "shared")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -170,7 +225,10 @@ public struct NeonAuthOauthProviderType: RawRepresentable, Hashable, Codable, Se
 public struct NeonAuthOauthProviderId: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let google = NeonAuthOauthProviderId(rawValue: "google")
     public static let github = NeonAuthOauthProviderId(rawValue: "github")
     public static let microsoft = NeonAuthOauthProviderId(rawValue: "microsoft")
@@ -178,7 +236,7 @@ public struct NeonAuthOauthProviderId: RawRepresentable, Hashable, Codable, Send
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -191,13 +249,16 @@ public struct NeonAuthOauthProviderId: RawRepresentable, Hashable, Codable, Send
 public struct NeonAuthProviderProjectTransferStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let initiated = NeonAuthProviderProjectTransferStatus(rawValue: "initiated")
     public static let finished = NeonAuthProviderProjectTransferStatus(rawValue: "finished")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -210,13 +271,16 @@ public struct NeonAuthProviderProjectTransferStatus: RawRepresentable, Hashable,
 public struct NeonAuthProviderProjectOwnedBy: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let user = NeonAuthProviderProjectOwnedBy(rawValue: "user")
     public static let neon = NeonAuthProviderProjectOwnedBy(rawValue: "neon")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -231,14 +295,17 @@ public struct NeonAuthProviderProjectOwnedBy: RawRepresentable, Hashable, Codabl
 public struct NeonAuthSupportedAuthProvider: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let mock = NeonAuthSupportedAuthProvider(rawValue: "mock")
     public static let stack = NeonAuthSupportedAuthProvider(rawValue: "stack")
     public static let betterAuth = NeonAuthSupportedAuthProvider(rawValue: "better_auth")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

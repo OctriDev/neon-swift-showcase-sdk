@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AIGateway domain models
+/// AIGateway domain models
 /// Typed representation of the `BranchAiGateway` API schema.
 public struct BranchAiGateway: Codable {
     /// Always `true` in 200 responses. Present for forward compatibility, mirroring BranchStorage.enabled.
@@ -18,28 +18,38 @@ public struct BranchAiGateway: Codable {
         case baseUrl = "base_url"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchAiGateway {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.enabled) else {
-            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
-        }
-        guard container.contains(.baseUrl) else {
-            throw SdkValidationError(field: "base_url", code: "required", message: "Validation failed for 'base_url': value is required")
-        }
-        self.enabled = try container.sdkDecodeRequired(.enabled)
-        self.baseUrl = try container.sdkDecodeRequired(.baseUrl)
-            try sdkValidateUri("base_url", self.baseUrl)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchAiGateway {
-    public init(enabled: Bool, baseUrl: String) throws {
+public extension BranchAiGateway {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.enabled) else {
+            throw SdkValidationError(
+                field: "enabled",
+                code: "required",
+                message: "Validation failed for 'enabled': value is required"
+            )
+        }
+        guard container.contains(.baseUrl) else {
+            throw SdkValidationError(
+                field: "base_url",
+                code: "required",
+                message: "Validation failed for 'base_url': value is required"
+            )
+        }
+        enabled = try container.sdkDecodeRequired(.enabled)
+        baseUrl = try container.sdkDecodeRequired(.baseUrl)
+        try sdkValidateUri("base_url", baseUrl)
+    }
+}
+
+public extension BranchAiGateway {
+    init(enabled: Bool, baseUrl: String) throws {
         (self.enabled, self.baseUrl) = (enabled, baseUrl)
-            try sdkValidateUri("base_url", self.baseUrl)
+        try sdkValidateUri("base_url", self.baseUrl)
     }
 }
 
@@ -61,29 +71,43 @@ public struct BranchAiGatewayNotEnabled: Codable {
         case reason
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchAiGatewayNotEnabled {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        guard container.contains(.reason) else {
-            throw SdkValidationError(field: "reason", code: "required", message: "Validation failed for 'reason': value is required")
-        }
-        self.code = try container.sdkDecodeRequired(.code)
-        self.message = try container.sdkDecodeRequired(.message)
-        self.reason = try container.sdkDecodeRequired(.reason)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchAiGatewayNotEnabled {
-    public init(code: String, message: String, reason: BranchAiGatewayNotEnabledReason) {
+public extension BranchAiGatewayNotEnabled {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        guard container.contains(.reason) else {
+            throw SdkValidationError(
+                field: "reason",
+                code: "required",
+                message: "Validation failed for 'reason': value is required"
+            )
+        }
+        code = try container.sdkDecodeRequired(.code)
+        message = try container.sdkDecodeRequired(.message)
+        reason = try container.sdkDecodeRequired(.reason)
+    }
+}
+
+public extension BranchAiGatewayNotEnabled {
+    init(code: String, message: String, reason: BranchAiGatewayNotEnabledReason) {
         (self.code, self.message) = (code, message)
         self.reason = reason
     }
@@ -95,13 +119,16 @@ extension BranchAiGatewayNotEnabled {
 public struct BranchAiGatewayNotEnabledReason: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let aiGatewayUnavailable = BranchAiGatewayNotEnabledReason(rawValue: "ai_gateway_unavailable")
     public static let branchNotFound = BranchAiGatewayNotEnabledReason(rawValue: "branch_not_found")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

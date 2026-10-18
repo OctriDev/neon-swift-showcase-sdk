@@ -7,18 +7,32 @@ import Foundation
     import FoundationNetworking
 #endif
 public enum RegionMethods {
-    /// Lists supported Neon regions. **Note:** Not all regions are available to all organizations. Pass the `org_id` parameter to get an accurate list of regions available to your organization.
+    /// Lists supported Neon regions. **Note:** Not all regions are available to all organizations. Pass the `org_id`
+    /// parameter to get an accurate list of regions available to your organization.
     ///
     /// - Parameters:
     /// - orgId: Organization ID. When provided, returns only regions available to
     ///   this organization. Recommended for accurate region availability.
-    public static func getActiveRegions(config: ClientConfig, orgId: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ActiveRegionsResponse {
-        if let orgId = orgId {
+    public static func getActiveRegions(
+        config: ClientConfig,
+        orgId: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ActiveRegionsResponse {
+        if let orgId {
             try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
         }
 
-        return try (await sdkRequest("GET", "/regions", config: config, query: [
-            SdkQueryParameter("org_id", value: orgId),
-        ], decoder: .json, operationId: "getActiveRegions", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            "/regions",
+            config: config,
+            query: [
+                SdkQueryParameter("org_id", value: orgId),
+            ],
+            decoder: .json,
+            operationId: "getActiveRegions",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

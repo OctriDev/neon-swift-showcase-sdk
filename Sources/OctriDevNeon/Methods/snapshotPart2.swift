@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension SnapshotMethods {
+public extension SnapshotMethods {
     /// Creates a snapshot from the specified branch. This operation may initiate an asynchronous process.
     ///
     /// - Parameters:
@@ -19,26 +19,63 @@ extension SnapshotMethods {
     /// - name: A name for the snapshot.
     /// - expiresAt: The time at which the snapshot will be automatically deleted.
     ///   RFC 3339 format.
-    public static func createSnapshot(config: ClientConfig, projectId: String, branchId: String, lsn: String? = nil, timestamp: String? = nil, name: String? = nil, expiresAt: String? = nil, requestOptions: RequestOptions? = nil) async throws -> CreateSnapshotResponse {
+    static func createSnapshot(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        lsn: String? = nil,
+        timestamp: String? = nil,
+        name: String? = nil,
+        expiresAt: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> CreateSnapshotResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/snapshot"].joined(), config: config, query: [
-            SdkQueryParameter("lsn", value: lsn),
-            SdkQueryParameter("timestamp", value: timestamp),
-            SdkQueryParameter("name", value: name),
-            SdkQueryParameter("expires_at", value: expiresAt),
-        ], decoder: .json, operationId: "createSnapshot", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "POST",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/snapshot",
+            ].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("lsn", value: lsn),
+                SdkQueryParameter("timestamp", value: timestamp),
+                SdkQueryParameter("name", value: name),
+                SdkQueryParameter("expires_at", value: expiresAt),
+            ],
+            decoder: .json,
+            operationId: "createSnapshot",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
-    /// Lists the snapshots for the specified project. Each snapshot represents a point-in-time backup of the project data.
+    /// Lists the snapshots for the specified project. Each snapshot represents a point-in-time backup of the project
+    /// data.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
-    public static func listSnapshots(config: ClientConfig, projectId: String, requestOptions: RequestOptions? = nil) async throws -> ListSnapshotsResponse {
+    static func listSnapshots(
+        config: ClientConfig,
+        projectId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListSnapshotsResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/snapshots"].joined(), config: config, decoder: .json, operationId: "listSnapshots", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/snapshots"].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "listSnapshots",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

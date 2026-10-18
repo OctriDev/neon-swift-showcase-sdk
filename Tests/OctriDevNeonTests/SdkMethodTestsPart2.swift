@@ -17,11 +17,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.create(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            authProvider: decoded("\"mock\""),
-            databaseName: decoded("\"Example Name\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                authProvider: decoded("\"mock\""),
+                databaseName: decoded("\"Example Name\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -70,12 +70,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.authLegacy.createIntegration(
-            authProvider: decoded("\"mock\""),
-            projectId: decoded("\"wispy-forest-12345678\""),
-            branchId: decoded("\"br-cool-darkness-12345678\""),
-            databaseName: decoded("\"Example Name\""),
-            roleName: decoded("\"Example Name\"")
-        )
+                authProvider: decoded("\"mock\""),
+                projectId: decoded("\"wispy-forest-12345678\""),
+                branchId: decoded("\"br-cool-darkness-12345678\""),
+                databaseName: decoded("\"Example Name\""),
+                roleName: decoded("\"Example Name\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -110,7 +110,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testCreateAuthLegacyProviderSdkKeysCreateAuthLegacyProviderSdkKeys418ReachesMockAndDecodesResponse() async throws {
+    func testCreateAuthLegacyProviderSdkKeysCreateAuthLegacyProviderSdkKeys418ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/418") else {
             return
         }
@@ -121,9 +122,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.authLegacy.createProviderSdkKeys(
-            projectId: decoded("\"wispy-forest-12345678\""),
-            authProvider: decoded("\"mock\"")
-        )
+                projectId: decoded("\"wispy-forest-12345678\""),
+                authProvider: decoded("\"mock\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -171,11 +172,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.authLegacy.createUser(
-            projectId: decoded("\"a\""),
-            authProvider: decoded("\"mock\""),
-            email: decoded("\"user@example.com\""),
-            name: decoded("\"Example Name\"")
-        )
+                projectId: decoded("\"a\""),
+                authProvider: decoded("\"mock\""),
+                email: decoded("\"user@example.com\""),
+                name: decoded("\"Example Name\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -226,14 +227,14 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.createOAuthClient(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            name: decoded("\"Example Name\""),
-            redirectUris: decoded("[\"https://example.com\"]"),
-            type: decoded("\"confidential\""),
-            resources: decoded("[\"resources\"]"),
-            skipConsent: decoded("false")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                name: decoded("\"Example Name\""),
+                redirectUris: decoded("[\"https://example.com\"]"),
+                type: decoded("\"confidential\""),
+                resources: decoded("[\"resources\"]"),
+                skipConsent: decoded("false")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -281,11 +282,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.createUser(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            email: decoded("\"user@example.com\""),
-            name: decoded("\"Example Name\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                email: decoded("\"user@example.com\""),
+                name: decoded("\"Example Name\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -331,9 +332,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.create(
-            projectId: decoded("\"a\""),
-            body: decoded(sdkMethodFixture36Value1)
-        )
+                projectId: decoded("\"a\""),
+                body: decoded(sdkMethodFixture36Value1)
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -379,9 +380,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.createAnonymized(
-            projectId: decoded("\"a\""),
-            body: decoded(sdkMethodFixture38Value1)
-        )
+                projectId: decoded("\"a\""),
+                body: decoded(sdkMethodFixture38Value1)
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -428,10 +429,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.createDatabase(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            database: decoded("{\"name\":\"mydb\",\"owner_name\":\"casey\"}")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                database: decoded("{\"name\":\"mydb\",\"owner_name\":\"casey\"}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -478,10 +479,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.createRole(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            role: decoded("{\"name\":\"sally\"}")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                role: decoded("{\"name\":\"sally\"}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -529,11 +530,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.buckets.create(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            name: decoded("\"Example Name\""),
-            accessLevel: decoded("\"private\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                name: decoded("\"Example Name\""),
+                accessLevel: decoded("\"private\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 410)

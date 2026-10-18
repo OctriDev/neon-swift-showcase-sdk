@@ -15,7 +15,15 @@ public struct SendAuthTestEmailOptionsRequired1: Codable {
     public let password: String
     public let senderEmail: String
 
-    public init(projectId: String, branchId: String, host: String, port: Int, username: String, password: String, senderEmail: String) {
+    public init(
+        projectId: String,
+        branchId: String,
+        host: String,
+        port: Int,
+        username: String,
+        password: String,
+        senderEmail: String
+    ) {
         self.projectId = projectId
         self.branchId = branchId
         self.host = host
@@ -47,23 +55,23 @@ struct SendAuthTestEmailRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.host, forKey: SdkCodingKey("host"))
-        try keyedContainer.encode(self.port, forKey: SdkCodingKey("port"))
-        try keyedContainer.encode(self.username, forKey: SdkCodingKey("username"))
-        try keyedContainer.encode(self.password, forKey: SdkCodingKey("password"))
-        try keyedContainer.encode(self.senderEmail, forKey: SdkCodingKey("sender_email"))
-        try keyedContainer.encode(self.senderName, forKey: SdkCodingKey("sender_name"))
-        try keyedContainer.encode(self.recipientEmail, forKey: SdkCodingKey("recipient_email"))
+        try keyedContainer.encode(host, forKey: SdkCodingKey("host"))
+        try keyedContainer.encode(port, forKey: SdkCodingKey("port"))
+        try keyedContainer.encode(username, forKey: SdkCodingKey("username"))
+        try keyedContainer.encode(password, forKey: SdkCodingKey("password"))
+        try keyedContainer.encode(senderEmail, forKey: SdkCodingKey("sender_email"))
+        try keyedContainer.encode(senderName, forKey: SdkCodingKey("sender_name"))
+        try keyedContainer.encode(recipientEmail, forKey: SdkCodingKey("recipient_email"))
     }
 
     init(options: AuthMethods.SendAuthTestEmailOptions) {
-        self.host = options.host
-        self.port = options.port
-        self.username = options.username
-        self.password = options.password
-        self.senderEmail = options.senderEmail
-        self.senderName = options.senderName
-        self.recipientEmail = options.recipientEmail
+        host = options.host
+        port = options.port
+        username = options.username
+        password = options.password
+        senderEmail = options.senderEmail
+        senderName = options.senderName
+        recipientEmail = options.recipientEmail
     }
 }
 
@@ -72,7 +80,7 @@ struct SendAuthEmailProviderTestRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.recipientEmail, forKey: SdkCodingKey("recipient_email"))
+        try keyedContainer.encode(recipientEmail, forKey: SdkCodingKey("recipient_email"))
     }
 }
 
@@ -87,23 +95,32 @@ struct UpdateAuthEmailAndPasswordConfigRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.enabled, forKey: SdkCodingKey("enabled"))
-        try keyedContainer.encodeIfPresent(self.emailVerificationMethod, forKey: SdkCodingKey("email_verification_method"))
-        try keyedContainer.encodeIfPresent(self.requireEmailVerification, forKey: SdkCodingKey("require_email_verification"))
-        try keyedContainer.encodeIfPresent(self.autoSignInAfterVerification, forKey: SdkCodingKey("auto_sign_in_after_verification"))
-        try keyedContainer.encodeIfPresent(self.sendVerificationEmailOnSignUp, forKey: SdkCodingKey("send_verification_email_on_sign_up"))
-        try keyedContainer.encodeIfPresent(self.sendVerificationEmailOnSignIn, forKey: SdkCodingKey("send_verification_email_on_sign_in"))
-        try keyedContainer.encodeIfPresent(self.disableSignUp, forKey: SdkCodingKey("disable_sign_up"))
+        try keyedContainer.encodeIfPresent(enabled, forKey: SdkCodingKey("enabled"))
+        try keyedContainer.encodeIfPresent(emailVerificationMethod, forKey: SdkCodingKey("email_verification_method"))
+        try keyedContainer.encodeIfPresent(requireEmailVerification, forKey: SdkCodingKey("require_email_verification"))
+        try keyedContainer.encodeIfPresent(
+            autoSignInAfterVerification,
+            forKey: SdkCodingKey("auto_sign_in_after_verification")
+        )
+        try keyedContainer.encodeIfPresent(
+            sendVerificationEmailOnSignUp,
+            forKey: SdkCodingKey("send_verification_email_on_sign_up")
+        )
+        try keyedContainer.encodeIfPresent(
+            sendVerificationEmailOnSignIn,
+            forKey: SdkCodingKey("send_verification_email_on_sign_in")
+        )
+        try keyedContainer.encodeIfPresent(disableSignUp, forKey: SdkCodingKey("disable_sign_up"))
     }
 
     init(options: AuthMethods.UpdateAuthEmailAndPasswordConfigOptions) {
-        self.enabled = options.enabled
-        self.emailVerificationMethod = options.emailVerificationMethod
-        self.requireEmailVerification = options.requireEmailVerification
-        self.autoSignInAfterVerification = options.autoSignInAfterVerification
-        self.sendVerificationEmailOnSignUp = options.sendVerificationEmailOnSignUp
-        self.sendVerificationEmailOnSignIn = options.sendVerificationEmailOnSignIn
-        self.disableSignUp = options.disableSignUp
+        enabled = options.enabled
+        emailVerificationMethod = options.emailVerificationMethod
+        requireEmailVerification = options.requireEmailVerification
+        autoSignInAfterVerification = options.autoSignInAfterVerification
+        sendVerificationEmailOnSignUp = options.sendVerificationEmailOnSignUp
+        sendVerificationEmailOnSignIn = options.sendVerificationEmailOnSignIn
+        disableSignUp = options.disableSignUp
     }
 }
 
@@ -112,7 +129,7 @@ struct UpdateAuthAllowLocalhostRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.allowLocalhost, forKey: SdkCodingKey("allow_localhost"))
+        try keyedContainer.encode(allowLocalhost, forKey: SdkCodingKey("allow_localhost"))
     }
 }
 
@@ -125,11 +142,11 @@ struct UpdateAuthOrganizationPluginRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.enabled, forKey: SdkCodingKey("enabled"))
-        try keyedContainer.encodeIfPresent(self.organizationLimit, forKey: SdkCodingKey("organization_limit"))
-        try keyedContainer.encodeIfPresent(self.membershipLimit, forKey: SdkCodingKey("membership_limit"))
-        try keyedContainer.encodeIfPresent(self.creatorRole, forKey: SdkCodingKey("creator_role"))
-        try keyedContainer.encodeIfPresent(self.sendInvitationEmail, forKey: SdkCodingKey("send_invitation_email"))
+        try keyedContainer.encodeIfPresent(enabled, forKey: SdkCodingKey("enabled"))
+        try keyedContainer.encodeIfPresent(organizationLimit, forKey: SdkCodingKey("organization_limit"))
+        try keyedContainer.encodeIfPresent(membershipLimit, forKey: SdkCodingKey("membership_limit"))
+        try keyedContainer.encodeIfPresent(creatorRole, forKey: SdkCodingKey("creator_role"))
+        try keyedContainer.encodeIfPresent(sendInvitationEmail, forKey: SdkCodingKey("send_invitation_email"))
     }
 }
 
@@ -138,7 +155,7 @@ struct UpdateAuthConfigRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encode(name, forKey: SdkCodingKey("name"))
     }
 }
 
@@ -149,9 +166,9 @@ struct UpdateAuthMagicLinkPluginRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.enabled, forKey: SdkCodingKey("enabled"))
-        try keyedContainer.encodeIfPresent(self.expiresIn, forKey: SdkCodingKey("expires_in"))
-        try keyedContainer.encodeIfPresent(self.disableSignUp, forKey: SdkCodingKey("disable_sign_up"))
+        try keyedContainer.encodeIfPresent(enabled, forKey: SdkCodingKey("enabled"))
+        try keyedContainer.encodeIfPresent(expiresIn, forKey: SdkCodingKey("expires_in"))
+        try keyedContainer.encodeIfPresent(disableSignUp, forKey: SdkCodingKey("disable_sign_up"))
     }
 }
 
@@ -161,8 +178,8 @@ struct UpdateAuthPhoneNumberPluginRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.enabled, forKey: SdkCodingKey("enabled"))
-        try keyedContainer.encodeIfPresent(self.otpExpiresIn, forKey: SdkCodingKey("otp_expires_in"))
+        try keyedContainer.encodeIfPresent(enabled, forKey: SdkCodingKey("enabled"))
+        try keyedContainer.encodeIfPresent(otpExpiresIn, forKey: SdkCodingKey("otp_expires_in"))
     }
 }
 
@@ -175,11 +192,11 @@ struct UpdateAuthOAuthProviderPluginRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.enabled, forKey: SdkCodingKey("enabled"))
-        try keyedContainer.encodeIfPresent(self.loginPage, forKey: SdkCodingKey("login_page"))
-        try keyedContainer.encodeIfPresent(self.consentPage, forKey: SdkCodingKey("consent_page"))
-        try keyedContainer.encodeIfPresent(self.mcp, forKey: SdkCodingKey("mcp"))
-        try keyedContainer.encodeIfPresent(self.resources, forKey: SdkCodingKey("resources"))
+        try keyedContainer.encodeIfPresent(enabled, forKey: SdkCodingKey("enabled"))
+        try keyedContainer.encodeIfPresent(loginPage, forKey: SdkCodingKey("login_page"))
+        try keyedContainer.encodeIfPresent(consentPage, forKey: SdkCodingKey("consent_page"))
+        try keyedContainer.encodeIfPresent(mcp, forKey: SdkCodingKey("mcp"))
+        try keyedContainer.encodeIfPresent(resources, forKey: SdkCodingKey("resources"))
     }
 }
 
@@ -192,10 +209,10 @@ struct CreateAuthOAuthClientRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encode(self.redirectUris, forKey: SdkCodingKey("redirect_uris"))
-        try keyedContainer.encode(self.type, forKey: SdkCodingKey("type"))
-        try keyedContainer.encode(self.resources, forKey: SdkCodingKey("resources"))
-        try keyedContainer.encodeIfPresent(self.skipConsent, forKey: SdkCodingKey("skip_consent"))
+        try keyedContainer.encode(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encode(redirectUris, forKey: SdkCodingKey("redirect_uris"))
+        try keyedContainer.encode(type, forKey: SdkCodingKey("type"))
+        try keyedContainer.encode(resources, forKey: SdkCodingKey("resources"))
+        try keyedContainer.encodeIfPresent(skipConsent, forKey: SdkCodingKey("skip_consent"))
     }
 }

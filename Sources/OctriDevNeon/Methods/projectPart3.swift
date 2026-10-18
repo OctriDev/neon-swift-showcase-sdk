@@ -6,8 +6,11 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ProjectMethods {
-    /// Retrieves a list of projects for the specified organization. If using a personal API key, include the `org_id` parameter to specify which organization to work with. If using an org API key, `org_id` is automatically inferred from the key. For more information, see [Manage organizations using the Neon API](https://neon.com/docs/manage/orgs-api) and [Manage projects](https://neon.com/docs/manage/projects/).
+public extension ProjectMethods {
+    /// Retrieves a list of projects for the specified organization. If using a personal API key, include the `org_id`
+    /// parameter to specify which organization to work with. If using an org API key, `org_id` is automatically
+    /// inferred from the key. For more information, see [Manage organizations using the Neon
+    /// API](https://neon.com/docs/manage/orgs-api) and [Manage projects](https://neon.com/docs/manage/projects/).
     ///
     /// - Parameters:
     /// - cursor: Specify the cursor value from the previous response to retrieve
@@ -24,26 +27,44 @@ extension ProjectMethods {
     ///   implicit implementation defined timeout is chosen with the same behaviour as
     ///   above
     /// - recoverable: Show only deleted projects within the recovery window.
-    public static func listProjects(config: ClientConfig, cursor: String? = nil, limit: Int? = nil, search: String? = nil, orgId: String? = nil, timeout: Int? = nil, recoverable: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> ListProjectsResponse {
-        if let limit = limit {
+    static func listProjects(
+        config: ClientConfig,
+        cursor: String? = nil,
+        limit: Int? = nil,
+        search: String? = nil,
+        orgId: String? = nil,
+        timeout: Int? = nil,
+        recoverable: Bool? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListProjectsResponse {
+        if let limit {
             try validateRange("limit", Double(limit), min: 1, max: 400)
         }
 
-        if let orgId = orgId {
+        if let orgId {
             try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
         }
 
-        if let timeout = timeout {
+        if let timeout {
             try validateRange("timeout", Double(timeout), min: 100, max: 30000)
         }
 
-        return try (await sdkRequest("GET", "/projects", config: config, query: [
-            SdkQueryParameter("cursor", value: cursor),
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("search", value: search),
-            SdkQueryParameter("org_id", value: orgId),
-            SdkQueryParameter("timeout", value: timeout),
-            SdkQueryParameter("recoverable", value: recoverable),
-        ], decoder: .json, operationId: "listProjects", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            "/projects",
+            config: config,
+            query: [
+                SdkQueryParameter("cursor", value: cursor),
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("search", value: search),
+                SdkQueryParameter("org_id", value: orgId),
+                SdkQueryParameter("timeout", value: timeout),
+                SdkQueryParameter("recoverable", value: recoverable),
+            ],
+            decoder: .json,
+            operationId: "listProjects",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }
