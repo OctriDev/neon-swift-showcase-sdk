@@ -17,8 +17,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.organizations.listApiKeys(
-            orgId: decoded("\"a\"")
-        )
+                orgId: decoded("\"a\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -63,8 +63,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.organizations.listInvitations(
-            orgId: decoded("\"a\"")
-        )
+                orgId: decoded("\"a\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -113,12 +113,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.organizations.listMembers(
-            orgId: decoded("\"a\""),
-            sortBy: decoded("\"joined_at\""),
-            cursor: decoded("\"cursor\""),
-            sortOrder: decoded("\"desc\""),
-            limit: decoded("1")
-        )
+                orgId: decoded("\"a\""),
+                sortBy: decoded("\"joined_at\""),
+                cursor: decoded("\"cursor\""),
+                sortOrder: decoded("\"desc\""),
+                limit: decoded("1")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -164,9 +164,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.organizations.listVpcEndpoints(
-            orgId: decoded("\"a\""),
-            regionId: decoded("\"region-1\"")
-        )
+                orgId: decoded("\"a\""),
+                regionId: decoded("\"region-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -182,7 +182,8 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testListOrganizationVpcEndpointsAllRegionsListOrganizationVpcEndpX6377d106b7ReachesMockAndDecodesResponse() async throws {
+    func testListOrganizationVpcEndpointsAllRegionsListOrganizationVpcEndpX6377d106b7ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -200,7 +201,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testListOrganizationVpcEndpointsAllRegionsListOrganizationVpcEndpXeb87b5753fReachesMockAndDecodesResponse() async throws {
+    func testListOrganizationVpcEndpointsAllRegionsListOrganizationVpcEndpXeb87b5753fReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/418") else {
             return
         }
@@ -211,8 +213,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.organizations.listVpcEndpointsAllRegions(
-            orgId: decoded("\"a\"")
-        )
+                orgId: decoded("\"a\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -259,10 +261,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.listMembers(
-            projectId: decoded("\"a\""),
-            cursor: decoded("\"cursor\""),
-            limit: decoded("1")
-        )
+                projectId: decoded("\"a\""),
+                cursor: decoded("\"cursor\""),
+                limit: decoded("1")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -307,8 +309,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.listPermissions(
-            projectId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -358,13 +360,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.list(
-            cursor: decoded("\"cursor\""),
-            limit: decoded("10"),
-            search: decoded("\"search\""),
-            orgId: decoded("\"a\""),
-            timeout: decoded("100"),
-            recoverable: decoded("false")
-        )
+                cursor: decoded("\"cursor\""),
+                limit: decoded("10"),
+                search: decoded("\"search\""),
+                orgId: decoded("\"a\""),
+                timeout: decoded("100"),
+                recoverable: decoded("false")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -409,8 +411,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.listVpcEndpoints(
-            projectId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -458,11 +460,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.listShared(
-            cursor: decoded("\"cursor\""),
-            limit: decoded("10"),
-            search: decoded("\"search\""),
-            timeout: decoded("100")
-        )
+                cursor: decoded("\"cursor\""),
+                limit: decoded("10"),
+                search: decoded("\"search\""),
+                timeout: decoded("100")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -507,8 +509,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.snapshot.list(
-            projectId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -559,14 +561,14 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.buckets.presignObject(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            bucketName: decoded("\"Example Name\""),
-            objectKey: decoded("\"x\""),
-            operation: decoded("\"upload\""),
-            contentType: decoded("\"content_type\""),
-            expiresInSeconds: decoded("900")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                bucketName: decoded("\"Example Name\""),
+                objectKey: decoded("\"x\""),
+                operation: decoded("\"upload\""),
+                contentType: decoded("\"content_type\""),
+                expiresInSeconds: decoded("900")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)

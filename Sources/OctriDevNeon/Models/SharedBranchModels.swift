@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedBranch domain models
+/// SharedBranch domain models
 public typealias BranchRestoreStatus = String
 
 public typealias BranchState = String
@@ -22,25 +22,35 @@ public struct BranchRestrictedAction: Codable {
         case reason
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchRestrictedAction {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.reason) else {
-            throw SdkValidationError(field: "reason", code: "required", message: "Validation failed for 'reason': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.reason = try container.sdkDecodeRequired(.reason)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchRestrictedAction {
-    public init(name: String, reason: String) {
+public extension BranchRestrictedAction {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.reason) else {
+            throw SdkValidationError(
+                field: "reason",
+                code: "required",
+                message: "Validation failed for 'reason': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+        reason = try container.sdkDecodeRequired(.reason)
+    }
+}
+
+public extension BranchRestrictedAction {
+    init(name: String, reason: String) {
         (self.name, self.reason) = (name, reason)
     }
 }
@@ -60,20 +70,20 @@ public struct BranchCreatedBy: Codable {
     }
 
     init() {
-        (self.name, self.image) = (nil, nil)
+        (name, image) = (nil, nil)
     }
 }
 
-extension BranchCreatedBy {
-    public init(from decoder: Decoder) throws {
+public extension BranchCreatedBy {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.image = try container.sdkDecodeIfPresent(.image)
+        name = try container.sdkDecodeIfPresent(.name)
+        image = try container.sdkDecodeIfPresent(.image)
     }
 }
 
-extension BranchCreatedBy {
-    public init(name: String? = nil, image: String? = nil) {
+public extension BranchCreatedBy {
+    init(name: String? = nil, image: String? = nil) {
         self.init()
         (self.name, self.image) = (name, image)
     }
@@ -94,21 +104,27 @@ public struct BranchResponse: Codable {
         case branch
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.branch) else {
-            throw SdkValidationError(field: "branch", code: "required", message: "Validation failed for 'branch': value is required")
-        }
-        self.branch = try container.sdkDecodeRequired(.branch)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchResponse {
-    public init(branch: Branch) {
+public extension BranchResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.branch) else {
+            throw SdkValidationError(
+                field: "branch",
+                code: "required",
+                message: "Validation failed for 'branch': value is required"
+            )
+        }
+        branch = try container.sdkDecodeRequired(.branch)
+    }
+}
+
+public extension BranchResponse {
+    init(branch: Branch) {
         self.branch = branch
     }
 }
@@ -130,35 +146,49 @@ public struct BranchRecoveryInfo: Codable {
         case deletionMethod = "deletion_method"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchRecoveryInfo {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.deletedAt) else {
-            throw SdkValidationError(field: "deleted_at", code: "required", message: "Validation failed for 'deleted_at': value is required")
-        }
-        guard container.contains(.recoverableUntil) else {
-            throw SdkValidationError(field: "recoverable_until", code: "required", message: "Validation failed for 'recoverable_until': value is required")
-        }
-        guard container.contains(.deletionMethod) else {
-            throw SdkValidationError(field: "deletion_method", code: "required", message: "Validation failed for 'deletion_method': value is required")
-        }
-        self.deletedAt = try container.sdkDecodeRequired(.deletedAt)
-        self.recoverableUntil = try container.sdkDecodeRequired(.recoverableUntil)
-        self.deletionMethod = try container.sdkDecodeRequired(.deletionMethod)
-            try sdkValidateDateTime("deleted_at", sdkWireString(self.deletedAt))
-            try sdkValidateDateTime("recoverable_until", sdkWireString(self.recoverableUntil))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchRecoveryInfo {
-    public init(deletedAt: Date, recoverableUntil: Date, deletionMethod: BranchRecoveryInfoDeletionMethod) throws {
+public extension BranchRecoveryInfo {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.deletedAt) else {
+            throw SdkValidationError(
+                field: "deleted_at",
+                code: "required",
+                message: "Validation failed for 'deleted_at': value is required"
+            )
+        }
+        guard container.contains(.recoverableUntil) else {
+            throw SdkValidationError(
+                field: "recoverable_until",
+                code: "required",
+                message: "Validation failed for 'recoverable_until': value is required"
+            )
+        }
+        guard container.contains(.deletionMethod) else {
+            throw SdkValidationError(
+                field: "deletion_method",
+                code: "required",
+                message: "Validation failed for 'deletion_method': value is required"
+            )
+        }
+        deletedAt = try container.sdkDecodeRequired(.deletedAt)
+        recoverableUntil = try container.sdkDecodeRequired(.recoverableUntil)
+        deletionMethod = try container.sdkDecodeRequired(.deletionMethod)
+        try sdkValidateDateTime("deleted_at", sdkWireString(deletedAt))
+        try sdkValidateDateTime("recoverable_until", sdkWireString(recoverableUntil))
+    }
+}
+
+public extension BranchRecoveryInfo {
+    init(deletedAt: Date, recoverableUntil: Date, deletionMethod: BranchRecoveryInfoDeletionMethod) throws {
         (self.deletedAt, self.recoverableUntil) = (deletedAt, recoverableUntil)
         self.deletionMethod = deletionMethod
-            try sdkValidateDateTime("deleted_at", sdkWireString(self.deletedAt))
-            try sdkValidateDateTime("recoverable_until", sdkWireString(self.recoverableUntil))
+        try sdkValidateDateTime("deleted_at", sdkWireString(self.deletedAt))
+        try sdkValidateDateTime("recoverable_until", sdkWireString(self.recoverableUntil))
     }
 }
 
@@ -297,53 +327,87 @@ public struct Branch: Codable {
         case recovery
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension Branch {
-    public init(from decoder: Decoder) throws {
+public extension Branch {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.projectId = try container.sdkDecodeRequired(.projectId)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.currentState = try container.sdkDecodeRequired(.currentState)
-        self.stateChangedAt = try container.sdkDecodeRequired(.stateChangedAt)
-        self.creationSource = try container.sdkDecodeRequired(.creationSource)
-        self.`default` = try container.sdkDecodeRequired(.`default`)
-        self.protected = try container.sdkDecodeRequired(.protected)
-        self.cpuUsedSec = try container.sdkDecodeRequired(.cpuUsedSec)
-        self.computeTimeSeconds = try container.sdkDecodeRequired(.computeTimeSeconds)
-        self.activeTimeSeconds = try container.sdkDecodeRequired(.activeTimeSeconds)
-        self.writtenDataBytes = try container.sdkDecodeRequired(.writtenDataBytes)
-        self.dataTransferBytes = try container.sdkDecodeRequired(.dataTransferBytes)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.updatedAt = try container.sdkDecodeRequired(.updatedAt)
-        self.parentId = try container.sdkDecodeIfPresent(.parentId)
-        self.parentLsn = try container.sdkDecodeIfPresent(.parentLsn)
-        self.parentTimestamp = try container.sdkDecodeIfPresent(.parentTimestamp)
-        self.pendingState = try container.sdkDecodeIfPresent(.pendingState)
-        self.logicalSize = try container.sdkDecodeIfPresent(.logicalSize)
-        self.primary = try container.sdkDecodeIfPresent(.primary)
-        self.ttlIntervalSeconds = try container.sdkDecodeIfPresent(.ttlIntervalSeconds)
-        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
-        self.lastResetAt = try container.sdkDecodeIfPresent(.lastResetAt)
-        self.createdBy = try container.sdkDecodeIfPresent(.createdBy)
-        self.initSource = try container.sdkDecodeIfPresent(.initSource)
-        self.restoreStatus = try container.sdkDecodeIfPresent(.restoreStatus)
-        self.restoredFrom = try container.sdkDecodeIfPresent(.restoredFrom)
-        self.restoredAs = try container.sdkDecodeIfPresent(.restoredAs)
-        self.restrictedActions = try container.sdkDecodeIfPresent(.restrictedActions)
-        self.recovery = try container.sdkDecodeIfPresent(.recovery)
+        id = try container.sdkDecodeRequired(.id)
+        projectId = try container.sdkDecodeRequired(.projectId)
+        name = try container.sdkDecodeRequired(.name)
+        currentState = try container.sdkDecodeRequired(.currentState)
+        stateChangedAt = try container.sdkDecodeRequired(.stateChangedAt)
+        creationSource = try container.sdkDecodeRequired(.creationSource)
+        self.default = try container.sdkDecodeRequired(.default)
+        protected = try container.sdkDecodeRequired(.protected)
+        cpuUsedSec = try container.sdkDecodeRequired(.cpuUsedSec)
+        computeTimeSeconds = try container.sdkDecodeRequired(.computeTimeSeconds)
+        activeTimeSeconds = try container.sdkDecodeRequired(.activeTimeSeconds)
+        writtenDataBytes = try container.sdkDecodeRequired(.writtenDataBytes)
+        dataTransferBytes = try container.sdkDecodeRequired(.dataTransferBytes)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        updatedAt = try container.sdkDecodeRequired(.updatedAt)
+        parentId = try container.sdkDecodeIfPresent(.parentId)
+        parentLsn = try container.sdkDecodeIfPresent(.parentLsn)
+        parentTimestamp = try container.sdkDecodeIfPresent(.parentTimestamp)
+        pendingState = try container.sdkDecodeIfPresent(.pendingState)
+        logicalSize = try container.sdkDecodeIfPresent(.logicalSize)
+        primary = try container.sdkDecodeIfPresent(.primary)
+        ttlIntervalSeconds = try container.sdkDecodeIfPresent(.ttlIntervalSeconds)
+        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        lastResetAt = try container.sdkDecodeIfPresent(.lastResetAt)
+        createdBy = try container.sdkDecodeIfPresent(.createdBy)
+        initSource = try container.sdkDecodeIfPresent(.initSource)
+        restoreStatus = try container.sdkDecodeIfPresent(.restoreStatus)
+        restoredFrom = try container.sdkDecodeIfPresent(.restoredFrom)
+        restoredAs = try container.sdkDecodeIfPresent(.restoredAs)
+        restrictedActions = try container.sdkDecodeIfPresent(.restrictedActions)
+        recovery = try container.sdkDecodeIfPresent(.recovery)
         try sdkValidateConstraints()
     }
 }
 
-extension Branch {
-    public init(id: String, projectId: String, name: String, currentState: BranchState, stateChangedAt: Date, creationSource: String, `default`: Bool, protected: Bool, cpuUsedSec: Int, computeTimeSeconds: Int, activeTimeSeconds: Int, writtenDataBytes: Int, dataTransferBytes: Int, createdAt: Date, updatedAt: Date, parentId: String? = nil, parentLsn: String? = nil, parentTimestamp: Date? = nil, pendingState: BranchState? = nil, logicalSize: Int? = nil, primary: Bool? = nil, ttlIntervalSeconds: Int? = nil, expiresAt: Date? = nil, lastResetAt: Date? = nil, createdBy: BranchCreatedBy? = nil, initSource: String? = nil, restoreStatus: BranchRestoreStatus? = nil, restoredFrom: String? = nil, restoredAs: String? = nil, restrictedActions: [BranchRestrictedAction]? = nil, recovery: BranchRecoveryInfo? = nil) throws {
+public extension Branch {
+    init(
+        id: String,
+        projectId: String,
+        name: String,
+        currentState: BranchState,
+        stateChangedAt: Date,
+        creationSource: String,
+        default: Bool,
+        protected: Bool,
+        cpuUsedSec: Int,
+        computeTimeSeconds: Int,
+        activeTimeSeconds: Int,
+        writtenDataBytes: Int,
+        dataTransferBytes: Int,
+        createdAt: Date,
+        updatedAt: Date,
+        parentId: String? = nil,
+        parentLsn: String? = nil,
+        parentTimestamp: Date? = nil,
+        pendingState: BranchState? = nil,
+        logicalSize: Int? = nil,
+        primary: Bool? = nil,
+        ttlIntervalSeconds: Int? = nil,
+        expiresAt: Date? = nil,
+        lastResetAt: Date? = nil,
+        createdBy: BranchCreatedBy? = nil,
+        initSource: String? = nil,
+        restoreStatus: BranchRestoreStatus? = nil,
+        restoredFrom: String? = nil,
+        restoredAs: String? = nil,
+        restrictedActions: [BranchRestrictedAction]? = nil,
+        recovery: BranchRecoveryInfo? = nil
+    ) throws {
         (self.id, self.projectId) = (id, projectId)
         (self.name, self.currentState) = (name, currentState)
         (self.stateChangedAt, self.creationSource) = (stateChangedAt, creationSource)
-        (self.`default`, self.protected) = (`default`, protected)
+        (self.default, self.protected) = (`default`, protected)
         (self.cpuUsedSec, self.computeTimeSeconds) = (cpuUsedSec, computeTimeSeconds)
         (self.activeTimeSeconds, self.writtenDataBytes) = (activeTimeSeconds, writtenDataBytes)
         (self.dataTransferBytes, self.createdAt) = (dataTransferBytes, createdAt)
@@ -362,21 +426,21 @@ extension Branch {
 
 extension Branch {
     func sdkValidateConstraints() throws {
-            try sdkValidatePattern("id", self.id, sdkPatternead2b03f7a95)
-            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-            try sdkValidateDateTime("state_changed_at", sdkWireString(self.stateChangedAt))
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-            try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
-        if let value = self.parentId {
+        try sdkValidatePattern("id", id, sdkPatternead2b03f7a95)
+        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
+        try sdkValidateDateTime("state_changed_at", sdkWireString(stateChangedAt))
+        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
+        try sdkValidateDateTime("updated_at", sdkWireString(updatedAt))
+        if let value = parentId {
             try sdkValidatePattern("parent_id", value, sdkPatternead2b03f7a95)
         }
-        if let value = self.parentTimestamp {
+        if let value = parentTimestamp {
             try sdkValidateDateTime("parent_timestamp", sdkWireString(value))
         }
-        if let value = self.expiresAt {
+        if let value = expiresAt {
             try sdkValidateDateTime("expires_at", sdkWireString(value))
         }
-        if let value = self.lastResetAt {
+        if let value = lastResetAt {
             try sdkValidateDateTime("last_reset_at", sdkWireString(value))
         }
     }
@@ -386,13 +450,16 @@ extension Branch {
 public struct BranchRecoveryInfoDeletionMethod: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let user = BranchRecoveryInfoDeletionMethod(rawValue: "user")
     public static let ttl = BranchRecoveryInfoDeletionMethod(rawValue: "ttl")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -6,18 +6,40 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension DataApiMethods {
-    /// Retrieves the Neon Data API configuration for the specified branch, including endpoint URL, enabled state, and database settings.
+public extension DataApiMethods {
+    /// Retrieves the Neon Data API configuration for the specified branch, including endpoint URL, enabled state, and
+    /// database settings.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
     /// - databaseName: The database name
-    public static func getDataApi(config: ClientConfig, projectId: String, branchId: String, databaseName: String, requestOptions: RequestOptions? = nil) async throws -> DataAPIReponse {
+    static func getDataApi(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        databaseName: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DataAPIReponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/data-api/", sdkEncodePathSegment(sdkWireString(databaseName))].joined(), config: config, decoder: .json, operationId: "getDataApi", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/data-api/",
+                sdkEncodePathSegment(sdkWireString(databaseName)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getDataApi",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

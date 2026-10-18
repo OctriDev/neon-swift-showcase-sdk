@@ -6,17 +6,38 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension OrganizationsMethods {
+public extension OrganizationsMethods {
     /// Retrieves the current state and configuration details of a specified VPC endpoint.
     ///
     /// - Parameters:
     /// - orgId: The Neon organization ID
     /// - regionId: The Neon region ID. Azure regions are currently not supported.
     /// - vpcEndpointId: The VPC endpoint ID
-    public static func getOrganizationsVpcEndpoint(config: ClientConfig, orgId: String, regionId: String, vpcEndpointId: String, requestOptions: RequestOptions? = nil) async throws -> VPCEndpointDetails {
+    static func getOrganizationsVpcEndpoint(
+        config: ClientConfig,
+        orgId: String,
+        regionId: String,
+        vpcEndpointId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VPCEndpointDetails {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/vpc/region/", sdkEncodePathSegment(sdkWireString(regionId)), "/vpc_endpoints/", sdkEncodePathSegment(sdkWireString(vpcEndpointId))].joined(), config: config, decoder: .json, operationId: "getOrganizationsVpcEndpoint", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/organizations/",
+                sdkEncodePathSegment(sdkWireString(orgId)),
+                "/vpc/region/",
+                sdkEncodePathSegment(sdkWireString(regionId)),
+                "/vpc_endpoints/",
+                sdkEncodePathSegment(sdkWireString(vpcEndpointId)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getOrganizationsVpcEndpoint",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
     /// Assigns a VPC endpoint to a Neon organization or updates its existing assignment.
@@ -27,11 +48,34 @@ extension OrganizationsMethods {
     /// - vpcEndpointId: The VPC endpoint ID
     /// - label: Human-readable name for the VPC endpoint assignment, used to
     ///   identify it within the organization.
-    public static func assignOrganizationVpcEndpoint(config: ClientConfig, orgId: String, regionId: String, vpcEndpointId: String, label: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+    static func assignOrganizationVpcEndpoint(
+        config: ClientConfig,
+        orgId: String,
+        regionId: String,
+        vpcEndpointId: String,
+        label: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
         let requestBody = AssignOrganizationVpcEndpointRequestBody(label: label)
 
-        return try (await sdkRequest("POST", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/vpc/region/", sdkEncodePathSegment(sdkWireString(regionId)), "/vpc_endpoints/", sdkEncodePathSegment(sdkWireString(vpcEndpointId))].joined(), config: config, body: requestBody, decoder: .empty, operationId: "assignOrganizationVPCEndpoint", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "POST",
+            [
+                "/organizations/",
+                sdkEncodePathSegment(sdkWireString(orgId)),
+                "/vpc/region/",
+                sdkEncodePathSegment(sdkWireString(regionId)),
+                "/vpc_endpoints/",
+                sdkEncodePathSegment(sdkWireString(vpcEndpointId)),
+            ].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .empty,
+            operationId: "assignOrganizationVPCEndpoint",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ConsumptionMethods {
-    public struct GetConsumptionHistoryPerProjectOptions: Codable {
+public extension ConsumptionMethods {
+    struct GetConsumptionHistoryPerProjectOptions: Codable {
         public var from: Date
         public var to: Date
         public var granularity: ConsumptionHistoryGranularity
@@ -25,7 +25,9 @@ extension ConsumptionMethods {
         }
     }
 
-    /// Retrieves consumption metrics for Scale, Business, and Enterprise plan projects. History begins at the time of upgrade. Results are ordered by time in ascending order (oldest to newest). Issuing a call to this API does not wake a project's compute endpoint.
+    /// Retrieves consumption metrics for Scale, Business, and Enterprise plan projects. History begins at the time of
+    /// upgrade. Results are ordered by time in ascending order (oldest to newest). Issuing a call to this API does not
+    /// wake a project's compute endpoint.
     ///
     /// - Parameters:
     /// - from: Specify the start `date-time` for the consumption period. The
@@ -77,7 +79,11 @@ extension ConsumptionMethods {
     ///   comma-separated list in a single parameter value. - As an array of parameter
     ///   values: `metrics=cpu_seconds&metrics=ram_bytes` - As a comma-separated list
     ///   in a single parameter value: `metrics=cpu_seconds,ram_bytes`
-    public static func getConsumptionHistoryPerProject(config: ClientConfig, options: GetConsumptionHistoryPerProjectOptions, requestOptions: RequestOptions? = nil) async throws -> GetConsumptionHistoryPerProjectResponse {
+    static func getConsumptionHistoryPerProject(
+        config: ClientConfig,
+        options: GetConsumptionHistoryPerProjectOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> GetConsumptionHistoryPerProjectResponse {
         try sdkValidateDateTime("from", options.from)
 
         try sdkValidateDateTime("to", options.to)
@@ -94,16 +100,31 @@ extension ConsumptionMethods {
             try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
         }
 
-        return try (await sdkRequest("GET", "/consumption_history/projects", config: config, query: [
-            SdkQueryParameter("from", value: options.from),
-            SdkQueryParameter("to", value: options.to),
-            SdkQueryParameter("granularity", value: options.granularity),
-            SdkQueryParameter("cursor", value: options.cursor),
-            SdkQueryParameter("limit", value: options.limit),
-            SdkQueryParameter("project_ids", values: options.projectIds, style: "form", explode: true),
-            SdkQueryParameter("org_id", value: options.orgId),
-            SdkQueryParameter("include_v1_metrics", value: options.includeV1Metrics),
-            SdkQueryParameter("metrics", values: options.metrics, style: "form", explode: true),
-        ], decoder: .json, operationId: "getConsumptionHistoryPerProject", options: requestOptions, errors: ["403": GeneralError.self, "404": GeneralError.self, "406": GeneralError.self, "429": GeneralError.self, "default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            "/consumption_history/projects",
+            config: config,
+            query: [
+                SdkQueryParameter("from", value: options.from),
+                SdkQueryParameter("to", value: options.to),
+                SdkQueryParameter("granularity", value: options.granularity),
+                SdkQueryParameter("cursor", value: options.cursor),
+                SdkQueryParameter("limit", value: options.limit),
+                SdkQueryParameter("project_ids", values: options.projectIds, style: "form", explode: true),
+                SdkQueryParameter("org_id", value: options.orgId),
+                SdkQueryParameter("include_v1_metrics", value: options.includeV1Metrics),
+                SdkQueryParameter("metrics", values: options.metrics, style: "form", explode: true),
+            ],
+            decoder: .json,
+            operationId: "getConsumptionHistoryPerProject",
+            options: requestOptions,
+            errors: [
+                "403": GeneralError.self,
+                "404": GeneralError.self,
+                "406": GeneralError.self,
+                "429": GeneralError.self,
+                "default": GeneralError.self,
+            ]
+        )).data
     }
 }

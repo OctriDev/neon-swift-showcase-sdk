@@ -7,7 +7,7 @@ import Foundation
     import FoundationNetworking
 #endif
 
-// Canonical functions operation model declarations
+/// Canonical functions operation model declarations
 public struct ListFunctionsCustomDomainsResponse: Codable {
     /// Required array value serialized in the `custom_domains` wire field.
     public var customDomains: [CustomDomain]
@@ -22,22 +22,28 @@ public struct ListFunctionsCustomDomainsResponse: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ListFunctionsCustomDomainsResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.customDomains) else {
-            throw SdkValidationError(field: "custom_domains", code: "required", message: "Validation failed for 'custom_domains': value is required")
-        }
-        self.customDomains = try container.sdkDecodeRequired(.customDomains)
-        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ListFunctionsCustomDomainsResponse {
-    public init(customDomains: [CustomDomain], pagination: CursorPagination? = nil) {
+public extension ListFunctionsCustomDomainsResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.customDomains) else {
+            throw SdkValidationError(
+                field: "custom_domains",
+                code: "required",
+                message: "Validation failed for 'custom_domains': value is required"
+            )
+        }
+        customDomains = try container.sdkDecodeRequired(.customDomains)
+        pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+public extension ListFunctionsCustomDomainsResponse {
+    init(customDomains: [CustomDomain], pagination: CursorPagination? = nil) {
         (self.customDomains, self.pagination) = (customDomains, pagination)
     }
 }
@@ -56,22 +62,28 @@ public struct ListFunctionsResponse: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ListFunctionsResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.functions) else {
-            throw SdkValidationError(field: "functions", code: "required", message: "Validation failed for 'functions': value is required")
-        }
-        self.functions = try container.sdkDecodeRequired(.functions)
-        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ListFunctionsResponse {
-    public init(functions: [NeonFunction], pagination: CursorPagination? = nil) {
+public extension ListFunctionsResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.functions) else {
+            throw SdkValidationError(
+                field: "functions",
+                code: "required",
+                message: "Validation failed for 'functions': value is required"
+            )
+        }
+        functions = try container.sdkDecodeRequired(.functions)
+        pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+public extension ListFunctionsResponse {
+    init(functions: [NeonFunction], pagination: CursorPagination? = nil) {
         (self.functions, self.pagination) = (functions, pagination)
     }
 }

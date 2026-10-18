@@ -6,10 +6,14 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension FunctionsMethods {
-    /// Creates a deployment for a function on a branch. Supply at least one of `zip`, `environment`, or `runtime`; omitted fields inherit the function's latest version. The first deployment must include `zip`, and the newest deployment becomes active.
+public extension FunctionsMethods {
+    /// Creates a deployment for a function on a branch. Supply at least one of `zip`, `environment`, or `runtime`;
+    /// omitted fields inherit the function's latest version. The first deployment must include `zip`, and the newest
+    /// deployment becomes active.
     ///
-    /// Creates a deployment for the function. Supply any subset of zip, environment, and runtime; omitted fields inherit the function's latest version. At least one field must be supplied. The first deployment of a function must include zip. The newest deployment becomes active. **Note**: This endpoint is currently in Beta.
+    /// Creates a deployment for the function. Supply any subset of zip, environment, and runtime; omitted fields
+    /// inherit the function's latest version. At least one field must be supplied. The first deployment of a function
+    /// must include zip. The newest deployment becomes active. **Note**: This endpoint is currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -43,7 +47,16 @@ extension FunctionsMethods {
     ///   object parts. Values are write-only: they are encrypted at rest, and
     ///   responses carry only the variable names (the `environment` array), never the
     ///   values.
-    public static func createFunctionsDeployment(config: ClientConfig, projectId: String, branchId: String, slug: String, zip: SdkUploadFile? = nil, runtime: FunctionDeployRequestRuntime? = nil, environment: String? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonFunctionDeploymentResponse {
+    static func createFunctionsDeployment(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        slug: String,
+        zip: SdkUploadFile? = nil,
+        runtime: FunctionDeployRequestRuntime? = nil,
+        environment: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonFunctionDeploymentResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -51,17 +64,35 @@ extension FunctionsMethods {
         try sdkValidatePattern("slug", slug, sdkPatternacaa1d52e8e2)
 
         var multipartParts: [SdkMultipartField] = []
-        if let zip = zip {
+        if let zip {
             multipartParts.append(.file("zip", zip))
         }
-        if let runtime = runtime {
+        if let runtime {
             multipartParts.append(.scalar("runtime", runtime))
         }
-        if let environment = environment {
+        if let environment {
             multipartParts.append(.scalar("environment", environment))
         }
         let multipart = sdkEncodeMultipart(multipartParts)
 
-        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/functions/", sdkEncodePathSegment(sdkWireString(slug)), "/deployments"].joined(), config: config, rawBody: multipart.data, contentType: multipart.contentType, decoder: .json, operationId: "createFunctionsDeployment", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "POST",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/functions/",
+                sdkEncodePathSegment(sdkWireString(slug)),
+                "/deployments",
+            ].joined(),
+            config: config,
+            rawBody: multipart.data,
+            contentType: multipart.contentType,
+            decoder: .json,
+            operationId: "createFunctionsDeployment",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

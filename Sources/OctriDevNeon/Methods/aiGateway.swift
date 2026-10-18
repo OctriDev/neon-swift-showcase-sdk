@@ -7,16 +7,37 @@ import Foundation
     import FoundationNetworking
 #endif
 public enum AiGatewayMethods {
-    /// Returns the AI Gateway endpoint host for the specified branch, used to render code-snippet base URLs. A 200 response means the branch is registered and this region serves the AI gateway. A 404 response includes a `reason` field indicating why the gateway is unavailable. **Note**: This endpoint is currently in Beta.
+    /// Returns the AI Gateway endpoint host for the specified branch, used to render code-snippet base URLs. A 200
+    /// response means the branch is registered and this region serves the AI gateway. A 404 response includes a
+    /// `reason` field indicating why the gateway is unavailable. **Note**: This endpoint is currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
-    public static func getAiGateway(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> BranchAiGateway {
+    public static func getAiGateway(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> BranchAiGateway {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/ai_gateway"].joined(), config: config, decoder: .json, operationId: "getAiGateway", options: requestOptions, errors: ["404": BranchAiGatewayNotEnabled.self, "default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/ai_gateway",
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getAiGateway",
+            options: requestOptions,
+            errors: ["404": BranchAiGatewayNotEnabled.self, "default": GeneralError.self]
+        )).data
     }
 }

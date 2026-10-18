@@ -3,9 +3,9 @@
 
 import Foundation
 
-// Project domain models
-extension SetProjectMemberRoleRequest {
-    public init(role: ProjectRole) {
+/// Project domain models
+public extension SetProjectMemberRoleRequest {
+    init(role: ProjectRole) {
         self.role = role
     }
 }
@@ -25,20 +25,20 @@ public struct AllowedIps: Codable {
     }
 
     init() {
-        (self.ips, self.protectedBranchesOnly) = (nil, nil)
+        (ips, protectedBranchesOnly) = (nil, nil)
     }
 }
 
-extension AllowedIps {
-    public init(from decoder: Decoder) throws {
+public extension AllowedIps {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.ips = try container.sdkDecodeIfPresent(.ips)
-        self.protectedBranchesOnly = try container.sdkDecodeIfPresent(.protectedBranchesOnly)
+        ips = try container.sdkDecodeIfPresent(.ips)
+        protectedBranchesOnly = try container.sdkDecodeIfPresent(.protectedBranchesOnly)
     }
 }
 
-extension AllowedIps {
-    public init(ips: [String]? = nil, protectedBranchesOnly: Bool? = nil) {
+public extension AllowedIps {
+    init(ips: [String]? = nil, protectedBranchesOnly: Bool? = nil) {
         self.init()
         (self.ips, self.protectedBranchesOnly) = (ips, protectedBranchesOnly)
     }
@@ -70,45 +70,105 @@ public struct DefaultEndpointSettings: Codable {
     }
 
     init() {
-        (self.pgSettings, self.pgbouncerSettings, self.autoscalingLimitMinCu, self.autoscalingLimitMaxCu, self.suspendTimeoutSeconds) = (nil, nil, nil, nil, nil)
+        (pgSettings, pgbouncerSettings, autoscalingLimitMinCu, autoscalingLimitMaxCu, suspendTimeoutSeconds) = (
+            nil,
+            nil,
+            nil,
+            nil,
+            nil
+        )
     }
 }
 
-extension DefaultEndpointSettings {
-    public init(from decoder: Decoder) throws {
+public extension DefaultEndpointSettings {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.pgSettings = try container.sdkDecodeIfPresent(.pgSettings)
-        self.pgbouncerSettings = try container.sdkDecodeIfPresent(.pgbouncerSettings)
-        self.autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
-        self.autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
-        self.suspendTimeoutSeconds = try container.sdkDecodeIfPresent(.suspendTimeoutSeconds)
-        if let value = self.autoscalingLimitMinCu {
-            try validateRange("autoscaling_limit_min_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        pgSettings = try container.sdkDecodeIfPresent(.pgSettings)
+        pgbouncerSettings = try container.sdkDecodeIfPresent(.pgbouncerSettings)
+        autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
+        autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
+        suspendTimeoutSeconds = try container.sdkDecodeIfPresent(.suspendTimeoutSeconds)
+        if let value = autoscalingLimitMinCu {
+            try validateRange(
+                "autoscaling_limit_min_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.autoscalingLimitMaxCu {
-            try validateRange("autoscaling_limit_max_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = autoscalingLimitMaxCu {
+            try validateRange(
+                "autoscaling_limit_max_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.suspendTimeoutSeconds {
-            try validateRange("suspend_timeout_seconds", Double(value), min: -1, max: 604800, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = suspendTimeoutSeconds {
+            try validateRange(
+                "suspend_timeout_seconds",
+                Double(value),
+                min: -1,
+                max: 604_800,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension DefaultEndpointSettings {
-    public init(pgSettings: PgSettingsData? = nil, pgbouncerSettings: PgbouncerSettingsData? = nil, autoscalingLimitMinCu: ComputeUnit? = nil, autoscalingLimitMaxCu: ComputeUnit? = nil, suspendTimeoutSeconds: SuspendTimeoutSeconds? = nil) throws {
+public extension DefaultEndpointSettings {
+    init(
+        pgSettings: PgSettingsData? = nil,
+        pgbouncerSettings: PgbouncerSettingsData? = nil,
+        autoscalingLimitMinCu: ComputeUnit? = nil,
+        autoscalingLimitMaxCu: ComputeUnit? = nil,
+        suspendTimeoutSeconds: SuspendTimeoutSeconds? = nil
+    ) throws {
         self.init()
         (self.pgSettings, self.pgbouncerSettings) = (pgSettings, pgbouncerSettings)
         self.autoscalingLimitMinCu = autoscalingLimitMinCu
         self.autoscalingLimitMaxCu = autoscalingLimitMaxCu
         self.suspendTimeoutSeconds = suspendTimeoutSeconds
         if let value = self.autoscalingLimitMinCu {
-            try validateRange("autoscaling_limit_min_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "autoscaling_limit_min_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.autoscalingLimitMaxCu {
-            try validateRange("autoscaling_limit_max_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "autoscaling_limit_max_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.suspendTimeoutSeconds {
-            try validateRange("suspend_timeout_seconds", Double(value), min: -1, max: 604800, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "suspend_timeout_seconds",
+                Double(value),
+                min: -1,
+                max: 604_800,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -125,25 +185,35 @@ public struct AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem: Codable
         case code
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        self.message = try container.sdkDecodeRequired(.message)
-        self.code = try container.sdkDecodeRequired(.code)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem {
-    public init(message: String, code: String) {
+public extension AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        message = try container.sdkDecodeRequired(.message)
+        code = try container.sdkDecodeRequired(.code)
+    }
+}
+
+public extension AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem {
+    init(message: String, code: String) {
         (self.message, self.code) = (message, code)
     }
 }
@@ -158,21 +228,27 @@ public struct AcceptProjectTransferRequestSatisfiesPlanError: Codable {
         case reasons
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AcceptProjectTransferRequestSatisfiesPlanError {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.reasons) else {
-            throw SdkValidationError(field: "reasons", code: "required", message: "Validation failed for 'reasons': value is required")
-        }
-        self.reasons = try container.sdkDecodeRequired(.reasons)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AcceptProjectTransferRequestSatisfiesPlanError {
-    public init(reasons: [AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem]) {
+public extension AcceptProjectTransferRequestSatisfiesPlanError {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.reasons) else {
+            throw SdkValidationError(
+                field: "reasons",
+                code: "required",
+                message: "Validation failed for 'reasons': value is required"
+            )
+        }
+        reasons = try container.sdkDecodeRequired(.reasons)
+    }
+}
+
+public extension AcceptProjectTransferRequestSatisfiesPlanError {
+    init(reasons: [AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem]) {
         self.reasons = reasons
     }
 }
@@ -181,7 +257,10 @@ extension AcceptProjectTransferRequestSatisfiesPlanError {
 public struct ApplicationType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let vercel = ApplicationType(rawValue: "vercel")
     public static let github = ApplicationType(rawValue: "github")
     public static let datadog = ApplicationType(rawValue: "datadog")
@@ -189,7 +268,7 @@ public struct ApplicationType: RawRepresentable, Hashable, Codable, Sendable, Sd
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

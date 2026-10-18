@@ -3,12 +3,15 @@
 
 import Foundation
 
-// Project domain models
+/// Project domain models
 /// How a member's project access is granted.
 public struct ProjectMemberGrantSource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let explicit = ProjectMemberGrantSource(rawValue: "explicit")
     public static let orgRoleDefault = ProjectMemberGrantSource(rawValue: "org_role_default")
     public static let orgAdminOverride = ProjectMemberGrantSource(rawValue: "org_admin_override")
@@ -16,7 +19,7 @@ public struct ProjectMemberGrantSource: RawRepresentable, Hashable, Codable, Sen
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -29,14 +32,17 @@ public struct ProjectMemberGrantSource: RawRepresentable, Hashable, Codable, Sen
 public struct ProjectAuditLogLevel: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let base = ProjectAuditLogLevel(rawValue: "base")
     public static let extended = ProjectAuditLogLevel(rawValue: "extended")
     public static let full = ProjectAuditLogLevel(rawValue: "full")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -49,13 +55,16 @@ public struct ProjectAuditLogLevel: RawRepresentable, Hashable, Codable, Sendabl
 public struct AdvisorCategory: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let security = AdvisorCategory(rawValue: "SECURITY")
     public static let performance = AdvisorCategory(rawValue: "PERFORMANCE")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -68,14 +77,17 @@ public struct AdvisorCategory: RawRepresentable, Hashable, Codable, Sendable, Sd
 public struct ProjectRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let viewer = ProjectRole(rawValue: "viewer")
     public static let editor = ProjectRole(rawValue: "editor")
     public static let admin = ProjectRole(rawValue: "admin")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -88,7 +100,10 @@ public struct ProjectRole: RawRepresentable, Hashable, Codable, Sendable, SdkWir
 public struct ApplicationType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let vercel = ApplicationType(rawValue: "vercel")
     public static let github = ApplicationType(rawValue: "github")
     public static let datadog = ApplicationType(rawValue: "datadog")
@@ -96,7 +111,7 @@ public struct ApplicationType: RawRepresentable, Hashable, Codable, Sendable, Sd
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
