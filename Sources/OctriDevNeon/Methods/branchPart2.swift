@@ -11,7 +11,7 @@ extension BranchMethods {
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
-    public static func createBranch(config: ClientConfig, projectId: String, body: CreateBranchRequestBody? = nil, requestOptions: RequestOptions? = nil) async throws -> CreateBranchAnonymizedResponse {
+    public static func createBranch(config: ClientConfig, projectId: String, body: CreateBranchRequestBody? = nil, requestOptions: RequestOptions? = nil) async throws -> CreateBranchResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches"].joined(), config: config, rawBody: (try body.map { try sdkEncodeBody($0, contentType: "application/json") }), decoder: .json, operationId: "createBranch", options: requestOptions, errors: ["default": GeneralError.self])).data

@@ -60,6 +60,7 @@ extension BucketsMethods {
                         let pageItems = pageResponse.objects
                         if pageItems.isEmpty { break }
                         for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.isTruncated { break }
                         guard let nextCursor = pageResponse.nextCursor else { break }
                         pageCursor = nextCursor
                     }
@@ -88,7 +89,7 @@ extension BucketsMethods {
                         let pageResponse = try await listBucketsObjects(config: config, projectId: projectId, branchId: branchId, bucketName: bucketName, prefix: prefix, delimiter: delimiter, cursor: pageCursor, limit: limit, requestOptions: requestOptions)
                         let pageItems = pageResponse.objects
                         if pageItems.isEmpty { break }
-                        let hasMore = pageResponse.nextCursor != nil
+                        let hasMore = pageResponse.isTruncated && pageResponse.nextCursor != nil
                         pageContinuation.yield(ListBucketsObjectsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
                         if !hasMore { break }
                         guard let nextCursor = pageResponse.nextCursor else { break }

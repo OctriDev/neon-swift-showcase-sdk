@@ -20,6 +20,42 @@ extension OrganizationInvitesCreateRequest {
     }
 }
 
+/// Typed representation of the `ListOrganizationsMembersResponse` API schema.
+public struct ListOrganizationsMembersResponse: Codable {
+    /// Members of the organization, each combining membership details (role, status) with the associated user's
+    /// identity.
+    public var members: [MemberWithUser]
+    /// To paginate the response, issue an initial request with `limit` value. Then, add the value returned in the
+    /// response `.pagination.next` attribute into the request under the `cursor` query parameter to the subsequent
+    /// request to retrieve next page in pagination. The contents on cursor `next` are opaque, clients are not
+    /// expected to make any assumptions on the format of the data inside the cursor.
+    public var pagination: CursorPagination?
+
+    enum CodingKeys: String, CodingKey {
+        case members
+        case pagination
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension ListOrganizationsMembersResponse {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.members) else {
+            throw SdkValidationError(field: "members", code: "required", message: "Validation failed for 'members': value is required")
+        }
+        self.members = try container.sdkDecodeRequired(.members)
+        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+extension ListOrganizationsMembersResponse {
+    public init(members: [MemberWithUser], pagination: CursorPagination? = nil) {
+        (self.members, self.pagination) = (members, pagination)
+    }
+}
+
 public struct OrgApiKeyCreateRequestVariant1: Codable {
     /// If set, the API key can access only this project
     public var projectId: String?
@@ -460,33 +496,5 @@ extension Invitation {
             try sdkValidatePattern("org_id", self.orgId, sdkPatternead2b03f7a95)
             try sdkValidateUuid("invited_by", self.invitedBy)
             try sdkValidateDateTime("invited_at", sdkWireString(self.invitedAt))
-    }
-}
-
-/// Typed representation of the `VPCEndpointsWithRegionResponse` API schema.
-public struct VPCEndpointsWithRegionResponse: Codable {
-    /// VPC endpoints associated with the region.
-    public var endpoints: [VPCEndpointWithRegion]
-
-    enum CodingKeys: String, CodingKey {
-        case endpoints
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension VPCEndpointsWithRegionResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.endpoints) else {
-            throw SdkValidationError(field: "endpoints", code: "required", message: "Validation failed for 'endpoints': value is required")
-        }
-        self.endpoints = try container.sdkDecodeRequired(.endpoints)
-    }
-}
-
-extension VPCEndpointsWithRegionResponse {
-    public init(endpoints: [VPCEndpointWithRegion]) {
-        self.endpoints = endpoints
     }
 }

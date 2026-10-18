@@ -36,3 +36,37 @@ extension OperationResponse {
         self.operation = operation
     }
 }
+
+/// Typed representation of the `ListOperationResponse` API schema.
+public struct ListOperationResponse: Codable {
+    /// Required array value serialized in the `operations` wire field.
+    public var operations: [Operation]
+    /// Cursor-based pagination. The `cursor` value reflects the endpoint's sort field (for example, an ID or
+    /// timestamp), so pass it back unchanged.
+    /// - Example: {"cursor":"2022-12-07T00:45:05.262011Z"}
+    public var pagination: Pagination?
+
+    enum CodingKeys: String, CodingKey {
+        case operations
+        case pagination
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension ListOperationResponse {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.operations) else {
+            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
+        }
+        self.operations = try container.sdkDecodeRequired(.operations)
+        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+extension ListOperationResponse {
+    public init(operations: [Operation], pagination: Pagination? = nil) {
+        (self.operations, self.pagination) = (operations, pagination)
+    }
+}

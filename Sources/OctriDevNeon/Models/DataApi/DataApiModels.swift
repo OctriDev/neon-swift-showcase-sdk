@@ -136,7 +136,7 @@ public struct DataAPIReponse: Codable {
     /// The status of the Neon Data API deployment
     public var status: String
     /// Configuration settings for the Data API (SubZero only)
-    public var settings: [String: JSONValue]?
+    public var settings: DataAPISettings?
     /// List of available database schemas (SubZero only)
     public var availableSchemas: [String]?
     /// When `settings` and `available_schemas` were read from the database. While the compute is suspended they are
@@ -177,7 +177,7 @@ extension DataAPIReponse {
 }
 
 extension DataAPIReponse {
-    public init(url: String, status: String, settings: [String: JSONValue]? = nil, availableSchemas: [String]? = nil, observedAt: Date? = nil) throws {
+    public init(url: String, status: String, settings: DataAPISettings? = nil, availableSchemas: [String]? = nil, observedAt: Date? = nil) throws {
         (self.url, self.status) = (url, status)
         (self.settings, self.availableSchemas) = (settings, availableSchemas)
         self.observedAt = observedAt
@@ -248,77 +248,6 @@ extension DataAPISettings {
 }
 
 extension DataAPISettings {
-    public init(dbAggregatesEnabled: Bool? = nil, dbAnonRole: String? = nil, dbExtraSearchPath: String? = nil, dbMaxRows: Int? = nil, dbSchemas: [String]? = nil, jwtRoleClaimKey: String? = nil, jwtCacheMaxLifetime: Int? = nil, openapiMode: String? = nil, serverCorsAllowedOrigins: String? = nil, serverTimingEnabled: Bool? = nil) {
-        self.init()
-        (self.dbAggregatesEnabled, self.dbAnonRole) = (dbAggregatesEnabled, dbAnonRole)
-        (self.dbExtraSearchPath, self.dbMaxRows) = (dbExtraSearchPath, dbMaxRows)
-        (self.dbSchemas, self.jwtRoleClaimKey) = (dbSchemas, jwtRoleClaimKey)
-        (self.jwtCacheMaxLifetime, self.openapiMode) = (jwtCacheMaxLifetime, openapiMode)
-        self.serverCorsAllowedOrigins = serverCorsAllowedOrigins
-        self.serverTimingEnabled = serverTimingEnabled
-    }
-}
-
-/// Configuration settings for the Data API (SubZero only)
-public struct DataAPIReponseSettings: Codable {
-    /// Enable aggregates feature
-    public var dbAggregatesEnabled: Bool?
-    /// Database role to use for anonymous requests
-    public var dbAnonRole: String?
-    /// Extra schemas to add to the search path
-    public var dbExtraSearchPath: String?
-    /// Hard limit on the number of rows returned in a single Data API response. No limit when unset.
-    public var dbMaxRows: Int?
-    /// List of schemas to expose via the API. Default: ["public"]
-    public var dbSchemas: [String]?
-    /// JWT claim key to use for role extraction
-    public var jwtRoleClaimKey: String?
-    /// Maximum lifetime of the Data API's JWT cache, in seconds.
-    public var jwtCacheMaxLifetime: Int?
-    /// OpenAPI specification mode (ignore-privileges, disabled)
-    public var openapiMode: String?
-    /// CORS allowed origins
-    public var serverCorsAllowedOrigins: String?
-    /// When enabled, the Data API adds `Server-Timing` headers to each response showing database execution and
-    /// internal processing time. Default: disabled.
-    public var serverTimingEnabled: Bool?
-
-    enum CodingKeys: String, CodingKey {
-        case dbAggregatesEnabled = "db_aggregates_enabled"
-        case dbAnonRole = "db_anon_role"
-        case dbExtraSearchPath = "db_extra_search_path"
-        case dbMaxRows = "db_max_rows"
-        case dbSchemas = "db_schemas"
-        case jwtRoleClaimKey = "jwt_role_claim_key"
-        case jwtCacheMaxLifetime = "jwt_cache_max_lifetime"
-        case openapiMode = "openapi_mode"
-        case serverCorsAllowedOrigins = "server_cors_allowed_origins"
-        case serverTimingEnabled = "server_timing_enabled"
-    }
-
-    init() {
-        (self.dbAggregatesEnabled, self.dbAnonRole, self.dbExtraSearchPath, self.dbMaxRows, self.dbSchemas) = (nil, nil, nil, nil, nil)
-        (self.jwtRoleClaimKey, self.jwtCacheMaxLifetime, self.openapiMode, self.serverCorsAllowedOrigins, self.serverTimingEnabled) = (nil, nil, nil, nil, nil)
-    }
-}
-
-extension DataAPIReponseSettings {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.dbAggregatesEnabled = try container.sdkDecodeIfPresent(.dbAggregatesEnabled)
-        self.dbAnonRole = try container.sdkDecodeIfPresent(.dbAnonRole)
-        self.dbExtraSearchPath = try container.sdkDecodeIfPresent(.dbExtraSearchPath)
-        self.dbMaxRows = try container.sdkDecodeIfPresent(.dbMaxRows)
-        self.dbSchemas = try container.sdkDecodeIfPresent(.dbSchemas)
-        self.jwtRoleClaimKey = try container.sdkDecodeIfPresent(.jwtRoleClaimKey)
-        self.jwtCacheMaxLifetime = try container.sdkDecodeIfPresent(.jwtCacheMaxLifetime)
-        self.openapiMode = try container.sdkDecodeIfPresent(.openapiMode)
-        self.serverCorsAllowedOrigins = try container.sdkDecodeIfPresent(.serverCorsAllowedOrigins)
-        self.serverTimingEnabled = try container.sdkDecodeIfPresent(.serverTimingEnabled)
-    }
-}
-
-extension DataAPIReponseSettings {
     public init(dbAggregatesEnabled: Bool? = nil, dbAnonRole: String? = nil, dbExtraSearchPath: String? = nil, dbMaxRows: Int? = nil, dbSchemas: [String]? = nil, jwtRoleClaimKey: String? = nil, jwtCacheMaxLifetime: Int? = nil, openapiMode: String? = nil, serverCorsAllowedOrigins: String? = nil, serverTimingEnabled: Bool? = nil) {
         self.init()
         (self.dbAggregatesEnabled, self.dbAnonRole) = (dbAggregatesEnabled, dbAnonRole)

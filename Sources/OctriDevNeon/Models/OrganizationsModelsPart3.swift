@@ -4,6 +4,34 @@
 import Foundation
 
 // Organizations domain models
+/// Typed representation of the `VPCEndpointsWithRegionResponse` API schema.
+public struct VPCEndpointsWithRegionResponse: Codable {
+    /// VPC endpoints associated with the region.
+    public var endpoints: [VPCEndpointWithRegion]
+
+    enum CodingKeys: String, CodingKey {
+        case endpoints
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension VPCEndpointsWithRegionResponse {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.endpoints) else {
+            throw SdkValidationError(field: "endpoints", code: "required", message: "Validation failed for 'endpoints': value is required")
+        }
+        self.endpoints = try container.sdkDecodeRequired(.endpoints)
+    }
+}
+
+extension VPCEndpointsWithRegionResponse {
+    public init(endpoints: [VPCEndpointWithRegion]) {
+        self.endpoints = endpoints
+    }
+}
+
 public struct OrgApiKeysListResponseItemVariant1: Codable {
     /// If set, the API key can access only this project
     public var projectId: String?

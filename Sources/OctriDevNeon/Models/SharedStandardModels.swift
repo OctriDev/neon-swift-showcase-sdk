@@ -21,6 +21,8 @@ public struct StandardEmailServerResponse: Codable {
     public var senderEmail: String
     /// Display name shown as the sender in outgoing emails.
     public var senderName: String
+    /// Optional enumerated value serialized in the `type` wire field.
+    public var type: StandardEmailServerResponseType?
 
     enum CodingKeys: String, CodingKey {
         case host
@@ -29,6 +31,7 @@ public struct StandardEmailServerResponse: Codable {
         case password
         case senderEmail = "sender_email"
         case senderName = "sender_name"
+        case type
     }
 
     private init(sdkCopy value: Self) { self = value }
@@ -61,14 +64,22 @@ extension StandardEmailServerResponse {
         self.password = try container.sdkDecodeRequired(.password)
         self.senderEmail = try container.sdkDecodeRequired(.senderEmail)
         self.senderName = try container.sdkDecodeRequired(.senderName)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        if let value = self.type {
+            try sdkValidateRawEnum("type", value, StandardEmailServerResponseType.allCases.map(\.rawValue))
+        }
     }
 }
 
 extension StandardEmailServerResponse {
-    public init(host: String, port: Int, username: String, password: String, senderEmail: String, senderName: String) {
+    public init(host: String, port: Int, username: String, password: String, senderEmail: String, senderName: String, type: StandardEmailServerResponseType? = nil) throws {
         (self.host, self.port) = (host, port)
         (self.username, self.password) = (username, password)
         (self.senderEmail, self.senderName) = (senderEmail, senderName)
+        self.type = type
+        if let value = self.type {
+            try sdkValidateRawEnum("type", value, StandardEmailServerResponseType.allCases.map(\.rawValue))
+        }
     }
 }
 
@@ -86,6 +97,8 @@ public struct StandardEmailServer: Codable {
     public var senderEmail: String?
     /// Display name shown as the sender in outgoing emails.
     public var senderName: String?
+    /// Optional enumerated value serialized in the `type` wire field.
+    public var type: StandardEmailServerType?
 
     enum CodingKeys: String, CodingKey {
         case host
@@ -94,11 +107,12 @@ public struct StandardEmailServer: Codable {
         case password
         case senderEmail = "sender_email"
         case senderName = "sender_name"
+        case type
     }
 
     init() {
         (self.host, self.port, self.username, self.password, self.senderEmail) = (nil, nil, nil, nil, nil)
-        self.senderName = nil
+        (self.senderName, self.type) = (nil, nil)
     }
 }
 
@@ -111,14 +125,58 @@ extension StandardEmailServer {
         self.password = try container.sdkDecodeIfPresent(.password)
         self.senderEmail = try container.sdkDecodeIfPresent(.senderEmail)
         self.senderName = try container.sdkDecodeIfPresent(.senderName)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        if let value = self.type {
+            try sdkValidateRawEnum("type", value, StandardEmailServerType.allCases.map(\.rawValue))
+        }
     }
 }
 
 extension StandardEmailServer {
-    public init(host: String? = nil, port: Int? = nil, username: String? = nil, password: String? = nil, senderEmail: String? = nil, senderName: String? = nil) {
+    public init(host: String? = nil, port: Int? = nil, username: String? = nil, password: String? = nil, senderEmail: String? = nil, senderName: String? = nil, type: StandardEmailServerType? = nil) throws {
         self.init()
         (self.host, self.port) = (host, port)
         (self.username, self.password) = (username, password)
         (self.senderEmail, self.senderName) = (senderEmail, senderName)
+        self.type = type
+        if let value = self.type {
+            try sdkValidateRawEnum("type", value, StandardEmailServerType.allCases.map(\.rawValue))
+        }
+    }
+}
+
+/// Optional enumerated value serialized in the `type` wire field.
+public enum StandardEmailServerType: String, CaseIterable, Codable {
+    case standard
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        guard let value = Self(rawValue: rawValue) else {
+            let field = decoder.codingPath.last?.stringValue ?? "StandardEmailServerType"
+            throw SdkValidationError(
+                field: field,
+                code: "enum",
+                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
+            )
+        }
+        self = value
+    }
+}
+
+/// Optional enumerated value serialized in the `type` wire field.
+public enum StandardEmailServerResponseType: String, CaseIterable, Codable {
+    case standard
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        guard let value = Self(rawValue: rawValue) else {
+            let field = decoder.codingPath.last?.stringValue ?? "StandardEmailServerResponseType"
+            throw SdkValidationError(
+                field: field,
+                code: "enum",
+                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
+            )
+        }
+        self = value
     }
 }

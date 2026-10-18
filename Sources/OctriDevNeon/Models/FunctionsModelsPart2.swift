@@ -4,6 +4,79 @@
 import Foundation
 
 // Functions domain models
+/// Typed representation of the `TriggerResponse` API schema.
+public struct TriggerResponse: Codable {
+    /// A branch-effective trigger discriminated by `type`. The supported trigger types are `schedule` and
+    /// `storage_object_created`.
+    public var trigger: Trigger
+
+    enum CodingKeys: String, CodingKey {
+        case trigger
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension TriggerResponse {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.trigger) else {
+            throw SdkValidationError(field: "trigger", code: "required", message: "Validation failed for 'trigger': value is required")
+        }
+        self.trigger = try container.sdkDecodeRequired(.trigger)
+    }
+}
+
+extension TriggerResponse {
+    public init(trigger: Trigger) {
+        self.trigger = trigger
+    }
+}
+
+/// Typed representation of the `FunctionDeployRequest` API schema.
+public struct FunctionDeployRequest: Codable {
+    /// Optional ZIP archive of the function source code. Omit to reuse the latest version's bundle (a config-only
+    /// change). Required for the first deployment of a function. Place `index.mjs` or `index.js` at the archive
+    /// root, without a containing directory. If both exist, `index.mjs` is loaded. Export a request handler
+    /// function or an object with a `fetch` method. Use `export default` for ESM or `module.exports` for CommonJS;
+    /// prefer `index.mjs` for ESM. Upload JavaScript ready to run…
+    public var zip: Data?
+    /// Optional enumerated value serialized in the `runtime` wire field.
+    public var runtime: FunctionDeployRequestRuntime?
+    /// Optional JSON object (a string-to-string map) of environment variables for the deployment, e.g.
+    /// {"KEY":"VALUE"}. Carried as a JSON-encoded string because multipart form data does not support typed object
+    /// parts. Values are write-only: they are encrypted at rest, and responses carry only the variable names (the
+    /// `environment` array), never the values.
+    public var environment: String?
+
+    enum CodingKeys: String, CodingKey {
+        case zip
+        case runtime
+        case environment
+    }
+
+    init() {
+        (self.zip, self.runtime, self.environment) = (nil, nil, nil)
+    }
+}
+
+extension FunctionDeployRequest {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.zip = try container.sdkDecodeIfPresent(.zip)
+        self.runtime = try container.sdkDecodeIfPresent(.runtime)
+        self.environment = try container.sdkDecodeIfPresent(.environment)
+    }
+}
+
+extension FunctionDeployRequest {
+    public init(zip: Data? = nil, runtime: FunctionDeployRequestRuntime? = nil, environment: String? = nil) {
+        self.init()
+        (self.zip, self.runtime) = (zip, runtime)
+        self.environment = environment
+    }
+}
+
 /// Typed representation of the `NeonFunctionDeployment` API schema.
 public struct NeonFunctionDeployment: Codable {
     /// The deployment id, which is the platform version number (monotonic per function).
@@ -65,76 +138,6 @@ extension NeonFunctionDeployment {
 }
 
 extension NeonFunctionDeployment {
-    public init(id: Int, status: NeonFunctionDeploymentStatus, memoryMib: Int, runtime: String, createdAt: String, environment: [String]? = nil, error: String? = nil) {
-        (self.id, self.status) = (id, status)
-        (self.memoryMib, self.runtime) = (memoryMib, runtime)
-        (self.createdAt, self.environment) = (createdAt, environment)
-        self.error = error
-    }
-}
-
-/// The most recent deployment, regardless of build status. It may still be building or it may have failed. Omitted
-/// until the first deployment is created.
-public struct NeonFunctionCurrentDeployment: Codable {
-    /// The deployment id, which is the platform version number (monotonic per function).
-    public var id: Int
-    /// Build lifecycle status of the deployment.
-    public var status: NeonFunctionDeploymentStatus
-    /// Required `int32`-formatted value serialized in the `memory_mib` wire field.
-    public var memoryMib: Int
-    /// Required `string` value serialized in the `runtime` wire field.
-    public var runtime: String
-    /// Required `string` value serialized in the `created_at` wire field.
-    public var createdAt: String
-    /// The NAMES of the deployment's environment variables, sorted. Values are encrypted at rest and are never
-    /// returned — they are write-only. To change a value, deploy the variable with the new value; to remove a
-    /// variable, deploy it with an empty value.
-    public var environment: [String]?
-    /// Human-readable reason the deployment build failed. Present only when `status` is `failed`.
-    public var error: String?
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case status
-        case memoryMib = "memory_mib"
-        case runtime
-        case createdAt = "created_at"
-        case environment
-        case error
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension NeonFunctionCurrentDeployment {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        guard container.contains(.memoryMib) else {
-            throw SdkValidationError(field: "memory_mib", code: "required", message: "Validation failed for 'memory_mib': value is required")
-        }
-        guard container.contains(.runtime) else {
-            throw SdkValidationError(field: "runtime", code: "required", message: "Validation failed for 'runtime': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.memoryMib = try container.sdkDecodeRequired(.memoryMib)
-        self.runtime = try container.sdkDecodeRequired(.runtime)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.environment = try container.sdkDecodeIfPresent(.environment)
-        self.error = try container.sdkDecodeIfPresent(.error)
-    }
-}
-
-extension NeonFunctionCurrentDeployment {
     public init(id: Int, status: NeonFunctionDeploymentStatus, memoryMib: Int, runtime: String, createdAt: String, environment: [String]? = nil, error: String? = nil) {
         (self.id, self.status) = (id, status)
         (self.memoryMib, self.runtime) = (memoryMib, runtime)
@@ -394,72 +397,77 @@ extension StorageObjectCreatedTrigger {
     }
 }
 
-/// The most recent deployment whose build completed successfully. This is the deployment that serves invocations.
-/// Omitted until a deployment succeeds.
-public struct NeonFunctionActiveDeployment: Codable {
-    /// The deployment id, which is the platform version number (monotonic per function).
-    public var id: Int
-    /// Build lifecycle status of the deployment.
-    public var status: NeonFunctionDeploymentStatus
-    /// Required `int32`-formatted value serialized in the `memory_mib` wire field.
-    public var memoryMib: Int
-    /// Required `string` value serialized in the `runtime` wire field.
-    public var runtime: String
-    /// Required `string` value serialized in the `created_at` wire field.
-    public var createdAt: String
-    /// The NAMES of the deployment's environment variables, sorted. Values are encrypted at rest and are never
-    /// returned — they are write-only. To change a value, deploy the variable with the new value; to remove a
-    /// variable, deploy it with an empty value.
-    public var environment: [String]?
-    /// Human-readable reason the deployment build failed. Present only when `status` is `failed`.
-    public var error: String?
+/// Typed representation of the `NeonFunctionDeploymentResponse` API schema.
+public struct NeonFunctionDeploymentResponse: Codable {
+    /// Required object value serialized in the `deployment` wire field.
+    public var deployment: NeonFunctionDeployment
 
     enum CodingKeys: String, CodingKey {
-        case id
-        case status
-        case memoryMib = "memory_mib"
-        case runtime
-        case createdAt = "created_at"
-        case environment
-        case error
+        case deployment
     }
 
     private init(sdkCopy value: Self) { self = value }
 }
 
-extension NeonFunctionActiveDeployment {
+extension NeonFunctionDeploymentResponse {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
+        guard container.contains(.deployment) else {
+            throw SdkValidationError(field: "deployment", code: "required", message: "Validation failed for 'deployment': value is required")
         }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        guard container.contains(.memoryMib) else {
-            throw SdkValidationError(field: "memory_mib", code: "required", message: "Validation failed for 'memory_mib': value is required")
-        }
-        guard container.contains(.runtime) else {
-            throw SdkValidationError(field: "runtime", code: "required", message: "Validation failed for 'runtime': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.memoryMib = try container.sdkDecodeRequired(.memoryMib)
-        self.runtime = try container.sdkDecodeRequired(.runtime)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.environment = try container.sdkDecodeIfPresent(.environment)
-        self.error = try container.sdkDecodeIfPresent(.error)
+        self.deployment = try container.sdkDecodeRequired(.deployment)
     }
 }
 
-extension NeonFunctionActiveDeployment {
-    public init(id: Int, status: NeonFunctionDeploymentStatus, memoryMib: Int, runtime: String, createdAt: String, environment: [String]? = nil, error: String? = nil) {
-        (self.id, self.status) = (id, status)
-        (self.memoryMib, self.runtime) = (memoryMib, runtime)
-        (self.createdAt, self.environment) = (createdAt, environment)
-        self.error = error
+extension NeonFunctionDeploymentResponse {
+    public init(deployment: NeonFunctionDeployment) {
+        self.deployment = deployment
+    }
+}
+
+/// Matches successful uploads to one exact bucket and, when configured, an object-key prefix. The Function receives
+/// a JSON request body with `type` set to `storage_object_created` and a `data` object containing exactly
+/// `bucket_name` and `object_key`.
+public struct FunctionTriggerStorageObjectCreated: Codable {
+    /// The exact object-storage bucket name to watch.
+    public var bucketName: String
+    /// Optional object-key prefix of at most 1024 UTF-8 bytes. When omitted, every key in the bucket matches. When
+    /// present, the full object key must start with these exact bytes; matching is case-sensitive and does not
+    /// normalize paths or require a path-segment boundary. Match-all responses omit this field rather than
+    /// returning an empty string.
+    public var prefix: String?
+
+    enum CodingKeys: String, CodingKey {
+        case bucketName = "bucket_name"
+        case prefix
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension FunctionTriggerStorageObjectCreated {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.bucketName) else {
+            throw SdkValidationError(field: "bucket_name", code: "required", message: "Validation failed for 'bucket_name': value is required")
+        }
+        self.bucketName = try container.sdkDecodeRequired(.bucketName)
+        self.prefix = try container.sdkDecodeIfPresent(.prefix)
+            try validateLength("bucket_name", self.bucketName, min: 3, max: 63)
+        if let value = self.prefix {
+            try validateLength("prefix", value, min: 1, max: 1024)
+            try sdkValidatePattern("prefix", value, sdkPattern19d7264b312c)
+        }
+    }
+}
+
+extension FunctionTriggerStorageObjectCreated {
+    public init(bucketName: String, prefix: String? = nil) throws {
+        (self.bucketName, self.prefix) = (bucketName, prefix)
+            try validateLength("bucket_name", self.bucketName, min: 3, max: 63)
+        if let value = self.prefix {
+            try validateLength("prefix", value, min: 1, max: 1024)
+            try sdkValidatePattern("prefix", value, sdkPattern19d7264b312c)
+        }
     }
 }

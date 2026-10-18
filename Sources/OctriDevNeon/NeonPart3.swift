@@ -123,7 +123,7 @@ public class BranchNamespace {
     }
 
 /// Creates a branch in the specified project. No request body is required, but you can specify one to create a compute endpoint or select a non-default parent branch. By default, the branch is created from the project's default branch with no compute endpoint, and the branch name is auto-generated. To access the branch, add a `read_write` endpoint. Each branch supports one read-write endpoint and multiple read-only endpoints. For related information, see [Manage branches](https://neon.com/docs/manage/branches/).
-    public func create(projectId: String, body: CreateBranchRequestBody? = nil, requestOptions: RequestOptions? = nil) async throws -> CreateBranchAnonymizedResponse {
+    public func create(projectId: String, body: CreateBranchRequestBody? = nil, requestOptions: RequestOptions? = nil) async throws -> CreateBranchResponse {
         return try await BranchMethods.createBranch(config: config, projectId: projectId, body: body, requestOptions: requestOptions)
     }
 
@@ -135,12 +135,12 @@ public class BranchNamespace {
 /// Creates a branch with anonymized data using PostgreSQL Anonymizer for static masking. Supply `branch_create` to configure the branch and optionally provide `masking_rules` or set `start_anonymization` to true to apply masking rules and start anonymization during creation. This endpoint is in beta; the response includes the created branch, operations, and any endpoints specified in the request.
     ///
     /// Creates a new branch with anonymized data using PostgreSQL Anonymizer for static masking. This allows developers to work with masked production data. Optionally, provide `masking_rules` to set initial masking rules for the branch and `start_anonymization` to automatically start anonymization after creation. This combines functionality of updating masking rules and starting anonymization into the branch creation request. **Note**: This endpoint is currently in Beta.
-    public func createAnonymized(projectId: String, body: BranchAnonymizedCreateRequest, requestOptions: RequestOptions? = nil) async throws -> CreateBranchAnonymizedResponse {
+    public func createAnonymized(projectId: String, body: BranchAnonymizedCreateRequest, requestOptions: RequestOptions? = nil) async throws -> CreateBranchResponse {
         return try await BranchMethods.createBranchAnonymized(config: config, projectId: projectId, body: body, requestOptions: requestOptions)
     }
 
 /// Retrieves the total number of branches in the specified project. Supports an optional `search` parameter to count branches matching a name filter.
-    public func count(projectId: String, search: String? = nil, requestOptions: RequestOptions? = nil) async throws -> CountBranchResponse {
+    public func count(projectId: String, search: String? = nil, requestOptions: RequestOptions? = nil) async throws -> BranchesCountResponse {
         return try await BranchMethods.countBranch(config: config, projectId: projectId, search: search, requestOptions: requestOptions)
     }
 

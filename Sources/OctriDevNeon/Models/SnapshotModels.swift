@@ -251,6 +251,52 @@ extension BackupScheduleItem {
     }
 }
 
+/// Typed representation of the `RestoreSnapshotResponse` API schema.
+public struct RestoreSnapshotResponse: Codable {
+    /// Branch returned by the request.
+    /// - Example:
+    /// {"id":"br-wispy-meadow-118737","project_id":"spring-example-302709","parent_id":"br-aged-salad-637688","pare
+    /// nt_lsn":"0/1DE2850","name":"dev2","protected":false,"current_state":"ready","state_changed_at":"2022-11-30T2
+    /// 0:09:48Z","creation_source":"console","created_at":"2022-11-30T19:09:48Z","updated_at":"2022-12-01T19:53:05Z
+    /// ","default":true,"init_source":"parent-data","data_transfer_bytes":72911987,"written_data_bytes":542998300,"
+    /// compute_time_seconds":823880990,"active_time_seconds":922200,"cpu_used_sec":461100}
+    public var branch: Branch
+    /// Required array value serialized in the `operations` wire field.
+    public var operations: [Operation]
+    /// Compute endpoints associated with the project.
+    public var endpoints: [Endpoint]?
+
+    enum CodingKeys: String, CodingKey {
+        case branch
+        case operations
+        case endpoints
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension RestoreSnapshotResponse {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.branch) else {
+            throw SdkValidationError(field: "branch", code: "required", message: "Validation failed for 'branch': value is required")
+        }
+        guard container.contains(.operations) else {
+            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
+        }
+        self.branch = try container.sdkDecodeRequired(.branch)
+        self.operations = try container.sdkDecodeRequired(.operations)
+        self.endpoints = try container.sdkDecodeIfPresent(.endpoints)
+    }
+}
+
+extension RestoreSnapshotResponse {
+    public init(branch: Branch, operations: [Operation], endpoints: [Endpoint]? = nil) {
+        (self.branch, self.operations) = (branch, operations)
+        self.endpoints = endpoints
+    }
+}
+
 /// Fields to update on the snapshot. Updatable fields include `name` and `expires_at`.
 public struct SnapshotUpdateRequestSnapshot: Codable {
     /// Human-readable label for the snapshot.

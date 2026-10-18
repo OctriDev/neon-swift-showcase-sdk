@@ -34,51 +34,93 @@ extension JWKSResponse {
     }
 }
 
-/// Configuration for the initial branch created with the project.
-public struct ProjectCreateRequestProjectBranch: Codable {
-    /// The default branch name. If not specified, the default branch name, `main`, will be used.
-    public var name: String?
-    /// The role name. If not specified, the default role name, `{database_name}_owner`, will be used.
-    public var roleName: String?
-    /// The database name. If not specified, the default database name, `neondb`, will be used.
-    public var databaseName: String?
-    /// Arbitrary key-value metadata to attach to the branch.
-    /// - Example: {"github-commit-ref":"github-branch-name"}
-    public var annotations: AnnotationValueData?
+/// Typed representation of the `CreateProjectResponse` API schema.
+public struct CreateProjectResponse: Codable {
+    /// Full details of the project, including configuration, consumption metrics, and ownership.
+    /// - Example:
+    /// {"id":"spring-example-302709","platform_id":"aws","region_id":"aws-us-east-2","name":"spring-example-302709"
+    /// ,"provisioner":"k8s-pod","pg_version":15,"proxy_host":"us-east-2.aws.neon.tech","store_passwords":true,"crea
+    /// tion_source":"console","history_retention_seconds":604800,"created_at":"2022-12-13T01:30:55Z","updated_at":"
+    /// 2022-12-13T01:30:55Z","owner":{"name":"John
+    /// Smith","email":"some@email.com","branches_limit":10,"subscription_type":"scale"},"org_id":"org-morning-bread
+    /// -81040908","owner_id":"629982cc-de05-43db-ae16-28f2399c4910","data_storage_bytes_hour":2831928,"branch_logic
+    /// al_size_limit":10,"branch_logical_size_limit_bytes":10485760,"data_transfer_bytes":1000,"written_data_bytes"
+    /// :193990002,"compute_time_seconds":2485760,"active_time_seconds":621440,"cpu_used_sec":155350,"consumption_pe
+    /// riod_start":"2022-11-01T00:00:00Z","consumption_period_end":"2022-12-01T00:00:00Z"}
+    public var project: Project
+    /// Connection URIs for the project. Each entry contains credentials and should be treated as sensitive.
+    public var connectionUris: [ConnectionDetails]
+    /// Roles belonging to the branch. Each role includes fields such as `branch_id`, `name`, `protected`,
+    /// `created_at`, and `updated_at`.
+    public var roles: [Role]
+    /// Databases on the branch. Each includes `id`, `name`, `owner_name`, and `created_at`.
+    public var databases: [Database]
+    /// Required array value serialized in the `operations` wire field.
+    public var operations: [Operation]
+    /// Branch returned by the request.
+    /// - Example:
+    /// {"id":"br-wispy-meadow-118737","project_id":"spring-example-302709","parent_id":"br-aged-salad-637688","pare
+    /// nt_lsn":"0/1DE2850","name":"dev2","protected":false,"current_state":"ready","state_changed_at":"2022-11-30T2
+    /// 0:09:48Z","creation_source":"console","created_at":"2022-11-30T19:09:48Z","updated_at":"2022-12-01T19:53:05Z
+    /// ","default":true,"init_source":"parent-data","data_transfer_bytes":72911987,"written_data_bytes":542998300,"
+    /// compute_time_seconds":823880990,"active_time_seconds":922200,"cpu_used_sec":461100}
+    public var branch: Branch
+    /// Compute endpoints in the project. Each includes `id`, `branch_id`, `host`, and `type`.
+    public var endpoints: [Endpoint]
 
     enum CodingKeys: String, CodingKey {
-        case name
-        case roleName = "role_name"
-        case databaseName = "database_name"
-        case annotations
+        case project
+        case connectionUris = "connection_uris"
+        case roles
+        case databases
+        case operations
+        case branch
+        case endpoints
     }
 
-    init() {
-        (self.name, self.roleName, self.databaseName, self.annotations) = (nil, nil, nil, nil)
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-extension ProjectCreateRequestProjectBranch {
+extension CreateProjectResponse {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.roleName = try container.sdkDecodeIfPresent(.roleName)
-        self.databaseName = try container.sdkDecodeIfPresent(.databaseName)
-        self.annotations = try container.sdkDecodeIfPresent(.annotations)
-        if let value = self.name {
-            try validateLength("name", value, min: 1, max: 256)
+        guard container.contains(.project) else {
+            throw SdkValidationError(field: "project", code: "required", message: "Validation failed for 'project': value is required")
         }
+        guard container.contains(.connectionUris) else {
+            throw SdkValidationError(field: "connection_uris", code: "required", message: "Validation failed for 'connection_uris': value is required")
+        }
+        guard container.contains(.roles) else {
+            throw SdkValidationError(field: "roles", code: "required", message: "Validation failed for 'roles': value is required")
+        }
+        guard container.contains(.databases) else {
+            throw SdkValidationError(field: "databases", code: "required", message: "Validation failed for 'databases': value is required")
+        }
+        guard container.contains(.operations) else {
+            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
+        }
+        guard container.contains(.branch) else {
+            throw SdkValidationError(field: "branch", code: "required", message: "Validation failed for 'branch': value is required")
+        }
+        guard container.contains(.endpoints) else {
+            throw SdkValidationError(field: "endpoints", code: "required", message: "Validation failed for 'endpoints': value is required")
+        }
+        self.project = try container.sdkDecodeRequired(.project)
+        self.connectionUris = try container.sdkDecodeRequired(.connectionUris)
+        self.roles = try container.sdkDecodeRequired(.roles)
+        self.databases = try container.sdkDecodeRequired(.databases)
+        self.operations = try container.sdkDecodeRequired(.operations)
+        self.branch = try container.sdkDecodeRequired(.branch)
+        self.endpoints = try container.sdkDecodeRequired(.endpoints)
     }
 }
 
-extension ProjectCreateRequestProjectBranch {
-    public init(name: String? = nil, roleName: String? = nil, databaseName: String? = nil, annotations: AnnotationValueData? = nil) throws {
-        self.init()
-        (self.name, self.roleName) = (name, roleName)
-        (self.databaseName, self.annotations) = (databaseName, annotations)
-        if let value = self.name {
-            try validateLength("name", value, min: 1, max: 256)
-        }
+extension CreateProjectResponse {
+    public init(project: Project, connectionUris: [ConnectionDetails], roles: [Role], databases: [Database], operations: [Operation], branch: Branch, endpoints: [Endpoint]) {
+        (self.project, self.connectionUris) = (project, connectionUris)
+        (self.roles, self.databases) = (roles, databases)
+        (self.operations, self.branch) = (operations, branch)
+        self.endpoints = endpoints
     }
 }
 
@@ -127,121 +169,6 @@ extension MaintenanceWindow {
     }
 }
 
-/// Typed representation of the `ProjectSettingsData` API schema.
-public struct ProjectSettingsData: Codable {
-    /// Per-project consumption quotas. If a quota is exceeded, all active computes are automatically suspended and
-    /// cannot be started via API calls or incoming connections. The exception is `logical_size_bytes`, which is
-    /// enforced per branch. If a branch exceeds its `logical_size_bytes` quota, computes can still be started, but
-    /// write operations will fail—allowing data to be deleted to free up space. Computes on other branches are not
-    /// affected. Setting `logical_size_bytes` overrides…
-    public var quota: ProjectQuota?
-    /// A list of IP addresses that are allowed to connect to the compute endpoint. If the list is empty or not set,
-    /// all IP addresses are allowed. If protected_branches_only is true, the list will be applied only to protected
-    /// branches.
-    public var allowedIps: AllowedIps?
-    /// Sets wal_level=logical for all compute endpoints in this project. All active endpoints will be suspended.
-    /// Once enabled, logical replication cannot be disabled.
-    public var enableLogicalReplication: Bool?
-    /// A maintenance window is a time period during which Neon may perform maintenance on the project's
-    /// infrastructure. During this time, the project's compute endpoints may be unavailable and existing
-    /// connections can be interrupted.
-    public var maintenanceWindow: MaintenanceWindow?
-    /// When set, connections from the public internet are disallowed. This supersedes the AllowedIPs list. This
-    /// parameter is under active development and its semantics may change in the future.
-    public var blockPublicConnections: Bool?
-    /// When set, connections using VPC endpoints are disallowed. This parameter is under active development and its
-    /// semantics may change in the future.
-    public var blockVpcConnections: Bool?
-    /// Audit logging level, set only on HIPAA-enabled organizations (absent otherwise). Values: `base`, `extended`,
-    /// `full`; HIPAA defaults to `extended`. Cannot be lowered back to `base` once `extended` or `full`.
-    public var auditLogLevel: ProjectAuditLogLevel?
-    /// Enables HIPAA compliance mode for the project, including audit logging.
-    public var hipaa: Bool?
-    /// The shared libraries to preload into the project's compute instances.
-    public var preloadLibraries: PreloadLibraries?
-
-    enum CodingKeys: String, CodingKey {
-        case quota
-        case allowedIps = "allowed_ips"
-        case enableLogicalReplication = "enable_logical_replication"
-        case maintenanceWindow = "maintenance_window"
-        case blockPublicConnections = "block_public_connections"
-        case blockVpcConnections = "block_vpc_connections"
-        case auditLogLevel = "audit_log_level"
-        case hipaa
-        case preloadLibraries = "preload_libraries"
-    }
-
-    init() {
-        (self.quota, self.allowedIps, self.enableLogicalReplication, self.maintenanceWindow, self.blockPublicConnections) = (nil, nil, nil, nil, nil)
-        (self.blockVpcConnections, self.auditLogLevel, self.hipaa, self.preloadLibraries) = (nil, nil, nil, nil)
-    }
-}
-
-extension ProjectSettingsData {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.quota = try container.sdkDecodeIfPresent(.quota)
-        self.allowedIps = try container.sdkDecodeIfPresent(.allowedIps)
-        self.enableLogicalReplication = try container.sdkDecodeIfPresent(.enableLogicalReplication)
-        self.maintenanceWindow = try container.sdkDecodeIfPresent(.maintenanceWindow)
-        self.blockPublicConnections = try container.sdkDecodeIfPresent(.blockPublicConnections)
-        self.blockVpcConnections = try container.sdkDecodeIfPresent(.blockVpcConnections)
-        self.auditLogLevel = try container.sdkDecodeIfPresent(.auditLogLevel)
-        self.hipaa = try container.sdkDecodeIfPresent(.hipaa)
-        self.preloadLibraries = try container.sdkDecodeIfPresent(.preloadLibraries)
-    }
-}
-
-extension ProjectSettingsData {
-    public init(quota: ProjectQuota? = nil, allowedIps: AllowedIps? = nil, enableLogicalReplication: Bool? = nil, maintenanceWindow: MaintenanceWindow? = nil, blockPublicConnections: Bool? = nil, blockVpcConnections: Bool? = nil, auditLogLevel: ProjectAuditLogLevel? = nil, hipaa: Bool? = nil, preloadLibraries: PreloadLibraries? = nil) {
-        self.init()
-        (self.quota, self.allowedIps) = (quota, allowedIps)
-        self.enableLogicalReplication = enableLogicalReplication
-        (self.maintenanceWindow, self.blockPublicConnections) = (maintenanceWindow, blockPublicConnections)
-        (self.blockVpcConnections, self.auditLogLevel) = (blockVpcConnections, auditLogLevel)
-        (self.hipaa, self.preloadLibraries) = (hipaa, preloadLibraries)
-    }
-}
-
-/// Typed representation of the `ProjectResponse` API schema.
-public struct ProjectResponse: Codable {
-    /// Full details of the project, including configuration, consumption metrics, and ownership.
-    /// - Example:
-    /// {"id":"spring-example-302709","platform_id":"aws","region_id":"aws-us-east-2","name":"spring-example-302709"
-    /// ,"provisioner":"k8s-pod","pg_version":15,"proxy_host":"us-east-2.aws.neon.tech","store_passwords":true,"crea
-    /// tion_source":"console","history_retention_seconds":604800,"created_at":"2022-12-13T01:30:55Z","updated_at":"
-    /// 2022-12-13T01:30:55Z","owner":{"name":"John
-    /// Smith","email":"some@email.com","branches_limit":10,"subscription_type":"scale"},"org_id":"org-morning-bread
-    /// -81040908","owner_id":"629982cc-de05-43db-ae16-28f2399c4910","data_storage_bytes_hour":2831928,"branch_logic
-    /// al_size_limit":10,"branch_logical_size_limit_bytes":10485760,"data_transfer_bytes":1000,"written_data_bytes"
-    /// :193990002,"compute_time_seconds":2485760,"active_time_seconds":621440,"cpu_used_sec":155350,"consumption_pe
-    /// riod_start":"2022-11-01T00:00:00Z","consumption_period_end":"2022-12-01T00:00:00Z"}
-    public var project: Project
-
-    enum CodingKeys: String, CodingKey {
-        case project
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.project) else {
-            throw SdkValidationError(field: "project", code: "required", message: "Validation failed for 'project': value is required")
-        }
-        self.project = try container.sdkDecodeRequired(.project)
-    }
-}
-
-extension ProjectResponse {
-    public init(project: Project) {
-        self.project = project
-    }
-}
-
 /// Typed representation of the `GrantPermissionToProjectRequest` API schema.
 public struct GrantPermissionToProjectRequest: Codable {
     /// Email address of the user to grant project access to.
@@ -274,212 +201,296 @@ extension GrantPermissionToProjectRequest {
     }
 }
 
-/// Typed representation of the `ProjectOwnerData` API schema.
-public struct ProjectOwnerData: Codable {
-    /// Email address of the project owner.
-    public var email: String
-    /// Display name of the project owner.
-    public var name: String
-    /// Maximum number of branches the owner is allowed to create across their projects.
-    public var branchesLimit: Int
-    /// Type of subscription to Neon Cloud. Notice that for users without billing account this will be "UNKNOWN"
-    public var subscriptionType: BillingSubscriptionType
+/// Typed representation of the `UpdateProjectResponse` API schema.
+public struct UpdateProjectResponse: Codable {
+    /// Full details of the project, including configuration, consumption metrics, and ownership.
+    /// - Example:
+    /// {"id":"spring-example-302709","platform_id":"aws","region_id":"aws-us-east-2","name":"spring-example-302709"
+    /// ,"provisioner":"k8s-pod","pg_version":15,"proxy_host":"us-east-2.aws.neon.tech","store_passwords":true,"crea
+    /// tion_source":"console","history_retention_seconds":604800,"created_at":"2022-12-13T01:30:55Z","updated_at":"
+    /// 2022-12-13T01:30:55Z","owner":{"name":"John
+    /// Smith","email":"some@email.com","branches_limit":10,"subscription_type":"scale"},"org_id":"org-morning-bread
+    /// -81040908","owner_id":"629982cc-de05-43db-ae16-28f2399c4910","data_storage_bytes_hour":2831928,"branch_logic
+    /// al_size_limit":10,"branch_logical_size_limit_bytes":10485760,"data_transfer_bytes":1000,"written_data_bytes"
+    /// :193990002,"compute_time_seconds":2485760,"active_time_seconds":621440,"cpu_used_sec":155350,"consumption_pe
+    /// riod_start":"2022-11-01T00:00:00Z","consumption_period_end":"2022-12-01T00:00:00Z"}
+    public var project: Project
+    /// Required array value serialized in the `operations` wire field.
+    public var operations: [Operation]
 
     enum CodingKeys: String, CodingKey {
-        case email
-        case name
-        case branchesLimit = "branches_limit"
-        case subscriptionType = "subscription_type"
+        case project
+        case operations
     }
 
     private init(sdkCopy value: Self) { self = value }
 }
 
-extension ProjectOwnerData {
+extension UpdateProjectResponse {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.email) else {
-            throw SdkValidationError(field: "email", code: "required", message: "Validation failed for 'email': value is required")
+        guard container.contains(.project) else {
+            throw SdkValidationError(field: "project", code: "required", message: "Validation failed for 'project': value is required")
         }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
+        guard container.contains(.operations) else {
+            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
         }
-        guard container.contains(.branchesLimit) else {
-            throw SdkValidationError(field: "branches_limit", code: "required", message: "Validation failed for 'branches_limit': value is required")
-        }
-        guard container.contains(.subscriptionType) else {
-            throw SdkValidationError(field: "subscription_type", code: "required", message: "Validation failed for 'subscription_type': value is required")
-        }
-        self.email = try container.sdkDecodeRequired(.email)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.branchesLimit = try container.sdkDecodeRequired(.branchesLimit)
-        self.subscriptionType = try container.sdkDecodeRequired(.subscriptionType)
-            try validateLength("email", self.email, min: 1, max: 256)
-            try sdkValidateEmail("email", self.email)
+        self.project = try container.sdkDecodeRequired(.project)
+        self.operations = try container.sdkDecodeRequired(.operations)
     }
 }
 
-extension ProjectOwnerData {
-    public init(email: String, name: String, branchesLimit: Int, subscriptionType: BillingSubscriptionType) throws {
-        (self.email, self.name) = (email, name)
-        (self.branchesLimit, self.subscriptionType) = (branchesLimit, subscriptionType)
-            try validateLength("email", self.email, min: 1, max: 256)
-            try sdkValidateEmail("email", self.email)
+extension UpdateProjectResponse {
+    public init(project: Project, operations: [Operation]) {
+        (self.project, self.operations) = (project, operations)
     }
 }
 
-/// Typed representation of the `ProjectMember` API schema.
-public struct ProjectMember: Codable {
-    /// The organization member ID.
-    public var memberId: String
-    /// The user ID for the organization member.
-    public var userId: String
-    /// Organization-level role used by project member role management.
-    public var orgRole: ProjectMemberOrgRole
-    /// Email address of the user who has been granted access to the project.
-    public var email: String?
-    /// The user's display name.
-    public var name: String?
-    /// Per-project role. `viewer` maps to `VIEWER`, `editor` maps to `EDITOR`, and `admin` maps to `ADMIN`.
-    public var projectRole: ProjectRole?
-    /// The caller's effective permission for a project when per-project permissions are enabled. `VIEWER` grants
-    /// read access, `EDITOR` adds update access, and `ADMIN` grants full management. Omitted for personal projects,
-    /// flag-off organizations, and non-user subjects.
-    public var orgDefaultProjectPermission: ProjectPermissionLevel?
-    /// The caller's effective permission for a project when per-project permissions are enabled. `VIEWER` grants
-    /// read access, `EDITOR` adds update access, and `ADMIN` grants full management. Omitted for personal projects,
-    /// flag-off organizations, and non-user subjects.
-    public var explicitProjectPermission: ProjectPermissionLevel?
-    /// The caller's effective permission for a project when per-project permissions are enabled. `VIEWER` grants
-    /// read access, `EDITOR` adds update access, and `ADMIN` grants full management. Omitted for personal projects,
-    /// flag-off organizations, and non-user subjects.
-    public var effectiveProjectPermission: ProjectPermissionLevel?
-    /// How a member's project access is granted.
-    public var grantSource: ProjectMemberGrantSource?
+/// Add a new JWKS to a specific endpoint of a project
+public struct AddProjectJWKSRequest: Codable {
+    /// URL of the provider's JWKS endpoint used to verify JWTs.
+    public var jwksUrl: String
+    /// The name of the authentication provider (e.g., Clerk, Stytch, Auth0)
+    public var providerName: String
+    /// The Neon branch ID. Returned as `id` from `GET /projects/{project_id}/branches`.
+    public var branchId: String?
+    /// Expected `aud` claim in incoming JWTs. When set, tokens with a different audience are rejected; tokens with
+    /// no audience are still accepted. Omit to skip audience validation.
+    public var jwtAudience: String?
+    /// Deprecated. The roles the JWKS should be mapped to. By default, the JWKS is mapped to the `authenticator`,
+    /// `authenticated`, and `anonymous` roles.
+    public var roleNames: [String]?
+    /// Deprecated. Only used with Neon RLS. If true, role creation is skipped.
+    public var skipRoleCreation: Bool?
 
     enum CodingKeys: String, CodingKey {
-        case memberId = "member_id"
-        case userId = "user_id"
-        case orgRole = "org_role"
-        case email
-        case name
-        case projectRole = "project_role"
-        case orgDefaultProjectPermission = "org_default_project_permission"
-        case explicitProjectPermission = "explicit_project_permission"
-        case effectiveProjectPermission = "effective_project_permission"
-        case grantSource = "grant_source"
+        case jwksUrl = "jwks_url"
+        case providerName = "provider_name"
+        case branchId = "branch_id"
+        case jwtAudience = "jwt_audience"
+        case roleNames = "role_names"
+        case skipRoleCreation = "skip_role_creation"
     }
 
     private init(sdkCopy value: Self) { self = value }
 }
 
-extension ProjectMember {
+extension AddProjectJWKSRequest {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.memberId) else {
-            throw SdkValidationError(field: "member_id", code: "required", message: "Validation failed for 'member_id': value is required")
+        guard container.contains(.jwksUrl) else {
+            throw SdkValidationError(field: "jwks_url", code: "required", message: "Validation failed for 'jwks_url': value is required")
         }
-        guard container.contains(.userId) else {
-            throw SdkValidationError(field: "user_id", code: "required", message: "Validation failed for 'user_id': value is required")
+        guard container.contains(.providerName) else {
+            throw SdkValidationError(field: "provider_name", code: "required", message: "Validation failed for 'provider_name': value is required")
         }
-        guard container.contains(.orgRole) else {
-            throw SdkValidationError(field: "org_role", code: "required", message: "Validation failed for 'org_role': value is required")
+        self.jwksUrl = try container.sdkDecodeRequired(.jwksUrl)
+        self.providerName = try container.sdkDecodeRequired(.providerName)
+        self.branchId = try container.sdkDecodeIfPresent(.branchId)
+        self.jwtAudience = try container.sdkDecodeIfPresent(.jwtAudience)
+        self.roleNames = try container.sdkDecodeIfPresent(.roleNames)
+        self.skipRoleCreation = try container.sdkDecodeIfPresent(.skipRoleCreation)
+        if let value = self.branchId {
+            try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
         }
-        self.memberId = try container.sdkDecodeRequired(.memberId)
-        self.userId = try container.sdkDecodeRequired(.userId)
-        self.orgRole = try container.sdkDecodeRequired(.orgRole)
-        self.email = try container.sdkDecodeIfPresent(.email)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.projectRole = try container.sdkDecodeIfPresent(.projectRole)
-        self.orgDefaultProjectPermission = try container.sdkDecodeIfPresent(.orgDefaultProjectPermission)
-        self.explicitProjectPermission = try container.sdkDecodeIfPresent(.explicitProjectPermission)
-        self.effectiveProjectPermission = try container.sdkDecodeIfPresent(.effectiveProjectPermission)
-        self.grantSource = try container.sdkDecodeIfPresent(.grantSource)
-            try sdkValidateUuid("member_id", self.memberId)
-            try sdkValidateUuid("user_id", self.userId)
-        if let value = self.email {
-            try validateLength("email", value, min: 1, max: 256)
-            try sdkValidateEmail("email", value)
+        if let value = self.roleNames {
+            try validateItems("role_names", value, min: 0, max: 10)
         }
     }
 }
 
-extension ProjectMember {
-    public init(memberId: String, userId: String, orgRole: ProjectMemberOrgRole, email: String? = nil, name: String? = nil, projectRole: ProjectRole? = nil, orgDefaultProjectPermission: ProjectPermissionLevel? = nil, explicitProjectPermission: ProjectPermissionLevel? = nil, effectiveProjectPermission: ProjectPermissionLevel? = nil, grantSource: ProjectMemberGrantSource? = nil) throws {
-        (self.memberId, self.userId) = (memberId, userId)
-        (self.orgRole, self.email) = (orgRole, email)
-        (self.name, self.projectRole) = (name, projectRole)
-        self.orgDefaultProjectPermission = orgDefaultProjectPermission
-        self.explicitProjectPermission = explicitProjectPermission
-        (self.effectiveProjectPermission, self.grantSource) = (effectiveProjectPermission, grantSource)
-            try sdkValidateUuid("member_id", self.memberId)
-            try sdkValidateUuid("user_id", self.userId)
-        if let value = self.email {
-            try validateLength("email", value, min: 1, max: 256)
-            try sdkValidateEmail("email", value)
+extension AddProjectJWKSRequest {
+    public init(jwksUrl: String, providerName: String, branchId: String? = nil, jwtAudience: String? = nil, roleNames: [String]? = nil, skipRoleCreation: Bool? = nil) throws {
+        (self.jwksUrl, self.providerName) = (jwksUrl, providerName)
+        (self.branchId, self.jwtAudience) = (branchId, jwtAudience)
+        (self.roleNames, self.skipRoleCreation) = (roleNames, skipRoleCreation)
+        if let value = self.branchId {
+            try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
+        }
+        if let value = self.roleNames {
+            try validateItems("role_names", value, min: 0, max: 10)
         }
     }
 }
 
-/// Typed representation of the `ProjectMembers` API schema.
-public struct ProjectMembers: Codable {
-    /// Required array value serialized in the `project_members` wire field.
-    public var projectMembers: [ProjectMember]
-    /// To paginate the response, issue an initial request with `limit` value. Then, add the value returned in the
-    /// response `.pagination.next` attribute into the request under the `cursor` query parameter to the subsequent
-    /// request to retrieve next page in pagination. The contents on cursor `next` are opaque, clients are not
-    /// expected to make any assumptions on the format of the data inside the cursor.
-    public var pagination: CursorPagination?
+/// Typed representation of the `ProjectsResponse` API schema.
+public struct ProjectsResponse: Codable {
+    /// List of projects accessible to the caller. Projects that exist but could not be retrieved are identified in
+    /// `unavailable_project_ids`.
+    public var projects: [ProjectListItem]
+    /// A list of project IDs indicating which projects are known to exist, but whose details could not be fetched
+    /// within the requested (or implicit) time limit
+    public var unavailableProjectIds: [String]?
 
     enum CodingKeys: String, CodingKey {
-        case projectMembers = "project_members"
-        case pagination
+        case projects
+        case unavailableProjectIds = "unavailable_project_ids"
     }
 
     private init(sdkCopy value: Self) { self = value }
 }
 
-extension ProjectMembers {
+extension ProjectsResponse {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projectMembers) else {
-            throw SdkValidationError(field: "project_members", code: "required", message: "Validation failed for 'project_members': value is required")
+        guard container.contains(.projects) else {
+            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
         }
-        self.projectMembers = try container.sdkDecodeRequired(.projectMembers)
-        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+        self.projects = try container.sdkDecodeRequired(.projects)
+        self.unavailableProjectIds = try container.sdkDecodeIfPresent(.unavailableProjectIds)
     }
 }
 
-extension ProjectMembers {
-    public init(projectMembers: [ProjectMember], pagination: CursorPagination? = nil) {
-        (self.projectMembers, self.pagination) = (projectMembers, pagination)
+extension ProjectsResponse {
+    public init(projects: [ProjectListItem], unavailableProjectIds: [String]? = nil) {
+        (self.projects, self.unavailableProjectIds) = (projects, unavailableProjectIds)
     }
 }
 
-/// The list of configured JWKS definitions for a project
-public struct ProjectJWKSResponse: Codable {
-    /// JWKS configurations associated with the project.
-    public var jwks: [JWKS]
+/// Typed representation of the `JWKSCreationOperation` API schema.
+public struct JWKSCreationOperation: Codable {
+    /// JWKS configuration associated with the project.
+    public var jwks: JWKS
+    /// Required array value serialized in the `operations` wire field.
+    public var operations: [Operation]
 
     enum CodingKeys: String, CodingKey {
         case jwks
+        case operations
     }
 
     private init(sdkCopy value: Self) { self = value }
 }
 
-extension ProjectJWKSResponse {
+extension JWKSCreationOperation {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.jwks) else {
             throw SdkValidationError(field: "jwks", code: "required", message: "Validation failed for 'jwks': value is required")
         }
+        guard container.contains(.operations) else {
+            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
+        }
         self.jwks = try container.sdkDecodeRequired(.jwks)
+        self.operations = try container.sdkDecodeRequired(.operations)
     }
 }
 
-extension ProjectJWKSResponse {
-    public init(jwks: [JWKS]) {
-        self.jwks = jwks
+extension JWKSCreationOperation {
+    public init(jwks: JWKS, operations: [Operation]) {
+        (self.jwks, self.operations) = (jwks, operations)
+    }
+}
+
+/// Typed representation of the `JWKS` API schema.
+public struct JWKS: Codable {
+    /// The JWKS configuration's ID.
+    public var id: String
+    /// The Neon project ID. Returned as `id` from `GET /projects`.
+    public var projectId: String
+    /// URL of the provider's JWKS endpoint used to verify JWTs.
+    public var jwksUrl: String
+    /// The name of the authentication provider (e.g., Clerk, Stytch, Auth0)
+    public var providerName: String
+    /// The date and time when the JWKS was created
+    public var createdAt: Date
+    /// The date and time when the JWKS was last modified
+    public var updatedAt: Date
+    /// The Neon branch ID. Returned as `id` from `GET /projects/{project_id}/branches`.
+    public var branchId: String?
+    /// Expected JWT `aud` claim value configured for this JWKS.
+    public var jwtAudience: String?
+    /// Database role names that are permitted to authenticate using this JWKS configuration.
+    public var roleNames: [String]?
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case projectId = "project_id"
+        case jwksUrl = "jwks_url"
+        case providerName = "provider_name"
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+        case branchId = "branch_id"
+        case jwtAudience = "jwt_audience"
+        case roleNames = "role_names"
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension JWKS {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
+        }
+        guard container.contains(.projectId) else {
+            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
+        }
+        guard container.contains(.jwksUrl) else {
+            throw SdkValidationError(field: "jwks_url", code: "required", message: "Validation failed for 'jwks_url': value is required")
+        }
+        guard container.contains(.providerName) else {
+            throw SdkValidationError(field: "provider_name", code: "required", message: "Validation failed for 'provider_name': value is required")
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
+        }
+        guard container.contains(.updatedAt) else {
+            throw SdkValidationError(field: "updated_at", code: "required", message: "Validation failed for 'updated_at': value is required")
+        }
+        self.id = try container.sdkDecodeRequired(.id)
+        self.projectId = try container.sdkDecodeRequired(.projectId)
+        self.jwksUrl = try container.sdkDecodeRequired(.jwksUrl)
+        self.providerName = try container.sdkDecodeRequired(.providerName)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.updatedAt = try container.sdkDecodeRequired(.updatedAt)
+        self.branchId = try container.sdkDecodeIfPresent(.branchId)
+        self.jwtAudience = try container.sdkDecodeIfPresent(.jwtAudience)
+        self.roleNames = try container.sdkDecodeIfPresent(.roleNames)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+            try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
+        if let value = self.branchId {
+            try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
+        }
+    }
+}
+
+extension JWKS {
+    public init(id: String, projectId: String, jwksUrl: String, providerName: String, createdAt: Date, updatedAt: Date, branchId: String? = nil, jwtAudience: String? = nil, roleNames: [String]? = nil) throws {
+        (self.id, self.projectId) = (id, projectId)
+        (self.jwksUrl, self.providerName) = (jwksUrl, providerName)
+        (self.createdAt, self.updatedAt) = (createdAt, updatedAt)
+        (self.branchId, self.jwtAudience) = (branchId, jwtAudience)
+        self.roleNames = roleNames
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+            try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
+        if let value = self.branchId {
+            try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
+        }
+    }
+}
+
+/// Typed representation of the `SetProjectMemberRoleRequest` API schema.
+public struct SetProjectMemberRoleRequest: Codable {
+    /// Per-project role. `viewer` maps to `VIEWER`, `editor` maps to `EDITOR`, and `admin` maps to `ADMIN`.
+    public var role: ProjectRole
+
+    enum CodingKeys: String, CodingKey {
+        case role
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension SetProjectMemberRoleRequest {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.role) else {
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
+        }
+        self.role = try container.sdkDecodeRequired(.role)
     }
 }

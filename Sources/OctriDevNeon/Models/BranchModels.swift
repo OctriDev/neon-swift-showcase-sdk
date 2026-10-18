@@ -100,6 +100,75 @@ extension DatabaseResponse {
     }
 }
 
+/// Typed representation of the `CreateBranchResponse` API schema.
+public struct CreateBranchResponse: Codable {
+    /// Branch returned by the request.
+    /// - Example:
+    /// {"id":"br-wispy-meadow-118737","project_id":"spring-example-302709","parent_id":"br-aged-salad-637688","pare
+    /// nt_lsn":"0/1DE2850","name":"dev2","protected":false,"current_state":"ready","state_changed_at":"2022-11-30T2
+    /// 0:09:48Z","creation_source":"console","created_at":"2022-11-30T19:09:48Z","updated_at":"2022-12-01T19:53:05Z
+    /// ","default":true,"init_source":"parent-data","data_transfer_bytes":72911987,"written_data_bytes":542998300,"
+    /// compute_time_seconds":823880990,"active_time_seconds":922200,"cpu_used_sec":461100}
+    public var branch: Branch
+    /// Compute endpoints in the project. Each includes `id`, `branch_id`, `host`, and `type`.
+    public var endpoints: [Endpoint]
+    /// Required array value serialized in the `operations` wire field.
+    public var operations: [Operation]
+    /// Roles belonging to the branch. Each role includes fields such as `branch_id`, `name`, `protected`,
+    /// `created_at`, and `updated_at`.
+    public var roles: [Role]
+    /// Databases on the branch. Each includes `id`, `name`, `owner_name`, and `created_at`.
+    public var databases: [Database]
+    /// Connection URIs for the compute endpoint, including credentials.
+    public var connectionUris: [ConnectionDetails]?
+
+    enum CodingKeys: String, CodingKey {
+        case branch
+        case endpoints
+        case operations
+        case roles
+        case databases
+        case connectionUris = "connection_uris"
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension CreateBranchResponse {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.branch) else {
+            throw SdkValidationError(field: "branch", code: "required", message: "Validation failed for 'branch': value is required")
+        }
+        guard container.contains(.endpoints) else {
+            throw SdkValidationError(field: "endpoints", code: "required", message: "Validation failed for 'endpoints': value is required")
+        }
+        guard container.contains(.operations) else {
+            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
+        }
+        guard container.contains(.roles) else {
+            throw SdkValidationError(field: "roles", code: "required", message: "Validation failed for 'roles': value is required")
+        }
+        guard container.contains(.databases) else {
+            throw SdkValidationError(field: "databases", code: "required", message: "Validation failed for 'databases': value is required")
+        }
+        self.branch = try container.sdkDecodeRequired(.branch)
+        self.endpoints = try container.sdkDecodeRequired(.endpoints)
+        self.operations = try container.sdkDecodeRequired(.operations)
+        self.roles = try container.sdkDecodeRequired(.roles)
+        self.databases = try container.sdkDecodeRequired(.databases)
+        self.connectionUris = try container.sdkDecodeIfPresent(.connectionUris)
+    }
+}
+
+extension CreateBranchResponse {
+    public init(branch: Branch, endpoints: [Endpoint], operations: [Operation], roles: [Role], databases: [Database], connectionUris: [ConnectionDetails]? = nil) {
+        (self.branch, self.endpoints) = (branch, endpoints)
+        (self.operations, self.roles) = (operations, roles)
+        (self.databases, self.connectionUris) = (databases, connectionUris)
+    }
+}
+
 /// Typed representation of the `BranchSchemaResponse` API schema.
 public struct BranchSchemaResponse: Codable {
     /// Branch schema expressed as SQL DDL statements.
@@ -452,92 +521,5 @@ extension BranchUpdateRequestBranch {
         if let value = self.expiresAt {
             try sdkValidateDateTime("expires_at", sdkWireString(value))
         }
-    }
-}
-
-/// Typed representation of the `ConnectionURIsOptionalResponse` API schema.
-public struct ConnectionURIsOptionalResponse: Codable {
-    /// Connection URIs for the compute endpoint, including credentials.
-    public var connectionUris: [ConnectionDetails]?
-
-    enum CodingKeys: String, CodingKey {
-        case connectionUris = "connection_uris"
-    }
-
-    init() {
-        self.connectionUris = nil
-    }
-}
-
-extension ConnectionURIsOptionalResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.connectionUris = try container.sdkDecodeIfPresent(.connectionUris)
-    }
-}
-
-extension ConnectionURIsOptionalResponse {
-    public init(connectionUris: [ConnectionDetails]? = nil) {
-        self.init()
-        self.connectionUris = connectionUris
-    }
-}
-
-/// Configuration for the new Postgres database.
-public struct DatabaseCreateRequestDatabase: Codable {
-    /// Name of the database to create.
-    public var name: String
-    /// The name of the role that owns the database
-    public var ownerName: String
-
-    enum CodingKeys: String, CodingKey {
-        case name
-        case ownerName = "owner_name"
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DatabaseCreateRequestDatabase {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.ownerName) else {
-            throw SdkValidationError(field: "owner_name", code: "required", message: "Validation failed for 'owner_name': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.ownerName = try container.sdkDecodeRequired(.ownerName)
-    }
-}
-
-extension DatabaseCreateRequestDatabase {
-    public init(name: String, ownerName: String) {
-        (self.name, self.ownerName) = (name, ownerName)
-    }
-}
-
-/// Typed representation of the `BranchAnonymizedCreateRequest` API schema.
-public struct BranchAnonymizedCreateRequest: Codable {
-    /// A free-form map of string key-value pairs for attaching metadata to a resource (for example, a git commit
-    /// reference). Maximum 50 entries.
-    /// - Example: {"github-commit-ref":"github-branch-name"}
-    public var annotationValue: AnnotationValueData?
-    public var branchCreate: BranchCreateRequest?
-    /// List of masking rules to apply to the branch.
-    public var maskingRules: [MaskingRule]?
-    /// If true, automatically start anonymization after the branch is created. Defaults to false.
-    public var startAnonymization: Bool?
-
-    enum CodingKeys: String, CodingKey {
-        case annotationValue = "annotation_value"
-        case branchCreate = "branch_create"
-        case maskingRules = "masking_rules"
-        case startAnonymization = "start_anonymization"
-    }
-
-    init() {
-        (self.annotationValue, self.branchCreate, self.maskingRules, self.startAnonymization) = (nil, nil, nil, nil)
     }
 }

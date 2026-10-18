@@ -13,7 +13,7 @@ extension BranchMethods {
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
-    public static func createBranchAnonymized(config: ClientConfig, projectId: String, body: BranchAnonymizedCreateRequest, requestOptions: RequestOptions? = nil) async throws -> CreateBranchAnonymizedResponse {
+    public static func createBranchAnonymized(config: ClientConfig, projectId: String, body: BranchAnonymizedCreateRequest, requestOptions: RequestOptions? = nil) async throws -> CreateBranchResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branch_anonymized"].joined(), config: config, rawBody: (try sdkEncodeBody(body, contentType: "application/json")), decoder: .json, operationId: "createBranchAnonymized", options: requestOptions, errors: ["default": GeneralError.self])).data
@@ -24,7 +24,7 @@ extension BranchMethods {
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - search: Count branches matching the `name` in search query
-    public static func countBranch(config: ClientConfig, projectId: String, search: String? = nil, requestOptions: RequestOptions? = nil) async throws -> CountBranchResponse {
+    public static func countBranch(config: ClientConfig, projectId: String, search: String? = nil, requestOptions: RequestOptions? = nil) async throws -> BranchesCountResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/count"].joined(), config: config, query: [

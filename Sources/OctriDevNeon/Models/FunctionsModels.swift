@@ -158,6 +158,41 @@ extension TriggerUpdateRequest {
     }
 }
 
+/// Typed representation of the `ListFunctionsCustomDomainsResponse` API schema.
+public struct ListFunctionsCustomDomainsResponse: Codable {
+    /// Required array value serialized in the `custom_domains` wire field.
+    public var customDomains: [CustomDomain]
+    /// To paginate the response, issue an initial request with `limit` value. Then, add the value returned in the
+    /// response `.pagination.next` attribute into the request under the `cursor` query parameter to the subsequent
+    /// request to retrieve next page in pagination. The contents on cursor `next` are opaque, clients are not
+    /// expected to make any assumptions on the format of the data inside the cursor.
+    public var pagination: CursorPagination?
+
+    enum CodingKeys: String, CodingKey {
+        case customDomains = "custom_domains"
+        case pagination
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension ListFunctionsCustomDomainsResponse {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.customDomains) else {
+            throw SdkValidationError(field: "custom_domains", code: "required", message: "Validation failed for 'custom_domains': value is required")
+        }
+        self.customDomains = try container.sdkDecodeRequired(.customDomains)
+        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+extension ListFunctionsCustomDomainsResponse {
+    public init(customDomains: [CustomDomain], pagination: CursorPagination? = nil) {
+        (self.customDomains, self.pagination) = (customDomains, pagination)
+    }
+}
+
 /// Typed representation of the `NeonFunction` API schema.
 public struct NeonFunction: Codable {
     /// Opaque, stable function identifier.
@@ -174,10 +209,10 @@ public struct NeonFunction: Codable {
     public var createdAt: String
     /// The most recent deployment, regardless of build status. It may still be building or it may have failed.
     /// Omitted until the first deployment is created.
-    public var currentDeployment: NeonFunctionCurrentDeployment?
+    public var currentDeployment: NeonFunctionDeployment?
     /// The most recent deployment whose build completed successfully. This is the deployment that serves
     /// invocations. Omitted until a deployment succeeds.
-    public var activeDeployment: NeonFunctionActiveDeployment?
+    public var activeDeployment: NeonFunctionDeployment?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -221,7 +256,7 @@ extension NeonFunction {
 }
 
 extension NeonFunction {
-    public init(id: String, slug: String, name: String, invocationUrl: String, createdAt: String, currentDeployment: NeonFunctionCurrentDeployment? = nil, activeDeployment: NeonFunctionActiveDeployment? = nil) {
+    public init(id: String, slug: String, name: String, invocationUrl: String, createdAt: String, currentDeployment: NeonFunctionDeployment? = nil, activeDeployment: NeonFunctionDeployment? = nil) {
         (self.id, self.slug) = (id, slug)
         (self.name, self.invocationUrl) = (name, invocationUrl)
         (self.createdAt, self.currentDeployment) = (createdAt, currentDeployment)
@@ -254,6 +289,41 @@ extension NeonFunctionsListResponse {
 extension NeonFunctionsListResponse {
     public init(functions: [NeonFunction]) {
         self.functions = functions
+    }
+}
+
+/// Typed representation of the `ListFunctionsResponse` API schema.
+public struct ListFunctionsResponse: Codable {
+    /// Required array value serialized in the `functions` wire field.
+    public var functions: [NeonFunction]
+    /// To paginate the response, issue an initial request with `limit` value. Then, add the value returned in the
+    /// response `.pagination.next` attribute into the request under the `cursor` query parameter to the subsequent
+    /// request to retrieve next page in pagination. The contents on cursor `next` are opaque, clients are not
+    /// expected to make any assumptions on the format of the data inside the cursor.
+    public var pagination: CursorPagination?
+
+    enum CodingKeys: String, CodingKey {
+        case functions
+        case pagination
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension ListFunctionsResponse {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.functions) else {
+            throw SdkValidationError(field: "functions", code: "required", message: "Validation failed for 'functions': value is required")
+        }
+        self.functions = try container.sdkDecodeRequired(.functions)
+        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+extension ListFunctionsResponse {
+    public init(functions: [NeonFunction], pagination: CursorPagination? = nil) {
+        (self.functions, self.pagination) = (functions, pagination)
     }
 }
 
@@ -429,78 +499,5 @@ extension FunctionTriggerSchedule {
     public init(cron: String) throws {
         self.cron = cron
             try validateLength("cron", self.cron, min: 1, max: 1024)
-    }
-}
-
-/// Typed representation of the `TriggerResponse` API schema.
-public struct TriggerResponse: Codable {
-    /// A branch-effective trigger discriminated by `type`. The supported trigger types are `schedule` and
-    /// `storage_object_created`.
-    public var trigger: Trigger
-
-    enum CodingKeys: String, CodingKey {
-        case trigger
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension TriggerResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.trigger) else {
-            throw SdkValidationError(field: "trigger", code: "required", message: "Validation failed for 'trigger': value is required")
-        }
-        self.trigger = try container.sdkDecodeRequired(.trigger)
-    }
-}
-
-extension TriggerResponse {
-    public init(trigger: Trigger) {
-        self.trigger = trigger
-    }
-}
-
-/// Typed representation of the `FunctionDeployRequest` API schema.
-public struct FunctionDeployRequest: Codable {
-    /// Optional ZIP archive of the function source code. Omit to reuse the latest version's bundle (a config-only
-    /// change). Required for the first deployment of a function. Place `index.mjs` or `index.js` at the archive
-    /// root, without a containing directory. If both exist, `index.mjs` is loaded. Export a request handler
-    /// function or an object with a `fetch` method. Use `export default` for ESM or `module.exports` for CommonJS;
-    /// prefer `index.mjs` for ESM. Upload JavaScript ready to run…
-    public var zip: Data?
-    /// Optional enumerated value serialized in the `runtime` wire field.
-    public var runtime: FunctionDeployRequestRuntime?
-    /// Optional JSON object (a string-to-string map) of environment variables for the deployment, e.g.
-    /// {"KEY":"VALUE"}. Carried as a JSON-encoded string because multipart form data does not support typed object
-    /// parts. Values are write-only: they are encrypted at rest, and responses carry only the variable names (the
-    /// `environment` array), never the values.
-    public var environment: String?
-
-    enum CodingKeys: String, CodingKey {
-        case zip
-        case runtime
-        case environment
-    }
-
-    init() {
-        (self.zip, self.runtime, self.environment) = (nil, nil, nil)
-    }
-}
-
-extension FunctionDeployRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.zip = try container.sdkDecodeIfPresent(.zip)
-        self.runtime = try container.sdkDecodeIfPresent(.runtime)
-        self.environment = try container.sdkDecodeIfPresent(.environment)
-    }
-}
-
-extension FunctionDeployRequest {
-    public init(zip: Data? = nil, runtime: FunctionDeployRequestRuntime? = nil, environment: String? = nil) {
-        self.init()
-        (self.zip, self.runtime) = (zip, runtime)
-        self.environment = environment
     }
 }

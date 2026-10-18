@@ -4,6 +4,137 @@
 import Foundation
 
 // Branch domain models
+/// Typed representation of the `ConnectionURIsOptionalResponse` API schema.
+public struct ConnectionURIsOptionalResponse: Codable {
+    /// Connection URIs for the compute endpoint, including credentials.
+    public var connectionUris: [ConnectionDetails]?
+
+    enum CodingKeys: String, CodingKey {
+        case connectionUris = "connection_uris"
+    }
+
+    init() {
+        self.connectionUris = nil
+    }
+}
+
+extension ConnectionURIsOptionalResponse {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.connectionUris = try container.sdkDecodeIfPresent(.connectionUris)
+    }
+}
+
+extension ConnectionURIsOptionalResponse {
+    public init(connectionUris: [ConnectionDetails]? = nil) {
+        self.init()
+        self.connectionUris = connectionUris
+    }
+}
+
+/// Typed representation of the `ListBranchResponse` API schema.
+public struct ListBranchResponse: Codable {
+    /// Branches in the project. Each includes `id`, `name`, `current_state`, and `created_at`.
+    public var branches: [Branch]
+    /// Map of annotations keyed by resource identifier, where each value contains the annotation data for that
+    /// resource.
+    public var annotations: [String: AnnotationData]
+    /// To paginate the response, issue an initial request with `limit` value. Then, add the value returned in the
+    /// response `.pagination.next` attribute into the request under the `cursor` query parameter to the subsequent
+    /// request to retrieve next page in pagination. The contents on cursor `next` are opaque, clients are not
+    /// expected to make any assumptions on the format of the data inside the cursor.
+    public var pagination: CursorPagination?
+
+    enum CodingKeys: String, CodingKey {
+        case branches
+        case annotations
+        case pagination
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension ListBranchResponse {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.branches) else {
+            throw SdkValidationError(field: "branches", code: "required", message: "Validation failed for 'branches': value is required")
+        }
+        guard container.contains(.annotations) else {
+            throw SdkValidationError(field: "annotations", code: "required", message: "Validation failed for 'annotations': value is required")
+        }
+        self.branches = try container.sdkDecodeRequired(.branches)
+        self.annotations = try container.sdkDecodeRequired(.annotations)
+        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+extension ListBranchResponse {
+    public init(branches: [Branch], annotations: [String: AnnotationData], pagination: CursorPagination? = nil) {
+        (self.branches, self.annotations) = (branches, annotations)
+        self.pagination = pagination
+    }
+}
+
+/// Configuration for the new Postgres database.
+public struct DatabaseCreateRequestDatabase: Codable {
+    /// Name of the database to create.
+    public var name: String
+    /// The name of the role that owns the database
+    public var ownerName: String
+
+    enum CodingKeys: String, CodingKey {
+        case name
+        case ownerName = "owner_name"
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension DatabaseCreateRequestDatabase {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
+        }
+        guard container.contains(.ownerName) else {
+            throw SdkValidationError(field: "owner_name", code: "required", message: "Validation failed for 'owner_name': value is required")
+        }
+        self.name = try container.sdkDecodeRequired(.name)
+        self.ownerName = try container.sdkDecodeRequired(.ownerName)
+    }
+}
+
+extension DatabaseCreateRequestDatabase {
+    public init(name: String, ownerName: String) {
+        (self.name, self.ownerName) = (name, ownerName)
+    }
+}
+
+/// Typed representation of the `BranchAnonymizedCreateRequest` API schema.
+public struct BranchAnonymizedCreateRequest: Codable {
+    /// A free-form map of string key-value pairs for attaching metadata to a resource (for example, a git commit
+    /// reference). Maximum 50 entries.
+    /// - Example: {"github-commit-ref":"github-branch-name"}
+    public var annotationValue: AnnotationValueData?
+    public var branchCreate: BranchCreateRequest?
+    /// List of masking rules to apply to the branch.
+    public var maskingRules: [MaskingRule]?
+    /// If true, automatically start anonymization after the branch is created. Defaults to false.
+    public var startAnonymization: Bool?
+
+    enum CodingKeys: String, CodingKey {
+        case annotationValue = "annotation_value"
+        case branchCreate = "branch_create"
+        case maskingRules = "masking_rules"
+        case startAnonymization = "start_anonymization"
+    }
+
+    init() {
+        (self.annotationValue, self.branchCreate, self.maskingRules, self.startAnonymization) = (nil, nil, nil, nil)
+    }
+}
+
 extension BranchAnonymizedCreateRequest {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -381,143 +512,5 @@ extension BranchSchemaJSONTablesItemConstraintsItemReferencedTable {
     public init(schema: String, table: String, columns: [String]) {
         (self.schema, self.table) = (schema, table)
         self.columns = columns
-    }
-}
-
-/// Typed representation of the `BranchUpdateRequest` API schema.
-public struct BranchUpdateRequest: Codable {
-    /// Branch attributes to update. Supply only the fields you want to change, for example `name` or `protected`.
-    public var branch: BranchUpdateRequestBranch
-
-    enum CodingKeys: String, CodingKey {
-        case branch
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchUpdateRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.branch) else {
-            throw SdkValidationError(field: "branch", code: "required", message: "Validation failed for 'branch': value is required")
-        }
-        self.branch = try container.sdkDecodeRequired(.branch)
-    }
-}
-
-extension BranchUpdateRequest {
-    public init(branch: BranchUpdateRequestBranch) {
-        self.branch = branch
-    }
-}
-
-/// Typed representation of the `BranchesCountResponse` API schema.
-public struct BranchesCountResponse: Codable {
-    /// Total number of branches in the project.
-    public var count: Int
-
-    enum CodingKeys: String, CodingKey {
-        case count
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchesCountResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.count) else {
-            throw SdkValidationError(field: "count", code: "required", message: "Validation failed for 'count': value is required")
-        }
-        self.count = try container.sdkDecodeRequired(.count)
-    }
-}
-
-extension BranchesCountResponse {
-    public init(count: Int) {
-        self.count = count
-    }
-}
-
-/// Optional configuration for the new branch, for example `name`, `parent_id` (fork from a branch), `parent_lsn` or
-/// `parent_timestamp` (point-in-time branching), and `protected`.
-public struct BranchCreateRequestBranch: Codable {
-    /// The `branch_id` of the parent branch. If omitted or empty, the branch will be created from the project's
-    /// default branch.
-    public var parentId: String?
-    /// The branch name
-    public var name: String?
-    /// A Log Sequence Number (LSN) on the parent branch. The branch will be created with data from this LSN.
-    public var parentLsn: String?
-    /// A timestamp identifying a point in time on the parent branch. The branch will be created with data starting
-    /// from this point in time. RFC 3339 format.
-    /// - Example: "2024-02-26T12:00:00Z"
-    public var parentTimestamp: Date?
-    /// Whether the branch is protected. Protected branches (and their computes) cannot be deleted, archived, or
-    /// reset, and block deletion of the project. Can be gated by `protected_branches_only` in the IP allowlist.
-    /// Paid plans only.
-    public var protected: Bool?
-    /// Enable Realtime for the branch with these options. A child of a Realtime branch is enabled even when this is
-    /// omitted.
-    public var realtime: RealtimeOptions?
-    /// Whether to create the branch in the archived state. When omitted, the branch is created as a normal
-    /// (non-archived) branch.
-    public var archived: Bool?
-    /// Source of initialization for the branch. `parent-data` copies schema and data from the parent branch.
-    /// `parent-schema` copies schema only from the parent branch. `schema-only` creates a new root branch
-    /// containing schema only, using `parent_id` as the source; optionally, `parent_lsn` or `parent_timestamp` can
-    /// narrow the source point. `import` initializes the branch from an external import.
-    /// - Example: "parent-data"
-    public var initSource: String?
-    /// The timestamp when the branch is scheduled to expire and be automatically deleted. Must be set by the client
-    /// following the RFC 3339, section 5.6 format with precision up to seconds (such as 2025-06-09T18:02:16Z).
-    /// Deletion is performed by a background job and may not occur exactly at the specified time. Access to this
-    /// feature is currently limited to participants in the Early Access Program.
-    /// - Example: "2025-06-09T18:02:16Z"
-    public var expiresAt: Date?
-
-    enum CodingKeys: String, CodingKey {
-        case parentId = "parent_id"
-        case name
-        case parentLsn = "parent_lsn"
-        case parentTimestamp = "parent_timestamp"
-        case protected
-        case realtime
-        case archived
-        case initSource = "init_source"
-        case expiresAt = "expires_at"
-    }
-
-    init() {
-        (self.parentId, self.name, self.parentLsn, self.parentTimestamp, self.protected) = (nil, nil, nil, nil, nil)
-        (self.realtime, self.archived, self.initSource, self.expiresAt) = (nil, nil, nil, nil)
-    }
-}
-
-extension BranchCreateRequestBranch {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.parentId = try container.sdkDecodeIfPresent(.parentId)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.parentLsn = try container.sdkDecodeIfPresent(.parentLsn)
-        self.parentTimestamp = try container.sdkDecodeIfPresent(.parentTimestamp)
-        self.protected = try container.sdkDecodeIfPresent(.protected)
-        self.realtime = try container.sdkDecodeIfPresent(.realtime)
-        self.archived = try container.sdkDecodeIfPresent(.archived)
-        self.initSource = try container.sdkDecodeIfPresent(.initSource)
-        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
-        if let value = self.parentId {
-            try sdkValidatePattern("parent_id", value, sdkPatternead2b03f7a95)
-        }
-        if let value = self.name {
-            try validateLength("name", value, min: 1, max: 256)
-        }
-        if let value = self.parentTimestamp {
-            try sdkValidateDateTime("parent_timestamp", sdkWireString(value))
-        }
-        if let value = self.expiresAt {
-            try sdkValidateDateTime("expires_at", sdkWireString(value))
-        }
     }
 }

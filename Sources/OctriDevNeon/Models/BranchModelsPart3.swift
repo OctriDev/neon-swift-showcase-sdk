@@ -4,6 +4,185 @@
 import Foundation
 
 // Branch domain models
+/// Typed representation of the `GetBranchResponse` API schema.
+public struct GetBranchResponse: Codable {
+    /// Branch returned by the request.
+    /// - Example:
+    /// {"id":"br-wispy-meadow-118737","project_id":"spring-example-302709","parent_id":"br-aged-salad-637688","pare
+    /// nt_lsn":"0/1DE2850","name":"dev2","protected":false,"current_state":"ready","state_changed_at":"2022-11-30T2
+    /// 0:09:48Z","creation_source":"console","created_at":"2022-11-30T19:09:48Z","updated_at":"2022-12-01T19:53:05Z
+    /// ","default":true,"init_source":"parent-data","data_transfer_bytes":72911987,"written_data_bytes":542998300,"
+    /// compute_time_seconds":823880990,"active_time_seconds":922200,"cpu_used_sec":461100}
+    public var branch: Branch
+    /// Annotation data associated with the annotated object.
+    public var annotation: AnnotationData
+
+    enum CodingKeys: String, CodingKey {
+        case branch
+        case annotation
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension GetBranchResponse {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.branch) else {
+            throw SdkValidationError(field: "branch", code: "required", message: "Validation failed for 'branch': value is required")
+        }
+        guard container.contains(.annotation) else {
+            throw SdkValidationError(field: "annotation", code: "required", message: "Validation failed for 'annotation': value is required")
+        }
+        self.branch = try container.sdkDecodeRequired(.branch)
+        self.annotation = try container.sdkDecodeRequired(.annotation)
+    }
+}
+
+extension GetBranchResponse {
+    public init(branch: Branch, annotation: AnnotationData) {
+        (self.branch, self.annotation) = (branch, annotation)
+    }
+}
+
+/// Typed representation of the `BranchUpdateRequest` API schema.
+public struct BranchUpdateRequest: Codable {
+    /// Branch attributes to update. Supply only the fields you want to change, for example `name` or `protected`.
+    public var branch: BranchUpdateRequestBranch
+
+    enum CodingKeys: String, CodingKey {
+        case branch
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension BranchUpdateRequest {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.branch) else {
+            throw SdkValidationError(field: "branch", code: "required", message: "Validation failed for 'branch': value is required")
+        }
+        self.branch = try container.sdkDecodeRequired(.branch)
+    }
+}
+
+extension BranchUpdateRequest {
+    public init(branch: BranchUpdateRequestBranch) {
+        self.branch = branch
+    }
+}
+
+/// Typed representation of the `BranchesCountResponse` API schema.
+public struct BranchesCountResponse: Codable {
+    /// Total number of branches in the project.
+    public var count: Int
+
+    enum CodingKeys: String, CodingKey {
+        case count
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension BranchesCountResponse {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.count) else {
+            throw SdkValidationError(field: "count", code: "required", message: "Validation failed for 'count': value is required")
+        }
+        self.count = try container.sdkDecodeRequired(.count)
+    }
+}
+
+extension BranchesCountResponse {
+    public init(count: Int) {
+        self.count = count
+    }
+}
+
+/// Optional configuration for the new branch, for example `name`, `parent_id` (fork from a branch), `parent_lsn` or
+/// `parent_timestamp` (point-in-time branching), and `protected`.
+public struct BranchCreateRequestBranch: Codable {
+    /// The `branch_id` of the parent branch. If omitted or empty, the branch will be created from the project's
+    /// default branch.
+    public var parentId: String?
+    /// The branch name
+    public var name: String?
+    /// A Log Sequence Number (LSN) on the parent branch. The branch will be created with data from this LSN.
+    public var parentLsn: String?
+    /// A timestamp identifying a point in time on the parent branch. The branch will be created with data starting
+    /// from this point in time. RFC 3339 format.
+    /// - Example: "2024-02-26T12:00:00Z"
+    public var parentTimestamp: Date?
+    /// Whether the branch is protected. Protected branches (and their computes) cannot be deleted, archived, or
+    /// reset, and block deletion of the project. Can be gated by `protected_branches_only` in the IP allowlist.
+    /// Paid plans only.
+    public var protected: Bool?
+    /// Enable Realtime for the branch with these options. A child of a Realtime branch is enabled even when this is
+    /// omitted.
+    public var realtime: RealtimeOptions?
+    /// Whether to create the branch in the archived state. When omitted, the branch is created as a normal
+    /// (non-archived) branch.
+    public var archived: Bool?
+    /// Source of initialization for the branch. `parent-data` copies schema and data from the parent branch.
+    /// `parent-schema` copies schema only from the parent branch. `schema-only` creates a new root branch
+    /// containing schema only, using `parent_id` as the source; optionally, `parent_lsn` or `parent_timestamp` can
+    /// narrow the source point. `import` initializes the branch from an external import.
+    /// - Example: "parent-data"
+    public var initSource: String?
+    /// The timestamp when the branch is scheduled to expire and be automatically deleted. Must be set by the client
+    /// following the RFC 3339, section 5.6 format with precision up to seconds (such as 2025-06-09T18:02:16Z).
+    /// Deletion is performed by a background job and may not occur exactly at the specified time. Access to this
+    /// feature is currently limited to participants in the Early Access Program.
+    /// - Example: "2025-06-09T18:02:16Z"
+    public var expiresAt: Date?
+
+    enum CodingKeys: String, CodingKey {
+        case parentId = "parent_id"
+        case name
+        case parentLsn = "parent_lsn"
+        case parentTimestamp = "parent_timestamp"
+        case protected
+        case realtime
+        case archived
+        case initSource = "init_source"
+        case expiresAt = "expires_at"
+    }
+
+    init() {
+        (self.parentId, self.name, self.parentLsn, self.parentTimestamp, self.protected) = (nil, nil, nil, nil, nil)
+        (self.realtime, self.archived, self.initSource, self.expiresAt) = (nil, nil, nil, nil)
+    }
+}
+
+extension BranchCreateRequestBranch {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.parentId = try container.sdkDecodeIfPresent(.parentId)
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.parentLsn = try container.sdkDecodeIfPresent(.parentLsn)
+        self.parentTimestamp = try container.sdkDecodeIfPresent(.parentTimestamp)
+        self.protected = try container.sdkDecodeIfPresent(.protected)
+        self.realtime = try container.sdkDecodeIfPresent(.realtime)
+        self.archived = try container.sdkDecodeIfPresent(.archived)
+        self.initSource = try container.sdkDecodeIfPresent(.initSource)
+        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        if let value = self.parentId {
+            try sdkValidatePattern("parent_id", value, sdkPatternead2b03f7a95)
+        }
+        if let value = self.name {
+            try validateLength("name", value, min: 1, max: 256)
+        }
+        if let value = self.parentTimestamp {
+            try sdkValidateDateTime("parent_timestamp", sdkWireString(value))
+        }
+        if let value = self.expiresAt {
+            try sdkValidateDateTime("expires_at", sdkWireString(value))
+        }
+    }
+}
+
 extension BranchCreateRequestBranch {
     public init(parentId: String? = nil, name: String? = nil, parentLsn: String? = nil, parentTimestamp: Date? = nil, protected: Bool? = nil, realtime: RealtimeOptions? = nil, archived: Bool? = nil, initSource: String? = nil, expiresAt: Date? = nil) throws {
         self.init()
@@ -314,94 +493,5 @@ extension MaskingRulesUpdateRequest {
 extension MaskingRulesUpdateRequest {
     public init(maskingRules: [MaskingRule]) {
         self.maskingRules = maskingRules
-    }
-}
-
-/// Typed representation of the `AnonymizedBranchStatusResponse` API schema.
-public struct AnonymizedBranchStatusResponse: Codable {
-    /// The ID of the project this branch belongs to.
-    public var projectId: String
-    /// The ID of the anonymized branch.
-    public var branchId: String
-    /// The current state of the anonymized branch. `created`: branch record exists but setup has not started.
-    /// `initialized`: setup is complete and the branch is ready for anonymization. `initialization_error`: an error
-    /// occurred during setup. `anonymizing`: the anonymization process is currently running. `anonymized`:
-    /// anonymization completed successfully. `error`: an error occurred during anonymization.
-    /// - Example: "created"
-    public var state: String
-    /// A timestamp indicating when the anonymized branch was created
-    public var createdAt: Date
-    /// A timestamp indicating when the anonymized branch status was last updated
-    public var updatedAt: Date
-    /// A descriptive message about the current status or any errors
-    public var statusMessage: String?
-    /// A timestamp indicating when the anonymized branch operation failed (if applicable)
-    public var failedAt: Date?
-    /// Metadata about the most recent anonymization attempt for the branch.
-    public var lastRun: AnonymizationRunMetadata?
-
-    enum CodingKeys: String, CodingKey {
-        case projectId = "project_id"
-        case branchId = "branch_id"
-        case state
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-        case statusMessage = "status_message"
-        case failedAt = "failed_at"
-        case lastRun = "last_run"
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AnonymizedBranchStatusResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projectId) else {
-            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
-        }
-        guard container.contains(.branchId) else {
-            throw SdkValidationError(field: "branch_id", code: "required", message: "Validation failed for 'branch_id': value is required")
-        }
-        guard container.contains(.state) else {
-            throw SdkValidationError(field: "state", code: "required", message: "Validation failed for 'state': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.updatedAt) else {
-            throw SdkValidationError(field: "updated_at", code: "required", message: "Validation failed for 'updated_at': value is required")
-        }
-        self.projectId = try container.sdkDecodeRequired(.projectId)
-        self.branchId = try container.sdkDecodeRequired(.branchId)
-        self.state = try container.sdkDecodeRequired(.state)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.updatedAt = try container.sdkDecodeRequired(.updatedAt)
-        self.statusMessage = try container.sdkDecodeIfPresent(.statusMessage)
-        self.failedAt = try container.sdkDecodeIfPresent(.failedAt)
-        self.lastRun = try container.sdkDecodeIfPresent(.lastRun)
-            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-            try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-            try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
-        if let value = self.failedAt {
-            try sdkValidateDateTime("failed_at", sdkWireString(value))
-        }
-    }
-}
-
-extension AnonymizedBranchStatusResponse {
-    public init(projectId: String, branchId: String, state: String, createdAt: Date, updatedAt: Date, statusMessage: String? = nil, failedAt: Date? = nil, lastRun: AnonymizationRunMetadata? = nil) throws {
-        (self.projectId, self.branchId) = (projectId, branchId)
-        (self.state, self.createdAt) = (state, createdAt)
-        (self.updatedAt, self.statusMessage) = (updatedAt, statusMessage)
-        (self.failedAt, self.lastRun) = (failedAt, lastRun)
-            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-            try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-            try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
-        if let value = self.failedAt {
-            try sdkValidateDateTime("failed_at", sdkWireString(value))
-        }
     }
 }

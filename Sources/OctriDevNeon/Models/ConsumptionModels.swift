@@ -6,6 +6,40 @@ import Foundation
 // Consumption domain models
 public typealias ConsumptionHistoryQueryMetrics = [String]
 
+/// Typed representation of the `GetConsumptionHistoryPerBranchV2Response` API schema.
+public struct GetConsumptionHistoryPerBranchV2Response: Codable {
+    /// Per-branch consumption history records returned for the requested time range.
+    public var branches: [ConsumptionHistoryPerBranchV2]
+    /// Cursor-based pagination. The `cursor` value reflects the endpoint's sort field (for example, an ID or
+    /// timestamp), so pass it back unchanged.
+    /// - Example: {"cursor":"2022-12-07T00:45:05.262011Z"}
+    public var pagination: Pagination?
+
+    enum CodingKeys: String, CodingKey {
+        case branches
+        case pagination
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension GetConsumptionHistoryPerBranchV2Response {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.branches) else {
+            throw SdkValidationError(field: "branches", code: "required", message: "Validation failed for 'branches': value is required")
+        }
+        self.branches = try container.sdkDecodeRequired(.branches)
+        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+extension GetConsumptionHistoryPerBranchV2Response {
+    public init(branches: [ConsumptionHistoryPerBranchV2], pagination: Pagination? = nil) {
+        (self.branches, self.pagination) = (branches, pagination)
+    }
+}
+
 /// Typed representation of the `ConsumptionHistoryPerTimeframeV2` API schema.
 public struct ConsumptionHistoryPerTimeframeV2: Codable {
     /// The specified start date-time for the reported consumption.
@@ -89,6 +123,40 @@ extension ConsumptionHistoryPerProject {
     public init(projectId: String, periods: [ConsumptionHistoryPerPeriod]) throws {
         (self.projectId, self.periods) = (projectId, periods)
             try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+    }
+}
+
+/// Typed representation of the `GetConsumptionHistoryPerProjectResponse` API schema.
+public struct GetConsumptionHistoryPerProjectResponse: Codable {
+    /// Per-project consumption history records included in the response.
+    public var projects: [ConsumptionHistoryPerProject]
+    /// Cursor-based pagination. The `cursor` value reflects the endpoint's sort field (for example, an ID or
+    /// timestamp), so pass it back unchanged.
+    /// - Example: {"cursor":"2022-12-07T00:45:05.262011Z"}
+    public var pagination: Pagination?
+
+    enum CodingKeys: String, CodingKey {
+        case projects
+        case pagination
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension GetConsumptionHistoryPerProjectResponse {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.projects) else {
+            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
+        }
+        self.projects = try container.sdkDecodeRequired(.projects)
+        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+extension GetConsumptionHistoryPerProjectResponse {
+    public init(projects: [ConsumptionHistoryPerProject], pagination: Pagination? = nil) {
+        (self.projects, self.pagination) = (projects, pagination)
     }
 }
 
@@ -421,70 +489,5 @@ extension ConsumptionHistoryPerTimeframe {
         self.logicalSizeBytesHour = logicalSizeBytesHour
             try sdkValidateDateTime("timeframe_start", sdkWireString(self.timeframeStart))
             try sdkValidateDateTime("timeframe_end", sdkWireString(self.timeframeEnd))
-    }
-}
-
-/// Typed representation of the `ConsumptionHistoryPerPeriodV2` API schema.
-public struct ConsumptionHistoryPerPeriodV2: Codable {
-    /// The ID assigned to the specified billing period.
-    public var periodId: String
-    /// The billing plan applicable during the billing period.
-    public var periodPlan: String
-    /// The start date-time of the billing period.
-    public var periodStart: Date
-    /// Consumption metric records for the billing period.
-    public var consumption: [ConsumptionHistoryPerTimeframeV2]
-    /// The end date-time of the billing period, available for the past periods only.
-    public var periodEnd: Date?
-
-    enum CodingKeys: String, CodingKey {
-        case periodId = "period_id"
-        case periodPlan = "period_plan"
-        case periodStart = "period_start"
-        case consumption
-        case periodEnd = "period_end"
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ConsumptionHistoryPerPeriodV2 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.periodId) else {
-            throw SdkValidationError(field: "period_id", code: "required", message: "Validation failed for 'period_id': value is required")
-        }
-        guard container.contains(.periodPlan) else {
-            throw SdkValidationError(field: "period_plan", code: "required", message: "Validation failed for 'period_plan': value is required")
-        }
-        guard container.contains(.periodStart) else {
-            throw SdkValidationError(field: "period_start", code: "required", message: "Validation failed for 'period_start': value is required")
-        }
-        guard container.contains(.consumption) else {
-            throw SdkValidationError(field: "consumption", code: "required", message: "Validation failed for 'consumption': value is required")
-        }
-        self.periodId = try container.sdkDecodeRequired(.periodId)
-        self.periodPlan = try container.sdkDecodeRequired(.periodPlan)
-        self.periodStart = try container.sdkDecodeRequired(.periodStart)
-        self.consumption = try container.sdkDecodeRequired(.consumption)
-        self.periodEnd = try container.sdkDecodeIfPresent(.periodEnd)
-            try sdkValidateUuid("period_id", self.periodId)
-            try sdkValidateDateTime("period_start", sdkWireString(self.periodStart))
-        if let value = self.periodEnd {
-            try sdkValidateDateTime("period_end", sdkWireString(value))
-        }
-    }
-}
-
-extension ConsumptionHistoryPerPeriodV2 {
-    public init(periodId: String, periodPlan: String, periodStart: Date, consumption: [ConsumptionHistoryPerTimeframeV2], periodEnd: Date? = nil) throws {
-        (self.periodId, self.periodPlan) = (periodId, periodPlan)
-        (self.periodStart, self.consumption) = (periodStart, consumption)
-        self.periodEnd = periodEnd
-            try sdkValidateUuid("period_id", self.periodId)
-            try sdkValidateDateTime("period_start", sdkWireString(self.periodStart))
-        if let value = self.periodEnd {
-            try sdkValidateDateTime("period_end", sdkWireString(value))
-        }
     }
 }
