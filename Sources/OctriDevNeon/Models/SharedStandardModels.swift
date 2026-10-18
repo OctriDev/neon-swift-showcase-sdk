@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedStandard domain models
+// SharedStandard domain models
 /// Typed representation of the `StandardEmailServerResponse` API schema.
 public struct StandardEmailServerResponse: Codable {
     /// Hostname of the email server.
@@ -34,79 +34,45 @@ public struct StandardEmailServerResponse: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension StandardEmailServerResponse {
-    init(from decoder: Decoder) throws {
+extension StandardEmailServerResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.host) else {
-            throw SdkValidationError(
-                field: "host",
-                code: "required",
-                message: "Validation failed for 'host': value is required"
-            )
+            throw SdkValidationError(field: "host", code: "required", message: "Validation failed for 'host': value is required")
         }
         guard container.contains(.port) else {
-            throw SdkValidationError(
-                field: "port",
-                code: "required",
-                message: "Validation failed for 'port': value is required"
-            )
+            throw SdkValidationError(field: "port", code: "required", message: "Validation failed for 'port': value is required")
         }
         guard container.contains(.username) else {
-            throw SdkValidationError(
-                field: "username",
-                code: "required",
-                message: "Validation failed for 'username': value is required"
-            )
+            throw SdkValidationError(field: "username", code: "required", message: "Validation failed for 'username': value is required")
         }
         guard container.contains(.password) else {
-            throw SdkValidationError(
-                field: "password",
-                code: "required",
-                message: "Validation failed for 'password': value is required"
-            )
+            throw SdkValidationError(field: "password", code: "required", message: "Validation failed for 'password': value is required")
         }
         guard container.contains(.senderEmail) else {
-            throw SdkValidationError(
-                field: "sender_email",
-                code: "required",
-                message: "Validation failed for 'sender_email': value is required"
-            )
+            throw SdkValidationError(field: "sender_email", code: "required", message: "Validation failed for 'sender_email': value is required")
         }
         guard container.contains(.senderName) else {
-            throw SdkValidationError(
-                field: "sender_name",
-                code: "required",
-                message: "Validation failed for 'sender_name': value is required"
-            )
+            throw SdkValidationError(field: "sender_name", code: "required", message: "Validation failed for 'sender_name': value is required")
         }
-        host = try container.sdkDecodeRequired(.host)
-        port = try container.sdkDecodeRequired(.port)
-        username = try container.sdkDecodeRequired(.username)
-        password = try container.sdkDecodeRequired(.password)
-        senderEmail = try container.sdkDecodeRequired(.senderEmail)
-        senderName = try container.sdkDecodeRequired(.senderName)
-        type = try container.sdkDecodeIfPresent(.type)
-        if let value = type {
+        self.host = try container.sdkDecodeRequired(.host)
+        self.port = try container.sdkDecodeRequired(.port)
+        self.username = try container.sdkDecodeRequired(.username)
+        self.password = try container.sdkDecodeRequired(.password)
+        self.senderEmail = try container.sdkDecodeRequired(.senderEmail)
+        self.senderName = try container.sdkDecodeRequired(.senderName)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        if let value = self.type {
             try sdkValidateRawEnum("type", value, StandardEmailServerResponseType.allCases.map(\.rawValue))
         }
     }
 }
 
-public extension StandardEmailServerResponse {
-    init(
-        host: String,
-        port: Int,
-        username: String,
-        password: String,
-        senderEmail: String,
-        senderName: String,
-        type: StandardEmailServerResponseType? = nil
-    ) throws {
+extension StandardEmailServerResponse {
+    public init(host: String, port: Int, username: String, password: String, senderEmail: String, senderName: String, type: StandardEmailServerResponseType? = nil) throws {
         (self.host, self.port) = (host, port)
         (self.username, self.password) = (username, password)
         (self.senderEmail, self.senderName) = (senderEmail, senderName)
@@ -145,37 +111,29 @@ public struct StandardEmailServer: Codable {
     }
 
     init() {
-        (host, port, username, password, senderEmail) = (nil, nil, nil, nil, nil)
-        (senderName, type) = (nil, nil)
+        (self.host, self.port, self.username, self.password, self.senderEmail) = (nil, nil, nil, nil, nil)
+        (self.senderName, self.type) = (nil, nil)
     }
 }
 
-public extension StandardEmailServer {
-    init(from decoder: Decoder) throws {
+extension StandardEmailServer {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        host = try container.sdkDecodeIfPresent(.host)
-        port = try container.sdkDecodeIfPresent(.port)
-        username = try container.sdkDecodeIfPresent(.username)
-        password = try container.sdkDecodeIfPresent(.password)
-        senderEmail = try container.sdkDecodeIfPresent(.senderEmail)
-        senderName = try container.sdkDecodeIfPresent(.senderName)
-        type = try container.sdkDecodeIfPresent(.type)
-        if let value = type {
+        self.host = try container.sdkDecodeIfPresent(.host)
+        self.port = try container.sdkDecodeIfPresent(.port)
+        self.username = try container.sdkDecodeIfPresent(.username)
+        self.password = try container.sdkDecodeIfPresent(.password)
+        self.senderEmail = try container.sdkDecodeIfPresent(.senderEmail)
+        self.senderName = try container.sdkDecodeIfPresent(.senderName)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        if let value = self.type {
             try sdkValidateRawEnum("type", value, StandardEmailServerType.allCases.map(\.rawValue))
         }
     }
 }
 
-public extension StandardEmailServer {
-    init(
-        host: String? = nil,
-        port: Int? = nil,
-        username: String? = nil,
-        password: String? = nil,
-        senderEmail: String? = nil,
-        senderName: String? = nil,
-        type: StandardEmailServerType? = nil
-    ) throws {
+extension StandardEmailServer {
+    public init(host: String? = nil, port: Int? = nil, username: String? = nil, password: String? = nil, senderEmail: String? = nil, senderName: String? = nil, type: StandardEmailServerType? = nil) throws {
         self.init()
         (self.host, self.port) = (host, port)
         (self.username, self.password) = (username, password)

@@ -6,38 +6,19 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ProjectMethods {
-    /// Creates a Neon project within an organization. If using a personal API key, include the `org_id` parameter to
-    /// specify which organization to create the project in. If using an org API key, `org_id` is automatically inferred
-    /// from the key. Plan limits define how many projects you can create. For more information, see [Manage
-    /// projects](https://neon.com/docs/manage/projects/). You can specify a region and Postgres version in the request
-    /// body. Neon supports Postgres 14 through 18, with 19 rolling out to enabled regions. For supported regions and
-    /// `region_id` values, see [Regions](https://neon.com/docs/introduction/regions/).
+extension ProjectMethods {
+    /// Creates a Neon project within an organization. If using a personal API key, include the `org_id` parameter to specify which organization to create the project in. If using an org API key, `org_id` is automatically inferred from the key. Plan limits define how many projects you can create. For more information, see [Manage projects](https://neon.com/docs/manage/projects/). You can specify a region and Postgres version in the request body. Neon supports Postgres 14 through 18, with 19 rolling out to enabled regions. For supported regions and `region_id` values, see [Regions](https://neon.com/docs/introduction/regions/).
     ///
     /// - Parameters:
     /// - project: Configuration for the new project, including name, region, and
     ///   Postgres compute and storage settings.
-    static func createProject(
-        config: ClientConfig,
-        project: ProjectCreateRequestProject,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CreateProjectResponse {
+    public static func createProject(config: ClientConfig, project: ProjectCreateRequestProject, requestOptions: RequestOptions? = nil) async throws -> CreateProjectResponse {
         let requestBody = CreateProjectRequestBody(project: project)
 
-        return try await (sdkRequest(
-            "POST",
-            "/projects",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createProject",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", "/projects", config: config, body: requestBody, decoder: .json, operationId: "createProject", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Retrieves a list of projects shared with your Neon account. For more information, see [Manage
-    /// projects](https://neon.com/docs/manage/projects/).
+    /// Retrieves a list of projects shared with your Neon account. For more information, see [Manage projects](https://neon.com/docs/manage/projects/).
     ///
     /// - Parameters:
     /// - cursor: Specify the cursor value from the previous response to get the
@@ -51,36 +32,20 @@ public extension ProjectMethods {
     ///   listed in the "unavailable" attribute of the response. If not specified, an
     ///   implicit implementation defined timeout is chosen with the same behaviour as
     ///   above
-    static func listSharedProjects(
-        config: ClientConfig,
-        cursor: String? = nil,
-        limit: Int? = nil,
-        search: String? = nil,
-        timeout: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListSharedProjectsResponse {
-        if let limit {
+    public static func listSharedProjects(config: ClientConfig, cursor: String? = nil, limit: Int? = nil, search: String? = nil, timeout: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> ListSharedProjectsResponse {
+        if let limit = limit {
             try validateRange("limit", Double(limit), min: 1, max: 400)
         }
 
-        if let timeout {
+        if let timeout = timeout {
             try validateRange("timeout", Double(timeout), min: 100, max: 30000)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            "/projects/shared",
-            config: config,
-            query: [
-                SdkQueryParameter("cursor", value: cursor),
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("search", value: search),
-                SdkQueryParameter("timeout", value: timeout),
-            ],
-            decoder: .json,
-            operationId: "listSharedProjects",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", "/projects/shared", config: config, query: [
+            SdkQueryParameter("cursor", value: cursor),
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("search", value: search),
+            SdkQueryParameter("timeout", value: timeout),
+        ], decoder: .json, operationId: "listSharedProjects", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

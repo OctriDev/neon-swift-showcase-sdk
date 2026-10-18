@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Endpoint domain models
+// Endpoint domain models
 /// Parameters for the compute endpoint update.
 public struct EndpointUpdateRequestEndpoint: Codable {
     /// Deprecated. The destination branch ID; must not have an existing read-write endpoint.
@@ -52,82 +52,46 @@ public struct EndpointUpdateRequestEndpoint: Codable {
     }
 
     init() {
-        (branchId, autoscalingLimitMinCu, autoscalingLimitMaxCu, provisioner, settings) = (nil, nil, nil, nil, nil)
-        (poolerEnabled, poolerMode, disabled, passwordlessAccess, suspendTimeoutSeconds) = (nil, nil, nil, nil, nil)
-        name = nil
+        (self.branchId, self.autoscalingLimitMinCu, self.autoscalingLimitMaxCu, self.provisioner, self.settings) = (nil, nil, nil, nil, nil)
+        (self.poolerEnabled, self.poolerMode, self.disabled, self.passwordlessAccess, self.suspendTimeoutSeconds) = (nil, nil, nil, nil, nil)
+        self.name = nil
     }
 }
 
-public extension EndpointUpdateRequestEndpoint {
-    init(from decoder: Decoder) throws {
+extension EndpointUpdateRequestEndpoint {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        branchId = try container.sdkDecodeIfPresent(.branchId)
-        autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
-        autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
-        provisioner = try container.sdkDecodeIfPresent(.provisioner)
-        settings = try container.sdkDecodeIfPresent(.settings)
-        poolerEnabled = try container.sdkDecodeIfPresent(.poolerEnabled)
-        poolerMode = try container.sdkDecodeIfPresent(.poolerMode)
-        disabled = try container.sdkDecodeIfPresent(.disabled)
-        passwordlessAccess = try container.sdkDecodeIfPresent(.passwordlessAccess)
-        suspendTimeoutSeconds = try container.sdkDecodeIfPresent(.suspendTimeoutSeconds)
-        name = try container.sdkDecodeIfPresent(.name)
-        if let value = branchId {
+        self.branchId = try container.sdkDecodeIfPresent(.branchId)
+        self.autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
+        self.autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
+        self.provisioner = try container.sdkDecodeIfPresent(.provisioner)
+        self.settings = try container.sdkDecodeIfPresent(.settings)
+        self.poolerEnabled = try container.sdkDecodeIfPresent(.poolerEnabled)
+        self.poolerMode = try container.sdkDecodeIfPresent(.poolerMode)
+        self.disabled = try container.sdkDecodeIfPresent(.disabled)
+        self.passwordlessAccess = try container.sdkDecodeIfPresent(.passwordlessAccess)
+        self.suspendTimeoutSeconds = try container.sdkDecodeIfPresent(.suspendTimeoutSeconds)
+        self.name = try container.sdkDecodeIfPresent(.name)
+        if let value = self.branchId {
             try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
         }
-        if let value = autoscalingLimitMinCu {
-            try validateRange(
-                "autoscaling_limit_min_cu",
-                Double(value),
-                min: 0.25,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.autoscalingLimitMinCu {
+            try validateRange("autoscaling_limit_min_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = autoscalingLimitMaxCu {
-            try validateRange(
-                "autoscaling_limit_max_cu",
-                Double(value),
-                min: 0.25,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.autoscalingLimitMaxCu {
+            try validateRange("autoscaling_limit_max_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = suspendTimeoutSeconds {
-            try validateRange(
-                "suspend_timeout_seconds",
-                Double(value),
-                min: -1,
-                max: 604_800,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.suspendTimeoutSeconds {
+            try validateRange("suspend_timeout_seconds", Double(value), min: -1, max: 604800, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = name {
+        if let value = self.name {
             try validateLength("name", value, min: 1, max: 64)
         }
     }
 }
 
-public extension EndpointUpdateRequestEndpoint {
-    init(
-        branchId: String? = nil,
-        autoscalingLimitMinCu: ComputeUnit? = nil,
-        autoscalingLimitMaxCu: ComputeUnit? = nil,
-        provisioner: Provisioner? = nil,
-        settings: EndpointSettingsData? = nil,
-        poolerEnabled: Bool? = nil,
-        poolerMode: EndpointPoolerMode? = nil,
-        disabled: Bool? = nil,
-        passwordlessAccess: Bool? = nil,
-        suspendTimeoutSeconds: SuspendTimeoutSeconds? = nil,
-        name: String? = nil
-    ) throws {
+extension EndpointUpdateRequestEndpoint {
+    public init(branchId: String? = nil, autoscalingLimitMinCu: ComputeUnit? = nil, autoscalingLimitMaxCu: ComputeUnit? = nil, provisioner: Provisioner? = nil, settings: EndpointSettingsData? = nil, poolerEnabled: Bool? = nil, poolerMode: EndpointPoolerMode? = nil, disabled: Bool? = nil, passwordlessAccess: Bool? = nil, suspendTimeoutSeconds: SuspendTimeoutSeconds? = nil, name: String? = nil) throws {
         self.init()
         (self.branchId, self.autoscalingLimitMinCu) = (branchId, autoscalingLimitMinCu)
         (self.autoscalingLimitMaxCu, self.provisioner) = (autoscalingLimitMaxCu, provisioner)
@@ -139,37 +103,13 @@ public extension EndpointUpdateRequestEndpoint {
             try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
         }
         if let value = self.autoscalingLimitMinCu {
-            try validateRange(
-                "autoscaling_limit_min_cu",
-                Double(value),
-                min: 0.25,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("autoscaling_limit_min_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.autoscalingLimitMaxCu {
-            try validateRange(
-                "autoscaling_limit_max_cu",
-                Double(value),
-                min: 0.25,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("autoscaling_limit_max_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.suspendTimeoutSeconds {
-            try validateRange(
-                "suspend_timeout_seconds",
-                Double(value),
-                min: -1,
-                max: 604_800,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("suspend_timeout_seconds", Double(value), min: -1, max: 604800, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.name {
             try validateLength("name", value, min: 1, max: 64)
@@ -194,27 +134,21 @@ public struct EndpointResponse: Codable {
         case endpoint
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EndpointResponse {
-    init(from decoder: Decoder) throws {
+extension EndpointResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.endpoint) else {
-            throw SdkValidationError(
-                field: "endpoint",
-                code: "required",
-                message: "Validation failed for 'endpoint': value is required"
-            )
+            throw SdkValidationError(field: "endpoint", code: "required", message: "Validation failed for 'endpoint': value is required")
         }
-        endpoint = try container.sdkDecodeRequired(.endpoint)
+        self.endpoint = try container.sdkDecodeRequired(.endpoint)
     }
 }
 
-public extension EndpointResponse {
-    init(endpoint: Endpoint) {
+extension EndpointResponse {
+    public init(endpoint: Endpoint) {
         self.endpoint = endpoint
     }
 }
@@ -239,35 +173,25 @@ public struct EndpointOperations: Codable {
         case operations
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EndpointOperations {
-    init(from decoder: Decoder) throws {
+extension EndpointOperations {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.endpoint) else {
-            throw SdkValidationError(
-                field: "endpoint",
-                code: "required",
-                message: "Validation failed for 'endpoint': value is required"
-            )
+            throw SdkValidationError(field: "endpoint", code: "required", message: "Validation failed for 'endpoint': value is required")
         }
         guard container.contains(.operations) else {
-            throw SdkValidationError(
-                field: "operations",
-                code: "required",
-                message: "Validation failed for 'operations': value is required"
-            )
+            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
         }
-        endpoint = try container.sdkDecodeRequired(.endpoint)
-        operations = try container.sdkDecodeRequired(.operations)
+        self.endpoint = try container.sdkDecodeRequired(.endpoint)
+        self.operations = try container.sdkDecodeRequired(.operations)
     }
 }
 
-public extension EndpointOperations {
-    init(endpoint: Endpoint, operations: [Operation]) {
+extension EndpointOperations {
+    public init(endpoint: Endpoint, operations: [Operation]) {
         (self.endpoint, self.operations) = (endpoint, operations)
     }
 }
@@ -281,27 +205,21 @@ public struct EndpointCreateRequest: Codable {
         case endpoint
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EndpointCreateRequest {
-    init(from decoder: Decoder) throws {
+extension EndpointCreateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.endpoint) else {
-            throw SdkValidationError(
-                field: "endpoint",
-                code: "required",
-                message: "Validation failed for 'endpoint': value is required"
-            )
+            throw SdkValidationError(field: "endpoint", code: "required", message: "Validation failed for 'endpoint': value is required")
         }
-        endpoint = try container.sdkDecodeRequired(.endpoint)
+        self.endpoint = try container.sdkDecodeRequired(.endpoint)
     }
 }
 
-public extension EndpointCreateRequest {
-    init(endpoint: EndpointCreateRequestEndpoint) {
+extension EndpointCreateRequest {
+    public init(endpoint: EndpointCreateRequestEndpoint) {
         self.endpoint = endpoint
     }
 }
@@ -315,27 +233,21 @@ public struct EndpointUpdateRequest: Codable {
         case endpoint
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EndpointUpdateRequest {
-    init(from decoder: Decoder) throws {
+extension EndpointUpdateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.endpoint) else {
-            throw SdkValidationError(
-                field: "endpoint",
-                code: "required",
-                message: "Validation failed for 'endpoint': value is required"
-            )
+            throw SdkValidationError(field: "endpoint", code: "required", message: "Validation failed for 'endpoint': value is required")
         }
-        endpoint = try container.sdkDecodeRequired(.endpoint)
+        self.endpoint = try container.sdkDecodeRequired(.endpoint)
     }
 }
 
-public extension EndpointUpdateRequest {
-    init(endpoint: EndpointUpdateRequestEndpoint) {
+extension EndpointUpdateRequest {
+    public init(endpoint: EndpointUpdateRequestEndpoint) {
         self.endpoint = endpoint
     }
 }
@@ -394,97 +306,49 @@ public struct EndpointCreateRequestEndpoint: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EndpointCreateRequestEndpoint {
-    init(from decoder: Decoder) throws {
+extension EndpointCreateRequestEndpoint {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.branchId) else {
-            throw SdkValidationError(
-                field: "branch_id",
-                code: "required",
-                message: "Validation failed for 'branch_id': value is required"
-            )
+            throw SdkValidationError(field: "branch_id", code: "required", message: "Validation failed for 'branch_id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        branchId = try container.sdkDecodeRequired(.branchId)
-        type = try container.sdkDecodeRequired(.type)
-        regionId = try container.sdkDecodeIfPresent(.regionId)
-        settings = try container.sdkDecodeIfPresent(.settings)
-        autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
-        autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
-        provisioner = try container.sdkDecodeIfPresent(.provisioner)
-        poolerEnabled = try container.sdkDecodeIfPresent(.poolerEnabled)
-        poolerMode = try container.sdkDecodeIfPresent(.poolerMode)
-        disabled = try container.sdkDecodeIfPresent(.disabled)
-        passwordlessAccess = try container.sdkDecodeIfPresent(.passwordlessAccess)
-        suspendTimeoutSeconds = try container.sdkDecodeIfPresent(.suspendTimeoutSeconds)
-        name = try container.sdkDecodeIfPresent(.name)
-        try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
-        if let value = autoscalingLimitMinCu {
-            try validateRange(
-                "autoscaling_limit_min_cu",
-                Double(value),
-                min: 0.25,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.branchId = try container.sdkDecodeRequired(.branchId)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.regionId = try container.sdkDecodeIfPresent(.regionId)
+        self.settings = try container.sdkDecodeIfPresent(.settings)
+        self.autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
+        self.autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
+        self.provisioner = try container.sdkDecodeIfPresent(.provisioner)
+        self.poolerEnabled = try container.sdkDecodeIfPresent(.poolerEnabled)
+        self.poolerMode = try container.sdkDecodeIfPresent(.poolerMode)
+        self.disabled = try container.sdkDecodeIfPresent(.disabled)
+        self.passwordlessAccess = try container.sdkDecodeIfPresent(.passwordlessAccess)
+        self.suspendTimeoutSeconds = try container.sdkDecodeIfPresent(.suspendTimeoutSeconds)
+        self.name = try container.sdkDecodeIfPresent(.name)
+            try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
+        if let value = self.autoscalingLimitMinCu {
+            try validateRange("autoscaling_limit_min_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = autoscalingLimitMaxCu {
-            try validateRange(
-                "autoscaling_limit_max_cu",
-                Double(value),
-                min: 0.25,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.autoscalingLimitMaxCu {
+            try validateRange("autoscaling_limit_max_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = suspendTimeoutSeconds {
-            try validateRange(
-                "suspend_timeout_seconds",
-                Double(value),
-                min: -1,
-                max: 604_800,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.suspendTimeoutSeconds {
+            try validateRange("suspend_timeout_seconds", Double(value), min: -1, max: 604800, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = name {
+        if let value = self.name {
             try validateLength("name", value, min: 1, max: 64)
         }
     }
 }
 
-public extension EndpointCreateRequestEndpoint {
-    init(
-        branchId: String,
-        type: EndpointType,
-        regionId: String? = nil,
-        settings: EndpointSettingsData? = nil,
-        autoscalingLimitMinCu: ComputeUnit? = nil,
-        autoscalingLimitMaxCu: ComputeUnit? = nil,
-        provisioner: Provisioner? = nil,
-        poolerEnabled: Bool? = nil,
-        poolerMode: EndpointPoolerMode? = nil,
-        disabled: Bool? = nil,
-        passwordlessAccess: Bool? = nil,
-        suspendTimeoutSeconds: SuspendTimeoutSeconds? = nil,
-        name: String? = nil
-    ) throws {
+extension EndpointCreateRequestEndpoint {
+    public init(branchId: String, type: EndpointType, regionId: String? = nil, settings: EndpointSettingsData? = nil, autoscalingLimitMinCu: ComputeUnit? = nil, autoscalingLimitMaxCu: ComputeUnit? = nil, provisioner: Provisioner? = nil, poolerEnabled: Bool? = nil, poolerMode: EndpointPoolerMode? = nil, disabled: Bool? = nil, passwordlessAccess: Bool? = nil, suspendTimeoutSeconds: SuspendTimeoutSeconds? = nil, name: String? = nil) throws {
         (self.branchId, self.type) = (branchId, type)
         (self.regionId, self.settings) = (regionId, settings)
         self.autoscalingLimitMinCu = autoscalingLimitMinCu
@@ -492,39 +356,15 @@ public extension EndpointCreateRequestEndpoint {
         (self.poolerEnabled, self.poolerMode) = (poolerEnabled, poolerMode)
         (self.disabled, self.passwordlessAccess) = (disabled, passwordlessAccess)
         (self.suspendTimeoutSeconds, self.name) = (suspendTimeoutSeconds, name)
-        try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
         if let value = self.autoscalingLimitMinCu {
-            try validateRange(
-                "autoscaling_limit_min_cu",
-                Double(value),
-                min: 0.25,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("autoscaling_limit_min_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.autoscalingLimitMaxCu {
-            try validateRange(
-                "autoscaling_limit_max_cu",
-                Double(value),
-                min: 0.25,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("autoscaling_limit_max_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.suspendTimeoutSeconds {
-            try validateRange(
-                "suspend_timeout_seconds",
-                Double(value),
-                min: -1,
-                max: 604_800,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("suspend_timeout_seconds", Double(value), min: -1, max: 604800, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.name {
             try validateLength("name", value, min: 1, max: 64)

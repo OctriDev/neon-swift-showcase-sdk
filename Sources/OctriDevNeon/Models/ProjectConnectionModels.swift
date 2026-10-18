@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ProjectConnection domain models
+// ProjectConnection domain models
 /// Typed representation of the `ConnectionURIsResponse` API schema.
 public struct ConnectionURIsResponse: Codable {
     /// Connection URIs for the project. Each entry contains credentials and should be treated as sensitive.
@@ -13,27 +13,21 @@ public struct ConnectionURIsResponse: Codable {
         case connectionUris = "connection_uris"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConnectionURIsResponse {
-    init(from decoder: Decoder) throws {
+extension ConnectionURIsResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.connectionUris) else {
-            throw SdkValidationError(
-                field: "connection_uris",
-                code: "required",
-                message: "Validation failed for 'connection_uris': value is required"
-            )
+            throw SdkValidationError(field: "connection_uris", code: "required", message: "Validation failed for 'connection_uris': value is required")
         }
-        connectionUris = try container.sdkDecodeRequired(.connectionUris)
+        self.connectionUris = try container.sdkDecodeRequired(.connectionUris)
     }
 }
 
-public extension ConnectionURIsResponse {
-    init(connectionUris: [ConnectionDetails]) {
+extension ConnectionURIsResponse {
+    public init(connectionUris: [ConnectionDetails]) {
         self.connectionUris = connectionUris
     }
 }
@@ -47,27 +41,21 @@ public struct ConnectionURIResponse: Codable {
         case uri
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConnectionURIResponse {
-    init(from decoder: Decoder) throws {
+extension ConnectionURIResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.uri) else {
-            throw SdkValidationError(
-                field: "uri",
-                code: "required",
-                message: "Validation failed for 'uri': value is required"
-            )
+            throw SdkValidationError(field: "uri", code: "required", message: "Validation failed for 'uri': value is required")
         }
-        uri = try container.sdkDecodeRequired(.uri)
+        self.uri = try container.sdkDecodeRequired(.uri)
     }
 }
 
-public extension ConnectionURIResponse {
-    init(uri: String) {
+extension ConnectionURIResponse {
+    public init(uri: String) {
         self.uri = uri
     }
 }

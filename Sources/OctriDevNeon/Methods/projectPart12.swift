@@ -6,39 +6,19 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ProjectMethods {
-    /// Removes the specified JWKS URL from the project. JWTs signed by keys from the removed URL can no longer
-    /// authenticate to the project's endpoints.
+extension ProjectMethods {
+    /// Removes the specified JWKS URL from the project. JWTs signed by keys from the removed URL can no longer authenticate to the project's endpoints.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - jwksId: The JWKS ID
-    static func deleteProjectJwks(
-        config: ClientConfig,
-        projectId: String,
-        jwksId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> JWKS {
+    public static func deleteProjectJwks(config: ClientConfig, projectId: String, jwksId: String, requestOptions: RequestOptions? = nil) async throws -> JWKS {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "DELETE",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/jwks/",
-                sdkEncodePathSegment(sdkWireString(jwksId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteProjectJWKS",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/jwks/", sdkEncodePathSegment(sdkWireString(jwksId))].joined(), config: config, decoder: .json, operationId: "deleteProjectJWKS", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Retrieves a connection URI for the specified database. The URI uses the standard PostgreSQL connection string
-    /// format. Set `pooled=true` to include the `-pooler` suffix for a connection pooler URI.
+    /// Retrieves a connection URI for the specified database. The URI uses the standard PostgreSQL connection string format. Set `pooled=true` to include the `-pooler` suffix for a connection pooler URI.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -50,41 +30,23 @@ public extension ProjectMethods {
     ///   associated with the `branch_id` if not specified.
     /// - pooled: Adds the `-pooler` option to the connection URI when set to
     ///   `true`, creating a pooled connection URI.
-    static func getConnectionUri(
-        config: ClientConfig,
-        projectId: String,
-        databaseName: String,
-        roleName: String,
-        branchId: String? = nil,
-        endpointId: String? = nil,
-        pooled: Bool? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ConnectionURIResponse {
+    public static func getConnectionUri(config: ClientConfig, projectId: String, databaseName: String, roleName: String, branchId: String? = nil, endpointId: String? = nil, pooled: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> ConnectionURIResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        if let branchId {
+        if let branchId = branchId {
             try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
         }
 
-        if let endpointId {
+        if let endpointId = endpointId {
             try sdkValidatePattern("endpoint_id", endpointId, sdkPatternead2b03f7a95)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/connection_uri"].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("database_name", value: databaseName),
-                SdkQueryParameter("role_name", value: roleName),
-                SdkQueryParameter("branch_id", value: branchId),
-                SdkQueryParameter("endpoint_id", value: endpointId),
-                SdkQueryParameter("pooled", value: pooled),
-            ],
-            decoder: .json,
-            operationId: "getConnectionURI",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/connection_uri"].joined(), config: config, query: [
+            SdkQueryParameter("database_name", value: databaseName),
+            SdkQueryParameter("role_name", value: roleName),
+            SdkQueryParameter("branch_id", value: branchId),
+            SdkQueryParameter("endpoint_id", value: endpointId),
+            SdkQueryParameter("pooled", value: pooled),
+        ], decoder: .json, operationId: "getConnectionURI", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

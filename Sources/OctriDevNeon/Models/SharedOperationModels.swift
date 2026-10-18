@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedOperation domain models
+// SharedOperation domain models
 /// An asynchronous action Neon performs on your resources (for example, starting a compute or creating a branch).
 /// Fields such as `action`, `status`, and `total_duration_ms` describe the operation and its progress.
 public struct Operation: Codable {
@@ -47,45 +47,30 @@ public struct Operation: Codable {
         case retryAt = "retry_at"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension Operation {
-    init(from decoder: Decoder) throws {
+extension Operation {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeRequired(.id)
-        projectId = try container.sdkDecodeRequired(.projectId)
-        action = try container.sdkDecodeRequired(.action)
-        status = try container.sdkDecodeRequired(.status)
-        failuresCount = try container.sdkDecodeRequired(.failuresCount)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        updatedAt = try container.sdkDecodeRequired(.updatedAt)
-        totalDurationMs = try container.sdkDecodeRequired(.totalDurationMs)
-        branchId = try container.sdkDecodeIfPresent(.branchId)
-        endpointId = try container.sdkDecodeIfPresent(.endpointId)
-        error = try container.sdkDecodeIfPresent(.error)
-        retryAt = try container.sdkDecodeIfPresent(.retryAt)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.projectId = try container.sdkDecodeRequired(.projectId)
+        self.action = try container.sdkDecodeRequired(.action)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.failuresCount = try container.sdkDecodeRequired(.failuresCount)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.updatedAt = try container.sdkDecodeRequired(.updatedAt)
+        self.totalDurationMs = try container.sdkDecodeRequired(.totalDurationMs)
+        self.branchId = try container.sdkDecodeIfPresent(.branchId)
+        self.endpointId = try container.sdkDecodeIfPresent(.endpointId)
+        self.error = try container.sdkDecodeIfPresent(.error)
+        self.retryAt = try container.sdkDecodeIfPresent(.retryAt)
         try sdkValidateConstraints()
     }
 }
 
-public extension Operation {
-    init(
-        id: String,
-        projectId: String,
-        action: OperationAction,
-        status: OperationStatus,
-        failuresCount: Int,
-        createdAt: Date,
-        updatedAt: Date,
-        totalDurationMs: Int,
-        branchId: String? = nil,
-        endpointId: String? = nil,
-        error: String? = nil,
-        retryAt: Date? = nil
-    ) throws {
+extension Operation {
+    public init(id: String, projectId: String, action: OperationAction, status: OperationStatus, failuresCount: Int, createdAt: Date, updatedAt: Date, totalDurationMs: Int, branchId: String? = nil, endpointId: String? = nil, error: String? = nil, retryAt: Date? = nil) throws {
         (self.id, self.projectId) = (id, projectId)
         (self.action, self.status) = (action, status)
         (self.failuresCount, self.createdAt) = (failuresCount, createdAt)
@@ -98,17 +83,17 @@ public extension Operation {
 
 extension Operation {
     func sdkValidateConstraints() throws {
-        try sdkValidateUuid("id", id)
-        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
-        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
-        try sdkValidateDateTime("updated_at", sdkWireString(updatedAt))
-        if let value = branchId {
+            try sdkValidateUuid("id", self.id)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+            try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
+        if let value = self.branchId {
             try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
         }
-        if let value = endpointId {
+        if let value = self.endpointId {
             try sdkValidatePattern("endpoint_id", value, sdkPatternead2b03f7a95)
         }
-        if let value = retryAt {
+        if let value = self.retryAt {
             try sdkValidateDateTime("retry_at", sdkWireString(value))
         }
     }
@@ -118,10 +103,7 @@ extension Operation {
 public struct OperationAction: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let createCompute = OperationAction(rawValue: "create_compute")
     public static let createTimeline = OperationAction(rawValue: "create_timeline")
     public static let startCompute = OperationAction(rawValue: "start_compute")
@@ -161,7 +143,7 @@ public struct OperationAction: RawRepresentable, Hashable, Codable, Sendable, Sd
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -177,10 +159,7 @@ public struct OperationAction: RawRepresentable, Hashable, Codable, Sendable, Sd
 public struct OperationStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let scheduling = OperationStatus(rawValue: "scheduling")
     public static let running = OperationStatus(rawValue: "running")
     public static let finished = OperationStatus(rawValue: "finished")
@@ -192,7 +171,7 @@ public struct OperationStatus: RawRepresentable, Hashable, Codable, Sendable, Sd
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

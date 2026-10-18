@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension OrganizationsMethods {
+extension OrganizationsMethods {
     /// Retrieves a paginated list of members for the specified organization.
     ///
     /// - Parameters:
@@ -17,36 +17,19 @@ public extension OrganizationsMethods {
     ///   fetch next page of the list.
     /// - sortOrder: Defines the sorting order of entities.
     /// - limit: The maximum number of members to return in the response
-    static func listOrganizationsMembers(
-        config: ClientConfig,
-        orgId: String,
-        sortBy: ListOrganizationsMembersParameterXbc1280c2? = nil,
-        cursor: String? = nil,
-        sortOrder: ListOrganizationsMembersParameter? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListOrganizationsMembersResponse {
+    public static func listOrganizationsMembers(config: ClientConfig, orgId: String, sortBy: ListOrganizationsMembersParameterXbc1280c2? = nil, cursor: String? = nil, sortOrder: ListOrganizationsMembersParameter? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> ListOrganizationsMembersResponse {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
-        if let limit {
+        if let limit = limit {
             try validateRange("limit", Double(limit), min: 1, max: 500)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/members"].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("sort_by", value: sortBy),
-                SdkQueryParameter("cursor", value: cursor),
-                SdkQueryParameter("sort_order", value: sortOrder),
-                SdkQueryParameter("limit", value: limit),
-            ],
-            decoder: .json,
-            operationId: "listOrganizationsMembers",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/members"].joined(), config: config, query: [
+            SdkQueryParameter("sort_by", value: sortBy),
+            SdkQueryParameter("cursor", value: cursor),
+            SdkQueryParameter("sort_order", value: sortOrder),
+            SdkQueryParameter("limit", value: limit),
+        ], decoder: .json, operationId: "listOrganizationsMembers", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
     /// Retrieves information about the specified organization member.
@@ -54,29 +37,11 @@ public extension OrganizationsMethods {
     /// - Parameters:
     /// - orgId: The Neon organization ID
     /// - memberId: The Neon organization member ID
-    static func getOrganizationMember(
-        config: ClientConfig,
-        orgId: String,
-        memberId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Member {
+    public static func getOrganizationMember(config: ClientConfig, orgId: String, memberId: String, requestOptions: RequestOptions? = nil) async throws -> Member {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
         try sdkValidateUuid("member_id", memberId)
 
-        return try await (sdkRequest(
-            "GET",
-            [
-                "/organizations/",
-                sdkEncodePathSegment(sdkWireString(orgId)),
-                "/members/",
-                sdkEncodePathSegment(sdkWireString(memberId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "getOrganizationMember",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/members/", sdkEncodePathSegment(sdkWireString(memberId))].joined(), config: config, decoder: .json, operationId: "getOrganizationMember", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

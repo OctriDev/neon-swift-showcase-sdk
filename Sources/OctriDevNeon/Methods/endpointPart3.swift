@@ -6,78 +6,33 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension EndpointMethods {
-    /// Deletes the specified compute endpoint. A compute endpoint is a Neon compute instance. Deleting a compute
-    /// endpoint drops existing network connections to the compute endpoint. The deletion is completed when the last
-    /// operation in the chain finishes successfully. An `endpoint_id` has an `ep-` prefix. For information about
-    /// compute endpoints, see [Manage computes](https://neon.com/docs/manage/endpoints/).
+extension EndpointMethods {
+    /// Deletes the specified compute endpoint. A compute endpoint is a Neon compute instance. Deleting a compute endpoint drops existing network connections to the compute endpoint. The deletion is completed when the last operation in the chain finishes successfully. An `endpoint_id` has an `ep-` prefix. For information about compute endpoints, see [Manage computes](https://neon.com/docs/manage/endpoints/).
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - endpointId: The endpoint ID
-    static func deleteEndpoint(
-        config: ClientConfig,
-        projectId: String,
-        endpointId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EndpointOperations {
+    public static func deleteEndpoint(config: ClientConfig, projectId: String, endpointId: String, requestOptions: RequestOptions? = nil) async throws -> EndpointOperations {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("endpoint_id", endpointId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "DELETE",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/endpoints/",
-                sdkEncodePathSegment(sdkWireString(endpointId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteEndpoint",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/endpoints/", sdkEncodePathSegment(sdkWireString(endpointId))].joined(), config: config, decoder: .json, operationId: "deleteEndpoint", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Updates the specified compute endpoint. An `endpoint_id` has an `ep-` prefix. A `branch_id` has a `br-` prefix.
-    /// For more information about compute endpoints, see [Manage computes](https://neon.com/docs/manage/endpoints/). If
-    /// the returned list of operations is not empty, the compute endpoint is not ready to use. The client must wait for
-    /// the last operation to finish before using the compute endpoint. If the compute endpoint was idle before the
-    /// update, it becomes active for a short period of time, and the control plane suspends it again after the update.
+    /// Updates the specified compute endpoint. An `endpoint_id` has an `ep-` prefix. A `branch_id` has a `br-` prefix. For more information about compute endpoints, see [Manage computes](https://neon.com/docs/manage/endpoints/). If the returned list of operations is not empty, the compute endpoint is not ready to use. The client must wait for the last operation to finish before using the compute endpoint. If the compute endpoint was idle before the update, it becomes active for a short period of time, and the control plane suspends it again after the update.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - endpointId: The endpoint ID
     /// - endpoint: Parameters for the compute endpoint update.
-    static func updateEndpoint(
-        config: ClientConfig,
-        projectId: String,
-        endpointId: String,
-        endpoint: EndpointUpdateRequestEndpoint,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EndpointOperations {
+    public static func updateEndpoint(config: ClientConfig, projectId: String, endpointId: String, endpoint: EndpointUpdateRequestEndpoint, requestOptions: RequestOptions? = nil) async throws -> EndpointOperations {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("endpoint_id", endpointId, sdkPatternead2b03f7a95)
 
         let requestBody = UpdateEndpointRequestBody(endpoint: endpoint)
 
-        return try await (sdkRequest(
-            "PATCH",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/endpoints/",
-                sdkEncodePathSegment(sdkWireString(endpointId)),
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateEndpoint",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("PATCH", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/endpoints/", sdkEncodePathSegment(sdkWireString(endpointId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateEndpoint", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

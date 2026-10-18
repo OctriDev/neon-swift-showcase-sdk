@@ -6,59 +6,25 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension OrganizationsMethods {
-    /// Revokes the specified organization API key. An API key that is no longer needed can be revoked. This action
-    /// cannot be reversed. API keys can also be managed in the Neon Console. See [Manage API
-    /// keys](https://neon.com/docs/manage/api-keys/).
+extension OrganizationsMethods {
+    /// Revokes the specified organization API key. An API key that is no longer needed can be revoked. This action cannot be reversed. API keys can also be managed in the Neon Console. See [Manage API keys](https://neon.com/docs/manage/api-keys/).
     ///
     /// - Parameters:
     /// - orgId: The Neon organization ID
     /// - keyId: The API key ID
-    static func revokeOrganizationsApiKey(
-        config: ClientConfig,
-        orgId: String,
-        keyId: Int,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrgApiKeyRevokeResponse {
+    public static func revokeOrganizationsApiKey(config: ClientConfig, orgId: String, keyId: Int, requestOptions: RequestOptions? = nil) async throws -> OrgApiKeyRevokeResponse {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "DELETE",
-            [
-                "/organizations/",
-                sdkEncodePathSegment(sdkWireString(orgId)),
-                "/api_keys/",
-                sdkEncodePathSegment(sdkWireString(keyId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "revokeOrganizationsApiKey",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("DELETE", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/api_keys/", sdkEncodePathSegment(sdkWireString(keyId))].joined(), config: config, decoder: .json, operationId: "revokeOrganizationsApiKey", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Returns the configured monthly spending limit for the specified organization. `spending_limit_cents: null`
-    /// indicates that no limit is currently set. Available to organization members with read access on Launch and Scale
-    /// plans only.
+    /// Returns the configured monthly spending limit for the specified organization. `spending_limit_cents: null` indicates that no limit is currently set. Available to organization members with read access on Launch and Scale plans only.
     ///
     /// - Parameters:
     /// - orgId: The Neon organization ID
-    static func getOrganizationSpendingLimit(
-        config: ClientConfig,
-        orgId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SpendingLimitResponse {
+    public static func getOrganizationSpendingLimit(config: ClientConfig, orgId: String, requestOptions: RequestOptions? = nil) async throws -> SpendingLimitResponse {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "GET",
-            ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/billing/spending_limit"].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "getOrganizationSpendingLimit",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/billing/spending_limit"].joined(), config: config, decoder: .json, operationId: "getOrganizationSpendingLimit", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

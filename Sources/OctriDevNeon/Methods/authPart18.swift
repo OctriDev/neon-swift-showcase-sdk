@@ -6,83 +6,38 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthMethods {
-    /// Returns the phone number plugin configuration for Neon Auth. The phone number plugin enables phone-based OTP
-    /// authentication.
+extension AuthMethods {
+    /// Returns the phone number plugin configuration for Neon Auth. The phone number plugin enables phone-based OTP authentication.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
-    static func getAuthPhoneNumberPlugin(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonAuthPhoneNumberConfig {
+    public static func getAuthPhoneNumberPlugin(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthPhoneNumberConfig {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "GET",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/auth/plugins/phone-number",
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "getAuthPhoneNumberPlugin",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/plugins/phone-number"].joined(), config: config, decoder: .json, operationId: "getAuthPhoneNumberPlugin", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Updates the phone number plugin configuration for Neon Auth. Only the fields provided in the request body are
-    /// updated; omitted fields retain their current values. The phone number plugin enables phone-based OTP
-    /// authentication. OTP codes are delivered via the `send.otp` webhook event with `delivery_preference: "sms"`. A
-    /// webhook must be configured with the `send.otp` event enabled for SMS delivery to work.
+    /// Updates the phone number plugin configuration for Neon Auth. Only the fields provided in the request body are updated; omitted fields retain their current values. The phone number plugin enables phone-based OTP authentication. OTP codes are delivered via the `send.otp` webhook event with `delivery_preference: "sms"`. A webhook must be configured with the `send.otp` event enabled for SMS delivery to work.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
     /// - enabled: Whether the phone number plugin is enabled.
     /// - otpExpiresIn: Time in seconds before the OTP expires
-    static func updateAuthPhoneNumberPlugin(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        enabled: Bool? = nil,
-        otpExpiresIn: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonAuthPhoneNumberConfig {
+    public static func updateAuthPhoneNumberPlugin(config: ClientConfig, projectId: String, branchId: String, enabled: Bool? = nil, otpExpiresIn: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonAuthPhoneNumberConfig {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        if let otpExpiresIn {
+        if let otpExpiresIn = otpExpiresIn {
             try validateRange("otp_expires_in", Double(otpExpiresIn), min: 60, max: 600)
         }
 
         let requestBody = UpdateAuthPhoneNumberPluginRequestBody(enabled: enabled, otpExpiresIn: otpExpiresIn)
 
-        return try await (sdkRequest(
-            "PATCH",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/auth/plugins/phone-number",
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateAuthPhoneNumberPlugin",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("PATCH", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/plugins/phone-number"].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateAuthPhoneNumberPlugin", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedConnection domain models
+// SharedConnection domain models
 /// Typed representation of the `ConnectionParameters` API schema.
 public struct ConnectionParameters: Codable {
     /// Name of the Postgres database used in the connection URI.
@@ -26,59 +26,37 @@ public struct ConnectionParameters: Codable {
         case poolerHost = "pooler_host"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConnectionParameters {
-    init(from decoder: Decoder) throws {
+extension ConnectionParameters {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.database) else {
-            throw SdkValidationError(
-                field: "database",
-                code: "required",
-                message: "Validation failed for 'database': value is required"
-            )
+            throw SdkValidationError(field: "database", code: "required", message: "Validation failed for 'database': value is required")
         }
         guard container.contains(.password) else {
-            throw SdkValidationError(
-                field: "password",
-                code: "required",
-                message: "Validation failed for 'password': value is required"
-            )
+            throw SdkValidationError(field: "password", code: "required", message: "Validation failed for 'password': value is required")
         }
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
         guard container.contains(.host) else {
-            throw SdkValidationError(
-                field: "host",
-                code: "required",
-                message: "Validation failed for 'host': value is required"
-            )
+            throw SdkValidationError(field: "host", code: "required", message: "Validation failed for 'host': value is required")
         }
         guard container.contains(.poolerHost) else {
-            throw SdkValidationError(
-                field: "pooler_host",
-                code: "required",
-                message: "Validation failed for 'pooler_host': value is required"
-            )
+            throw SdkValidationError(field: "pooler_host", code: "required", message: "Validation failed for 'pooler_host': value is required")
         }
-        database = try container.sdkDecodeRequired(.database)
-        password = try container.sdkDecodeRequired(.password)
-        role = try container.sdkDecodeRequired(.role)
-        host = try container.sdkDecodeRequired(.host)
-        poolerHost = try container.sdkDecodeRequired(.poolerHost)
+        self.database = try container.sdkDecodeRequired(.database)
+        self.password = try container.sdkDecodeRequired(.password)
+        self.role = try container.sdkDecodeRequired(.role)
+        self.host = try container.sdkDecodeRequired(.host)
+        self.poolerHost = try container.sdkDecodeRequired(.poolerHost)
     }
 }
 
-public extension ConnectionParameters {
-    init(database: String, password: String, role: String, host: String, poolerHost: String) {
+extension ConnectionParameters {
+    public init(database: String, password: String, role: String, host: String, poolerHost: String) {
         (self.database, self.password) = (database, password)
         (self.role, self.host) = (role, host)
         self.poolerHost = poolerHost
@@ -100,35 +78,25 @@ public struct ConnectionDetails: Codable {
         case connectionParameters = "connection_parameters"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConnectionDetails {
-    init(from decoder: Decoder) throws {
+extension ConnectionDetails {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.connectionUri) else {
-            throw SdkValidationError(
-                field: "connection_uri",
-                code: "required",
-                message: "Validation failed for 'connection_uri': value is required"
-            )
+            throw SdkValidationError(field: "connection_uri", code: "required", message: "Validation failed for 'connection_uri': value is required")
         }
         guard container.contains(.connectionParameters) else {
-            throw SdkValidationError(
-                field: "connection_parameters",
-                code: "required",
-                message: "Validation failed for 'connection_parameters': value is required"
-            )
+            throw SdkValidationError(field: "connection_parameters", code: "required", message: "Validation failed for 'connection_parameters': value is required")
         }
-        connectionUri = try container.sdkDecodeRequired(.connectionUri)
-        connectionParameters = try container.sdkDecodeRequired(.connectionParameters)
+        self.connectionUri = try container.sdkDecodeRequired(.connectionUri)
+        self.connectionParameters = try container.sdkDecodeRequired(.connectionParameters)
     }
 }
 
-public extension ConnectionDetails {
-    init(connectionUri: String, connectionParameters: ConnectionParameters) {
+extension ConnectionDetails {
+    public init(connectionUri: String, connectionParameters: ConnectionParameters) {
         (self.connectionUri, self.connectionParameters) = (connectionUri, connectionParameters)
     }
 }

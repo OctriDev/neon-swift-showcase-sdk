@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// TaggedModelsProject domain models
+// TaggedModelsProject domain models
 /// A map where key is a project ID and a value is a list of installed applications.
 public struct ProjectsApplicationsMapResponse: Codable {
     /// Map of project IDs to their installed applications. Each key is a project ID; each value is an array of
@@ -14,27 +14,21 @@ public struct ProjectsApplicationsMapResponse: Codable {
         case applications
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectsApplicationsMapResponse {
-    init(from decoder: Decoder) throws {
+extension ProjectsApplicationsMapResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.applications) else {
-            throw SdkValidationError(
-                field: "applications",
-                code: "required",
-                message: "Validation failed for 'applications': value is required"
-            )
+            throw SdkValidationError(field: "applications", code: "required", message: "Validation failed for 'applications': value is required")
         }
-        applications = try container.sdkDecodeRequired(.applications)
+        self.applications = try container.sdkDecodeRequired(.applications)
     }
 }
 
-public extension ProjectsApplicationsMapResponse {
-    init(applications: [String: [ApplicationType]]) {
+extension ProjectsApplicationsMapResponse {
+    public init(applications: [String: [ApplicationType]]) {
         self.applications = applications
     }
 }
@@ -48,27 +42,21 @@ public struct ProjectsIntegrationsMapResponse: Codable {
         case integrations
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectsIntegrationsMapResponse {
-    init(from decoder: Decoder) throws {
+extension ProjectsIntegrationsMapResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.integrations) else {
-            throw SdkValidationError(
-                field: "integrations",
-                code: "required",
-                message: "Validation failed for 'integrations': value is required"
-            )
+            throw SdkValidationError(field: "integrations", code: "required", message: "Validation failed for 'integrations': value is required")
         }
-        integrations = try container.sdkDecodeRequired(.integrations)
+        self.integrations = try container.sdkDecodeRequired(.integrations)
     }
 }
 
-public extension ProjectsIntegrationsMapResponse {
-    init(integrations: [String: [ApplicationType]]) {
+extension ProjectsIntegrationsMapResponse {
+    public init(integrations: [String: [ApplicationType]]) {
         self.integrations = integrations
     }
 }

@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension BranchMethods {
-    /// Retrieves the database schema. Specify `lsn` or `timestamp` (not both) to read at a point in time; omit both to
-    /// read from the database's head.
+extension BranchMethods {
+    /// Retrieves the database schema. Specify `lsn` or `timestamp` (not both) to read at a point in time; omit both to read from the database's head.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -18,44 +17,20 @@ public extension BranchMethods {
     /// - timestamp: The point in time for which the schema is retrieved
     /// - format: The format of the schema to retrieve. Possible values: - `sql`
     ///   (default) - `json`
-    static func getBranchSchema(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        dbName: String,
-        lsn: String? = nil,
-        timestamp: Date? = nil,
-        format: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BranchSchemaResponse {
+    public static func getBranchSchema(config: ClientConfig, projectId: String, branchId: String, dbName: String, lsn: String? = nil, timestamp: Date? = nil, format: String? = nil, requestOptions: RequestOptions? = nil) async throws -> BranchSchemaResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        if let timestamp {
+        if let timestamp = timestamp {
             try sdkValidateDateTime("timestamp", timestamp)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/schema",
-            ].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("db_name", value: dbName),
-                SdkQueryParameter("lsn", value: lsn),
-                SdkQueryParameter("timestamp", value: timestamp),
-                SdkQueryParameter("format", value: format),
-            ],
-            decoder: .json,
-            operationId: "getBranchSchema",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/schema"].joined(), config: config, query: [
+            SdkQueryParameter("db_name", value: dbName),
+            SdkQueryParameter("lsn", value: lsn),
+            SdkQueryParameter("timestamp", value: timestamp),
+            SdkQueryParameter("format", value: format),
+        ], decoder: .json, operationId: "getBranchSchema", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

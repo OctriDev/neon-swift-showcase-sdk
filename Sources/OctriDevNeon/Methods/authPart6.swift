@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthMethods {
-    /// Creates a new user in the Neon Auth user directory for the specified branch. The user is created in the
-    /// `neon_auth.users_sync` table and can immediately authenticate using the branch's configured auth providers.
+extension AuthMethods {
+    /// Creates a new user in the Neon Auth user directory for the specified branch. The user is created in the `neon_auth.users_sync` table and can immediately authenticate using the branch's configured auth providers.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -16,14 +15,7 @@ public extension AuthMethods {
     /// - email: Email address of the new Neon Auth user to create.
     /// - name: Display name for the new user. Optional. Pair with the required
     ///   email field when creating a new user.
-    static func createAuthUser(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        email: String,
-        name: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonAuthCreateNewUserResponse {
+    public static func createAuthUser(config: ClientConfig, projectId: String, branchId: String, email: String, name: String? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonAuthCreateNewUserResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -31,63 +23,26 @@ public extension AuthMethods {
         try validateLength("email", email, min: 1, max: 256)
         try sdkValidateEmail("email", email)
 
-        if let name {
+        if let name = name {
             try validateLength("name", name, min: 1, max: 255)
         }
 
         let requestBody = CreateAuthUserRequestBody(email: email, name: name)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/auth/users",
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createAuthUser",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/users"].joined(), config: config, body: requestBody, decoder: .json, operationId: "createAuthUser", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Deletes the specified user from the Neon Auth user directory for the specified branch. Removes the user record
-    /// from `neon_auth.users_sync`. This action cannot be undone.
+    /// Deletes the specified user from the Neon Auth user directory for the specified branch. Removes the user record from `neon_auth.users_sync`. This action cannot be undone.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
     /// - authUserId: The Neon user ID
-    static func deleteAuthUser(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        authUserId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
+    public static func deleteAuthUser(config: ClientConfig, projectId: String, branchId: String, authUserId: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "DELETE",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/auth/users/",
-                sdkEncodePathSegment(sdkWireString(authUserId)),
-            ].joined(),
-            config: config,
-            decoder: .empty,
-            operationId: "deleteAuthUser",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/users/", sdkEncodePathSegment(sdkWireString(authUserId))].joined(), config: config, decoder: .empty, operationId: "deleteAuthUser", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

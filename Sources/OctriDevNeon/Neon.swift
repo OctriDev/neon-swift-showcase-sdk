@@ -9,410 +9,144 @@ public class ProjectNamespace {
         self.config = config
     }
 
-    /// Analyzes the database for security and performance issues. Returns a list of issues categorized by severity
-    /// (ERROR, WARN, INFO). Requires read access to the project and Data API enabled.
-    public func getAdvisorSecurityIssues(
-        projectId: String,
-        branchId: String? = nil,
-        databaseName: String? = nil,
-        category: AdvisorCategory? = nil,
-        minSeverity: GetProjectAdvisorSecurityIssuesParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> GetProjectAdvisorSecurityIssuesResponse {
-        try await ProjectMethods.getProjectAdvisorSecurityIssues(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            databaseName: databaseName,
-            category: category,
-            minSeverity: minSeverity,
-            requestOptions: requestOptions
-        )
+/// Analyzes the database for security and performance issues. Returns a list of issues categorized by severity (ERROR, WARN, INFO). Requires read access to the project and Data API enabled.
+    public func getAdvisorSecurityIssues(projectId: String, branchId: String? = nil, databaseName: String? = nil, category: AdvisorCategory? = nil, minSeverity: GetProjectAdvisorSecurityIssuesParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> GetProjectAdvisorSecurityIssuesResponse {
+        return try await ProjectMethods.getProjectAdvisorSecurityIssues(config: config, projectId: projectId, branchId: branchId, databaseName: databaseName, category: category, minSeverity: minSeverity, requestOptions: requestOptions)
     }
 
-    /// Retrieves a list of projects for the specified organization. If using a personal API key, include the `org_id`
-    /// parameter to specify which organization to work with. If using an org API key, `org_id` is automatically
-    /// inferred from the key. For more information, see [Manage organizations using the Neon
-    /// API](https://neon.com/docs/manage/orgs-api) and [Manage projects](https://neon.com/docs/manage/projects/).
-    public func list(
-        cursor: String? = nil,
-        limit: Int? = nil,
-        search: String? = nil,
-        orgId: String? = nil,
-        timeout: Int? = nil,
-        recoverable: Bool? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListProjectsResponse {
-        try await ProjectMethods.listProjects(
-            config: config,
-            cursor: cursor,
-            limit: limit,
-            search: search,
-            orgId: orgId,
-            timeout: timeout,
-            recoverable: recoverable,
-            requestOptions: requestOptions
-        )
+/// Retrieves a list of projects for the specified organization. If using a personal API key, include the `org_id` parameter to specify which organization to work with. If using an org API key, `org_id` is automatically inferred from the key. For more information, see [Manage organizations using the Neon API](https://neon.com/docs/manage/orgs-api) and [Manage projects](https://neon.com/docs/manage/projects/).
+    public func list(cursor: String? = nil, limit: Int? = nil, search: String? = nil, orgId: String? = nil, timeout: Int? = nil, recoverable: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> ListProjectsResponse {
+        return try await ProjectMethods.listProjects(config: config, cursor: cursor, limit: limit, search: search, orgId: orgId, timeout: timeout, recoverable: recoverable, requestOptions: requestOptions)
     }
 
-    /// Creates a Neon project within an organization. If using a personal API key, include the `org_id` parameter to
-    /// specify which organization to create the project in. If using an org API key, `org_id` is automatically inferred
-    /// from the key. Plan limits define how many projects you can create. For more information, see [Manage
-    /// projects](https://neon.com/docs/manage/projects/). You can specify a region and Postgres version in the request
-    /// body. Neon supports Postgres 14 through 18, with 19 rolling out to enabled regions. For supported regions and
-    /// `region_id` values, see [Regions](https://neon.com/docs/introduction/regions/).
-    public func create(
-        project: ProjectCreateRequestProject,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CreateProjectResponse {
-        try await ProjectMethods.createProject(config: config, project: project, requestOptions: requestOptions)
+/// Creates a Neon project within an organization. If using a personal API key, include the `org_id` parameter to specify which organization to create the project in. If using an org API key, `org_id` is automatically inferred from the key. Plan limits define how many projects you can create. For more information, see [Manage projects](https://neon.com/docs/manage/projects/). You can specify a region and Postgres version in the request body. Neon supports Postgres 14 through 18, with 19 rolling out to enabled regions. For supported regions and `region_id` values, see [Regions](https://neon.com/docs/introduction/regions/).
+    public func create(project: ProjectCreateRequestProject, requestOptions: RequestOptions? = nil) async throws -> CreateProjectResponse {
+        return try await ProjectMethods.createProject(config: config, project: project, requestOptions: requestOptions)
     }
 
-    /// Retrieves a list of projects shared with your Neon account. For more information, see [Manage
-    /// projects](https://neon.com/docs/manage/projects/).
-    public func listShared(
-        cursor: String? = nil,
-        limit: Int? = nil,
-        search: String? = nil,
-        timeout: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListSharedProjectsResponse {
-        try await ProjectMethods.listSharedProjects(
-            config: config,
-            cursor: cursor,
-            limit: limit,
-            search: search,
-            timeout: timeout,
-            requestOptions: requestOptions
-        )
+/// Retrieves a list of projects shared with your Neon account. For more information, see [Manage projects](https://neon.com/docs/manage/projects/).
+    public func listShared(cursor: String? = nil, limit: Int? = nil, search: String? = nil, timeout: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> ListSharedProjectsResponse {
+        return try await ProjectMethods.listSharedProjects(config: config, cursor: cursor, limit: limit, search: search, timeout: timeout, requestOptions: requestOptions)
     }
 
-    /// Retrieves information about the specified project. Returned details include the project settings, compute
-    /// configuration, history retention, owner information, and current usage metrics.
+/// Retrieves information about the specified project. Returned details include the project settings, compute configuration, history retention, owner information, and current usage metrics.
     public func get(projectId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectResponse {
-        try await ProjectMethods.getProject(config: config, projectId: projectId, requestOptions: requestOptions)
+        return try await ProjectMethods.getProject(config: config, projectId: projectId, requestOptions: requestOptions)
     }
 
-    /// Updates configurable properties of a Neon project, including its name, project settings, default endpoint
-    /// settings, and history retention period. Supply the required `project` object and include only the properties you
-    /// want to change. The response includes the updated project and any operations associated with the update.
+/// Updates configurable properties of a Neon project, including its name, project settings, default endpoint settings, and history retention period. Supply the required `project` object and include only the properties you want to change. The response includes the updated project and any operations associated with the update.
     ///
-    /// Updates the specified project. Configurable properties include the project name, default compute settings,
-    /// history retention period, and IP allowlist.
-    public func update(
-        projectId: String,
-        project: ProjectUpdateRequestProject,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> UpdateProjectResponse {
-        try await ProjectMethods.updateProject(
-            config: config,
-            projectId: projectId,
-            project: project,
-            requestOptions: requestOptions
-        )
+    /// Updates the specified project. Configurable properties include the project name, default compute settings, history retention period, and IP allowlist.
+    public func update(projectId: String, project: ProjectUpdateRequestProject, requestOptions: RequestOptions? = nil) async throws -> UpdateProjectResponse {
+        return try await ProjectMethods.updateProject(config: config, projectId: projectId, project: project, requestOptions: requestOptions)
     }
 
-    /// Deletes the specified project and all its endpoints, branches, databases, and users. Deleted projects can be
-    /// recovered within 7 days using `POST /projects/{project_id}/recover`. To list recoverable projects, use `GET
-    /// /projects?recoverable=true`.
+/// Deletes the specified project and all its endpoints, branches, databases, and users. Deleted projects can be recovered within 7 days using `POST /projects/{project_id}/recover`. To list recoverable projects, use `GET /projects?recoverable=true`.
     public func delete(projectId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectResponse {
-        try await ProjectMethods.deleteProject(config: config, projectId: projectId, requestOptions: requestOptions)
+        return try await ProjectMethods.deleteProject(config: config, projectId: projectId, requestOptions: requestOptions)
     }
 
-    /// Recovers a deleted project within the 7-day deletion recovery period. Restores branches, endpoints, settings,
-    /// and connection strings. Some integrations require manual reconfiguration after recovery. To list recoverable
-    /// projects, use `GET /projects?recoverable=true`.
-    public func recover(
-        projectId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectRecoverResponse {
-        try await ProjectMethods.recoverProject(config: config, projectId: projectId, requestOptions: requestOptions)
+/// Recovers a deleted project within the 7-day deletion recovery period. Restores branches, endpoints, settings, and connection strings. Some integrations require manual reconfiguration after recovery. To list recoverable projects, use `GET /projects?recoverable=true`.
+    public func recover(projectId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectRecoverResponse {
+        return try await ProjectMethods.recoverProject(config: config, projectId: projectId, requestOptions: requestOptions)
     }
 }
 
-public extension ProjectNamespace {
-    /// Lists users who have access to a project, including each permission ID, the granted-to email address, and the
-    /// grant date. Use the permission ID to identify a specific project access grant when you need to revoke it.
+extension ProjectNamespace {
+/// Lists users who have access to a project, including each permission ID, the granted-to email address, and the grant date. Use the permission ID to identify a specific project access grant when you need to revoke it.
     ///
-    /// Retrieves details about users who have access to the project, including the permission `id`, the granted-to
-    /// email address, and the date project access was granted.
-    func listPermissions(projectId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectPermissions {
-        try await ProjectMethods.listProjectPermissions(
-            config: config,
-            projectId: projectId,
-            requestOptions: requestOptions
-        )
+    /// Retrieves details about users who have access to the project, including the permission `id`, the granted-to email address, and the date project access was granted.
+    public func listPermissions(projectId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectPermissions {
+        return try await ProjectMethods.listProjectPermissions(config: config, projectId: projectId, requestOptions: requestOptions)
     }
 
-    /// Grants project access to the account associated with an email address. Supply the recipient's `email` in the
-    /// request body to create a project permission. The response includes the new permission's identifier and grant
-    /// details.
+/// Grants project access to the account associated with an email address. Supply the recipient's `email` in the request body to create a project permission. The response includes the new permission's identifier and grant details.
     ///
     /// Grants project access to the account associated with the specified email address.
-    func grantPermission(
-        projectId: String,
-        email: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectPermission {
-        try await ProjectMethods.grantProjectPermission(
-            config: config,
-            projectId: projectId,
-            email: email,
-            requestOptions: requestOptions
-        )
+    public func grantPermission(projectId: String, email: String, requestOptions: RequestOptions? = nil) async throws -> ProjectPermission {
+        return try await ProjectMethods.grantProjectPermission(config: config, projectId: projectId, email: email, requestOptions: requestOptions)
     }
 
-    /// Lists organization members and their project roles for an organization-owned project. The members shown depend
-    /// on the authenticated user's access: VIEWER and EDITOR see members with effective project access, while ADMIN
-    /// also sees unassigned organization members. Use `limit` and the response's `pagination.next` cursor to retrieve
-    /// subsequent pages.
+/// Lists organization members and their project roles for an organization-owned project. The members shown depend on the authenticated user's access: VIEWER and EDITOR see members with effective project access, while ADMIN also sees unassigned organization members. Use `limit` and the response's `pagination.next` cursor to retrieve subsequent pages.
     ///
-    /// Lists organization members and their per-project roles for an org-owned project. Returns 404 when the project is
-    /// not org-owned, per-project role management is disabled, or the caller has no access. Callers with VIEWER or
-    /// EDITOR see members with effective project access. Callers with ADMIN also see unassigned org members.
-    func listMembers(
-        projectId: String,
-        cursor: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectMembers {
-        try await ProjectMethods.listProjectMembers(
-            config: config,
-            projectId: projectId,
-            cursor: cursor,
-            limit: limit,
-            requestOptions: requestOptions
-        )
+    /// Lists organization members and their per-project roles for an org-owned project. Returns 404 when the project is not org-owned, per-project role management is disabled, or the caller has no access. Callers with VIEWER or EDITOR see members with effective project access. Callers with ADMIN also see unassigned org members.
+    public func listMembers(projectId: String, cursor: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectMembers {
+        return try await ProjectMethods.listProjectMembers(config: config, projectId: projectId, cursor: cursor, limit: limit, requestOptions: requestOptions)
     }
 
-    /// Sets or updates an organization's member's explicit role on a project. Provide `role` as `viewer`, `editor`, or
-    /// `admin` to set the corresponding project permission. If the authenticated user is demoting themself, set
-    /// `confirm_self_demotion` to true.
+/// Sets or updates an organization's member's explicit role on a project. Provide `role` as `viewer`, `editor`, or `admin` to set the corresponding project permission. If the authenticated user is demoting themself, set `confirm_self_demotion` to true.
     ///
-    /// Idempotently sets or updates the explicit project grant of the specified org member. Self-demotion requires
-    /// `confirm_self_demotion=true`.
-    func setMemberRole(
-        projectId: String,
-        memberId: String,
-        role: ProjectRole,
-        confirmSelfDemotion: Bool? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectMemberRoleResponse {
-        try await ProjectMethods.setProjectMemberRole(
-            config: config,
-            projectId: projectId,
-            memberId: memberId,
-            role: role,
-            confirmSelfDemotion: confirmSelfDemotion,
-            requestOptions: requestOptions
-        )
+    /// Idempotently sets or updates the explicit project grant of the specified org member. Self-demotion requires `confirm_self_demotion=true`.
+    public func setMemberRole(projectId: String, memberId: String, role: ProjectRole, confirmSelfDemotion: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectMemberRoleResponse {
+        return try await ProjectMethods.setProjectMemberRole(config: config, projectId: projectId, memberId: memberId, role: role, confirmSelfDemotion: confirmSelfDemotion, requestOptions: requestOptions)
     }
 
-    /// Removes an organization's member's explicit role on a project. The member's organization-role default project
-    /// permission continues to apply, and the operation is a no-op if no explicit role exists. If removing your own
-    /// role would remove your effective management access, confirm the change with `confirm_self_lockout`.
+/// Removes an organization's member's explicit role on a project. The member's organization-role default project permission continues to apply, and the operation is a no-op if no explicit role exists. If removing your own role would remove your effective management access, confirm the change with `confirm_self_lockout`.
     ///
-    /// Idempotently removes the explicit project grant. The member's organization-role default project permission still
-    /// applies. Self-DELETE requires `confirm_self_lockout=true` when effective manage access would be lost.
-    func removeMemberRole(
-        projectId: String,
-        memberId: String,
-        confirmSelfLockout: Bool? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectMemberRoleResponse {
-        try await ProjectMethods.removeProjectMemberRole(
-            config: config,
-            projectId: projectId,
-            memberId: memberId,
-            confirmSelfLockout: confirmSelfLockout,
-            requestOptions: requestOptions
-        )
+    /// Idempotently removes the explicit project grant. The member's organization-role default project permission still applies. Self-DELETE requires `confirm_self_lockout=true` when effective manage access would be lost.
+    public func removeMemberRole(projectId: String, memberId: String, confirmSelfLockout: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectMemberRoleResponse {
+        return try await ProjectMethods.removeProjectMemberRole(config: config, projectId: projectId, memberId: memberId, confirmSelfLockout: confirmSelfLockout, requestOptions: requestOptions)
     }
 
-    /// Revokes a user's access to a project using the ID of the access permission. Retrieve the permission ID by
-    /// listing project access, then provide it with the project identifier. The response includes the permission's
-    /// grant and revocation details.
+/// Revokes a user's access to a project using the ID of the access permission. Retrieve the permission ID by listing project access, then provide it with the project identifier. The response includes the permission's grant and revocation details.
     ///
-    /// Revokes project access from the user associated with the specified permission `id`. You can retrieve a user's
-    /// permission `id` by listing project access.
-    func revokePermission(
-        projectId: String,
-        permissionId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectPermission {
-        try await ProjectMethods.revokeProjectPermission(
-            config: config,
-            projectId: projectId,
-            permissionId: permissionId,
-            requestOptions: requestOptions
-        )
+    /// Revokes project access from the user associated with the specified permission `id`. You can retrieve a user's permission `id` by listing project access.
+    public func revokePermission(projectId: String, permissionId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectPermission {
+        return try await ProjectMethods.revokeProjectPermission(config: config, projectId: projectId, permissionId: permissionId, requestOptions: requestOptions)
     }
 
-    /// Lists the shared preload libraries available for the specified project's Postgres version. Use the list to
-    /// choose libraries for the project's `settings.preload_libraries` configuration; activating these libraries
-    /// requires a compute restart.
+/// Lists the shared preload libraries available for the specified project's Postgres version. Use the list to choose libraries for the project's `settings.preload_libraries` configuration; activating these libraries requires a compute restart.
     ///
-    /// Returns the shared preload libraries available for the specified project's Postgres version. Shared preload
-    /// libraries are Postgres extensions that require the `shared_preload_libraries` setting and a compute restart to
-    /// activate. Use this list to determine which libraries can be enabled in the project's
-    /// `settings.preload_libraries` configuration.
-    func getAvailablePreloadLibraries(
-        projectId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AvailablePreloadLibraries {
-        try await ProjectMethods.getAvailablePreloadLibraries(
-            config: config,
-            projectId: projectId,
-            requestOptions: requestOptions
-        )
+    /// Returns the shared preload libraries available for the specified project's Postgres version. Shared preload libraries are Postgres extensions that require the `shared_preload_libraries` setting and a compute restart to activate. Use this list to determine which libraries can be enabled in the project's `settings.preload_libraries` configuration.
+    public func getAvailablePreloadLibraries(projectId: String, requestOptions: RequestOptions? = nil) async throws -> AvailablePreloadLibraries {
+        return try await ProjectMethods.getAvailablePreloadLibraries(config: config, projectId: projectId, requestOptions: requestOptions)
     }
 
-    /// Creates a transfer request for the specified project. The request expires after a set period. To accept the
-    /// request, the recipient calls `PUT /projects/{project_id}/transfer_requests/{request_id}` or uses the Neon
-    /// Console claim link. The optional `ru` parameter redirects the recipient after acceptance.
-    func createTransferRequest(
-        projectId: String,
-        ttlSeconds: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectTransferRequestResponse {
-        try await ProjectMethods.createProjectTransferRequest(
-            config: config,
-            projectId: projectId,
-            ttlSeconds: ttlSeconds,
-            requestOptions: requestOptions
-        )
+/// Creates a transfer request for the specified project. The request expires after a set period. To accept the request, the recipient calls `PUT /projects/{project_id}/transfer_requests/{request_id}` or uses the Neon Console claim link. The optional `ru` parameter redirects the recipient after acceptance.
+    public func createTransferRequest(projectId: String, ttlSeconds: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectTransferRequestResponse {
+        return try await ProjectMethods.createProjectTransferRequest(config: config, projectId: projectId, ttlSeconds: ttlSeconds, requestOptions: requestOptions)
     }
 }
 
-public extension ProjectNamespace {
-    /// Accepts a transfer request for the specified project, transferring it to the specified organization or user. If
-    /// org_id is not passed, the project will be transferred to the current user or organization account.
-    func acceptTransferRequest(
-        projectId: String,
-        requestId: String,
-        orgId: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await ProjectMethods.acceptProjectTransferRequest(
-            config: config,
-            projectId: projectId,
-            requestId: requestId,
-            orgId: orgId,
-            requestOptions: requestOptions
-        )
+extension ProjectNamespace {
+/// Accepts a transfer request for the specified project, transferring it to the specified organization or user. If org_id is not passed, the project will be transferred to the current user or organization account.
+    public func acceptTransferRequest(projectId: String, requestId: String, orgId: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await ProjectMethods.acceptProjectTransferRequest(config: config, projectId: projectId, requestId: requestId, orgId: orgId, requestOptions: requestOptions)
     }
 
-    /// Returns the JWKS URLs available for verifying JWTs used as the authentication mechanism for the specified
-    /// project.
-    func getJwks(projectId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectJWKSResponse {
-        try await ProjectMethods.getProjectJwks(config: config, projectId: projectId, requestOptions: requestOptions)
+/// Returns the JWKS URLs available for verifying JWTs used as the authentication mechanism for the specified project.
+    public func getJwks(projectId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectJWKSResponse {
+        return try await ProjectMethods.getProjectJwks(config: config, projectId: projectId, requestOptions: requestOptions)
     }
 
-    /// Adds a JWKS URL to the specified project for verifying JWTs used as the authentication mechanism. The URL must
-    /// be a valid HTTPS URL that returns a JSON Web Key Set. The `provider_name` field allows you to specify which
-    /// authentication provider you're using (e.g., Clerk, Auth0, AWS Cognito). The `branch_id` scopes the JWKS URL to
-    /// specific branches; if not specified, it applies to all branches. The `role_names` scopes the URL to specific
-    /// roles; if not specified, default roles are used (`authenticator`, `authenticated`, `anonymous`). The
-    /// `jwt_audience` specifies which `aud` values are accepted in JWTs.
-    func addJwks(
-        projectId: String,
-        jwksUrl: String,
-        providerName: String,
-        branchId: String? = nil,
-        jwtAudience: String? = nil,
-        roleNames: [String]? = nil,
-        skipRoleCreation: Bool? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> JWKSCreationOperation {
-        try await ProjectMethods.addProjectJwks(
-            config: config,
-            projectId: projectId,
-            jwksUrl: jwksUrl,
-            providerName: providerName,
-            branchId: branchId,
-            jwtAudience: jwtAudience,
-            roleNames: roleNames,
-            skipRoleCreation: skipRoleCreation,
-            requestOptions: requestOptions
-        )
+/// Adds a JWKS URL to the specified project for verifying JWTs used as the authentication mechanism. The URL must be a valid HTTPS URL that returns a JSON Web Key Set. The `provider_name` field allows you to specify which authentication provider you're using (e.g., Clerk, Auth0, AWS Cognito). The `branch_id` scopes the JWKS URL to specific branches; if not specified, it applies to all branches. The `role_names` scopes the URL to specific roles; if not specified, default roles are used (`authenticator`, `authenticated`, `anonymous`). The `jwt_audience` specifies which `aud` values are accepted in JWTs.
+    public func addJwks(projectId: String, jwksUrl: String, providerName: String, branchId: String? = nil, jwtAudience: String? = nil, roleNames: [String]? = nil, skipRoleCreation: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> JWKSCreationOperation {
+        return try await ProjectMethods.addProjectJwks(config: config, projectId: projectId, jwksUrl: jwksUrl, providerName: providerName, branchId: branchId, jwtAudience: jwtAudience, roleNames: roleNames, skipRoleCreation: skipRoleCreation, requestOptions: requestOptions)
     }
 
-    /// Removes the specified JWKS URL from the project. JWTs signed by keys from the removed URL can no longer
-    /// authenticate to the project's endpoints.
-    func deleteJwks(projectId: String, jwksId: String, requestOptions: RequestOptions? = nil) async throws -> JWKS {
-        try await ProjectMethods.deleteProjectJwks(
-            config: config,
-            projectId: projectId,
-            jwksId: jwksId,
-            requestOptions: requestOptions
-        )
+/// Removes the specified JWKS URL from the project. JWTs signed by keys from the removed URL can no longer authenticate to the project's endpoints.
+    public func deleteJwks(projectId: String, jwksId: String, requestOptions: RequestOptions? = nil) async throws -> JWKS {
+        return try await ProjectMethods.deleteProjectJwks(config: config, projectId: projectId, jwksId: jwksId, requestOptions: requestOptions)
     }
 
-    /// Retrieves a connection URI for the specified database. The URI uses the standard PostgreSQL connection string
-    /// format. Set `pooled=true` to include the `-pooler` suffix for a connection pooler URI.
-    func getConnectionUri(
-        projectId: String,
-        databaseName: String,
-        roleName: String,
-        branchId: String? = nil,
-        endpointId: String? = nil,
-        pooled: Bool? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ConnectionURIResponse {
-        try await ProjectMethods.getConnectionUri(
-            config: config,
-            projectId: projectId,
-            databaseName: databaseName,
-            roleName: roleName,
-            branchId: branchId,
-            endpointId: endpointId,
-            pooled: pooled,
-            requestOptions: requestOptions
-        )
+/// Retrieves a connection URI for the specified database. The URI uses the standard PostgreSQL connection string format. Set `pooled=true` to include the `-pooler` suffix for a connection pooler URI.
+    public func getConnectionUri(projectId: String, databaseName: String, roleName: String, branchId: String? = nil, endpointId: String? = nil, pooled: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> ConnectionURIResponse {
+        return try await ProjectMethods.getConnectionUri(config: config, projectId: projectId, databaseName: databaseName, roleName: roleName, branchId: branchId, endpointId: endpointId, pooled: pooled, requestOptions: requestOptions)
     }
 
-    /// Lists VPC endpoint restrictions for the specified Neon project.
-    func listVpcEndpoints(
-        projectId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VPCEndpointsResponse {
-        try await ProjectMethods.listProjectVpcEndpoints(
-            config: config,
-            projectId: projectId,
-            requestOptions: requestOptions
-        )
+/// Lists VPC endpoint restrictions for the specified Neon project.
+    public func listVpcEndpoints(projectId: String, requestOptions: RequestOptions? = nil) async throws -> VPCEndpointsResponse {
+        return try await ProjectMethods.listProjectVpcEndpoints(config: config, projectId: projectId, requestOptions: requestOptions)
     }
 
-    /// Sets or updates a VPC endpoint restriction for a Neon project. When a VPC endpoint restriction is set, the
-    /// project only accepts connections from the specified VPC. A VPC endpoint can be set as a restriction only after
-    /// it is assigned to the parent organization of the Neon project.
-    func assignVpcEndpoint(
-        projectId: String,
-        vpcEndpointId: String,
-        label: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await ProjectMethods.assignProjectVpcEndpoint(
-            config: config,
-            projectId: projectId,
-            vpcEndpointId: vpcEndpointId,
-            label: label,
-            requestOptions: requestOptions
-        )
+/// Sets or updates a VPC endpoint restriction for a Neon project. When a VPC endpoint restriction is set, the project only accepts connections from the specified VPC. A VPC endpoint can be set as a restriction only after it is assigned to the parent organization of the Neon project.
+    public func assignVpcEndpoint(projectId: String, vpcEndpointId: String, label: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await ProjectMethods.assignProjectVpcEndpoint(config: config, projectId: projectId, vpcEndpointId: vpcEndpointId, label: label, requestOptions: requestOptions)
     }
 
-    /// Removes the specified VPC endpoint restriction from a Neon project.
-    func deleteVpcEndpoint(
-        projectId: String,
-        vpcEndpointId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await ProjectMethods.deleteProjectVpcEndpoint(
-            config: config,
-            projectId: projectId,
-            vpcEndpointId: vpcEndpointId,
-            requestOptions: requestOptions
-        )
+/// Removes the specified VPC endpoint restriction from a Neon project.
+    public func deleteVpcEndpoint(projectId: String, vpcEndpointId: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await ProjectMethods.deleteProjectVpcEndpoint(config: config, projectId: projectId, vpcEndpointId: vpcEndpointId, requestOptions: requestOptions)
     }
 }
 
@@ -422,26 +156,19 @@ public class ApiKeyNamespace {
         self.config = config
     }
 
-    /// Retrieves the API keys for your Neon account. The response does not include API key tokens. A token is only
-    /// provided when creating an API key. API keys can also be managed in the Neon Console. For more information, see
-    /// [Manage API keys](https://neon.com/docs/manage/api-keys/).
+/// Retrieves the API keys for your Neon account. The response does not include API key tokens. A token is only provided when creating an API key. API keys can also be managed in the Neon Console. For more information, see [Manage API keys](https://neon.com/docs/manage/api-keys/).
     public func list(requestOptions: RequestOptions? = nil) async throws -> [ApiKeysListResponseItem] {
-        try await ApiKeyMethods.listApiKey(config: config, requestOptions: requestOptions)
+        return try await ApiKeyMethods.listApiKey(config: config, requestOptions: requestOptions)
     }
 
-    /// Creates an API key. The `key_name` is a user-specified name for the key. Returns an `id` and `key`; the `key` is
-    /// a randomly generated, 64-bit token required to access the Neon API. Store the key securely — it is only returned
-    /// once. API keys can also be managed in the Neon Console. See [Manage API
-    /// keys](https://neon.com/docs/manage/api-keys/).
+/// Creates an API key. The `key_name` is a user-specified name for the key. Returns an `id` and `key`; the `key` is a randomly generated, 64-bit token required to access the Neon API. Store the key securely — it is only returned once. API keys can also be managed in the Neon Console. See [Manage API keys](https://neon.com/docs/manage/api-keys/).
     public func create(keyName: String, requestOptions: RequestOptions? = nil) async throws -> ApiKeyCreateResponse {
-        try await ApiKeyMethods.createApiKey(config: config, keyName: keyName, requestOptions: requestOptions)
+        return try await ApiKeyMethods.createApiKey(config: config, keyName: keyName, requestOptions: requestOptions)
     }
 
-    /// Revokes the specified API key. An API key that is no longer needed can be revoked. This action cannot be
-    /// reversed. API keys can also be managed in the Neon Console. See [Manage API
-    /// keys](https://neon.com/docs/manage/api-keys/).
+/// Revokes the specified API key. An API key that is no longer needed can be revoked. This action cannot be reversed. API keys can also be managed in the Neon Console. See [Manage API keys](https://neon.com/docs/manage/api-keys/).
     public func revoke(keyId: Int, requestOptions: RequestOptions? = nil) async throws -> ApiKeyRevokeResponse {
-        try await ApiKeyMethods.revokeApiKey(config: config, keyId: keyId, requestOptions: requestOptions)
+        return try await ApiKeyMethods.revokeApiKey(config: config, keyId: keyId, requestOptions: requestOptions)
     }
 }
 
@@ -451,37 +178,14 @@ public class OperationNamespace {
         self.config = config
     }
 
-    /// Retrieves details for the specified operation. An operation is an action performed on a Neon project resource.
-    public func get(
-        projectId: String,
-        operationId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OperationResponse {
-        try await OperationMethods.getOperation(
-            config: config,
-            projectId: projectId,
-            operationId: operationId,
-            requestOptions: requestOptions
-        )
+/// Retrieves details for the specified operation. An operation is an action performed on a Neon project resource.
+    public func get(projectId: String, operationId: String, requestOptions: RequestOptions? = nil) async throws -> OperationResponse {
+        return try await OperationMethods.getOperation(config: config, projectId: projectId, operationId: operationId, requestOptions: requestOptions)
     }
 
-    /// Retrieves a list of operations for the specified Neon project. The number of operations returned can be large.
-    /// To paginate the response, issue an initial request with a `limit` value. Then, add the `cursor` value that was
-    /// returned in the response to the next request. Operations older than 6 months may be deleted from our systems. If
-    /// you need more history than that, you should store your own history.
-    public func list(
-        projectId: String,
-        cursor: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListOperationResponse {
-        try await OperationMethods.listOperation(
-            config: config,
-            projectId: projectId,
-            cursor: cursor,
-            limit: limit,
-            requestOptions: requestOptions
-        )
+/// Retrieves a list of operations for the specified Neon project. The number of operations returned can be large. To paginate the response, issue an initial request with a `limit` value. Then, add the `cursor` value that was returned in the response to the next request. Operations older than 6 months may be deleted from our systems. If you need more history than that, you should store your own history.
+    public func list(projectId: String, cursor: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> ListOperationResponse {
+        return try await OperationMethods.listOperation(config: config, projectId: projectId, cursor: cursor, limit: limit, requestOptions: requestOptions)
     }
 }
 
@@ -491,65 +195,23 @@ public class DataApiNamespace {
         self.config = config
     }
 
-    /// Creates a new instance of Neon Data API in the specified branch. The Data API exposes a REST interface over the
-    /// branch database. The `database_name` path parameter determines which database the API serves.
-    public func create(
-        options: DataApiMethods.CreateDataApiOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DataAPICreateResponse {
-        try await DataApiMethods.createDataApi(config: config, options: options, requestOptions: requestOptions)
+/// Creates a new instance of Neon Data API in the specified branch. The Data API exposes a REST interface over the branch database. The `database_name` path parameter determines which database the API serves.
+    public func create(options: DataApiMethods.CreateDataApiOptions, requestOptions: RequestOptions? = nil) async throws -> DataAPICreateResponse {
+        return try await DataApiMethods.createDataApi(config: config, options: options, requestOptions: requestOptions)
     }
 
-    /// Updates the Neon Data API configuration for the specified branch. You can optionally provide settings to update
-    /// the Data API configuration. The schema cache is always refreshed as part of this operation.
-    public func update(
-        projectId: String,
-        branchId: String,
-        databaseName: String,
-        settings: DataAPISettings? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EmptyResponse {
-        try await DataApiMethods.updateDataApi(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            databaseName: databaseName,
-            settings: settings,
-            requestOptions: requestOptions
-        )
+/// Updates the Neon Data API configuration for the specified branch. You can optionally provide settings to update the Data API configuration. The schema cache is always refreshed as part of this operation.
+    public func update(projectId: String, branchId: String, databaseName: String, settings: DataAPISettings? = nil, requestOptions: RequestOptions? = nil) async throws -> EmptyResponse {
+        return try await DataApiMethods.updateDataApi(config: config, projectId: projectId, branchId: branchId, databaseName: databaseName, settings: settings, requestOptions: requestOptions)
     }
 
-    /// Deletes the Neon Data API for the specified branch. Existing connections using the Data API endpoint will fail
-    /// after deletion.
-    public func delete(
-        projectId: String,
-        branchId: String,
-        databaseName: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EmptyResponse {
-        try await DataApiMethods.deleteDataApi(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            databaseName: databaseName,
-            requestOptions: requestOptions
-        )
+/// Deletes the Neon Data API for the specified branch. Existing connections using the Data API endpoint will fail after deletion.
+    public func delete(projectId: String, branchId: String, databaseName: String, requestOptions: RequestOptions? = nil) async throws -> EmptyResponse {
+        return try await DataApiMethods.deleteDataApi(config: config, projectId: projectId, branchId: branchId, databaseName: databaseName, requestOptions: requestOptions)
     }
 
-    /// Retrieves the Neon Data API configuration for the specified branch, including endpoint URL, enabled state, and
-    /// database settings.
-    public func get(
-        projectId: String,
-        branchId: String,
-        databaseName: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DataAPIReponse {
-        try await DataApiMethods.getDataApi(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            databaseName: databaseName,
-            requestOptions: requestOptions
-        )
+/// Retrieves the Neon Data API configuration for the specified branch, including endpoint URL, enabled state, and database settings.
+    public func get(projectId: String, branchId: String, databaseName: String, requestOptions: RequestOptions? = nil) async throws -> DataAPIReponse {
+        return try await DataApiMethods.getDataApi(config: config, projectId: projectId, branchId: branchId, databaseName: databaseName, requestOptions: requestOptions)
     }
 }

@@ -36,9 +36,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.listRoles(
-                projectId: decoded("\"a\""),
-                branchId: decoded("\"a\"")
-            )
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -84,9 +84,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.buckets.list(
-                projectId: decoded("\"a\""),
-                branchId: decoded("\"a\"")
-            )
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -137,14 +137,14 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.buckets.listObjects(
-                projectId: decoded("\"a\""),
-                branchId: decoded("\"a\""),
-                bucketName: decoded("\"Example Name\""),
-                prefix: decoded("\"prefix\""),
-                delimiter: decoded("\"delimiter\""),
-                cursor: decoded("\"cursor\""),
-                limit: decoded("1000")
-            )
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\""),
+            bucketName: decoded("\"Example Name\""),
+            prefix: decoded("\"prefix\""),
+            delimiter: decoded("\"delimiter\""),
+            cursor: decoded("\"cursor\""),
+            limit: decoded("1000")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -190,9 +190,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.credentials.list(
-                projectId: decoded("\"a\""),
-                branchId: decoded("\"a\"")
-            )
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -237,8 +237,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.endpoint.list(
-                projectId: decoded("\"a\"")
-            )
+            projectId: decoded("\"a\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -286,11 +286,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.functions.list(
-                projectId: decoded("\"a\""),
-                branchId: decoded("\"a\""),
-                cursor: decoded("\"cursor\""),
-                limit: decoded("1")
-            )
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\""),
+            cursor: decoded("\"cursor\""),
+            limit: decoded("1")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -338,11 +338,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.functions.listCustomDomains(
-                projectId: decoded("\"a\""),
-                branchId: decoded("\"a\""),
-                cursor: decoded("\"cursor\""),
-                limit: decoded("1")
-            )
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\""),
+            cursor: decoded("\"cursor\""),
+            limit: decoded("1")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -388,9 +388,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.functions.listTriggers(
-                projectId: decoded("\"a\""),
-                branchId: decoded("\"a\"")
-            )
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -436,9 +436,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.logs.listFields(
-                projectId: decoded("\"a\""),
-                branchId: decoded("\"a\"")
-            )
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -459,11 +459,7 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try LogsMethods.ListLogsFieldValuesOptions(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            fieldName: decoded("\"Example Name\"")
-        )
+        var options = try LogsMethods.ListLogsFieldValuesOptions(projectId: decoded("\"a\""), branchId: decoded("\"a\""), fieldName: decoded("\"Example Name\""))
         options.since = try decoded("\"1h\"")
         options.startTime = try decoded("\"2024-01-01T00:00:00Z\"")
         options.endTime = try decoded("\"2024-01-01T00:00:00Z\"")
@@ -487,11 +483,7 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try LogsMethods.ListLogsFieldValuesOptions(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            fieldName: decoded("\"Example Name\"")
-        )
+        var options = try LogsMethods.ListLogsFieldValuesOptions(projectId: decoded("\"a\""), branchId: decoded("\"a\""), fieldName: decoded("\"Example Name\""))
         options.since = try decoded("\"1h\"")
         options.startTime = try decoded("\"2024-01-01T00:00:00Z\"")
         options.endTime = try decoded("\"2024-01-01T00:00:00Z\"")
@@ -503,8 +495,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.logs.listFieldValues(
-                options: options
-            )
+            options: options
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -551,10 +543,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.operation.list(
-                projectId: decoded("\"a\""),
-                cursor: decoded("\"cursor\""),
-                limit: decoded("1")
-            )
+            projectId: decoded("\"a\""),
+            cursor: decoded("\"cursor\""),
+            limit: decoded("1")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)

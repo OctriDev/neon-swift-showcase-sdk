@@ -6,68 +6,33 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ProjectMethods {
-    /// Recovers a deleted project within the 7-day deletion recovery period. Restores branches, endpoints, settings,
-    /// and connection strings. Some integrations require manual reconfiguration after recovery. To list recoverable
-    /// projects, use `GET /projects?recoverable=true`.
+extension ProjectMethods {
+    /// Recovers a deleted project within the 7-day deletion recovery period. Restores branches, endpoints, settings, and connection strings. Some integrations require manual reconfiguration after recovery. To list recoverable projects, use `GET /projects?recoverable=true`.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
-    static func recoverProject(
-        config: ClientConfig,
-        projectId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectRecoverResponse {
+    public static func recoverProject(config: ClientConfig, projectId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectRecoverResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/recover"].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "recoverProject",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/recover"].joined(), config: config, decoder: .json, operationId: "recoverProject", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Lists users who have access to a project, including each permission ID, the granted-to email address, and the
-    /// grant date. Use the permission ID to identify a specific project access grant when you need to revoke it.
+    /// Lists users who have access to a project, including each permission ID, the granted-to email address, and the grant date. Use the permission ID to identify a specific project access grant when you need to revoke it.
     ///
-    /// Retrieves details about users who have access to the project, including the permission `id`, the granted-to
-    /// email address, and the date project access was granted.
-    static func listProjectPermissions(
-        config: ClientConfig,
-        projectId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectPermissions {
+    /// Retrieves details about users who have access to the project, including the permission `id`, the granted-to email address, and the date project access was granted.
+    public static func listProjectPermissions(config: ClientConfig, projectId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectPermissions {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "GET",
-            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/permissions"].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "listProjectPermissions",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/permissions"].joined(), config: config, decoder: .json, operationId: "listProjectPermissions", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Grants project access to the account associated with an email address. Supply the recipient's `email` in the
-    /// request body to create a project permission. The response includes the new permission's identifier and grant
-    /// details.
+    /// Grants project access to the account associated with an email address. Supply the recipient's `email` in the request body to create a project permission. The response includes the new permission's identifier and grant details.
     ///
     /// Grants project access to the account associated with the specified email address.
     ///
     /// - Parameters:
     /// - email: Email address of the user to grant project access to.
-    static func grantProjectPermission(
-        config: ClientConfig,
-        projectId: String,
-        email: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectPermission {
+    public static func grantProjectPermission(config: ClientConfig, projectId: String, email: String, requestOptions: RequestOptions? = nil) async throws -> ProjectPermission {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try validateLength("email", email, min: 1, max: 256)
@@ -75,15 +40,6 @@ public extension ProjectMethods {
 
         let requestBody = GrantProjectPermissionRequestBody(email: email)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/permissions"].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "grantProjectPermission",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/permissions"].joined(), config: config, body: requestBody, decoder: .json, operationId: "grantProjectPermission", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

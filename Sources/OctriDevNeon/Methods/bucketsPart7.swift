@@ -6,15 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension BucketsMethods {
-    /// Returns a presigned URL that transfers bytes directly to or from the object's bucket on the specified branch,
-    /// without the caller ever handling S3 credentials. The `operation` field selects the direction: - `upload` returns
-    /// a presigned `PUT` URL (the caller `PUT`s the file bytes straight to `url` with the returned `headers`).
-    /// Authorized with project write access. - `download` returns a presigned `GET` URL (the caller `GET`s the bytes
-    /// straight from `url`). Authorized with project read access. The platform mints a short-lived credential and
-    /// builds the SigV4-signed URL against the branch's S3 data-plane host, returning it together with the HTTP method,
-    /// any headers the caller must echo, and the URL's expiry. Served by the user's session (no customer S3 credentials
-    /// required). **Note**: This endpoint is currently in Beta.
+extension BucketsMethods {
+    /// Returns a presigned URL that transfers bytes directly to or from the object's bucket on the specified branch, without the caller ever handling S3 credentials. The `operation` field selects the direction: - `upload` returns a presigned `PUT` URL (the caller `PUT`s the file bytes straight to `url` with the returned `headers`). Authorized with project write access. - `download` returns a presigned `GET` URL (the caller `GET`s the bytes straight from `url`). Authorized with project read access. The platform mints a short-lived credential and builds the SigV4-signed URL against the branch's S3 data-plane host, returning it together with the HTTP method, any headers the caller must echo, and the URL's expiry. Served by the user's session (no customer S3 credentials required). **Note**: This endpoint is currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -30,17 +23,7 @@ public extension BucketsMethods {
     ///   response `headers`. Ignored for `download`.
     /// - expiresInSeconds: How long the presigned URL stays valid, in seconds.
     ///   Defaults to 900 (15 minutes); capped at 604800 (7 days).
-    static func presignBucketsObject(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        bucketName: String,
-        objectKey: String,
-        operation: PresignRequestOperation,
-        contentType: String? = nil,
-        expiresInSeconds: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> PresignResponse {
+    public static func presignBucketsObject(config: ClientConfig, projectId: String, branchId: String, bucketName: String, objectKey: String, operation: PresignRequestOperation, contentType: String? = nil, expiresInSeconds: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> PresignResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -49,35 +32,12 @@ public extension BucketsMethods {
 
         try validateLength("object_key", objectKey, min: 1, max: 1024)
 
-        if let expiresInSeconds {
-            try validateRange("expires_in_seconds", Double(expiresInSeconds), min: 1, max: 604_800)
+        if let expiresInSeconds = expiresInSeconds {
+            try validateRange("expires_in_seconds", Double(expiresInSeconds), min: 1, max: 604800)
         }
 
-        let requestBody = PresignBucketsObjectRequestBody(
-            operation: operation,
-            contentType: contentType,
-            expiresInSeconds: expiresInSeconds
-        )
+        let requestBody = PresignBucketsObjectRequestBody(operation: operation, contentType: contentType, expiresInSeconds: expiresInSeconds)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/buckets/",
-                sdkEncodePathSegment(sdkWireString(bucketName)),
-                "/objects/",
-                sdkEncodePathSegment(sdkWireString(objectKey)),
-                "/presign",
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "presignBucketsObject",
-            options: requestOptions,
-            errors: ["404": GeneralError.self, "default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/buckets/", sdkEncodePathSegment(sdkWireString(bucketName)), "/objects/", sdkEncodePathSegment(sdkWireString(objectKey)), "/presign"].joined(), config: config, body: requestBody, decoder: .json, operationId: "presignBucketsObject", options: requestOptions, errors: ["404": GeneralError.self, "default": GeneralError.self])).data
     }
 }

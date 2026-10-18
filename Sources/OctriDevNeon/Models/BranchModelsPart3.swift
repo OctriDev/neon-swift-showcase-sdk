@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Branch domain models
+// Branch domain models
 /// Typed representation of the `GetBranchResponse` API schema.
 public struct GetBranchResponse: Codable {
     /// Branch returned by the request.
@@ -22,35 +22,25 @@ public struct GetBranchResponse: Codable {
         case annotation
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension GetBranchResponse {
-    init(from decoder: Decoder) throws {
+extension GetBranchResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.branch) else {
-            throw SdkValidationError(
-                field: "branch",
-                code: "required",
-                message: "Validation failed for 'branch': value is required"
-            )
+            throw SdkValidationError(field: "branch", code: "required", message: "Validation failed for 'branch': value is required")
         }
         guard container.contains(.annotation) else {
-            throw SdkValidationError(
-                field: "annotation",
-                code: "required",
-                message: "Validation failed for 'annotation': value is required"
-            )
+            throw SdkValidationError(field: "annotation", code: "required", message: "Validation failed for 'annotation': value is required")
         }
-        branch = try container.sdkDecodeRequired(.branch)
-        annotation = try container.sdkDecodeRequired(.annotation)
+        self.branch = try container.sdkDecodeRequired(.branch)
+        self.annotation = try container.sdkDecodeRequired(.annotation)
     }
 }
 
-public extension GetBranchResponse {
-    init(branch: Branch, annotation: AnnotationData) {
+extension GetBranchResponse {
+    public init(branch: Branch, annotation: AnnotationData) {
         (self.branch, self.annotation) = (branch, annotation)
     }
 }
@@ -64,27 +54,21 @@ public struct BranchUpdateRequest: Codable {
         case branch
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BranchUpdateRequest {
-    init(from decoder: Decoder) throws {
+extension BranchUpdateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.branch) else {
-            throw SdkValidationError(
-                field: "branch",
-                code: "required",
-                message: "Validation failed for 'branch': value is required"
-            )
+            throw SdkValidationError(field: "branch", code: "required", message: "Validation failed for 'branch': value is required")
         }
-        branch = try container.sdkDecodeRequired(.branch)
+        self.branch = try container.sdkDecodeRequired(.branch)
     }
 }
 
-public extension BranchUpdateRequest {
-    init(branch: BranchUpdateRequestBranch) {
+extension BranchUpdateRequest {
+    public init(branch: BranchUpdateRequestBranch) {
         self.branch = branch
     }
 }
@@ -98,27 +82,21 @@ public struct BranchesCountResponse: Codable {
         case count
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BranchesCountResponse {
-    init(from decoder: Decoder) throws {
+extension BranchesCountResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.count) else {
-            throw SdkValidationError(
-                field: "count",
-                code: "required",
-                message: "Validation failed for 'count': value is required"
-            )
+            throw SdkValidationError(field: "count", code: "required", message: "Validation failed for 'count': value is required")
         }
-        count = try container.sdkDecodeRequired(.count)
+        self.count = try container.sdkDecodeRequired(.count)
     }
 }
 
-public extension BranchesCountResponse {
-    init(count: Int) {
+extension BranchesCountResponse {
+    public init(count: Int) {
         self.count = count
     }
 }
@@ -173,50 +151,40 @@ public struct BranchCreateRequestBranch: Codable {
     }
 
     init() {
-        (parentId, name, parentLsn, parentTimestamp, protected) = (nil, nil, nil, nil, nil)
-        (realtime, archived, initSource, expiresAt) = (nil, nil, nil, nil)
+        (self.parentId, self.name, self.parentLsn, self.parentTimestamp, self.protected) = (nil, nil, nil, nil, nil)
+        (self.realtime, self.archived, self.initSource, self.expiresAt) = (nil, nil, nil, nil)
     }
 }
 
-public extension BranchCreateRequestBranch {
-    init(from decoder: Decoder) throws {
+extension BranchCreateRequestBranch {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        parentId = try container.sdkDecodeIfPresent(.parentId)
-        name = try container.sdkDecodeIfPresent(.name)
-        parentLsn = try container.sdkDecodeIfPresent(.parentLsn)
-        parentTimestamp = try container.sdkDecodeIfPresent(.parentTimestamp)
-        protected = try container.sdkDecodeIfPresent(.protected)
-        realtime = try container.sdkDecodeIfPresent(.realtime)
-        archived = try container.sdkDecodeIfPresent(.archived)
-        initSource = try container.sdkDecodeIfPresent(.initSource)
-        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
-        if let value = parentId {
+        self.parentId = try container.sdkDecodeIfPresent(.parentId)
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.parentLsn = try container.sdkDecodeIfPresent(.parentLsn)
+        self.parentTimestamp = try container.sdkDecodeIfPresent(.parentTimestamp)
+        self.protected = try container.sdkDecodeIfPresent(.protected)
+        self.realtime = try container.sdkDecodeIfPresent(.realtime)
+        self.archived = try container.sdkDecodeIfPresent(.archived)
+        self.initSource = try container.sdkDecodeIfPresent(.initSource)
+        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        if let value = self.parentId {
             try sdkValidatePattern("parent_id", value, sdkPatternead2b03f7a95)
         }
-        if let value = name {
+        if let value = self.name {
             try validateLength("name", value, min: 1, max: 256)
         }
-        if let value = parentTimestamp {
+        if let value = self.parentTimestamp {
             try sdkValidateDateTime("parent_timestamp", sdkWireString(value))
         }
-        if let value = expiresAt {
+        if let value = self.expiresAt {
             try sdkValidateDateTime("expires_at", sdkWireString(value))
         }
     }
 }
 
-public extension BranchCreateRequestBranch {
-    init(
-        parentId: String? = nil,
-        name: String? = nil,
-        parentLsn: String? = nil,
-        parentTimestamp: Date? = nil,
-        protected: Bool? = nil,
-        realtime: RealtimeOptions? = nil,
-        archived: Bool? = nil,
-        initSource: String? = nil,
-        expiresAt: Date? = nil
-    ) throws {
+extension BranchCreateRequestBranch {
+    public init(parentId: String? = nil, name: String? = nil, parentLsn: String? = nil, parentTimestamp: Date? = nil, protected: Bool? = nil, realtime: RealtimeOptions? = nil, archived: Bool? = nil, initSource: String? = nil, expiresAt: Date? = nil) throws {
         self.init()
         (self.parentId, self.name) = (parentId, name)
         (self.parentLsn, self.parentTimestamp) = (parentLsn, parentTimestamp)
@@ -247,27 +215,21 @@ public struct MaskingRulesResponse: Codable {
         case maskingRules = "masking_rules"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MaskingRulesResponse {
-    init(from decoder: Decoder) throws {
+extension MaskingRulesResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.maskingRules) else {
-            throw SdkValidationError(
-                field: "masking_rules",
-                code: "required",
-                message: "Validation failed for 'masking_rules': value is required"
-            )
+            throw SdkValidationError(field: "masking_rules", code: "required", message: "Validation failed for 'masking_rules': value is required")
         }
-        maskingRules = try container.sdkDecodeRequired(.maskingRules)
+        self.maskingRules = try container.sdkDecodeRequired(.maskingRules)
     }
 }
 
-public extension MaskingRulesResponse {
-    init(maskingRules: [MaskingRule]) {
+extension MaskingRulesResponse {
+    public init(maskingRules: [MaskingRule]) {
         self.maskingRules = maskingRules
     }
 }
@@ -302,108 +264,47 @@ public struct BranchCreateRequestEndpointOptions: Codable {
         case suspendTimeoutSeconds = "suspend_timeout_seconds"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BranchCreateRequestEndpointOptions {
-    init(from decoder: Decoder) throws {
+extension BranchCreateRequestEndpointOptions {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        settings = try container.sdkDecodeIfPresent(.settings)
-        autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
-        autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
-        provisioner = try container.sdkDecodeIfPresent(.provisioner)
-        suspendTimeoutSeconds = try container.sdkDecodeIfPresent(.suspendTimeoutSeconds)
-        if let value = autoscalingLimitMinCu {
-            try validateRange(
-                "autoscaling_limit_min_cu",
-                Double(value),
-                min: 0.25,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.type = try container.sdkDecodeRequired(.type)
+        self.settings = try container.sdkDecodeIfPresent(.settings)
+        self.autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
+        self.autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
+        self.provisioner = try container.sdkDecodeIfPresent(.provisioner)
+        self.suspendTimeoutSeconds = try container.sdkDecodeIfPresent(.suspendTimeoutSeconds)
+        if let value = self.autoscalingLimitMinCu {
+            try validateRange("autoscaling_limit_min_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = autoscalingLimitMaxCu {
-            try validateRange(
-                "autoscaling_limit_max_cu",
-                Double(value),
-                min: 0.25,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.autoscalingLimitMaxCu {
+            try validateRange("autoscaling_limit_max_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = suspendTimeoutSeconds {
-            try validateRange(
-                "suspend_timeout_seconds",
-                Double(value),
-                min: -1,
-                max: 604_800,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.suspendTimeoutSeconds {
+            try validateRange("suspend_timeout_seconds", Double(value), min: -1, max: 604800, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension BranchCreateRequestEndpointOptions {
-    init(
-        type: EndpointType,
-        settings: EndpointSettingsData? = nil,
-        autoscalingLimitMinCu: ComputeUnit? = nil,
-        autoscalingLimitMaxCu: ComputeUnit? = nil,
-        provisioner: Provisioner? = nil,
-        suspendTimeoutSeconds: SuspendTimeoutSeconds? = nil
-    ) throws {
+extension BranchCreateRequestEndpointOptions {
+    public init(type: EndpointType, settings: EndpointSettingsData? = nil, autoscalingLimitMinCu: ComputeUnit? = nil, autoscalingLimitMaxCu: ComputeUnit? = nil, provisioner: Provisioner? = nil, suspendTimeoutSeconds: SuspendTimeoutSeconds? = nil) throws {
         (self.type, self.settings) = (type, settings)
         self.autoscalingLimitMinCu = autoscalingLimitMinCu
         (self.autoscalingLimitMaxCu, self.provisioner) = (autoscalingLimitMaxCu, provisioner)
         self.suspendTimeoutSeconds = suspendTimeoutSeconds
         if let value = self.autoscalingLimitMinCu {
-            try validateRange(
-                "autoscaling_limit_min_cu",
-                Double(value),
-                min: 0.25,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("autoscaling_limit_min_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.autoscalingLimitMaxCu {
-            try validateRange(
-                "autoscaling_limit_max_cu",
-                Double(value),
-                min: 0.25,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("autoscaling_limit_max_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.suspendTimeoutSeconds {
-            try validateRange(
-                "suspend_timeout_seconds",
-                Double(value),
-                min: -1,
-                max: 604_800,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("suspend_timeout_seconds", Double(value), min: -1, max: 604800, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -422,25 +323,21 @@ public struct BranchAnonymizedCreateRequestVariant1: Codable {
     }
 
     init() {
-        (branchCreate, maskingRules, startAnonymization) = (nil, nil, nil)
+        (self.branchCreate, self.maskingRules, self.startAnonymization) = (nil, nil, nil)
     }
 }
 
-public extension BranchAnonymizedCreateRequestVariant1 {
-    init(from decoder: Decoder) throws {
+extension BranchAnonymizedCreateRequestVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        branchCreate = try container.sdkDecodeIfPresent(.branchCreate)
-        maskingRules = try container.sdkDecodeIfPresent(.maskingRules)
-        startAnonymization = try container.sdkDecodeIfPresent(.startAnonymization)
+        self.branchCreate = try container.sdkDecodeIfPresent(.branchCreate)
+        self.maskingRules = try container.sdkDecodeIfPresent(.maskingRules)
+        self.startAnonymization = try container.sdkDecodeIfPresent(.startAnonymization)
     }
 }
 
-public extension BranchAnonymizedCreateRequestVariant1 {
-    init(
-        branchCreate: BranchCreateRequest? = nil,
-        maskingRules: [MaskingRule]? = nil,
-        startAnonymization: Bool? = nil
-    ) {
+extension BranchAnonymizedCreateRequestVariant1 {
+    public init(branchCreate: BranchCreateRequest? = nil, maskingRules: [MaskingRule]? = nil, startAnonymization: Bool? = nil) {
         self.init()
         (self.branchCreate, self.maskingRules) = (branchCreate, maskingRules)
         self.startAnonymization = startAnonymization
@@ -456,27 +353,21 @@ public struct DatabaseUpdateRequest: Codable {
         case database
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension DatabaseUpdateRequest {
-    init(from decoder: Decoder) throws {
+extension DatabaseUpdateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.database) else {
-            throw SdkValidationError(
-                field: "database",
-                code: "required",
-                message: "Validation failed for 'database': value is required"
-            )
+            throw SdkValidationError(field: "database", code: "required", message: "Validation failed for 'database': value is required")
         }
-        database = try container.sdkDecodeRequired(.database)
+        self.database = try container.sdkDecodeRequired(.database)
     }
 }
 
-public extension DatabaseUpdateRequest {
-    init(database: DatabaseUpdateRequestDatabase) {
+extension DatabaseUpdateRequest {
+    public init(database: DatabaseUpdateRequestDatabase) {
         self.database = database
     }
 }
@@ -491,19 +382,19 @@ public struct BranchSchemaCompareResponse: Codable {
     }
 
     init() {
-        diff = nil
+        self.diff = nil
     }
 }
 
-public extension BranchSchemaCompareResponse {
-    init(from decoder: Decoder) throws {
+extension BranchSchemaCompareResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        diff = try container.sdkDecodeIfPresent(.diff)
+        self.diff = try container.sdkDecodeIfPresent(.diff)
     }
 }
 
-public extension BranchSchemaCompareResponse {
-    init(diff: String? = nil) {
+extension BranchSchemaCompareResponse {
+    public init(diff: String? = nil) {
         self.init()
         self.diff = diff
     }
@@ -526,35 +417,25 @@ public struct RoleOperations: Codable {
         case operations
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RoleOperations {
-    init(from decoder: Decoder) throws {
+extension RoleOperations {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
         guard container.contains(.operations) else {
-            throw SdkValidationError(
-                field: "operations",
-                code: "required",
-                message: "Validation failed for 'operations': value is required"
-            )
+            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
         }
-        role = try container.sdkDecodeRequired(.role)
-        operations = try container.sdkDecodeRequired(.operations)
+        self.role = try container.sdkDecodeRequired(.role)
+        self.operations = try container.sdkDecodeRequired(.operations)
     }
 }
 
-public extension RoleOperations {
-    init(role: Role, operations: [Operation]) {
+extension RoleOperations {
+    public init(role: Role, operations: [Operation]) {
         (self.role, self.operations) = (role, operations)
     }
 }
@@ -568,27 +449,21 @@ public struct BranchSchemaJSON: Codable {
         case tables
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BranchSchemaJSON {
-    init(from decoder: Decoder) throws {
+extension BranchSchemaJSON {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.tables) else {
-            throw SdkValidationError(
-                field: "tables",
-                code: "required",
-                message: "Validation failed for 'tables': value is required"
-            )
+            throw SdkValidationError(field: "tables", code: "required", message: "Validation failed for 'tables': value is required")
         }
-        tables = try container.sdkDecodeRequired(.tables)
+        self.tables = try container.sdkDecodeRequired(.tables)
     }
 }
 
-public extension BranchSchemaJSON {
-    init(tables: [BranchSchemaJSONTablesItem]) {
+extension BranchSchemaJSON {
+    public init(tables: [BranchSchemaJSONTablesItem]) {
         self.tables = tables
     }
 }
@@ -602,27 +477,21 @@ public struct MaskingRulesUpdateRequest: Codable {
         case maskingRules = "masking_rules"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MaskingRulesUpdateRequest {
-    init(from decoder: Decoder) throws {
+extension MaskingRulesUpdateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.maskingRules) else {
-            throw SdkValidationError(
-                field: "masking_rules",
-                code: "required",
-                message: "Validation failed for 'masking_rules': value is required"
-            )
+            throw SdkValidationError(field: "masking_rules", code: "required", message: "Validation failed for 'masking_rules': value is required")
         }
-        maskingRules = try container.sdkDecodeRequired(.maskingRules)
+        self.maskingRules = try container.sdkDecodeRequired(.maskingRules)
     }
 }
 
-public extension MaskingRulesUpdateRequest {
-    init(maskingRules: [MaskingRule]) {
+extension MaskingRulesUpdateRequest {
+    public init(maskingRules: [MaskingRule]) {
         self.maskingRules = maskingRules
     }
 }

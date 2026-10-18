@@ -3,38 +3,25 @@
 
 import Foundation
 
-/// ProjectProject domain models
-public extension ProjectUpdateRequestProject {
-    init(from decoder: Decoder) throws {
+// ProjectProject domain models
+extension ProjectUpdateRequestProject {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        settings = try container.sdkDecodeIfPresent(.settings)
-        name = try container.sdkDecodeIfPresent(.name)
-        defaultEndpointSettings = try container.sdkDecodeIfPresent(.defaultEndpointSettings)
-        historyRetentionSeconds = try container.sdkDecodeIfPresent(.historyRetentionSeconds)
-        if let value = name {
+        self.settings = try container.sdkDecodeIfPresent(.settings)
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.defaultEndpointSettings = try container.sdkDecodeIfPresent(.defaultEndpointSettings)
+        self.historyRetentionSeconds = try container.sdkDecodeIfPresent(.historyRetentionSeconds)
+        if let value = self.name {
             try validateLength("name", value, min: 1, max: 256)
         }
-        if let value = historyRetentionSeconds {
-            try validateRange(
-                "history_retention_seconds",
-                Double(value),
-                min: 0,
-                max: 2_592_000,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.historyRetentionSeconds {
+            try validateRange("history_retention_seconds", Double(value), min: 0, max: 2592000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension ProjectUpdateRequestProject {
-    init(
-        settings: ProjectSettingsData? = nil,
-        name: String? = nil,
-        defaultEndpointSettings: DefaultEndpointSettings? = nil,
-        historyRetentionSeconds: Int? = nil
-    ) throws {
+extension ProjectUpdateRequestProject {
+    public init(settings: ProjectSettingsData? = nil, name: String? = nil, defaultEndpointSettings: DefaultEndpointSettings? = nil, historyRetentionSeconds: Int? = nil) throws {
         self.init()
         (self.settings, self.name) = (settings, name)
         self.defaultEndpointSettings = defaultEndpointSettings
@@ -43,15 +30,7 @@ public extension ProjectUpdateRequestProject {
             try validateLength("name", value, min: 1, max: 256)
         }
         if let value = self.historyRetentionSeconds {
-            try validateRange(
-                "history_retention_seconds",
-                Double(value),
-                min: 0,
-                max: 2_592_000,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("history_retention_seconds", Double(value), min: 0, max: 2592000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -65,27 +44,21 @@ public struct ProjectUpdateRequest: Codable {
         case project
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectUpdateRequest {
-    init(from decoder: Decoder) throws {
+extension ProjectUpdateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.project) else {
-            throw SdkValidationError(
-                field: "project",
-                code: "required",
-                message: "Validation failed for 'project': value is required"
-            )
+            throw SdkValidationError(field: "project", code: "required", message: "Validation failed for 'project': value is required")
         }
-        project = try container.sdkDecodeRequired(.project)
+        self.project = try container.sdkDecodeRequired(.project)
     }
 }
 
-public extension ProjectUpdateRequest {
-    init(project: ProjectUpdateRequestProject) {
+extension ProjectUpdateRequest {
+    public init(project: ProjectUpdateRequestProject) {
         self.project = project
     }
 }
@@ -99,27 +72,21 @@ public struct ProjectCreateRequest: Codable {
         case project
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectCreateRequest {
-    init(from decoder: Decoder) throws {
+extension ProjectCreateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.project) else {
-            throw SdkValidationError(
-                field: "project",
-                code: "required",
-                message: "Validation failed for 'project': value is required"
-            )
+            throw SdkValidationError(field: "project", code: "required", message: "Validation failed for 'project': value is required")
         }
-        project = try container.sdkDecodeRequired(.project)
+        self.project = try container.sdkDecodeRequired(.project)
     }
 }
 
-public extension ProjectCreateRequest {
-    init(project: ProjectCreateRequestProject) {
+extension ProjectCreateRequest {
+    public init(project: ProjectCreateRequestProject) {
         self.project = project
     }
 }
@@ -153,148 +120,56 @@ public struct ProjectQuota: Codable {
     }
 
     init() {
-        (activeTimeSeconds, computeTimeSeconds, writtenDataBytes, dataTransferBytes, logicalSizeBytes) = (
-            nil,
-            nil,
-            nil,
-            nil,
-            nil
-        )
+        (self.activeTimeSeconds, self.computeTimeSeconds, self.writtenDataBytes, self.dataTransferBytes, self.logicalSizeBytes) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension ProjectQuota {
-    init(from decoder: Decoder) throws {
+extension ProjectQuota {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        activeTimeSeconds = try container.sdkDecodeIfPresent(.activeTimeSeconds)
-        computeTimeSeconds = try container.sdkDecodeIfPresent(.computeTimeSeconds)
-        writtenDataBytes = try container.sdkDecodeIfPresent(.writtenDataBytes)
-        dataTransferBytes = try container.sdkDecodeIfPresent(.dataTransferBytes)
-        logicalSizeBytes = try container.sdkDecodeIfPresent(.logicalSizeBytes)
-        if let value = activeTimeSeconds {
-            try validateRange(
-                "active_time_seconds",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.activeTimeSeconds = try container.sdkDecodeIfPresent(.activeTimeSeconds)
+        self.computeTimeSeconds = try container.sdkDecodeIfPresent(.computeTimeSeconds)
+        self.writtenDataBytes = try container.sdkDecodeIfPresent(.writtenDataBytes)
+        self.dataTransferBytes = try container.sdkDecodeIfPresent(.dataTransferBytes)
+        self.logicalSizeBytes = try container.sdkDecodeIfPresent(.logicalSizeBytes)
+        if let value = self.activeTimeSeconds {
+            try validateRange("active_time_seconds", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = computeTimeSeconds {
-            try validateRange(
-                "compute_time_seconds",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.computeTimeSeconds {
+            try validateRange("compute_time_seconds", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = writtenDataBytes {
-            try validateRange(
-                "written_data_bytes",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.writtenDataBytes {
+            try validateRange("written_data_bytes", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = dataTransferBytes {
-            try validateRange(
-                "data_transfer_bytes",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.dataTransferBytes {
+            try validateRange("data_transfer_bytes", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = logicalSizeBytes {
-            try validateRange(
-                "logical_size_bytes",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.logicalSizeBytes {
+            try validateRange("logical_size_bytes", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension ProjectQuota {
-    init(
-        activeTimeSeconds: Int? = nil,
-        computeTimeSeconds: Int? = nil,
-        writtenDataBytes: Int? = nil,
-        dataTransferBytes: Int? = nil,
-        logicalSizeBytes: Int? = nil
-    ) throws {
+extension ProjectQuota {
+    public init(activeTimeSeconds: Int? = nil, computeTimeSeconds: Int? = nil, writtenDataBytes: Int? = nil, dataTransferBytes: Int? = nil, logicalSizeBytes: Int? = nil) throws {
         self.init()
         (self.activeTimeSeconds, self.computeTimeSeconds) = (activeTimeSeconds, computeTimeSeconds)
         (self.writtenDataBytes, self.dataTransferBytes) = (writtenDataBytes, dataTransferBytes)
         self.logicalSizeBytes = logicalSizeBytes
         if let value = self.activeTimeSeconds {
-            try validateRange(
-                "active_time_seconds",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("active_time_seconds", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.computeTimeSeconds {
-            try validateRange(
-                "compute_time_seconds",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("compute_time_seconds", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.writtenDataBytes {
-            try validateRange(
-                "written_data_bytes",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("written_data_bytes", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.dataTransferBytes {
-            try validateRange(
-                "data_transfer_bytes",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("data_transfer_bytes", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.logicalSizeBytes {
-            try validateRange(
-                "logical_size_bytes",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("logical_size_bytes", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -408,79 +283,47 @@ public struct ProjectListItem: Codable {
         case effectiveProjectPermission = "effective_project_permission"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectListItem {
-    init(from decoder: Decoder) throws {
+extension ProjectListItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeRequired(.id)
-        platformId = try container.sdkDecodeRequired(.platformId)
-        regionId = try container.sdkDecodeRequired(.regionId)
-        name = try container.sdkDecodeRequired(.name)
-        provisioner = try container.sdkDecodeRequired(.provisioner)
-        pgVersion = try container.sdkDecodeRequired(.pgVersion)
-        proxyHost = try container.sdkDecodeRequired(.proxyHost)
-        branchLogicalSizeLimit = try container.sdkDecodeRequired(.branchLogicalSizeLimit)
-        branchLogicalSizeLimitBytes = try container.sdkDecodeRequired(.branchLogicalSizeLimitBytes)
-        storePasswords = try container.sdkDecodeRequired(.storePasswords)
-        activeTime = try container.sdkDecodeRequired(.activeTime)
-        cpuUsedSec = try container.sdkDecodeRequired(.cpuUsedSec)
-        creationSource = try container.sdkDecodeRequired(.creationSource)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        updatedAt = try container.sdkDecodeRequired(.updatedAt)
-        ownerId = try container.sdkDecodeRequired(.ownerId)
-        defaultEndpointSettings = try container.sdkDecodeIfPresent(.defaultEndpointSettings)
-        settings = try container.sdkDecodeIfPresent(.settings)
-        maintenanceStartsAt = try container.sdkDecodeIfPresent(.maintenanceStartsAt)
-        syntheticStorageSize = try container.sdkDecodeIfPresent(.syntheticStorageSize)
-        quotaResetAt = try container.sdkDecodeIfPresent(.quotaResetAt)
-        computeLastActiveAt = try container.sdkDecodeIfPresent(.computeLastActiveAt)
-        orgId = try container.sdkDecodeIfPresent(.orgId)
-        orgName = try container.sdkDecodeIfPresent(.orgName)
-        historyRetentionSeconds = try container.sdkDecodeIfPresent(.historyRetentionSeconds)
-        hipaaEnabledAt = try container.sdkDecodeIfPresent(.hipaaEnabledAt)
-        deletedAt = try container.sdkDecodeIfPresent(.deletedAt)
-        recoverableUntil = try container.sdkDecodeIfPresent(.recoverableUntil)
-        effectiveProjectPermission = try container.sdkDecodeIfPresent(.effectiveProjectPermission)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.platformId = try container.sdkDecodeRequired(.platformId)
+        self.regionId = try container.sdkDecodeRequired(.regionId)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.provisioner = try container.sdkDecodeRequired(.provisioner)
+        self.pgVersion = try container.sdkDecodeRequired(.pgVersion)
+        self.proxyHost = try container.sdkDecodeRequired(.proxyHost)
+        self.branchLogicalSizeLimit = try container.sdkDecodeRequired(.branchLogicalSizeLimit)
+        self.branchLogicalSizeLimitBytes = try container.sdkDecodeRequired(.branchLogicalSizeLimitBytes)
+        self.storePasswords = try container.sdkDecodeRequired(.storePasswords)
+        self.activeTime = try container.sdkDecodeRequired(.activeTime)
+        self.cpuUsedSec = try container.sdkDecodeRequired(.cpuUsedSec)
+        self.creationSource = try container.sdkDecodeRequired(.creationSource)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.updatedAt = try container.sdkDecodeRequired(.updatedAt)
+        self.ownerId = try container.sdkDecodeRequired(.ownerId)
+        self.defaultEndpointSettings = try container.sdkDecodeIfPresent(.defaultEndpointSettings)
+        self.settings = try container.sdkDecodeIfPresent(.settings)
+        self.maintenanceStartsAt = try container.sdkDecodeIfPresent(.maintenanceStartsAt)
+        self.syntheticStorageSize = try container.sdkDecodeIfPresent(.syntheticStorageSize)
+        self.quotaResetAt = try container.sdkDecodeIfPresent(.quotaResetAt)
+        self.computeLastActiveAt = try container.sdkDecodeIfPresent(.computeLastActiveAt)
+        self.orgId = try container.sdkDecodeIfPresent(.orgId)
+        self.orgName = try container.sdkDecodeIfPresent(.orgName)
+        self.historyRetentionSeconds = try container.sdkDecodeIfPresent(.historyRetentionSeconds)
+        self.hipaaEnabledAt = try container.sdkDecodeIfPresent(.hipaaEnabledAt)
+        self.deletedAt = try container.sdkDecodeIfPresent(.deletedAt)
+        self.recoverableUntil = try container.sdkDecodeIfPresent(.recoverableUntil)
+        self.effectiveProjectPermission = try container.sdkDecodeIfPresent(.effectiveProjectPermission)
         try sdkValidateConstraints()
     }
 }
 
-public extension ProjectListItem {
-    init(
-        id: String,
-        platformId: String,
-        regionId: String,
-        name: String,
-        provisioner: Provisioner,
-        pgVersion: PgVersion,
-        proxyHost: String,
-        branchLogicalSizeLimit: Int,
-        branchLogicalSizeLimitBytes: Int,
-        storePasswords: Bool,
-        activeTime: Int,
-        cpuUsedSec: Int,
-        creationSource: String,
-        createdAt: Date,
-        updatedAt: Date,
-        ownerId: String,
-        defaultEndpointSettings: DefaultEndpointSettings? = nil,
-        settings: ProjectSettingsData? = nil,
-        maintenanceStartsAt: Date? = nil,
-        syntheticStorageSize: Int? = nil,
-        quotaResetAt: Date? = nil,
-        computeLastActiveAt: Date? = nil,
-        orgId: String? = nil,
-        orgName: String? = nil,
-        historyRetentionSeconds: Int? = nil,
-        hipaaEnabledAt: Date? = nil,
-        deletedAt: Date? = nil,
-        recoverableUntil: Date? = nil,
-        effectiveProjectPermission: ProjectPermissionLevel? = nil
-    ) throws {
+extension ProjectListItem {
+    public init(id: String, platformId: String, regionId: String, name: String, provisioner: Provisioner, pgVersion: PgVersion, proxyHost: String, branchLogicalSizeLimit: Int, branchLogicalSizeLimitBytes: Int, storePasswords: Bool, activeTime: Int, cpuUsedSec: Int, creationSource: String, createdAt: Date, updatedAt: Date, ownerId: String, defaultEndpointSettings: DefaultEndpointSettings? = nil, settings: ProjectSettingsData? = nil, maintenanceStartsAt: Date? = nil, syntheticStorageSize: Int? = nil, quotaResetAt: Date? = nil, computeLastActiveAt: Date? = nil, orgId: String? = nil, orgName: String? = nil, historyRetentionSeconds: Int? = nil, hipaaEnabledAt: Date? = nil, deletedAt: Date? = nil, recoverableUntil: Date? = nil, effectiveProjectPermission: ProjectPermissionLevel? = nil) throws {
         (self.id, self.platformId) = (id, platformId)
         (self.regionId, self.name) = (regionId, name)
         (self.provisioner, self.pgVersion) = (provisioner, pgVersion)
@@ -503,46 +346,30 @@ public extension ProjectListItem {
 
 extension ProjectListItem {
     func sdkValidateConstraints() throws {
-        try sdkValidatePattern("id", id, sdkPatternead2b03f7a95)
-        try validateRange(
-            "pg_version",
-            Double(pgVersion),
-            min: 14,
-            max: 19,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try validateRange(
-            "active_time",
-            Double(activeTime),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
-        try sdkValidateDateTime("updated_at", sdkWireString(updatedAt))
-        if let value = maintenanceStartsAt {
+            try sdkValidatePattern("id", self.id, sdkPatternead2b03f7a95)
+            try validateRange("pg_version", Double(self.pgVersion), min: 14, max: 19, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange("active_time", Double(self.activeTime), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+            try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
+        if let value = self.maintenanceStartsAt {
             try sdkValidateDateTime("maintenance_starts_at", sdkWireString(value))
         }
-        if let value = quotaResetAt {
+        if let value = self.quotaResetAt {
             try sdkValidateDateTime("quota_reset_at", sdkWireString(value))
         }
-        if let value = computeLastActiveAt {
+        if let value = self.computeLastActiveAt {
             try sdkValidateDateTime("compute_last_active_at", sdkWireString(value))
         }
-        if let value = orgId {
+        if let value = self.orgId {
             try sdkValidatePattern("org_id", value, sdkPatternead2b03f7a95)
         }
-        if let value = hipaaEnabledAt {
+        if let value = self.hipaaEnabledAt {
             try sdkValidateDateTime("hipaa_enabled_at", sdkWireString(value))
         }
-        if let value = deletedAt {
+        if let value = self.deletedAt {
             try sdkValidateDateTime("deleted_at", sdkWireString(value))
         }
-        if let value = recoverableUntil {
+        if let value = self.recoverableUntil {
             try sdkValidateDateTime("recoverable_until", sdkWireString(value))
         }
     }
@@ -570,35 +397,25 @@ public struct ProjectRecoverResponse: Codable {
         case branches
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectRecoverResponse {
-    init(from decoder: Decoder) throws {
+extension ProjectRecoverResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.project) else {
-            throw SdkValidationError(
-                field: "project",
-                code: "required",
-                message: "Validation failed for 'project': value is required"
-            )
+            throw SdkValidationError(field: "project", code: "required", message: "Validation failed for 'project': value is required")
         }
         guard container.contains(.branches) else {
-            throw SdkValidationError(
-                field: "branches",
-                code: "required",
-                message: "Validation failed for 'branches': value is required"
-            )
+            throw SdkValidationError(field: "branches", code: "required", message: "Validation failed for 'branches': value is required")
         }
-        project = try container.sdkDecodeRequired(.project)
-        branches = try container.sdkDecodeRequired(.branches)
+        self.project = try container.sdkDecodeRequired(.project)
+        self.branches = try container.sdkDecodeRequired(.branches)
     }
 }
 
-public extension ProjectRecoverResponse {
-    init(project: Project, branches: [Branch]) {
+extension ProjectRecoverResponse {
+    public init(project: Project, branches: [Branch]) {
         (self.project, self.branches) = (project, branches)
     }
 }
@@ -621,7 +438,5 @@ public struct ProjectTransferRequestResponse: Codable {
         case expiresAt = "expires_at"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

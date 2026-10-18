@@ -3,15 +3,12 @@
 
 import Foundation
 
-/// Users domain models
+// Users domain models
 /// State of the billing account.
 public struct BillingAccountState: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let unknown = BillingAccountState(rawValue: "UNKNOWN")
     public static let active = BillingAccountState(rawValue: "active")
     public static let suspended = BillingAccountState(rawValue: "suspended")
@@ -20,7 +17,7 @@ public struct BillingAccountState: RawRepresentable, Hashable, Codable, Sendable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -35,10 +32,7 @@ public struct BillingAccountState: RawRepresentable, Hashable, Codable, Sendable
 public struct AuthDetailsResponseAuthMethod: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let keycloak = AuthDetailsResponseAuthMethod(rawValue: "keycloak")
     public static let sessionCookie = AuthDetailsResponseAuthMethod(rawValue: "session_cookie")
     public static let apiKeyUser = AuthDetailsResponseAuthMethod(rawValue: "api_key_user")
@@ -47,7 +41,7 @@ public struct AuthDetailsResponseAuthMethod: RawRepresentable, Hashable, Codable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -60,10 +54,7 @@ public struct AuthDetailsResponseAuthMethod: RawRepresentable, Hashable, Codable
 public struct BillingPaymentMethod: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let unknown = BillingPaymentMethod(rawValue: "UNKNOWN")
     public static let none = BillingPaymentMethod(rawValue: "none")
     public static let stripe = BillingPaymentMethod(rawValue: "stripe")
@@ -78,7 +69,7 @@ public struct BillingPaymentMethod: RawRepresentable, Hashable, Codable, Sendabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

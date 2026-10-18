@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Region domain models
+// Region domain models
 /// Typed representation of the `ActiveRegionsResponse` API schema.
 public struct ActiveRegionsResponse: Codable {
     /// The list of active regions
@@ -13,27 +13,21 @@ public struct ActiveRegionsResponse: Codable {
         case regions
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ActiveRegionsResponse {
-    init(from decoder: Decoder) throws {
+extension ActiveRegionsResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.regions) else {
-            throw SdkValidationError(
-                field: "regions",
-                code: "required",
-                message: "Validation failed for 'regions': value is required"
-            )
+            throw SdkValidationError(field: "regions", code: "required", message: "Validation failed for 'regions': value is required")
         }
-        regions = try container.sdkDecodeRequired(.regions)
+        self.regions = try container.sdkDecodeRequired(.regions)
     }
 }
 
-public extension ActiveRegionsResponse {
-    init(regions: [RegionResponse]) {
+extension ActiveRegionsResponse {
+    public init(regions: [RegionResponse]) {
         self.regions = regions
     }
 }
@@ -61,61 +55,39 @@ public struct RegionResponse: Codable {
         case geoLong = "geo_long"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RegionResponse {
-    init(from decoder: Decoder) throws {
+extension RegionResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.regionId) else {
-            throw SdkValidationError(
-                field: "region_id",
-                code: "required",
-                message: "Validation failed for 'region_id': value is required"
-            )
+            throw SdkValidationError(field: "region_id", code: "required", message: "Validation failed for 'region_id': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
-        guard container.contains(.default) else {
-            throw SdkValidationError(
-                field: "default",
-                code: "required",
-                message: "Validation failed for 'default': value is required"
-            )
+        guard container.contains(.`default`) else {
+            throw SdkValidationError(field: "default", code: "required", message: "Validation failed for 'default': value is required")
         }
         guard container.contains(.geoLat) else {
-            throw SdkValidationError(
-                field: "geo_lat",
-                code: "required",
-                message: "Validation failed for 'geo_lat': value is required"
-            )
+            throw SdkValidationError(field: "geo_lat", code: "required", message: "Validation failed for 'geo_lat': value is required")
         }
         guard container.contains(.geoLong) else {
-            throw SdkValidationError(
-                field: "geo_long",
-                code: "required",
-                message: "Validation failed for 'geo_long': value is required"
-            )
+            throw SdkValidationError(field: "geo_long", code: "required", message: "Validation failed for 'geo_long': value is required")
         }
-        regionId = try container.sdkDecodeRequired(.regionId)
-        name = try container.sdkDecodeRequired(.name)
-        self.default = try container.sdkDecodeRequired(.default)
-        geoLat = try container.sdkDecodeRequired(.geoLat)
-        geoLong = try container.sdkDecodeRequired(.geoLong)
+        self.regionId = try container.sdkDecodeRequired(.regionId)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.`default` = try container.sdkDecodeRequired(.`default`)
+        self.geoLat = try container.sdkDecodeRequired(.geoLat)
+        self.geoLong = try container.sdkDecodeRequired(.geoLong)
     }
 }
 
-public extension RegionResponse {
-    init(regionId: String, name: String, default: Bool, geoLat: String, geoLong: String) {
+extension RegionResponse {
+    public init(regionId: String, name: String, `default`: Bool, geoLat: String, geoLong: String) {
         (self.regionId, self.name) = (regionId, name)
-        (self.default, self.geoLat) = (`default`, geoLat)
+        (self.`default`, self.geoLat) = (`default`, geoLat)
         self.geoLong = geoLong
     }
 }

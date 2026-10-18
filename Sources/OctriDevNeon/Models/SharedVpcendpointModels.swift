@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedVpcendpoint domain models
+// SharedVpcendpoint domain models
 /// Typed representation of the `VPCEndpointAssignment` API schema.
 public struct VPCEndpointAssignment: Codable {
     /// Human-readable name for the VPC endpoint assignment, used to identify it within the organization.
@@ -13,27 +13,21 @@ public struct VPCEndpointAssignment: Codable {
         case label
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VPCEndpointAssignment {
-    init(from decoder: Decoder) throws {
+extension VPCEndpointAssignment {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.label) else {
-            throw SdkValidationError(
-                field: "label",
-                code: "required",
-                message: "Validation failed for 'label': value is required"
-            )
+            throw SdkValidationError(field: "label", code: "required", message: "Validation failed for 'label': value is required")
         }
-        label = try container.sdkDecodeRequired(.label)
+        self.label = try container.sdkDecodeRequired(.label)
     }
 }
 
-public extension VPCEndpointAssignment {
-    init(label: String) {
+extension VPCEndpointAssignment {
+    public init(label: String) {
         self.label = label
     }
 }
@@ -50,35 +44,25 @@ public struct VPCEndpoint: Codable {
         case label
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VPCEndpoint {
-    init(from decoder: Decoder) throws {
+extension VPCEndpoint {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.vpcEndpointId) else {
-            throw SdkValidationError(
-                field: "vpc_endpoint_id",
-                code: "required",
-                message: "Validation failed for 'vpc_endpoint_id': value is required"
-            )
+            throw SdkValidationError(field: "vpc_endpoint_id", code: "required", message: "Validation failed for 'vpc_endpoint_id': value is required")
         }
         guard container.contains(.label) else {
-            throw SdkValidationError(
-                field: "label",
-                code: "required",
-                message: "Validation failed for 'label': value is required"
-            )
+            throw SdkValidationError(field: "label", code: "required", message: "Validation failed for 'label': value is required")
         }
-        vpcEndpointId = try container.sdkDecodeRequired(.vpcEndpointId)
-        label = try container.sdkDecodeRequired(.label)
+        self.vpcEndpointId = try container.sdkDecodeRequired(.vpcEndpointId)
+        self.label = try container.sdkDecodeRequired(.label)
     }
 }
 
-public extension VPCEndpoint {
-    init(vpcEndpointId: String, label: String) {
+extension VPCEndpoint {
+    public init(vpcEndpointId: String, label: String) {
         (self.vpcEndpointId, self.label) = (vpcEndpointId, label)
     }
 }

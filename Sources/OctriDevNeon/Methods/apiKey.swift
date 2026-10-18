@@ -7,72 +7,27 @@ import Foundation
     import FoundationNetworking
 #endif
 public enum ApiKeyMethods {
-    /// Retrieves the API keys for your Neon account. The response does not include API key tokens. A token is only
-    /// provided when creating an API key. API keys can also be managed in the Neon Console. For more information, see
-    /// [Manage API keys](https://neon.com/docs/manage/api-keys/).
-    public static func listApiKey(
-        config: ClientConfig,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> [ApiKeysListResponseItem] {
-        try await (sdkRequest(
-            "GET",
-            "/api_keys",
-            config: config,
-            decoder: .json,
-            operationId: "listApiKey",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+    /// Retrieves the API keys for your Neon account. The response does not include API key tokens. A token is only provided when creating an API key. API keys can also be managed in the Neon Console. For more information, see [Manage API keys](https://neon.com/docs/manage/api-keys/).
+    public static func listApiKey(config: ClientConfig, requestOptions: RequestOptions? = nil) async throws -> [ApiKeysListResponseItem] {
+        return try (await sdkRequest("GET", "/api_keys", config: config, decoder: .json, operationId: "listApiKey", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
-
-    /// Creates an API key. The `key_name` is a user-specified name for the key. Returns an `id` and `key`; the `key` is
-    /// a randomly generated, 64-bit token required to access the Neon API. Store the key securely — it is only returned
-    /// once. API keys can also be managed in the Neon Console. See [Manage API
-    /// keys](https://neon.com/docs/manage/api-keys/).
+    /// Creates an API key. The `key_name` is a user-specified name for the key. Returns an `id` and `key`; the `key` is a randomly generated, 64-bit token required to access the Neon API. Store the key securely — it is only returned once. API keys can also be managed in the Neon Console. See [Manage API keys](https://neon.com/docs/manage/api-keys/).
     ///
     /// - Parameters:
     /// - keyName: A user-specified API key name. This value is required when
     ///   creating an API key.
-    public static func createApiKey(
-        config: ClientConfig,
-        keyName: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ApiKeyCreateResponse {
+    public static func createApiKey(config: ClientConfig, keyName: String, requestOptions: RequestOptions? = nil) async throws -> ApiKeyCreateResponse {
         try validateLength("key_name", keyName, max: 64)
 
         let requestBody = CreateApiKeyRequestBody(keyName: keyName)
 
-        return try await (sdkRequest(
-            "POST",
-            "/api_keys",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createApiKey",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", "/api_keys", config: config, body: requestBody, decoder: .json, operationId: "createApiKey", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
-
-    /// Revokes the specified API key. An API key that is no longer needed can be revoked. This action cannot be
-    /// reversed. API keys can also be managed in the Neon Console. See [Manage API
-    /// keys](https://neon.com/docs/manage/api-keys/).
+    /// Revokes the specified API key. An API key that is no longer needed can be revoked. This action cannot be reversed. API keys can also be managed in the Neon Console. See [Manage API keys](https://neon.com/docs/manage/api-keys/).
     ///
     /// - Parameters:
     /// - keyId: The API key ID
-    public static func revokeApiKey(
-        config: ClientConfig,
-        keyId: Int,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ApiKeyRevokeResponse {
-        try await (sdkRequest(
-            "DELETE",
-            ["/api_keys/", sdkEncodePathSegment(sdkWireString(keyId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "revokeApiKey",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+    public static func revokeApiKey(config: ClientConfig, keyId: Int, requestOptions: RequestOptions? = nil) async throws -> ApiKeyRevokeResponse {
+        return try (await sdkRequest("DELETE", ["/api_keys/", sdkEncodePathSegment(sdkWireString(keyId))].joined(), config: config, decoder: .json, operationId: "revokeApiKey", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

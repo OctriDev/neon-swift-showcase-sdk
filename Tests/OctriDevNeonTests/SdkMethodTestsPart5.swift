@@ -37,10 +37,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.dataApi.delete(
-                projectId: decoded("\"a\""),
-                branchId: decoded("\"a\""),
-                databaseName: decoded("\"Example Name\"")
-            )
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\""),
+            databaseName: decoded("\"Example Name\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -86,9 +86,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.endpoint.delete(
-                projectId: decoded("\"a\""),
-                endpointId: decoded("\"a\"")
-            )
+            projectId: decoded("\"a\""),
+            endpointId: decoded("\"a\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -128,10 +128,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.functions.delete(
-                projectId: decoded("\"a\""),
-                branchId: decoded("\"a\""),
-                slug: decoded("\"a\"")
-            )
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\""),
+            slug: decoded("\"a\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -171,10 +171,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.functions.deleteCustomDomain(
-                projectId: decoded("\"a\""),
-                branchId: decoded("\"a\""),
-                domain: decoded("\"axx\"")
-            )
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\""),
+            domain: decoded("\"axx\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -214,10 +214,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.functions.deleteTrigger(
-                projectId: decoded("\"a\""),
-                branchId: decoded("\"a\""),
-                triggerId: decoded("\"a\"")
-            )
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\""),
+            triggerId: decoded("\"a\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -251,8 +251,7 @@ extension SdkMethodTests {
         )
     }
 
-    func testDeleteOrganizationSpendingLimitDeleteOrganizationSpendingLimit418ReachesMockAndDecodesResponse(
-    ) async throws {
+    func testDeleteOrganizationSpendingLimitDeleteOrganizationSpendingLimit418ReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/418") else {
             return
         }
@@ -263,8 +262,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.organizations.deleteSpendingLimit(
-                orgId: decoded("\"a\"")
-            )
+            orgId: decoded("\"a\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -304,10 +303,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.organizations.deleteVpcEndpoint(
-                orgId: decoded("\"a\""),
-                regionId: decoded("\"region-1\""),
-                vpcEndpointId: decoded("\"vpc_endpoint-1\"")
-            )
+            orgId: decoded("\"a\""),
+            regionId: decoded("\"region-1\""),
+            vpcEndpointId: decoded("\"vpc_endpoint-1\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -352,8 +351,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.delete(
-                projectId: decoded("\"a\"")
-            )
+            projectId: decoded("\"a\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -399,9 +398,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.deleteJwks(
-                projectId: decoded("\"a\""),
-                jwksId: decoded("\"jwks-1\"")
-            )
+            projectId: decoded("\"a\""),
+            jwksId: decoded("\"jwks-1\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -440,9 +439,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.deleteVpcEndpoint(
-                projectId: decoded("\"a\""),
-                vpcEndpointId: decoded("\"vpc_endpoint-1\"")
-            )
+            projectId: decoded("\"a\""),
+            vpcEndpointId: decoded("\"vpc_endpoint-1\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -488,9 +487,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.snapshot.delete(
-                projectId: decoded("\"a\""),
-                snapshotId: decoded("\"a\"")
-            )
+            projectId: decoded("\"a\""),
+            snapshotId: decoded("\"a\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -530,10 +529,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.disable(
-                projectId: decoded("\"a\""),
-                branchId: decoded("\"a\""),
-                deleteData: decoded("false")
-            )
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\""),
+            deleteData: decoded("false")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)

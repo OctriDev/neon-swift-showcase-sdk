@@ -13,9 +13,9 @@ struct RestoreSnapshotRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(name2, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(targetBranchId, forKey: SdkCodingKey("target_branch_id"))
-        try keyedContainer.encodeIfPresent(finalizeRestore, forKey: SdkCodingKey("finalize_restore"))
+        try keyedContainer.encodeIfPresent(self.name2, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(self.targetBranchId, forKey: SdkCodingKey("target_branch_id"))
+        try keyedContainer.encodeIfPresent(self.finalizeRestore, forKey: SdkCodingKey("finalize_restore"))
     }
 }
 
@@ -24,7 +24,7 @@ struct SetSnapshotScheduleRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(schedule, forKey: SdkCodingKey("schedule"))
+        try keyedContainer.encode(self.schedule, forKey: SdkCodingKey("schedule"))
     }
 }
 
@@ -34,8 +34,8 @@ struct CreateBucketsRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(accessLevel, forKey: SdkCodingKey("access_level"))
+        try keyedContainer.encode(self.name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(self.accessLevel, forKey: SdkCodingKey("access_level"))
     }
 }
 
@@ -46,9 +46,9 @@ struct PresignBucketsObjectRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(operation, forKey: SdkCodingKey("operation"))
-        try keyedContainer.encodeIfPresent(contentType, forKey: SdkCodingKey("content_type"))
-        try keyedContainer.encodeIfPresent(expiresInSeconds, forKey: SdkCodingKey("expires_in_seconds"))
+        try keyedContainer.encode(self.operation, forKey: SdkCodingKey("operation"))
+        try keyedContainer.encodeIfPresent(self.contentType, forKey: SdkCodingKey("content_type"))
+        try keyedContainer.encodeIfPresent(self.expiresInSeconds, forKey: SdkCodingKey("expires_in_seconds"))
     }
 }
 
@@ -70,37 +70,37 @@ struct QueryLogsRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(since, forKey: SdkCodingKey("since"))
-        try keyedContainer.encodeIfPresent(startTime, forKey: SdkCodingKey("start_time"))
-        try keyedContainer.encodeIfPresent(endTime, forKey: SdkCodingKey("end_time"))
-        try keyedContainer.encodeIfPresent(limit, forKey: SdkCodingKey("limit"))
-        try keyedContainer.encodeIfPresent(cursor, forKey: SdkCodingKey("cursor"))
-        try keyedContainer.encodeIfPresent(sortOrder, forKey: SdkCodingKey("sort_order"))
-        try keyedContainer.encodeIfPresent(source, forKey: SdkCodingKey("source"))
-        try keyedContainer.encodeIfPresent(serviceName, forKey: SdkCodingKey("service_name"))
-        try keyedContainer.encodeIfPresent(scopeName, forKey: SdkCodingKey("scope_name"))
-        try keyedContainer.encodeIfPresent(minimumSeverity, forKey: SdkCodingKey("minimum_severity"))
-        try keyedContainer.encodeIfPresent(severityText, forKey: SdkCodingKey("severity_text"))
-        try keyedContainer.encodeIfPresent(bodyContains, forKey: SdkCodingKey("body_contains"))
-        try keyedContainer.encodeIfPresent(traceId, forKey: SdkCodingKey("trace_id"))
-        try keyedContainer.encodeIfPresent(logql, forKey: SdkCodingKey("logql"))
+        try keyedContainer.encodeIfPresent(self.since, forKey: SdkCodingKey("since"))
+        try keyedContainer.encodeIfPresent(self.startTime, forKey: SdkCodingKey("start_time"))
+        try keyedContainer.encodeIfPresent(self.endTime, forKey: SdkCodingKey("end_time"))
+        try keyedContainer.encodeIfPresent(self.limit, forKey: SdkCodingKey("limit"))
+        try keyedContainer.encodeIfPresent(self.cursor, forKey: SdkCodingKey("cursor"))
+        try keyedContainer.encodeIfPresent(self.sortOrder, forKey: SdkCodingKey("sort_order"))
+        try keyedContainer.encodeIfPresent(self.source, forKey: SdkCodingKey("source"))
+        try keyedContainer.encodeIfPresent(self.serviceName, forKey: SdkCodingKey("service_name"))
+        try keyedContainer.encodeIfPresent(self.scopeName, forKey: SdkCodingKey("scope_name"))
+        try keyedContainer.encodeIfPresent(self.minimumSeverity, forKey: SdkCodingKey("minimum_severity"))
+        try keyedContainer.encodeIfPresent(self.severityText, forKey: SdkCodingKey("severity_text"))
+        try keyedContainer.encodeIfPresent(self.bodyContains, forKey: SdkCodingKey("body_contains"))
+        try keyedContainer.encodeIfPresent(self.traceId, forKey: SdkCodingKey("trace_id"))
+        try keyedContainer.encodeIfPresent(self.logql, forKey: SdkCodingKey("logql"))
     }
 
     init(options: LogsMethods.QueryLogsOptions) {
-        since = options.since
-        startTime = options.startTime
-        endTime = options.endTime
-        limit = options.limit
-        cursor = options.cursor
-        sortOrder = options.sortOrder
-        source = options.source
-        serviceName = options.serviceName
-        scopeName = options.scopeName
-        minimumSeverity = options.minimumSeverity
-        severityText = options.severityText
-        bodyContains = options.bodyContains
-        traceId = options.traceId
-        logql = options.logql
+        self.since = options.since
+        self.startTime = options.startTime
+        self.endTime = options.endTime
+        self.limit = options.limit
+        self.cursor = options.cursor
+        self.sortOrder = options.sortOrder
+        self.source = options.source
+        self.serviceName = options.serviceName
+        self.scopeName = options.scopeName
+        self.minimumSeverity = options.minimumSeverity
+        self.severityText = options.severityText
+        self.bodyContains = options.bodyContains
+        self.traceId = options.traceId
+        self.logql = options.logql
     }
 }
 
@@ -111,9 +111,9 @@ struct CreateCredentialRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(scopes, forKey: SdkCodingKey("scopes"))
-        try keyedContainer.encode(principalType, forKey: SdkCodingKey("principal_type"))
-        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encode(self.scopes, forKey: SdkCodingKey("scopes"))
+        try keyedContainer.encode(self.principalType, forKey: SdkCodingKey("principal_type"))
+        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
     }
 }
 
@@ -122,7 +122,7 @@ struct UpdateFunctionsRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encode(self.name, forKey: SdkCodingKey("name"))
     }
 }
 
@@ -133,8 +133,8 @@ struct RegisterFunctionsCustomDomainRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(domain, forKey: SdkCodingKey("domain"))
-        try keyedContainer.encode(entityType, forKey: SdkCodingKey("entity_type"))
-        try keyedContainer.encode(entityId, forKey: SdkCodingKey("entity_id"))
+        try keyedContainer.encode(self.domain, forKey: SdkCodingKey("domain"))
+        try keyedContainer.encode(self.entityType, forKey: SdkCodingKey("entity_type"))
+        try keyedContainer.encode(self.entityId, forKey: SdkCodingKey("entity_id"))
     }
 }

@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthLegacyMethods {
-    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth` instead. Removal scheduled for March 1, 2026.
-    /// Use this endpoint if the frontend integration flow can't be used.
+extension AuthLegacyMethods {
+    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth` instead. Removal scheduled for March 1, 2026. Use this endpoint if the frontend integration flow can't be used.
     ///
     /// - Parameters:
     /// - authProvider: Authentication provider integrated with this Neon Auth
@@ -25,36 +24,13 @@ public extension AuthLegacyMethods {
     ///   this field; it is ignored.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func createAuthLegacyIntegration(
-        config: ClientConfig,
-        authProvider: NeonAuthSupportedAuthProvider,
-        projectId: String,
-        branchId: String,
-        databaseName: String? = nil,
-        roleName: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonAuthCreateIntegrationResponse {
+    public static func createAuthLegacyIntegration(config: ClientConfig, authProvider: NeonAuthSupportedAuthProvider, projectId: String, branchId: String, databaseName: String? = nil, roleName: String? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonAuthCreateIntegrationResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        let requestBody = CreateAuthLegacyIntegrationRequestBody(
-            authProvider: authProvider,
-            projectId: projectId,
-            branchId: branchId,
-            databaseName: databaseName,
-            roleName: roleName
-        )
+        let requestBody = CreateAuthLegacyIntegrationRequestBody(authProvider: authProvider, projectId: projectId, branchId: branchId, databaseName: databaseName, roleName: roleName)
 
-        return try await (sdkRequest(
-            "POST",
-            "/projects/auth/create",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createAuthLegacyIntegration",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", "/projects/auth/create", config: config, body: requestBody, decoder: .json, operationId: "createAuthLegacyIntegration", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

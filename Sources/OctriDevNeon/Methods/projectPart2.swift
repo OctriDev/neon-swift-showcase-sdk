@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ProjectMethods {
-    /// Analyzes the database for security and performance issues. Returns a list of issues categorized by severity
-    /// (ERROR, WARN, INFO). Requires read access to the project and Data API enabled.
+extension ProjectMethods {
+    /// Analyzes the database for security and performance issues. Returns a list of issues categorized by severity (ERROR, WARN, INFO). Requires read access to the project and Data API enabled.
     ///
     /// - Parameters:
     /// - projectId: Neon project ID
@@ -19,35 +18,18 @@ public extension ProjectMethods {
     /// - category: Filter issues by category
     /// - minSeverity: Minimum severity level to include. For example, WARN returns
     ///   WARN and ERROR issues, excluding INFO.
-    static func getProjectAdvisorSecurityIssues(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String? = nil,
-        databaseName: String? = nil,
-        category: AdvisorCategory? = nil,
-        minSeverity: GetProjectAdvisorSecurityIssuesParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> GetProjectAdvisorSecurityIssuesResponse {
+    public static func getProjectAdvisorSecurityIssues(config: ClientConfig, projectId: String, branchId: String? = nil, databaseName: String? = nil, category: AdvisorCategory? = nil, minSeverity: GetProjectAdvisorSecurityIssuesParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> GetProjectAdvisorSecurityIssuesResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        if let branchId {
+        if let branchId = branchId {
             try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/advisors"].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("branch_id", value: branchId),
-                SdkQueryParameter("database_name", value: databaseName),
-                SdkQueryParameter("category", value: category),
-                SdkQueryParameter("min_severity", value: minSeverity),
-            ],
-            decoder: .json,
-            operationId: "getProjectAdvisorSecurityIssues",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/advisors"].joined(), config: config, query: [
+            SdkQueryParameter("branch_id", value: branchId),
+            SdkQueryParameter("database_name", value: databaseName),
+            SdkQueryParameter("category", value: category),
+            SdkQueryParameter("min_severity", value: minSeverity),
+        ], decoder: .json, operationId: "getProjectAdvisorSecurityIssues", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }
