@@ -403,7 +403,7 @@ public class BranchNamespace {
         projectId: String,
         body: CreateBranchRequestBody? = nil,
         requestOptions: RequestOptions? = nil
-    ) async throws -> CreateBranchAnonymizedResponse {
+    ) async throws -> CreateBranchResponse {
         try await BranchMethods.createBranch(
             config: config,
             projectId: projectId,
@@ -453,7 +453,7 @@ public class BranchNamespace {
         projectId: String,
         body: BranchAnonymizedCreateRequest,
         requestOptions: RequestOptions? = nil
-    ) async throws -> CreateBranchAnonymizedResponse {
+    ) async throws -> CreateBranchResponse {
         try await BranchMethods.createBranchAnonymized(
             config: config,
             projectId: projectId,
@@ -468,7 +468,7 @@ public class BranchNamespace {
         projectId: String,
         search: String? = nil,
         requestOptions: RequestOptions? = nil
-    ) async throws -> CountBranchResponse {
+    ) async throws -> BranchesCountResponse {
         try await BranchMethods.countBranch(
             config: config,
             projectId: projectId,

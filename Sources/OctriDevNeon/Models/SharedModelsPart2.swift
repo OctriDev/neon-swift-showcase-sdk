@@ -4,6 +4,36 @@
 import Foundation
 
 /// Shared domain models
+public extension ProjectsWithIntegrationResponseProjectsItem {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.integration) else {
+            throw SdkValidationError(
+                field: "integration",
+                code: "required",
+                message: "Validation failed for 'integration': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        integration = try container.sdkDecodeRequired(.integration)
+        try sdkValidatePattern("id", id, sdkPatternead2b03f7a95)
+    }
+}
+
+public extension ProjectsWithIntegrationResponseProjectsItem {
+    init(id: String, integration: String) throws {
+        (self.id, self.integration) = (id, integration)
+        try sdkValidatePattern("id", self.id, sdkPatternead2b03f7a95)
+    }
+}
+
 /// Typed representation of the `GeneralError` API schema.
 public struct GeneralError: Codable {
     /// Machine-readable code classifying the error type. See `message` for a human-readable explanation.
@@ -348,5 +378,23 @@ public struct BillingSubscriptionType: RawRepresentable, Hashable, Codable, Send
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(rawValue)
+    }
+}
+
+/// Optional enumerated value serialized in the `type` wire field.
+public enum SharedEmailServerType: String, CaseIterable, Codable {
+    case shared
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        guard let value = Self(rawValue: rawValue) else {
+            let field = decoder.codingPath.last?.stringValue ?? "SharedEmailServerType"
+            throw SdkValidationError(
+                field: field,
+                code: "enum",
+                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
+            )
+        }
+        self = value
     }
 }

@@ -20,7 +20,7 @@ public extension BranchMethods {
         projectId: String,
         body: CreateBranchRequestBody? = nil,
         requestOptions: RequestOptions? = nil
-    ) async throws -> CreateBranchAnonymizedResponse {
+    ) async throws -> CreateBranchResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         return try await (sdkRequest(

@@ -4,88 +4,90 @@
 import Foundation
 
 /// Project domain models
-/// Configuration for the new project, including name, region, and Postgres compute and storage settings.
-public struct ProjectCreateRequestProject: Codable {
-    /// Project-level settings applied at creation.
-    public var settings: ProjectSettingsData?
-    /// The project name. If not specified, the name will be identical to the generated project ID
-    public var name: String?
-    /// Enable Realtime for the default branch with these options.
-    public var realtime: RealtimeOptions?
-    /// Configuration for the initial branch created with the project.
-    public var branch: ProjectCreateRequestProjectBranch?
-    /// Deprecated. Use `default_endpoint_settings.autoscaling_limit_min_cu` instead. The minimum number of Compute
-    /// Units. The minimum value is `0.25`. See Compute size and Autoscaling configuration for more information.
-    public var autoscalingLimitMinCu: ComputeUnit?
-    /// Deprecated. Use `default_endpoint_settings.autoscaling_limit_max_cu` instead. The maximum number of Compute
-    /// Units. See Compute size and Autoscaling configuration for more information.
-    public var autoscalingLimitMaxCu: ComputeUnit?
-    /// Compute provisioner. `k8s-neonvm` (default) supports Autoscaling; `k8s-pod` is fixed-size compute. Also
-    /// `docker` and `serverless-platform`.
-    /// - Example: "k8s-neonvm"
-    public var provisioner: Provisioner?
-    /// The region identifier. Refer to our Regions documentation for supported regions. Values are specified in
-    /// this format: `aws-us-east-1`
-    public var regionId: String?
-    /// A collection of settings for a Neon endpoint
-    public var defaultEndpointSettings: DefaultEndpointSettings?
-    /// The major Postgres version number. Supported versions are `14`, `15`, `16`, `17`, and `18`. `19` is rolling
-    /// out and is accepted only in regions where it is enabled; requesting it elsewhere returns an error.
-    /// - Example: 18
-    public var pgVersion: PgVersion?
-    /// Whether or not passwords are stored for roles in the Neon project. Storing passwords facilitates access to
-    /// Neon features that require authorization.
-    public var storePasswords: Bool?
-    /// History window (point-in-time restore range) for all branches, in seconds. `0` disables it. Default 1 day
-    /// (Free: 6 hours). Maximum depends on plan: Free 6 hours (21600), Launch 7 days (604800), Scale 30 days
-    /// (2592000).
-    public var historyRetentionSeconds: Int?
-    /// ID of the organization that will own the project. If omitted when using an organization API key, it is
-    /// inferred from the key.
-    public var orgId: String?
-
-    enum CodingKeys: String, CodingKey {
-        case settings
-        case name
-        case realtime
-        case branch
-        case autoscalingLimitMinCu = "autoscaling_limit_min_cu"
-        case autoscalingLimitMaxCu = "autoscaling_limit_max_cu"
-        case provisioner
-        case regionId = "region_id"
-        case defaultEndpointSettings = "default_endpoint_settings"
-        case pgVersion = "pg_version"
-        case storePasswords = "store_passwords"
-        case historyRetentionSeconds = "history_retention_seconds"
-        case orgId = "org_id"
-    }
-
-    init() {
-        (settings, name, realtime, branch, autoscalingLimitMinCu) = (nil, nil, nil, nil, nil)
-        (autoscalingLimitMaxCu, provisioner, regionId, defaultEndpointSettings, pgVersion) = (nil, nil, nil, nil, nil)
-        (storePasswords, historyRetentionSeconds, orgId) = (nil, nil, nil)
+public extension SetProjectMemberRoleRequest {
+    init(role: ProjectRole) {
+        self.role = role
     }
 }
 
-public extension ProjectCreateRequestProject {
+/// A list of IP addresses that are allowed to connect to the compute endpoint. If the list is empty or not set, all
+/// IP addresses are allowed. If protected_branches_only is true, the list will be applied only to protected
+/// branches.
+public struct AllowedIps: Codable {
+    /// A list of IP addresses that are allowed to connect to the endpoint.
+    public var ips: [String]?
+    /// If true, the list will be applied only to protected branches.
+    public var protectedBranchesOnly: Bool?
+
+    enum CodingKeys: String, CodingKey {
+        case ips
+        case protectedBranchesOnly = "protected_branches_only"
+    }
+
+    init() {
+        (ips, protectedBranchesOnly) = (nil, nil)
+    }
+}
+
+public extension AllowedIps {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        settings = try container.sdkDecodeIfPresent(.settings)
-        name = try container.sdkDecodeIfPresent(.name)
-        realtime = try container.sdkDecodeIfPresent(.realtime)
-        branch = try container.sdkDecodeIfPresent(.branch)
+        ips = try container.sdkDecodeIfPresent(.ips)
+        protectedBranchesOnly = try container.sdkDecodeIfPresent(.protectedBranchesOnly)
+    }
+}
+
+public extension AllowedIps {
+    init(ips: [String]? = nil, protectedBranchesOnly: Bool? = nil) {
+        self.init()
+        (self.ips, self.protectedBranchesOnly) = (ips, protectedBranchesOnly)
+    }
+}
+
+/// A collection of settings for a Neon endpoint
+public struct DefaultEndpointSettings: Codable {
+    /// A raw representation of Postgres settings
+    public var pgSettings: PgSettingsData?
+    /// Deprecated. Use the endpoint-level connection pooler configuration instead. Removal scheduled for June 20,
+    /// 2026.
+    public var pgbouncerSettings: PgbouncerSettingsData?
+    /// Minimum number of Compute Units for this endpoint. At least 0.25 and no greater than
+    /// `autoscaling_limit_max_cu`.
+    public var autoscalingLimitMinCu: ComputeUnit?
+    /// Default maximum number of Compute Units for endpoints created under this account. At least 0.25.
+    public var autoscalingLimitMaxCu: ComputeUnit?
+    /// Scale-to-zero idle timeout, in seconds, before the compute suspends. `0` uses the plan default; `-1`
+    /// disables scale-to-zero (never suspends). Minimum is plan-dependent (Scale: 60); maximum 604800 (one week).
+    /// Free cannot change it; Launch can only enable or disable; Scale can set any value.
+    public var suspendTimeoutSeconds: SuspendTimeoutSeconds?
+
+    enum CodingKeys: String, CodingKey {
+        case pgSettings = "pg_settings"
+        case pgbouncerSettings = "pgbouncer_settings"
+        case autoscalingLimitMinCu = "autoscaling_limit_min_cu"
+        case autoscalingLimitMaxCu = "autoscaling_limit_max_cu"
+        case suspendTimeoutSeconds = "suspend_timeout_seconds"
+    }
+
+    init() {
+        (pgSettings, pgbouncerSettings, autoscalingLimitMinCu, autoscalingLimitMaxCu, suspendTimeoutSeconds) = (
+            nil,
+            nil,
+            nil,
+            nil,
+            nil
+        )
+    }
+}
+
+public extension DefaultEndpointSettings {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        pgSettings = try container.sdkDecodeIfPresent(.pgSettings)
+        pgbouncerSettings = try container.sdkDecodeIfPresent(.pgbouncerSettings)
         autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
         autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
-        provisioner = try container.sdkDecodeIfPresent(.provisioner)
-        regionId = try container.sdkDecodeIfPresent(.regionId)
-        defaultEndpointSettings = try container.sdkDecodeIfPresent(.defaultEndpointSettings)
-        pgVersion = try container.sdkDecodeIfPresent(.pgVersion)
-        storePasswords = try container.sdkDecodeIfPresent(.storePasswords)
-        historyRetentionSeconds = try container.sdkDecodeIfPresent(.historyRetentionSeconds)
-        orgId = try container.sdkDecodeIfPresent(.orgId)
-        if let value = name {
-            try validateLength("name", value, min: 1, max: 256)
-        }
+        suspendTimeoutSeconds = try container.sdkDecodeIfPresent(.suspendTimeoutSeconds)
         if let value = autoscalingLimitMinCu {
             try validateRange(
                 "autoscaling_limit_min_cu",
@@ -108,61 +110,33 @@ public extension ProjectCreateRequestProject {
                 multipleOf: nil
             )
         }
-        if let value = pgVersion {
+        if let value = suspendTimeoutSeconds {
             try validateRange(
-                "pg_version",
+                "suspend_timeout_seconds",
                 Double(value),
-                min: 14,
-                max: 19,
+                min: -1,
+                max: 604_800,
                 exclusiveMin: nil,
                 exclusiveMax: nil,
                 multipleOf: nil
             )
-        }
-        if let value = historyRetentionSeconds {
-            try validateRange(
-                "history_retention_seconds",
-                Double(value),
-                min: 0,
-                max: 2_592_000,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
-        }
-        if let value = orgId {
-            try sdkValidatePattern("org_id", value, sdkPatternead2b03f7a95)
         }
     }
 }
 
-public extension ProjectCreateRequestProject {
+public extension DefaultEndpointSettings {
     init(
-        settings: ProjectSettingsData? = nil,
-        name: String? = nil,
-        realtime: RealtimeOptions? = nil,
-        branch: ProjectCreateRequestProjectBranch? = nil,
+        pgSettings: PgSettingsData? = nil,
+        pgbouncerSettings: PgbouncerSettingsData? = nil,
         autoscalingLimitMinCu: ComputeUnit? = nil,
         autoscalingLimitMaxCu: ComputeUnit? = nil,
-        provisioner: Provisioner? = nil,
-        regionId: String? = nil,
-        defaultEndpointSettings: DefaultEndpointSettings? = nil,
-        pgVersion: PgVersion? = nil,
-        storePasswords: Bool? = nil,
-        historyRetentionSeconds: Int? = nil,
-        orgId: String? = nil
+        suspendTimeoutSeconds: SuspendTimeoutSeconds? = nil
     ) throws {
         self.init()
-        (self.settings, self.name) = (settings, name)
-        (self.realtime, self.branch) = (realtime, branch)
+        (self.pgSettings, self.pgbouncerSettings) = (pgSettings, pgbouncerSettings)
         self.autoscalingLimitMinCu = autoscalingLimitMinCu
-        (self.autoscalingLimitMaxCu, self.provisioner) = (autoscalingLimitMaxCu, provisioner)
-        (self.regionId, self.defaultEndpointSettings) = (regionId, defaultEndpointSettings)
-        (self.pgVersion, self.storePasswords) = (pgVersion, storePasswords)
-        (self.historyRetentionSeconds, self.orgId) = (historyRetentionSeconds, orgId)
-        if let value = self.name {
-            try validateLength("name", value, min: 1, max: 256)
-        }
+        self.autoscalingLimitMaxCu = autoscalingLimitMaxCu
+        self.suspendTimeoutSeconds = suspendTimeoutSeconds
         if let value = self.autoscalingLimitMinCu {
             try validateRange(
                 "autoscaling_limit_min_cu",
@@ -185,58 +159,30 @@ public extension ProjectCreateRequestProject {
                 multipleOf: nil
             )
         }
-        if let value = self.pgVersion {
+        if let value = self.suspendTimeoutSeconds {
             try validateRange(
-                "pg_version",
+                "suspend_timeout_seconds",
                 Double(value),
-                min: 14,
-                max: 19,
+                min: -1,
+                max: 604_800,
                 exclusiveMin: nil,
                 exclusiveMax: nil,
                 multipleOf: nil
             )
         }
-        if let value = self.historyRetentionSeconds {
-            try validateRange(
-                "history_retention_seconds",
-                Double(value),
-                min: 0,
-                max: 2_592_000,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
-        }
-        if let value = self.orgId {
-            try sdkValidatePattern("org_id", value, sdkPatternead2b03f7a95)
-        }
     }
 }
 
-/// Add a new JWKS to a specific endpoint of a project
-public struct AddProjectJWKSRequest: Codable {
-    /// URL of the provider's JWKS endpoint used to verify JWTs.
-    public var jwksUrl: String
-    /// The name of the authentication provider (e.g., Clerk, Stytch, Auth0)
-    public var providerName: String
-    /// The Neon branch ID. Returned as `id` from `GET /projects/{project_id}/branches`.
-    public var branchId: String?
-    /// Expected `aud` claim in incoming JWTs. When set, tokens with a different audience are rejected; tokens with
-    /// no audience are still accepted. Omit to skip audience validation.
-    public var jwtAudience: String?
-    /// Deprecated. The roles the JWKS should be mapped to. By default, the JWKS is mapped to the `authenticator`,
-    /// `authenticated`, and `anonymous` roles.
-    public var roleNames: [String]?
-    /// Deprecated. Only used with Neon RLS. If true, role creation is skipped.
-    public var skipRoleCreation: Bool?
+/// Required object value serialized in the `reasons[]` wire field.
+public struct AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem: Codable {
+    /// Description of why the plan is not satisfied
+    public var message: String
+    /// A short code identifying the reason
+    public var code: String
 
     enum CodingKeys: String, CodingKey {
-        case jwksUrl = "jwks_url"
-        case providerName = "provider_name"
-        case branchId = "branch_id"
-        case jwtAudience = "jwt_audience"
-        case roleNames = "role_names"
-        case skipRoleCreation = "skip_role_creation"
+        case message
+        case code
     }
 
     private init(sdkCopy value: Self) {
@@ -244,71 +190,42 @@ public struct AddProjectJWKSRequest: Codable {
     }
 }
 
-public extension AddProjectJWKSRequest {
+public extension AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.jwksUrl) else {
+        guard container.contains(.message) else {
             throw SdkValidationError(
-                field: "jwks_url",
+                field: "message",
                 code: "required",
-                message: "Validation failed for 'jwks_url': value is required"
+                message: "Validation failed for 'message': value is required"
             )
         }
-        guard container.contains(.providerName) else {
+        guard container.contains(.code) else {
             throw SdkValidationError(
-                field: "provider_name",
+                field: "code",
                 code: "required",
-                message: "Validation failed for 'provider_name': value is required"
+                message: "Validation failed for 'code': value is required"
             )
         }
-        jwksUrl = try container.sdkDecodeRequired(.jwksUrl)
-        providerName = try container.sdkDecodeRequired(.providerName)
-        branchId = try container.sdkDecodeIfPresent(.branchId)
-        jwtAudience = try container.sdkDecodeIfPresent(.jwtAudience)
-        roleNames = try container.sdkDecodeIfPresent(.roleNames)
-        skipRoleCreation = try container.sdkDecodeIfPresent(.skipRoleCreation)
-        if let value = branchId {
-            try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
-        }
-        if let value = roleNames {
-            try validateItems("role_names", value, min: 0, max: 10)
-        }
+        message = try container.sdkDecodeRequired(.message)
+        code = try container.sdkDecodeRequired(.code)
     }
 }
 
-public extension AddProjectJWKSRequest {
-    init(
-        jwksUrl: String,
-        providerName: String,
-        branchId: String? = nil,
-        jwtAudience: String? = nil,
-        roleNames: [String]? = nil,
-        skipRoleCreation: Bool? = nil
-    ) throws {
-        (self.jwksUrl, self.providerName) = (jwksUrl, providerName)
-        (self.branchId, self.jwtAudience) = (branchId, jwtAudience)
-        (self.roleNames, self.skipRoleCreation) = (roleNames, skipRoleCreation)
-        if let value = self.branchId {
-            try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
-        }
-        if let value = self.roleNames {
-            try validateItems("role_names", value, min: 0, max: 10)
-        }
+public extension AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem {
+    init(message: String, code: String) {
+        (self.message, self.code) = (message, code)
     }
 }
 
-/// Typed representation of the `ProjectsResponse` API schema.
-public struct ProjectsResponse: Codable {
-    /// List of projects accessible to the caller. Projects that exist but could not be retrieved are identified in
-    /// `unavailable_project_ids`.
-    public var projects: [ProjectListItem]
-    /// A list of project IDs indicating which projects are known to exist, but whose details could not be fetched
-    /// within the requested (or implicit) time limit
-    public var unavailableProjectIds: [String]?
+/// Typed representation of the `AcceptProjectTransferRequestSatisfiesPlanError` API schema.
+public struct AcceptProjectTransferRequestSatisfiesPlanError: Codable {
+    /// List of reasons why the target account's plan cannot satisfy the transfer requirements. Each item contains a
+    /// `code` identifying the constraint and a `message` with a human-readable explanation.
+    public var reasons: [AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem]
 
     enum CodingKeys: String, CodingKey {
-        case projects
-        case unavailableProjectIds = "unavailable_project_ids"
+        case reasons
     }
 
     private init(sdkCopy value: Self) {
@@ -316,258 +233,46 @@ public struct ProjectsResponse: Codable {
     }
 }
 
-public extension ProjectsResponse {
+public extension AcceptProjectTransferRequestSatisfiesPlanError {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projects) else {
+        guard container.contains(.reasons) else {
             throw SdkValidationError(
-                field: "projects",
+                field: "reasons",
                 code: "required",
-                message: "Validation failed for 'projects': value is required"
+                message: "Validation failed for 'reasons': value is required"
             )
         }
-        projects = try container.sdkDecodeRequired(.projects)
-        unavailableProjectIds = try container.sdkDecodeIfPresent(.unavailableProjectIds)
+        reasons = try container.sdkDecodeRequired(.reasons)
     }
 }
 
-public extension ProjectsResponse {
-    init(projects: [ProjectListItem], unavailableProjectIds: [String]? = nil) {
-        (self.projects, self.unavailableProjectIds) = (projects, unavailableProjectIds)
+public extension AcceptProjectTransferRequestSatisfiesPlanError {
+    init(reasons: [AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem]) {
+        self.reasons = reasons
     }
 }
 
-/// Typed representation of the `JWKSCreationOperation` API schema.
-public struct JWKSCreationOperation: Codable {
-    /// JWKS configuration associated with the project.
-    public var jwks: JWKS
-    /// Required array value serialized in the `operations` wire field.
-    public var operations: [Operation]
+/// Type of application integration
+public struct ApplicationType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+    public let rawValue: String
 
-    enum CodingKeys: String, CodingKey {
-        case jwks
-        case operations
+    public init(rawValue: String) {
+        self.rawValue = rawValue
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
-}
+    public static let vercel = ApplicationType(rawValue: "vercel")
+    public static let github = ApplicationType(rawValue: "github")
+    public static let datadog = ApplicationType(rawValue: "datadog")
+    public static let opentelemetry = ApplicationType(rawValue: "opentelemetry")
 
-public extension JWKSCreationOperation {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.jwks) else {
-            throw SdkValidationError(
-                field: "jwks",
-                code: "required",
-                message: "Validation failed for 'jwks': value is required"
-            )
-        }
-        guard container.contains(.operations) else {
-            throw SdkValidationError(
-                field: "operations",
-                code: "required",
-                message: "Validation failed for 'operations': value is required"
-            )
-        }
-        jwks = try container.sdkDecodeRequired(.jwks)
-        operations = try container.sdkDecodeRequired(.operations)
-    }
-}
-
-public extension JWKSCreationOperation {
-    init(jwks: JWKS, operations: [Operation]) {
-        (self.jwks, self.operations) = (jwks, operations)
-    }
-}
-
-/// Typed representation of the `ProjectPermissions` API schema.
-public struct ProjectPermissions: Codable {
-    /// Required array value serialized in the `project_permissions` wire field.
-    public var projectPermissions: [ProjectPermission]
-
-    enum CodingKeys: String, CodingKey {
-        case projectPermissions = "project_permissions"
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
-}
-
-public extension ProjectPermissions {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projectPermissions) else {
-            throw SdkValidationError(
-                field: "project_permissions",
-                code: "required",
-                message: "Validation failed for 'project_permissions': value is required"
-            )
-        }
-        projectPermissions = try container.sdkDecodeRequired(.projectPermissions)
-    }
-}
-
-public extension ProjectPermissions {
-    init(projectPermissions: [ProjectPermission]) {
-        self.projectPermissions = projectPermissions
-    }
-}
-
-/// Typed representation of the `AvailablePreloadLibraries` API schema.
-public struct AvailablePreloadLibraries: Codable {
-    /// Preload libraries available for the project's Postgres version. Each entry includes `library_name`,
-    /// `description`, `is_default`, `is_experimental`, and `version`.
-    public var libraries: [AvailablePreloadLibrary]?
-
-    enum CodingKeys: String, CodingKey {
-        case libraries
-    }
-
-    init() {
-        libraries = nil
-    }
-}
-
-public extension AvailablePreloadLibraries {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        libraries = try container.sdkDecodeIfPresent(.libraries)
-    }
-}
-
-public extension AvailablePreloadLibraries {
-    init(libraries: [AvailablePreloadLibrary]? = nil) {
-        self.init()
-        self.libraries = libraries
-    }
-}
-
-/// Typed representation of the `JWKS` API schema.
-public struct JWKS: Codable {
-    /// The JWKS configuration's ID.
-    public var id: String
-    /// The Neon project ID. Returned as `id` from `GET /projects`.
-    public var projectId: String
-    /// URL of the provider's JWKS endpoint used to verify JWTs.
-    public var jwksUrl: String
-    /// The name of the authentication provider (e.g., Clerk, Stytch, Auth0)
-    public var providerName: String
-    /// The date and time when the JWKS was created
-    public var createdAt: Date
-    /// The date and time when the JWKS was last modified
-    public var updatedAt: Date
-    /// The Neon branch ID. Returned as `id` from `GET /projects/{project_id}/branches`.
-    public var branchId: String?
-    /// Expected JWT `aud` claim value configured for this JWKS.
-    public var jwtAudience: String?
-    /// Database role names that are permitted to authenticate using this JWKS configuration.
-    public var roleNames: [String]?
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case projectId = "project_id"
-        case jwksUrl = "jwks_url"
-        case providerName = "provider_name"
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-        case branchId = "branch_id"
-        case jwtAudience = "jwt_audience"
-        case roleNames = "role_names"
-    }
-
-    private init(sdkCopy value: Self) {
-        self = value
-    }
-}
-
-public extension JWKS {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
-        }
-        guard container.contains(.projectId) else {
-            throw SdkValidationError(
-                field: "project_id",
-                code: "required",
-                message: "Validation failed for 'project_id': value is required"
-            )
-        }
-        guard container.contains(.jwksUrl) else {
-            throw SdkValidationError(
-                field: "jwks_url",
-                code: "required",
-                message: "Validation failed for 'jwks_url': value is required"
-            )
-        }
-        guard container.contains(.providerName) else {
-            throw SdkValidationError(
-                field: "provider_name",
-                code: "required",
-                message: "Validation failed for 'provider_name': value is required"
-            )
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
-        }
-        guard container.contains(.updatedAt) else {
-            throw SdkValidationError(
-                field: "updated_at",
-                code: "required",
-                message: "Validation failed for 'updated_at': value is required"
-            )
-        }
-        id = try container.sdkDecodeRequired(.id)
-        projectId = try container.sdkDecodeRequired(.projectId)
-        jwksUrl = try container.sdkDecodeRequired(.jwksUrl)
-        providerName = try container.sdkDecodeRequired(.providerName)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        updatedAt = try container.sdkDecodeRequired(.updatedAt)
-        branchId = try container.sdkDecodeIfPresent(.branchId)
-        jwtAudience = try container.sdkDecodeIfPresent(.jwtAudience)
-        roleNames = try container.sdkDecodeIfPresent(.roleNames)
-        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
-        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
-        try sdkValidateDateTime("updated_at", sdkWireString(updatedAt))
-        if let value = branchId {
-            try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
-        }
-    }
-}
-
-public extension JWKS {
-    init(
-        id: String,
-        projectId: String,
-        jwksUrl: String,
-        providerName: String,
-        createdAt: Date,
-        updatedAt: Date,
-        branchId: String? = nil,
-        jwtAudience: String? = nil,
-        roleNames: [String]? = nil
-    ) throws {
-        (self.id, self.projectId) = (id, projectId)
-        (self.jwksUrl, self.providerName) = (jwksUrl, providerName)
-        (self.createdAt, self.updatedAt) = (createdAt, updatedAt)
-        (self.branchId, self.jwtAudience) = (branchId, jwtAudience)
-        self.roleNames = roleNames
-        try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-        try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-        try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
-        if let value = self.branchId {
-            try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
-        }
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
     }
 }

@@ -121,14 +121,17 @@ public struct SharedEmailServer: Codable {
     public var senderEmail: String?
     /// Display name shown as the sender in outgoing emails.
     public var senderName: String?
+    /// Optional enumerated value serialized in the `type` wire field.
+    public var type: SharedEmailServerType?
 
     enum CodingKeys: String, CodingKey {
         case senderEmail = "sender_email"
         case senderName = "sender_name"
+        case type
     }
 
     init() {
-        (senderEmail, senderName) = (nil, nil)
+        (senderEmail, senderName, type) = (nil, nil, nil)
     }
 }
 
@@ -137,13 +140,21 @@ public extension SharedEmailServer {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         senderEmail = try container.sdkDecodeIfPresent(.senderEmail)
         senderName = try container.sdkDecodeIfPresent(.senderName)
+        type = try container.sdkDecodeIfPresent(.type)
+        if let value = type {
+            try sdkValidateRawEnum("type", value, SharedEmailServerType.allCases.map(\.rawValue))
+        }
     }
 }
 
 public extension SharedEmailServer {
-    init(senderEmail: String? = nil, senderName: String? = nil) {
+    init(senderEmail: String? = nil, senderName: String? = nil, type: SharedEmailServerType? = nil) throws {
         self.init()
         (self.senderEmail, self.senderName) = (senderEmail, senderName)
+        self.type = type
+        if let value = self.type {
+            try sdkValidateRawEnum("type", value, SharedEmailServerType.allCases.map(\.rawValue))
+        }
     }
 }
 
@@ -607,35 +618,5 @@ public struct ProjectsWithIntegrationResponseProjectsItem: Codable {
 
     private init(sdkCopy value: Self) {
         self = value
-    }
-}
-
-public extension ProjectsWithIntegrationResponseProjectsItem {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
-        }
-        guard container.contains(.integration) else {
-            throw SdkValidationError(
-                field: "integration",
-                code: "required",
-                message: "Validation failed for 'integration': value is required"
-            )
-        }
-        id = try container.sdkDecodeRequired(.id)
-        integration = try container.sdkDecodeRequired(.integration)
-        try sdkValidatePattern("id", id, sdkPatternead2b03f7a95)
-    }
-}
-
-public extension ProjectsWithIntegrationResponseProjectsItem {
-    init(id: String, integration: String) throws {
-        (self.id, self.integration) = (id, integration)
-        try sdkValidatePattern("id", self.id, sdkPatternead2b03f7a95)
     }
 }

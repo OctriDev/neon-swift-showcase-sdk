@@ -25,7 +25,7 @@ public extension BranchMethods {
         projectId: String,
         body: BranchAnonymizedCreateRequest,
         requestOptions: RequestOptions? = nil
-    ) async throws -> CreateBranchAnonymizedResponse {
+    ) async throws -> CreateBranchResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         return try await (sdkRequest(
@@ -51,7 +51,7 @@ public extension BranchMethods {
         projectId: String,
         search: String? = nil,
         requestOptions: RequestOptions? = nil
-    ) async throws -> CountBranchResponse {
+    ) async throws -> BranchesCountResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         return try await (sdkRequest("GET", [

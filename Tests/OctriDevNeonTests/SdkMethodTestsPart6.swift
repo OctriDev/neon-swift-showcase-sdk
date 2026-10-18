@@ -6,92 +6,6 @@ import Foundation
 import XCTest
 
 extension SdkMethodTests {
-    func testDeleteSnapshotDeleteSnapshot418ReachesMockAndDecodesResponse() async throws {
-        guard let client = configuredClient(statusPrefix: "/__mockStatus/418") else {
-            return
-        }
-        _ = client
-        let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture114Expected.utf8),
-            options: [.fragmentsAllowed]
-        )
-        do {
-            _ = try await client.snapshot.delete(
-                projectId: decoded("\"a\""),
-                snapshotId: decoded("\"a\"")
-            )
-            XCTFail("deleteSnapshot did not raise its declared error")
-        } catch let error as SdkHttpError {
-            XCTAssertEqual(error.statusCode, 418)
-            let data = try XCTUnwrap(
-                error.data as? any Encodable,
-                "deleteSnapshot decoded no error body"
-            )
-            XCTAssertNil(
-                try mismatch(jsonValue(data), expected),
-                "deleteSnapshot decoded an error body " +
-                    "that differs from the mock"
-            )
-        }
-        XCTAssertTrue(true)
-    }
-
-    func testDisableAuthDisableAuthReachesMockAndDecodesResponse() async throws {
-        guard let client = configuredClient() else {
-            return
-        }
-        _ = client
-        _ = try await client.auth.disable(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            deleteData: decoded("false")
-        )
-        XCTAssertTrue(true)
-    }
-
-    func testDisableAuthDisableAuth418ReachesMockAndDecodesResponse() async throws {
-        guard let client = configuredClient(statusPrefix: "/__mockStatus/418") else {
-            return
-        }
-        _ = client
-        let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture116Expected.utf8),
-            options: [.fragmentsAllowed]
-        )
-        do {
-            _ = try await client.auth.disable(
-                projectId: decoded("\"a\""),
-                branchId: decoded("\"a\""),
-                deleteData: decoded("false")
-            )
-            XCTFail("disableAuth did not raise its declared error")
-        } catch let error as SdkHttpError {
-            XCTAssertEqual(error.statusCode, 418)
-            let data = try XCTUnwrap(
-                error.data as? any Encodable,
-                "disableAuth decoded no error body"
-            )
-            XCTAssertNil(
-                try mismatch(jsonValue(data), expected),
-                "disableAuth decoded an error body " +
-                    "that differs from the mock"
-            )
-        }
-        XCTAssertTrue(true)
-    }
-
-    func testDisableRealtimeDisableRealtimeReachesMockAndDecodesResponse() async throws {
-        guard let client = configuredClient() else {
-            return
-        }
-        _ = client
-        _ = try await client.realtime.disable(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\"")
-        )
-        XCTAssertTrue(true)
-    }
-
     func testDisableRealtimeDisableRealtime418ReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/418") else {
             return
@@ -106,17 +20,16 @@ extension SdkMethodTests {
                 projectId: decoded("\"a\""),
                 branchId: decoded("\"a\"")
             )
-            XCTFail("disableRealtime did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "disableRealtime decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "disableRealtime decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
@@ -150,17 +63,16 @@ extension SdkMethodTests {
                 branchId: decoded("\"a\""),
                 allowedOrigins: decoded("[\"*\"]")
             )
-            XCTFail("enableRealtime did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "enableRealtime decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "enableRealtime decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
@@ -182,8 +94,7 @@ extension SdkMethodTests {
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "finalizeRestoreBranch decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
@@ -202,17 +113,16 @@ extension SdkMethodTests {
                 branchId: decoded("\"a\""),
                 name: decoded("\"Example Name\"")
             )
-            XCTFail("finalizeRestoreBranch did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "finalizeRestoreBranch decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "finalizeRestoreBranch decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
@@ -232,8 +142,7 @@ extension SdkMethodTests {
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "getActiveRegions decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
@@ -250,17 +159,16 @@ extension SdkMethodTests {
             _ = try await client.region.getActive(
                 orgId: decoded("\"a\"")
             )
-            XCTFail("getActiveRegions did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "getActiveRegions decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "getActiveRegions decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
@@ -281,8 +189,7 @@ extension SdkMethodTests {
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "getAiGateway decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
@@ -300,17 +207,16 @@ extension SdkMethodTests {
                 projectId: decoded("\"a\""),
                 branchId: decoded("\"a\"")
             )
-            XCTFail("getAiGateway did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "getAiGateway decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "getAiGateway decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
@@ -331,8 +237,7 @@ extension SdkMethodTests {
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "getAnonymizedBranchStatus decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
@@ -350,17 +255,16 @@ extension SdkMethodTests {
                 projectId: decoded("\"a\""),
                 branchId: decoded("\"a\"")
             )
-            XCTFail("getAnonymizedBranchStatus did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "getAnonymizedBranchStatus decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "getAnonymizedBranchStatus decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
@@ -381,8 +285,7 @@ extension SdkMethodTests {
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "getAuth decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
@@ -400,17 +303,16 @@ extension SdkMethodTests {
                 projectId: decoded("\"a\""),
                 branchId: decoded("\"a\"")
             )
-            XCTFail("getAuth did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "getAuth decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "getAuth decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
@@ -431,8 +333,7 @@ extension SdkMethodTests {
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "getAuthAllowLocalhost decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
@@ -450,17 +351,16 @@ extension SdkMethodTests {
                 projectId: decoded("\"a\""),
                 branchId: decoded("\"a\"")
             )
-            XCTFail("getAuthAllowLocalhost did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "getAuthAllowLocalhost decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "getAuthAllowLocalhost decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
@@ -478,8 +378,7 @@ extension SdkMethodTests {
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "getAuthDetails decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
@@ -494,17 +393,16 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.users.getAuthDetails()
-            XCTFail("getAuthDetails did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "getAuthDetails decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "getAuthDetails decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
@@ -525,8 +423,7 @@ extension SdkMethodTests {
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "getAuthEmailAndPasswordConfig decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
@@ -544,17 +441,16 @@ extension SdkMethodTests {
                 projectId: decoded("\"a\""),
                 branchId: decoded("\"a\"")
             )
-            XCTFail("getAuthEmailAndPasswordConfig did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "getAuthEmailAndPasswordConfig decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "getAuthEmailAndPasswordConfig decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
@@ -575,8 +471,102 @@ extension SdkMethodTests {
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "getAuthEmailProvider decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
+        )
+    }
+
+    func testGetAuthEmailProviderGetAuthEmailProvider418ReachesMockAndDecodesResponse() async throws {
+        guard let client = configuredClient(statusPrefix: "/__mockStatus/418") else {
+            return
+        }
+        _ = client
+        let expected = try JSONSerialization.jsonObject(
+            with: Data(sdkMethodFixture138Expected.utf8),
+            options: [.fragmentsAllowed]
+        )
+        do {
+            _ = try await client.auth.getEmailProvider(
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\"")
+            )
+            XCTFail("did not raise its declared error")
+        } catch let error as SdkHttpError {
+            XCTAssertEqual(error.statusCode, 418)
+            let data = try XCTUnwrap(
+                error.data as? any Encodable,
+                "decoded no error body"
+            )
+            XCTAssertNil(
+                try mismatch(jsonValue(data), expected),
+                "decoded an error body that differs from the mock"
+            )
+        }
+        XCTAssertTrue(true)
+    }
+
+    func testGetAuthLegacyEmailServerGetAuthLegacyEmailServerReachesMockAndDecodesResponse() async throws {
+        guard let client = configuredClient() else {
+            return
+        }
+        _ = client
+        let actual = try await client.authLegacy.getEmailServer(
+            projectId: decoded("\"a\"")
+        )
+        let expected = try JSONSerialization.jsonObject(
+            with: Data(sdkMethodFixture139Expected.utf8),
+            options: [.fragmentsAllowed]
+        )
+        XCTAssertNil(
+            try mismatch(jsonValue(actual), expected),
+            "decoded a response that differs from the mock"
+        )
+    }
+
+    func testGetAuthLegacyEmailServerGetAuthLegacyEmailServer418ReachesMockAndDecodesResponse() async throws {
+        guard let client = configuredClient(statusPrefix: "/__mockStatus/418") else {
+            return
+        }
+        _ = client
+        let expected = try JSONSerialization.jsonObject(
+            with: Data(sdkMethodFixture140Expected.utf8),
+            options: [.fragmentsAllowed]
+        )
+        do {
+            _ = try await client.authLegacy.getEmailServer(
+                projectId: decoded("\"a\"")
+            )
+            XCTFail("did not raise its declared error")
+        } catch let error as SdkHttpError {
+            XCTAssertEqual(error.statusCode, 418)
+            let data = try XCTUnwrap(
+                error.data as? any Encodable,
+                "decoded no error body"
+            )
+            XCTAssertNil(
+                try mismatch(jsonValue(data), expected),
+                "decoded an error body that differs from the mock"
+            )
+        }
+        XCTAssertTrue(true)
+    }
+
+    func testGetAuthOAuthClientGetAuthOAuthClientReachesMockAndDecodesResponse() async throws {
+        guard let client = configuredClient() else {
+            return
+        }
+        _ = client
+        let actual = try await client.auth.getOAuthClient(
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\""),
+            clientId: decoded("\"a\"")
+        )
+        let expected = try JSONSerialization.jsonObject(
+            with: Data(sdkMethodFixture141Expected.utf8),
+            options: [.fragmentsAllowed]
+        )
+        XCTAssertNil(
+            try mismatch(jsonValue(actual), expected),
+            "decoded a response that differs from the mock"
         )
     }
 }

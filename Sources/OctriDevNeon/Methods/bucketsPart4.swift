@@ -122,6 +122,9 @@ public extension BucketsMethods {
                         for item in pageItems {
                             continuation.yield(item)
                         }
+                        if !pageResponse.isTruncated {
+                            break
+                        }
                         guard let nextCursor = pageResponse.nextCursor else {
                             break
                         }
@@ -177,7 +180,7 @@ public extension BucketsMethods {
                         if pageItems.isEmpty {
                             break
                         }
-                        let hasMore = pageResponse.nextCursor != nil
+                        let hasMore = pageResponse.isTruncated && pageResponse.nextCursor != nil
                         pageContinuation.yield(ListBucketsObjectsPage(
                             data: pageResponse,
                             items: pageItems,
