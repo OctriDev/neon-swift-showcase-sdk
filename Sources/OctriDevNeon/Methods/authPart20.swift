@@ -6,11 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthMethods {
-    /// Updates the OAuth provider plugin configuration for Neon Auth. Only the fields provided in the request body are
-    /// updated; omitted fields retain their current values. A provided `resources` list replaces the stored list. A
-    /// provided `mcp` object replaces the stored MCP configuration and must include `resource`. The plugin can only be
-    /// enabled on the project's root branch.
+extension AuthMethods {
+    /// Updates the OAuth provider plugin configuration for Neon Auth. Only the fields provided in the request body are updated; omitted fields retain their current values. A provided `resources` list replaces the stored list. A provided `mcp` object replaces the stored MCP configuration and must include `resource`. The plugin can only be enabled on the project's root branch.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -24,44 +21,13 @@ public extension AuthMethods {
     ///   the stored MCP configuration is replaced as a whole.
     /// - resources: Protected resources that clients can be linked to. When
     ///   provided, replaces the stored list.
-    static func updateAuthOAuthProviderPlugin(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        enabled: Bool? = nil,
-        loginPage: String? = nil,
-        consentPage: String? = nil,
-        mcp: NeonAuthOAuthProviderMcpUpdate? = nil,
-        resources: [NeonAuthOAuthProviderResource]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonAuthOAuthProviderConfig {
+    public static func updateAuthOAuthProviderPlugin(config: ClientConfig, projectId: String, branchId: String, enabled: Bool? = nil, loginPage: String? = nil, consentPage: String? = nil, mcp: NeonAuthOAuthProviderMcpUpdate? = nil, resources: [NeonAuthOAuthProviderResource]? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonAuthOAuthProviderConfig {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        let requestBody = UpdateAuthOAuthProviderPluginRequestBody(
-            enabled: enabled,
-            loginPage: loginPage,
-            consentPage: consentPage,
-            mcp: mcp,
-            resources: resources
-        )
+        let requestBody = UpdateAuthOAuthProviderPluginRequestBody(enabled: enabled, loginPage: loginPage, consentPage: consentPage, mcp: mcp, resources: resources)
 
-        return try await (sdkRequest(
-            "PATCH",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/auth/plugins/oauth-provider",
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateAuthOAuthProviderPlugin",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("PATCH", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/plugins/oauth-provider"].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateAuthOAuthProviderPlugin", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

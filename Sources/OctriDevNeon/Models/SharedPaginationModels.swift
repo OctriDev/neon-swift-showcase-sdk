@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedPagination domain models
+// SharedPagination domain models
 /// Cursor-based pagination. The `cursor` value reflects the endpoint's sort field (for example, an ID or
 /// timestamp), so pass it back unchanged.
 public struct Pagination: Codable {
@@ -15,30 +15,24 @@ public struct Pagination: Codable {
         case cursor
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension Pagination {
-    init(from decoder: Decoder) throws {
+extension Pagination {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.cursor) else {
-            throw SdkValidationError(
-                field: "cursor",
-                code: "required",
-                message: "Validation failed for 'cursor': value is required"
-            )
+            throw SdkValidationError(field: "cursor", code: "required", message: "Validation failed for 'cursor': value is required")
         }
-        cursor = try container.sdkDecodeRequired(.cursor)
-        try validateLength("cursor", cursor, min: 1, max: nil)
+        self.cursor = try container.sdkDecodeRequired(.cursor)
+            try validateLength("cursor", self.cursor, min: 1, max: nil)
     }
 }
 
-public extension Pagination {
-    init(cursor: String) throws {
+extension Pagination {
+    public init(cursor: String) throws {
         self.cursor = cursor
-        try validateLength("cursor", self.cursor, min: 1, max: nil)
+            try validateLength("cursor", self.cursor, min: 1, max: nil)
     }
 }
 
@@ -54,19 +48,19 @@ public struct PaginationResponse: Codable {
     }
 
     init() {
-        pagination = nil
+        self.pagination = nil
     }
 }
 
-public extension PaginationResponse {
-    init(from decoder: Decoder) throws {
+extension PaginationResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        pagination = try container.sdkDecodeIfPresent(.pagination)
+        self.pagination = try container.sdkDecodeIfPresent(.pagination)
     }
 }
 
-public extension PaginationResponse {
-    init(pagination: Pagination? = nil) {
+extension PaginationResponse {
+    public init(pagination: Pagination? = nil) {
         self.init()
         self.pagination = pagination
     }

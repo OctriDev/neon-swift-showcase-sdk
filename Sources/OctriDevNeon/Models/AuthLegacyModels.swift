@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AuthLegacy domain models
+// AuthLegacy domain models
 /// Typed representation of the `ListNeonAuthIntegrationsResponse` API schema.
 public struct ListNeonAuthIntegrationsResponse: Codable {
     /// Neon Auth integrations configured for the project.
@@ -13,27 +13,21 @@ public struct ListNeonAuthIntegrationsResponse: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ListNeonAuthIntegrationsResponse {
-    init(from decoder: Decoder) throws {
+extension ListNeonAuthIntegrationsResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
-        data = try container.sdkDecodeRequired(.data)
+        self.data = try container.sdkDecodeRequired(.data)
     }
 }
 
-public extension ListNeonAuthIntegrationsResponse {
-    init(data: [NeonAuthIntegration]) {
+extension ListNeonAuthIntegrationsResponse {
+    public init(data: [NeonAuthIntegration]) {
         self.data = data
     }
 }
@@ -52,38 +46,28 @@ public struct NeonAuthTransferAuthProviderProjectRequest: Codable {
         case authProvider = "auth_provider"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonAuthTransferAuthProviderProjectRequest {
-    init(from decoder: Decoder) throws {
+extension NeonAuthTransferAuthProviderProjectRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.projectId) else {
-            throw SdkValidationError(
-                field: "project_id",
-                code: "required",
-                message: "Validation failed for 'project_id': value is required"
-            )
+            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
         }
         guard container.contains(.authProvider) else {
-            throw SdkValidationError(
-                field: "auth_provider",
-                code: "required",
-                message: "Validation failed for 'auth_provider': value is required"
-            )
+            throw SdkValidationError(field: "auth_provider", code: "required", message: "Validation failed for 'auth_provider': value is required")
         }
-        projectId = try container.sdkDecodeRequired(.projectId)
-        authProvider = try container.sdkDecodeRequired(.authProvider)
-        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
+        self.projectId = try container.sdkDecodeRequired(.projectId)
+        self.authProvider = try container.sdkDecodeRequired(.authProvider)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
     }
 }
 
-public extension NeonAuthTransferAuthProviderProjectRequest {
-    init(projectId: String, authProvider: NeonAuthSupportedAuthProvider) throws {
+extension NeonAuthTransferAuthProviderProjectRequest {
+    public init(projectId: String, authProvider: NeonAuthSupportedAuthProvider) throws {
         (self.projectId, self.authProvider) = (projectId, authProvider)
-        try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
     }
 }
 
@@ -102,38 +86,28 @@ public struct NeonAuthCreateAuthProviderSDKKeysRequest: Codable {
         case authProvider = "auth_provider"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonAuthCreateAuthProviderSDKKeysRequest {
-    init(from decoder: Decoder) throws {
+extension NeonAuthCreateAuthProviderSDKKeysRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.projectId) else {
-            throw SdkValidationError(
-                field: "project_id",
-                code: "required",
-                message: "Validation failed for 'project_id': value is required"
-            )
+            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
         }
         guard container.contains(.authProvider) else {
-            throw SdkValidationError(
-                field: "auth_provider",
-                code: "required",
-                message: "Validation failed for 'auth_provider': value is required"
-            )
+            throw SdkValidationError(field: "auth_provider", code: "required", message: "Validation failed for 'auth_provider': value is required")
         }
-        projectId = try container.sdkDecodeRequired(.projectId)
-        authProvider = try container.sdkDecodeRequired(.authProvider)
-        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
+        self.projectId = try container.sdkDecodeRequired(.projectId)
+        self.authProvider = try container.sdkDecodeRequired(.authProvider)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
     }
 }
 
-public extension NeonAuthCreateAuthProviderSDKKeysRequest {
-    init(projectId: String, authProvider: NeonAuthSupportedAuthProvider) throws {
+extension NeonAuthCreateAuthProviderSDKKeysRequest {
+    public init(projectId: String, authProvider: NeonAuthSupportedAuthProvider) throws {
         (self.projectId, self.authProvider) = (projectId, authProvider)
-        try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
     }
 }
 
@@ -163,58 +137,38 @@ public struct NeonAuthCreateIntegrationRequest: Codable {
         case roleName = "role_name"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonAuthCreateIntegrationRequest {
-    init(from decoder: Decoder) throws {
+extension NeonAuthCreateIntegrationRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.authProvider) else {
-            throw SdkValidationError(
-                field: "auth_provider",
-                code: "required",
-                message: "Validation failed for 'auth_provider': value is required"
-            )
+            throw SdkValidationError(field: "auth_provider", code: "required", message: "Validation failed for 'auth_provider': value is required")
         }
         guard container.contains(.projectId) else {
-            throw SdkValidationError(
-                field: "project_id",
-                code: "required",
-                message: "Validation failed for 'project_id': value is required"
-            )
+            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
         }
         guard container.contains(.branchId) else {
-            throw SdkValidationError(
-                field: "branch_id",
-                code: "required",
-                message: "Validation failed for 'branch_id': value is required"
-            )
+            throw SdkValidationError(field: "branch_id", code: "required", message: "Validation failed for 'branch_id': value is required")
         }
-        authProvider = try container.sdkDecodeRequired(.authProvider)
-        projectId = try container.sdkDecodeRequired(.projectId)
-        branchId = try container.sdkDecodeRequired(.branchId)
-        databaseName = try container.sdkDecodeIfPresent(.databaseName)
-        roleName = try container.sdkDecodeIfPresent(.roleName)
-        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
-        try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
+        self.authProvider = try container.sdkDecodeRequired(.authProvider)
+        self.projectId = try container.sdkDecodeRequired(.projectId)
+        self.branchId = try container.sdkDecodeRequired(.branchId)
+        self.databaseName = try container.sdkDecodeIfPresent(.databaseName)
+        self.roleName = try container.sdkDecodeIfPresent(.roleName)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
     }
 }
 
-public extension NeonAuthCreateIntegrationRequest {
-    init(
-        authProvider: NeonAuthSupportedAuthProvider,
-        projectId: String,
-        branchId: String,
-        databaseName: String? = nil,
-        roleName: String? = nil
-    ) throws {
+extension NeonAuthCreateIntegrationRequest {
+    public init(authProvider: NeonAuthSupportedAuthProvider, projectId: String, branchId: String, databaseName: String? = nil, roleName: String? = nil) throws {
         (self.authProvider, self.projectId) = (authProvider, projectId)
         (self.branchId, self.databaseName) = (branchId, databaseName)
         self.roleName = roleName
-        try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-        try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
     }
 }
 
@@ -227,27 +181,21 @@ public struct NeonAuthTransferAuthProviderProjectResponse: Codable {
         case url
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonAuthTransferAuthProviderProjectResponse {
-    init(from decoder: Decoder) throws {
+extension NeonAuthTransferAuthProviderProjectResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.url) else {
-            throw SdkValidationError(
-                field: "url",
-                code: "required",
-                message: "Validation failed for 'url': value is required"
-            )
+            throw SdkValidationError(field: "url", code: "required", message: "Validation failed for 'url': value is required")
         }
-        url = try container.sdkDecodeRequired(.url)
+        self.url = try container.sdkDecodeRequired(.url)
     }
 }
 
-public extension NeonAuthTransferAuthProviderProjectResponse {
-    init(url: String) {
+extension NeonAuthTransferAuthProviderProjectResponse {
+    public init(url: String) {
         self.url = url
     }
 }
@@ -272,55 +220,41 @@ public struct NeonAuthCreateNewUserRequest: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonAuthCreateNewUserRequest {
-    init(from decoder: Decoder) throws {
+extension NeonAuthCreateNewUserRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.projectId) else {
-            throw SdkValidationError(
-                field: "project_id",
-                code: "required",
-                message: "Validation failed for 'project_id': value is required"
-            )
+            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
         }
         guard container.contains(.authProvider) else {
-            throw SdkValidationError(
-                field: "auth_provider",
-                code: "required",
-                message: "Validation failed for 'auth_provider': value is required"
-            )
+            throw SdkValidationError(field: "auth_provider", code: "required", message: "Validation failed for 'auth_provider': value is required")
         }
         guard container.contains(.email) else {
-            throw SdkValidationError(
-                field: "email",
-                code: "required",
-                message: "Validation failed for 'email': value is required"
-            )
+            throw SdkValidationError(field: "email", code: "required", message: "Validation failed for 'email': value is required")
         }
-        projectId = try container.sdkDecodeRequired(.projectId)
-        authProvider = try container.sdkDecodeRequired(.authProvider)
-        email = try container.sdkDecodeRequired(.email)
-        name = try container.sdkDecodeIfPresent(.name)
-        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
-        try validateLength("email", email, min: 1, max: 256)
-        try sdkValidateEmail("email", email)
-        if let value = name {
+        self.projectId = try container.sdkDecodeRequired(.projectId)
+        self.authProvider = try container.sdkDecodeRequired(.authProvider)
+        self.email = try container.sdkDecodeRequired(.email)
+        self.name = try container.sdkDecodeIfPresent(.name)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try validateLength("email", self.email, min: 1, max: 256)
+            try sdkValidateEmail("email", self.email)
+        if let value = self.name {
             try validateLength("name", value, min: 1, max: 255)
         }
     }
 }
 
-public extension NeonAuthCreateNewUserRequest {
-    init(projectId: String, authProvider: NeonAuthSupportedAuthProvider, email: String, name: String? = nil) throws {
+extension NeonAuthCreateNewUserRequest {
+    public init(projectId: String, authProvider: NeonAuthSupportedAuthProvider, email: String, name: String? = nil) throws {
         (self.projectId, self.authProvider) = (projectId, authProvider)
         (self.email, self.name) = (email, name)
-        try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-        try validateLength("email", self.email, min: 1, max: 256)
-        try sdkValidateEmail("email", self.email)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try validateLength("email", self.email, min: 1, max: 256)
+            try sdkValidateEmail("email", self.email)
         if let value = self.name {
             try validateLength("name", value, min: 1, max: 255)
         }

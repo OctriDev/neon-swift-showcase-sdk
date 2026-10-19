@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthMethods {
-    /// Updates the organization plugin configuration for Neon Auth. The organization plugin enables multi-tenant
-    /// organization support.
+extension AuthMethods {
+    /// Updates the organization plugin configuration for Neon Auth. The organization plugin enables multi-tenant organization support.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -23,52 +22,21 @@ public extension AuthMethods {
     ///   members and settings only.
     /// - sendInvitationEmail: When true, invited users receive an email containing
     ///   an accept link. Requires that the invited user has a verified email address.
-    static func updateAuthOrganizationPlugin(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        enabled: Bool? = nil,
-        organizationLimit: Int? = nil,
-        membershipLimit: Int? = nil,
-        creatorRole: NeonAuthOrganizationConfigUpdateCreatorRole? = nil,
-        sendInvitationEmail: Bool? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonAuthOrganizationConfig {
+    public static func updateAuthOrganizationPlugin(config: ClientConfig, projectId: String, branchId: String, enabled: Bool? = nil, organizationLimit: Int? = nil, membershipLimit: Int? = nil, creatorRole: NeonAuthOrganizationConfigUpdateCreatorRole? = nil, sendInvitationEmail: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonAuthOrganizationConfig {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        if let organizationLimit {
+        if let organizationLimit = organizationLimit {
             try validateRange("organization_limit", Double(organizationLimit), min: 1)
         }
 
-        if let membershipLimit {
+        if let membershipLimit = membershipLimit {
             try validateRange("membership_limit", Double(membershipLimit), min: 1)
         }
 
-        let requestBody = UpdateAuthOrganizationPluginRequestBody(
-            enabled: enabled,
-            organizationLimit: organizationLimit,
-            membershipLimit: membershipLimit,
-            creatorRole: creatorRole,
-            sendInvitationEmail: sendInvitationEmail
-        )
+        let requestBody = UpdateAuthOrganizationPluginRequestBody(enabled: enabled, organizationLimit: organizationLimit, membershipLimit: membershipLimit, creatorRole: creatorRole, sendInvitationEmail: sendInvitationEmail)
 
-        return try await (sdkRequest(
-            "PATCH",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/auth/plugins/organization",
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateAuthOrganizationPlugin",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("PATCH", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/plugins/organization"].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateAuthOrganizationPlugin", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

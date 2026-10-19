@@ -3,170 +3,62 @@
 
 import Foundation
 
-public extension OrganizationsNamespace {
-    /// Retrieves information about the specified organization member.
-    func getMember(orgId: String, memberId: String, requestOptions: RequestOptions? = nil) async throws -> Member {
-        try await OrganizationsMethods.getOrganizationMember(
-            config: config,
-            orgId: orgId,
-            memberId: memberId,
-            requestOptions: requestOptions
-        )
+extension OrganizationsNamespace {
+/// Retrieves information about the specified organization member.
+    public func getMember(orgId: String, memberId: String, requestOptions: RequestOptions? = nil) async throws -> Member {
+        return try await OrganizationsMethods.getOrganizationMember(config: config, orgId: orgId, memberId: memberId, requestOptions: requestOptions)
     }
 
-    /// Updates the role of an existing member in the specified organization. The requested role must be valid for the
-    /// organization. Only organization admins can call this endpoint.
-    func updateMember(
-        orgId: String,
-        memberId: String,
-        role: MemberRole,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Member {
-        try await OrganizationsMethods.updateOrganizationMember(
-            config: config,
-            orgId: orgId,
-            memberId: memberId,
-            role: role,
-            requestOptions: requestOptions
-        )
+/// Updates the role of an existing member in the specified organization. The requested role must be valid for the organization. Only organization admins can call this endpoint.
+    public func updateMember(orgId: String, memberId: String, role: MemberRole, requestOptions: RequestOptions? = nil) async throws -> Member {
+        return try await OrganizationsMethods.updateOrganizationMember(config: config, orgId: orgId, memberId: memberId, role: role, requestOptions: requestOptions)
     }
 
-    /// Removes the specified member from the organization. Only organization admins can perform this action. The last
-    /// admin in an organization cannot be removed.
-    func removeMember(
-        orgId: String,
-        memberId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EmptyResponse {
-        try await OrganizationsMethods.removeOrganizationMember(
-            config: config,
-            orgId: orgId,
-            memberId: memberId,
-            requestOptions: requestOptions
-        )
+/// Removes the specified member from the organization. Only organization admins can perform this action. The last admin in an organization cannot be removed.
+    public func removeMember(orgId: String, memberId: String, requestOptions: RequestOptions? = nil) async throws -> EmptyResponse {
+        return try await OrganizationsMethods.removeOrganizationMember(config: config, orgId: orgId, memberId: memberId, requestOptions: requestOptions)
     }
 
-    /// Retrieves pending and accepted invitations for the specified organization.
-    func listInvitations(
-        orgId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrganizationInvitationsResponse {
-        try await OrganizationsMethods.listOrganizationsInvitations(
-            config: config,
-            orgId: orgId,
-            requestOptions: requestOptions
-        )
+/// Retrieves pending and accepted invitations for the specified organization.
+    public func listInvitations(orgId: String, requestOptions: RequestOptions? = nil) async throws -> OrganizationInvitationsResponse {
+        return try await OrganizationsMethods.listOrganizationsInvitations(config: config, orgId: orgId, requestOptions: requestOptions)
     }
 
-    /// Creates invitations for a specific organization. If the invited user has an existing account, they automatically
-    /// join as a member. If they don't yet have an account, they are invited to create one, after which they become a
-    /// member. Each invited user receives an email notification.
-    func createInvitations(
-        orgId: String,
-        invitations: [OrganizationInviteCreateRequest],
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrganizationInvitationsResponse {
-        try await OrganizationsMethods.createOrganizationInvitations(
-            config: config,
-            orgId: orgId,
-            invitations: invitations,
-            requestOptions: requestOptions
-        )
+/// Creates invitations for a specific organization. If the invited user has an existing account, they automatically join as a member. If they don't yet have an account, they are invited to create one, after which they become a member. Each invited user receives an email notification.
+    public func createInvitations(orgId: String, invitations: [OrganizationInviteCreateRequest], requestOptions: RequestOptions? = nil) async throws -> OrganizationInvitationsResponse {
+        return try await OrganizationsMethods.createOrganizationInvitations(config: config, orgId: orgId, invitations: invitations, requestOptions: requestOptions)
     }
 
-    /// Transfers selected projects, identified by their IDs, from your organization to another specified organization.
-    func transferProjects(
-        sourceOrgId: String,
-        destinationOrgId: String,
-        projectIds: [String],
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EmptyResponse {
-        try await OrganizationsMethods.transferOrganizationsProjects(
-            config: config,
-            sourceOrgId: sourceOrgId,
-            destinationOrgId: destinationOrgId,
-            projectIds: projectIds,
-            requestOptions: requestOptions
-        )
+/// Transfers selected projects, identified by their IDs, from your organization to another specified organization.
+    public func transferProjects(sourceOrgId: String, destinationOrgId: String, projectIds: [String], requestOptions: RequestOptions? = nil) async throws -> EmptyResponse {
+        return try await OrganizationsMethods.transferOrganizationsProjects(config: config, sourceOrgId: sourceOrgId, destinationOrgId: destinationOrgId, projectIds: projectIds, requestOptions: requestOptions)
     }
 
-    /// Retrieves the list of VPC endpoints for the specified Neon organization across all regions.
-    func listVpcEndpointsAllRegions(
-        orgId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VPCEndpointsWithRegionResponse {
-        try await OrganizationsMethods.listOrganizationVpcEndpointsAllRegions(
-            config: config,
-            orgId: orgId,
-            requestOptions: requestOptions
-        )
+/// Retrieves the list of VPC endpoints for the specified Neon organization across all regions.
+    public func listVpcEndpointsAllRegions(orgId: String, requestOptions: RequestOptions? = nil) async throws -> VPCEndpointsWithRegionResponse {
+        return try await OrganizationsMethods.listOrganizationVpcEndpointsAllRegions(config: config, orgId: orgId, requestOptions: requestOptions)
     }
 
-    /// Retrieves the list of VPC endpoints for the specified Neon organization.
-    func listVpcEndpoints(
-        orgId: String,
-        regionId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VPCEndpointsResponse {
-        try await OrganizationsMethods.listOrganizationVpcEndpoints(
-            config: config,
-            orgId: orgId,
-            regionId: regionId,
-            requestOptions: requestOptions
-        )
+/// Retrieves the list of VPC endpoints for the specified Neon organization.
+    public func listVpcEndpoints(orgId: String, regionId: String, requestOptions: RequestOptions? = nil) async throws -> VPCEndpointsResponse {
+        return try await OrganizationsMethods.listOrganizationVpcEndpoints(config: config, orgId: orgId, regionId: regionId, requestOptions: requestOptions)
     }
 }
 
-public extension OrganizationsNamespace {
-    /// Retrieves the current state and configuration details of a specified VPC endpoint.
-    func getVpcEndpoint(
-        orgId: String,
-        regionId: String,
-        vpcEndpointId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VPCEndpointDetails {
-        try await OrganizationsMethods.getOrganizationsVpcEndpoint(
-            config: config,
-            orgId: orgId,
-            regionId: regionId,
-            vpcEndpointId: vpcEndpointId,
-            requestOptions: requestOptions
-        )
+extension OrganizationsNamespace {
+/// Retrieves the current state and configuration details of a specified VPC endpoint.
+    public func getVpcEndpoint(orgId: String, regionId: String, vpcEndpointId: String, requestOptions: RequestOptions? = nil) async throws -> VPCEndpointDetails {
+        return try await OrganizationsMethods.getOrganizationsVpcEndpoint(config: config, orgId: orgId, regionId: regionId, vpcEndpointId: vpcEndpointId, requestOptions: requestOptions)
     }
 
-    /// Assigns a VPC endpoint to a Neon organization or updates its existing assignment.
-    func assignVpcEndpoint(
-        orgId: String,
-        regionId: String,
-        vpcEndpointId: String,
-        label: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await OrganizationsMethods.assignOrganizationVpcEndpoint(
-            config: config,
-            orgId: orgId,
-            regionId: regionId,
-            vpcEndpointId: vpcEndpointId,
-            label: label,
-            requestOptions: requestOptions
-        )
+/// Assigns a VPC endpoint to a Neon organization or updates its existing assignment.
+    public func assignVpcEndpoint(orgId: String, regionId: String, vpcEndpointId: String, label: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await OrganizationsMethods.assignOrganizationVpcEndpoint(config: config, orgId: orgId, regionId: regionId, vpcEndpointId: vpcEndpointId, label: label, requestOptions: requestOptions)
     }
 
-    /// Deletes the VPC endpoint from the specified Neon organization. If you delete a VPC endpoint from a Neon
-    /// organization, that VPC endpoint cannot be added back to the Neon organization.
-    func deleteVpcEndpoint(
-        orgId: String,
-        regionId: String,
-        vpcEndpointId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await OrganizationsMethods.deleteOrganizationVpcEndpoint(
-            config: config,
-            orgId: orgId,
-            regionId: regionId,
-            vpcEndpointId: vpcEndpointId,
-            requestOptions: requestOptions
-        )
+/// Deletes the VPC endpoint from the specified Neon organization. If you delete a VPC endpoint from a Neon organization, that VPC endpoint cannot be added back to the Neon organization.
+    public func deleteVpcEndpoint(orgId: String, regionId: String, vpcEndpointId: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await OrganizationsMethods.deleteOrganizationVpcEndpoint(config: config, orgId: orgId, regionId: regionId, vpcEndpointId: vpcEndpointId, requestOptions: requestOptions)
     }
 }
 
@@ -176,13 +68,9 @@ public class RegionNamespace {
         self.config = config
     }
 
-    /// Lists supported Neon regions. **Note:** Not all regions are available to all organizations. Pass the `org_id`
-    /// parameter to get an accurate list of regions available to your organization.
-    public func getActive(
-        orgId: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ActiveRegionsResponse {
-        try await RegionMethods.getActiveRegions(config: config, orgId: orgId, requestOptions: requestOptions)
+/// Lists supported Neon regions. **Note:** Not all regions are available to all organizations. Pass the `org_id` parameter to get an accurate list of regions available to your organization.
+    public func getActive(orgId: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ActiveRegionsResponse {
+        return try await RegionMethods.getActiveRegions(config: config, orgId: orgId, requestOptions: requestOptions)
     }
 }
 
@@ -192,39 +80,26 @@ public class UsersNamespace {
         self.config = config
     }
 
-    /// Retrieves information about the currently authenticated Neon user, including account identifiers, plan details,
-    /// and linked auth accounts.
+/// Retrieves information about the currently authenticated Neon user, including account identifiers, plan details, and linked auth accounts.
     public func getCurrentInfo(requestOptions: RequestOptions? = nil) async throws -> CurrentUserInfoResponse {
-        try await UsersMethods.getCurrentUserInfo(config: config, requestOptions: requestOptions)
+        return try await UsersMethods.getCurrentUserInfo(config: config, requestOptions: requestOptions)
     }
 
-    /// Retrieves the organizations that the currently authenticated user belongs to. When called with an organization-
-    /// or project-scoped API key (which is not tied to a user), this returns the single organization that owns the key.
+/// Retrieves the organizations that the currently authenticated user belongs to. When called with an organization- or project-scoped API key (which is not tied to a user), this returns the single organization that owns the key.
     public func getCurrentOrganizations(requestOptions: RequestOptions? = nil) async throws -> OrganizationsResponse {
-        try await UsersMethods.getCurrentUserOrganizations(config: config, requestOptions: requestOptions)
+        return try await UsersMethods.getCurrentUserOrganizations(config: config, requestOptions: requestOptions)
     }
 
-    /// Deprecated. Personal accounts have been migrated to organizations, so this operation no longer applies. Removal
-    /// scheduled for July 1, 2026.
+/// Deprecated. Personal accounts have been migrated to organizations, so this operation no longer applies. Removal scheduled for July 1, 2026.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public func transferProjects(
-        destinationOrgId: String,
-        projectIds: [String],
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EmptyResponse {
-        try await UsersMethods.transferUsersProjects(
-            config: config,
-            destinationOrgId: destinationOrgId,
-            projectIds: projectIds,
-            requestOptions: requestOptions
-        )
+    public func transferProjects(destinationOrgId: String, projectIds: [String], requestOptions: RequestOptions? = nil) async throws -> EmptyResponse {
+        return try await UsersMethods.transferUsersProjects(config: config, destinationOrgId: destinationOrgId, projectIds: projectIds, requestOptions: requestOptions)
     }
 
-    /// Returns authentication details for the credentials used in the request, including the credential type (API key,
-    /// Bearer token, or OAuth session) and the associated identity.
+/// Returns authentication details for the credentials used in the request, including the credential type (API key, Bearer token, or OAuth session) and the associated identity.
     public func getAuthDetails(requestOptions: RequestOptions? = nil) async throws -> AuthDetailsResponse {
-        try await UsersMethods.getAuthDetails(config: config, requestOptions: requestOptions)
+        return try await UsersMethods.getAuthDetails(config: config, requestOptions: requestOptions)
     }
 }
 
@@ -234,123 +109,43 @@ public class SnapshotNamespace {
         self.config = config
     }
 
-    /// Creates a snapshot from the specified branch. This operation may initiate an asynchronous process.
-    public func create(
-        projectId: String,
-        branchId: String,
-        lsn: String? = nil,
-        timestamp: String? = nil,
-        name: String? = nil,
-        expiresAt: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CreateSnapshotResponse {
-        try await SnapshotMethods.createSnapshot(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            lsn: lsn,
-            timestamp: timestamp,
-            name: name,
-            expiresAt: expiresAt,
-            requestOptions: requestOptions
-        )
+/// Creates a snapshot from the specified branch. This operation may initiate an asynchronous process.
+    public func create(projectId: String, branchId: String, lsn: String? = nil, timestamp: String? = nil, name: String? = nil, expiresAt: String? = nil, requestOptions: RequestOptions? = nil) async throws -> CreateSnapshotResponse {
+        return try await SnapshotMethods.createSnapshot(config: config, projectId: projectId, branchId: branchId, lsn: lsn, timestamp: timestamp, name: name, expiresAt: expiresAt, requestOptions: requestOptions)
     }
 
-    /// Lists the snapshots for the specified project. Each snapshot represents a point-in-time backup of the project
-    /// data.
+/// Lists the snapshots for the specified project. Each snapshot represents a point-in-time backup of the project data.
     public func list(projectId: String, requestOptions: RequestOptions? = nil) async throws -> ListSnapshotsResponse {
-        try await SnapshotMethods.listSnapshots(config: config, projectId: projectId, requestOptions: requestOptions)
+        return try await SnapshotMethods.listSnapshots(config: config, projectId: projectId, requestOptions: requestOptions)
     }
 
-    /// Deletes a specified snapshot from a project. Use `project_id` and `snapshot_id` to identify the project and
-    /// snapshot. Deletion is asynchronous; the response includes operation details for tracking progress.
+/// Deletes a specified snapshot from a project. Use `project_id` and `snapshot_id` to identify the project and snapshot. Deletion is asynchronous; the response includes operation details for tracking progress.
     ///
     /// Deletes the specified snapshot.
-    public func delete(
-        projectId: String,
-        snapshotId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OperationsResponse {
-        try await SnapshotMethods.deleteSnapshot(
-            config: config,
-            projectId: projectId,
-            snapshotId: snapshotId,
-            requestOptions: requestOptions
-        )
+    public func delete(projectId: String, snapshotId: String, requestOptions: RequestOptions? = nil) async throws -> OperationsResponse {
+        return try await SnapshotMethods.deleteSnapshot(config: config, projectId: projectId, snapshotId: snapshotId, requestOptions: requestOptions)
     }
 
-    /// Updates the name or expiration time of a project snapshot. Supply the `snapshot` object with the fields to
-    /// change; omitting `expires_at` leaves the current expiration unchanged, while sending `null` clears it. A 200
-    /// response returns the updated snapshot.
+/// Updates the name or expiration time of a project snapshot. Supply the `snapshot` object with the fields to change; omitting `expires_at` leaves the current expiration unchanged, while sending `null` clears it. A 200 response returns the updated snapshot.
     ///
     /// Updates the specified snapshot.
-    public func update(
-        projectId: String,
-        snapshotId: String,
-        snapshot: SnapshotUpdateRequestSnapshot,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> UpdateSnapshotResponse {
-        try await SnapshotMethods.updateSnapshot(
-            config: config,
-            projectId: projectId,
-            snapshotId: snapshotId,
-            snapshot: snapshot,
-            requestOptions: requestOptions
-        )
+    public func update(projectId: String, snapshotId: String, snapshot: SnapshotUpdateRequestSnapshot, requestOptions: RequestOptions? = nil) async throws -> UpdateSnapshotResponse {
+        return try await SnapshotMethods.updateSnapshot(config: config, projectId: projectId, snapshotId: snapshotId, snapshot: snapshot, requestOptions: requestOptions)
     }
 
-    /// Restores the specified snapshot to a new branch, and optionally finalizes the restore operation to replace the
-    /// original branch.
-    public func restore(
-        projectId: String,
-        snapshotId: String,
-        name: String? = nil,
-        name2: String? = nil,
-        targetBranchId: String? = nil,
-        finalizeRestore: Bool? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> RestoreSnapshotResponse {
-        try await SnapshotMethods.restoreSnapshot(
-            config: config,
-            projectId: projectId,
-            snapshotId: snapshotId,
-            name: name,
-            name2: name2,
-            targetBranchId: targetBranchId,
-            finalizeRestore: finalizeRestore,
-            requestOptions: requestOptions
-        )
+/// Restores the specified snapshot to a new branch, and optionally finalizes the restore operation to replace the original branch.
+    public func restore(projectId: String, snapshotId: String, name: String? = nil, name2: String? = nil, targetBranchId: String? = nil, finalizeRestore: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> RestoreSnapshotResponse {
+        return try await SnapshotMethods.restoreSnapshot(config: config, projectId: projectId, snapshotId: snapshotId, name: name, name2: name2, targetBranchId: targetBranchId, finalizeRestore: finalizeRestore, requestOptions: requestOptions)
     }
 
-    /// Returns the backup schedule for the specified branch, including the configured snapshot frequencies.
-    public func getSchedule(
-        projectId: String,
-        branchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BackupSchedule {
-        try await SnapshotMethods.getSnapshotSchedule(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            requestOptions: requestOptions
-        )
+/// Returns the backup schedule for the specified branch, including the configured snapshot frequencies.
+    public func getSchedule(projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> BackupSchedule {
+        return try await SnapshotMethods.getSnapshotSchedule(config: config, projectId: projectId, branchId: branchId, requestOptions: requestOptions)
     }
 
-    /// Updates the backup schedule for the specified branch. The schedule defines how often automatic snapshots are
-    /// created (for example, `daily` or `weekly`). Requires a paid plan.
-    public func setSchedule(
-        projectId: String,
-        branchId: String,
-        schedule: [BackupScheduleItem],
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EmptyResponse {
-        try await SnapshotMethods.setSnapshotSchedule(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            schedule: schedule,
-            requestOptions: requestOptions
-        )
+/// Updates the backup schedule for the specified branch. The schedule defines how often automatic snapshots are created (for example, `daily` or `weekly`). Requires a paid plan.
+    public func setSchedule(projectId: String, branchId: String, schedule: [BackupScheduleItem], requestOptions: RequestOptions? = nil) async throws -> EmptyResponse {
+        return try await SnapshotMethods.setSnapshotSchedule(config: config, projectId: projectId, branchId: branchId, schedule: schedule, requestOptions: requestOptions)
     }
 }
 
@@ -360,212 +155,51 @@ public class BucketsNamespace {
         self.config = config
     }
 
-    /// Creates a new branchable object storage bucket on the specified branch. Buckets are managed by the Neon Platform
-    /// branchable object storage service. **Note**: This endpoint is currently in Beta.
-    public func create(
-        projectId: String,
-        branchId: String,
-        name: String,
-        accessLevel: BucketCreateRequestAccessLevel? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BucketResponse {
-        try await BucketsMethods.createBuckets(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            name: name,
-            accessLevel: accessLevel,
-            requestOptions: requestOptions
-        )
+/// Creates a new branchable object storage bucket on the specified branch. Buckets are managed by the Neon Platform branchable object storage service. **Note**: This endpoint is currently in Beta.
+    public func create(projectId: String, branchId: String, name: String, accessLevel: BucketCreateRequestAccessLevel? = nil, requestOptions: RequestOptions? = nil) async throws -> BucketResponse {
+        return try await BucketsMethods.createBuckets(config: config, projectId: projectId, branchId: branchId, name: name, accessLevel: accessLevel, requestOptions: requestOptions)
     }
 
-    /// Lists branchable object storage buckets visible on the specified branch, including those inherited from ancestor
-    /// branches. **Note**: This endpoint is currently in Beta.
-    public func list(
-        projectId: String,
-        branchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BucketsListResponse {
-        try await BucketsMethods.listBuckets(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            requestOptions: requestOptions
-        )
+/// Lists branchable object storage buckets visible on the specified branch, including those inherited from ancestor branches. **Note**: This endpoint is currently in Beta.
+    public func list(projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> BucketsListResponse {
+        return try await BucketsMethods.listBuckets(config: config, projectId: projectId, branchId: branchId, requestOptions: requestOptions)
     }
 
-    /// Deletes the named bucket from the specified branch. **Note**: This endpoint is currently in Beta.
-    public func delete(
-        projectId: String,
-        branchId: String,
-        bucketName: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await BucketsMethods.deleteBuckets(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            bucketName: bucketName,
-            requestOptions: requestOptions
-        )
+/// Deletes the named bucket from the specified branch. **Note**: This endpoint is currently in Beta.
+    public func delete(projectId: String, branchId: String, bucketName: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await BucketsMethods.deleteBuckets(config: config, projectId: projectId, branchId: branchId, bucketName: bucketName, requestOptions: requestOptions)
     }
 
-    /// Lists objects visible in the named bucket on the specified branch, including those inherited from ancestor
-    /// branches. Listing is served by the user's session (no customer S3 credentials required). When `delimiter` is
-    /// supplied (typically `/`), keys are collapsed into common prefixes (`folders`) so callers can render a
-    /// folder-style browser; keys that do not contain the delimiter after `prefix` are returned as `objects`. **Note**:
-    /// This endpoint is currently in Beta.
-    public func listObjects(
-        projectId: String,
-        branchId: String,
-        bucketName: String,
-        prefix: String? = nil,
-        delimiter: String? = nil,
-        cursor: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BucketObjectsListResponse {
-        try await BucketsMethods.listBucketsObjects(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            bucketName: bucketName,
-            prefix: prefix,
-            delimiter: delimiter,
-            cursor: cursor,
-            limit: limit,
-            requestOptions: requestOptions
-        )
+/// Lists objects visible in the named bucket on the specified branch, including those inherited from ancestor branches. Listing is served by the user's session (no customer S3 credentials required). When `delimiter` is supplied (typically `/`), keys are collapsed into common prefixes (`folders`) so callers can render a folder-style browser; keys that do not contain the delimiter after `prefix` are returned as `objects`. **Note**: This endpoint is currently in Beta.
+    public func listObjects(projectId: String, branchId: String, bucketName: String, prefix: String? = nil, delimiter: String? = nil, cursor: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> BucketObjectsListResponse {
+        return try await BucketsMethods.listBucketsObjects(config: config, projectId: projectId, branchId: branchId, bucketName: bucketName, prefix: prefix, delimiter: delimiter, cursor: cursor, limit: limit, requestOptions: requestOptions)
     }
 
-    /// Lists objects visible in the named bucket on the specified branch, including those inherited from ancestor
-    /// branches. Listing is served by the user's session (no customer S3 credentials required). When `delimiter` is
-    /// supplied (typically `/`), keys are collapsed into common prefixes (`folders`) so callers can render a
-    /// folder-style browser; keys that do not contain the delimiter after `prefix` are returned as `objects`. **Note**:
-    /// This endpoint is currently in Beta.
-    public func listObjectsPaginated(
-        projectId: String,
-        branchId: String,
-        bucketName: String,
-        prefix: String? = nil,
-        delimiter: String? = nil,
-        cursor: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<BucketObject, Swift.Error> {
-        BucketsMethods.listBucketsObjectsPaginated(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            bucketName: bucketName,
-            prefix: prefix,
-            delimiter: delimiter,
-            cursor: cursor,
-            limit: limit,
-            requestOptions: requestOptions
-        )
+/// Lists objects visible in the named bucket on the specified branch, including those inherited from ancestor branches. Listing is served by the user's session (no customer S3 credentials required). When `delimiter` is supplied (typically `/`), keys are collapsed into common prefixes (`folders`) so callers can render a folder-style browser; keys that do not contain the delimiter after `prefix` are returned as `objects`. **Note**: This endpoint is currently in Beta.
+    public func listObjectsPaginated(projectId: String, branchId: String, bucketName: String, prefix: String? = nil, delimiter: String? = nil, cursor: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<BucketObject, Swift.Error> {
+        return BucketsMethods.listBucketsObjectsPaginated(config: config, projectId: projectId, branchId: branchId, bucketName: bucketName, prefix: prefix, delimiter: delimiter, cursor: cursor, limit: limit, requestOptions: requestOptions)
     }
 
-    /// Deletes the named object from the bucket on the specified branch. Served by the user's session (no customer S3
-    /// credentials required). **Note**: This endpoint is currently in Beta.
-    public func deleteObject(
-        projectId: String,
-        branchId: String,
-        bucketName: String,
-        objectKey: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await BucketsMethods.deleteBucketsObject(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            bucketName: bucketName,
-            objectKey: objectKey,
-            requestOptions: requestOptions
-        )
+/// Deletes the named object from the bucket on the specified branch. Served by the user's session (no customer S3 credentials required). **Note**: This endpoint is currently in Beta.
+    public func deleteObject(projectId: String, branchId: String, bucketName: String, objectKey: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await BucketsMethods.deleteBucketsObject(config: config, projectId: projectId, branchId: branchId, bucketName: bucketName, objectKey: objectKey, requestOptions: requestOptions)
     }
 
-    /// Streams the raw bytes of the named object from the bucket on the specified branch, including objects inherited
-    /// from ancestor branches. Served by the user's session (no customer S3 credentials required). The body is returned
-    /// as `application/octet-stream` so a browser treats it as a download; the `Content-Length` and `ETag` response
-    /// headers echo the stored object metadata. BINARY-STREAM EXCEPTION TO THE BUILD-GENERATED-TYPES RULE (#7029): the
-    /// successful 200 body is the raw object stream, proxied verbatim from the platform object storage admin endpoint.
-    /// It is modeled as an `application/octet-stream` binary body (not a JSON response schema) and is streamed without
-    /// buffering the whole object in memory. Error responses still use the generated `GeneralError` shape. **Note**:
-    /// This endpoint is currently in Beta.
-    public func getObject(
-        projectId: String,
-        branchId: String,
-        bucketName: String,
-        objectKey: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Data {
-        try await BucketsMethods.getBucketsObject(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            bucketName: bucketName,
-            objectKey: objectKey,
-            requestOptions: requestOptions
-        )
+/// Streams the raw bytes of the named object from the bucket on the specified branch, including objects inherited from ancestor branches. Served by the user's session (no customer S3 credentials required). The body is returned as `application/octet-stream` so a browser treats it as a download; the `Content-Length` and `ETag` response headers echo the stored object metadata. BINARY-STREAM EXCEPTION TO THE BUILD-GENERATED-TYPES RULE (#7029): the successful 200 body is the raw object stream, proxied verbatim from the platform object storage admin endpoint. It is modeled as an `application/octet-stream` binary body (not a JSON response schema) and is streamed without buffering the whole object in memory. Error responses still use the generated `GeneralError` shape. **Note**: This endpoint is currently in Beta.
+    public func getObject(projectId: String, branchId: String, bucketName: String, objectKey: String, requestOptions: RequestOptions? = nil) async throws -> Data {
+        return try await BucketsMethods.getBucketsObject(config: config, projectId: projectId, branchId: branchId, bucketName: bucketName, objectKey: objectKey, requestOptions: requestOptions)
     }
 
-    /// Soft-deletes every object on the specified branch whose key starts with `prefix`, in a single call. Intended to
-    /// back a "delete folder" action in an object browser: a `prefix` of `app/avatars/` removes every object beneath
-    /// that folder. Served by the user's session (no customer S3 credentials required). `prefix` must be non-empty, end
-    /// with `/`, be at most 1024 bytes, and contain no control characters - a partial-segment prefix cannot
-    /// accidentally delete sibling keys. Returns the number of objects soft-deleted (`deleted`), which may be 0 when no
-    /// live object matched the prefix on this branch. Only objects physically present on this branch are tombstoned;
-    /// objects inherited from an ancestor branch via copy-on-write (not materialized on this branch) are out of scope.
-    /// **Note**: This endpoint is currently in Beta.
-    public func deleteObjectsByPrefix(
-        projectId: String,
-        branchId: String,
-        bucketName: String,
-        prefix: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BucketObjectsDeletePrefixResponse {
-        try await BucketsMethods.deleteBucketsObjectsByPrefix(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            bucketName: bucketName,
-            prefix: prefix,
-            requestOptions: requestOptions
-        )
+/// Soft-deletes every object on the specified branch whose key starts with `prefix`, in a single call. Intended to back a "delete folder" action in an object browser: a `prefix` of `app/avatars/` removes every object beneath that folder. Served by the user's session (no customer S3 credentials required). `prefix` must be non-empty, end with `/`, be at most 1024 bytes, and contain no control characters - a partial-segment prefix cannot accidentally delete sibling keys. Returns the number of objects soft-deleted (`deleted`), which may be 0 when no live object matched the prefix on this branch. Only objects physically present on this branch are tombstoned; objects inherited from an ancestor branch via copy-on-write (not materialized on this branch) are out of scope. **Note**: This endpoint is currently in Beta.
+    public func deleteObjectsByPrefix(projectId: String, branchId: String, bucketName: String, prefix: String, requestOptions: RequestOptions? = nil) async throws -> BucketObjectsDeletePrefixResponse {
+        return try await BucketsMethods.deleteBucketsObjectsByPrefix(config: config, projectId: projectId, branchId: branchId, bucketName: bucketName, prefix: prefix, requestOptions: requestOptions)
     }
 }
 
-public extension BucketsNamespace {
-    /// Returns a presigned URL that transfers bytes directly to or from the object's bucket on the specified branch,
-    /// without the caller ever handling S3 credentials. The `operation` field selects the direction: - `upload` returns
-    /// a presigned `PUT` URL (the caller `PUT`s the file bytes straight to `url` with the returned `headers`).
-    /// Authorized with project write access. - `download` returns a presigned `GET` URL (the caller `GET`s the bytes
-    /// straight from `url`). Authorized with project read access. The platform mints a short-lived credential and
-    /// builds the SigV4-signed URL against the branch's S3 data-plane host, returning it together with the HTTP method,
-    /// any headers the caller must echo, and the URL's expiry. Served by the user's session (no customer S3 credentials
-    /// required). **Note**: This endpoint is currently in Beta.
-    func presignObject(
-        projectId: String,
-        branchId: String,
-        bucketName: String,
-        objectKey: String,
-        operation: PresignRequestOperation,
-        contentType: String? = nil,
-        expiresInSeconds: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> PresignResponse {
-        try await BucketsMethods.presignBucketsObject(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            bucketName: bucketName,
-            objectKey: objectKey,
-            operation: operation,
-            contentType: contentType,
-            expiresInSeconds: expiresInSeconds,
-            requestOptions: requestOptions
-        )
+extension BucketsNamespace {
+/// Returns a presigned URL that transfers bytes directly to or from the object's bucket on the specified branch, without the caller ever handling S3 credentials. The `operation` field selects the direction: - `upload` returns a presigned `PUT` URL (the caller `PUT`s the file bytes straight to `url` with the returned `headers`). Authorized with project write access. - `download` returns a presigned `GET` URL (the caller `GET`s the bytes straight from `url`). Authorized with project read access. The platform mints a short-lived credential and builds the SigV4-signed URL against the branch's S3 data-plane host, returning it together with the HTTP method, any headers the caller must echo, and the URL's expiry. Served by the user's session (no customer S3 credentials required). **Note**: This endpoint is currently in Beta.
+    public func presignObject(projectId: String, branchId: String, bucketName: String, objectKey: String, operation: PresignRequestOperation, contentType: String? = nil, expiresInSeconds: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> PresignResponse {
+        return try await BucketsMethods.presignBucketsObject(config: config, projectId: projectId, branchId: branchId, bucketName: bucketName, objectKey: objectKey, operation: operation, contentType: contentType, expiresInSeconds: expiresInSeconds, requestOptions: requestOptions)
     }
 }
 
@@ -575,20 +209,8 @@ public class StorageNamespace {
         self.config = config
     }
 
-    /// Returns whether branchable object storage is usable for the specified branch. A 200 response means the branch is
-    /// registered in the object storage service and the S3 data plane will accept requests for it. A 404 response
-    /// includes a `reason` field indicating why object storage is unavailable. **Note**: This endpoint is currently in
-    /// Beta.
-    public func get(
-        projectId: String,
-        branchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BranchStorage {
-        try await StorageMethods.getStorage(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            requestOptions: requestOptions
-        )
+/// Returns whether branchable object storage is usable for the specified branch. A 200 response means the branch is registered in the object storage service and the S3 data plane will accept requests for it. A 404 response includes a `reason` field indicating why object storage is unavailable. **Note**: This endpoint is currently in Beta.
+    public func get(projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> BranchStorage {
+        return try await StorageMethods.getStorage(config: config, projectId: projectId, branchId: branchId, requestOptions: requestOptions)
     }
 }

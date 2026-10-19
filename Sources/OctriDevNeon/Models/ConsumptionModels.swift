@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Consumption domain models
+// Consumption domain models
 public typealias ConsumptionHistoryQueryMetrics = [String]
 
 /// Typed representation of the `GetConsumptionHistoryPerBranchV2Response` API schema.
@@ -20,28 +20,22 @@ public struct GetConsumptionHistoryPerBranchV2Response: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension GetConsumptionHistoryPerBranchV2Response {
-    init(from decoder: Decoder) throws {
+extension GetConsumptionHistoryPerBranchV2Response {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.branches) else {
-            throw SdkValidationError(
-                field: "branches",
-                code: "required",
-                message: "Validation failed for 'branches': value is required"
-            )
+            throw SdkValidationError(field: "branches", code: "required", message: "Validation failed for 'branches': value is required")
         }
-        branches = try container.sdkDecodeRequired(.branches)
-        pagination = try container.sdkDecodeIfPresent(.pagination)
+        self.branches = try container.sdkDecodeRequired(.branches)
+        self.pagination = try container.sdkDecodeIfPresent(.pagination)
     }
 }
 
-public extension GetConsumptionHistoryPerBranchV2Response {
-    init(branches: [ConsumptionHistoryPerBranchV2], pagination: Pagination? = nil) {
+extension GetConsumptionHistoryPerBranchV2Response {
+    public init(branches: [ConsumptionHistoryPerBranchV2], pagination: Pagination? = nil) {
         (self.branches, self.pagination) = (branches, pagination)
     }
 }
@@ -62,27 +56,27 @@ public struct ConsumptionHistoryPerTimeframeV2: Codable {
     }
 
     init() {
-        (timeframeStart, timeframeEnd, metrics) = (nil, nil, nil)
+        (self.timeframeStart, self.timeframeEnd, self.metrics) = (nil, nil, nil)
     }
 }
 
-public extension ConsumptionHistoryPerTimeframeV2 {
-    init(from decoder: Decoder) throws {
+extension ConsumptionHistoryPerTimeframeV2 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        timeframeStart = try container.sdkDecodeIfPresent(.timeframeStart)
-        timeframeEnd = try container.sdkDecodeIfPresent(.timeframeEnd)
-        metrics = try container.sdkDecodeIfPresent(.metrics)
-        if let value = timeframeStart {
+        self.timeframeStart = try container.sdkDecodeIfPresent(.timeframeStart)
+        self.timeframeEnd = try container.sdkDecodeIfPresent(.timeframeEnd)
+        self.metrics = try container.sdkDecodeIfPresent(.metrics)
+        if let value = self.timeframeStart {
             try sdkValidateDateTime("timeframe_start", sdkWireString(value))
         }
-        if let value = timeframeEnd {
+        if let value = self.timeframeEnd {
             try sdkValidateDateTime("timeframe_end", sdkWireString(value))
         }
     }
 }
 
-public extension ConsumptionHistoryPerTimeframeV2 {
-    init(timeframeStart: Date? = nil, timeframeEnd: Date? = nil, metrics: [ConsumptionMetricValue]? = nil) throws {
+extension ConsumptionHistoryPerTimeframeV2 {
+    public init(timeframeStart: Date? = nil, timeframeEnd: Date? = nil, metrics: [ConsumptionMetricValue]? = nil) throws {
         self.init()
         (self.timeframeStart, self.timeframeEnd) = (timeframeStart, timeframeEnd)
         self.metrics = metrics
@@ -107,38 +101,28 @@ public struct ConsumptionHistoryPerProject: Codable {
         case periods
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConsumptionHistoryPerProject {
-    init(from decoder: Decoder) throws {
+extension ConsumptionHistoryPerProject {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.projectId) else {
-            throw SdkValidationError(
-                field: "project_id",
-                code: "required",
-                message: "Validation failed for 'project_id': value is required"
-            )
+            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
         }
         guard container.contains(.periods) else {
-            throw SdkValidationError(
-                field: "periods",
-                code: "required",
-                message: "Validation failed for 'periods': value is required"
-            )
+            throw SdkValidationError(field: "periods", code: "required", message: "Validation failed for 'periods': value is required")
         }
-        projectId = try container.sdkDecodeRequired(.projectId)
-        periods = try container.sdkDecodeRequired(.periods)
-        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
+        self.projectId = try container.sdkDecodeRequired(.projectId)
+        self.periods = try container.sdkDecodeRequired(.periods)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
     }
 }
 
-public extension ConsumptionHistoryPerProject {
-    init(projectId: String, periods: [ConsumptionHistoryPerPeriod]) throws {
+extension ConsumptionHistoryPerProject {
+    public init(projectId: String, periods: [ConsumptionHistoryPerPeriod]) throws {
         (self.projectId, self.periods) = (projectId, periods)
-        try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
     }
 }
 
@@ -156,28 +140,22 @@ public struct GetConsumptionHistoryPerProjectResponse: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension GetConsumptionHistoryPerProjectResponse {
-    init(from decoder: Decoder) throws {
+extension GetConsumptionHistoryPerProjectResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.projects) else {
-            throw SdkValidationError(
-                field: "projects",
-                code: "required",
-                message: "Validation failed for 'projects': value is required"
-            )
+            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
         }
-        projects = try container.sdkDecodeRequired(.projects)
-        pagination = try container.sdkDecodeIfPresent(.pagination)
+        self.projects = try container.sdkDecodeRequired(.projects)
+        self.pagination = try container.sdkDecodeIfPresent(.pagination)
     }
 }
 
-public extension GetConsumptionHistoryPerProjectResponse {
-    init(projects: [ConsumptionHistoryPerProject], pagination: Pagination? = nil) {
+extension GetConsumptionHistoryPerProjectResponse {
+    public init(projects: [ConsumptionHistoryPerProject], pagination: Pagination? = nil) {
         (self.projects, self.pagination) = (projects, pagination)
     }
 }
@@ -194,35 +172,25 @@ public struct ConsumptionMetricValue: Codable {
         case value
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConsumptionMetricValue {
-    init(from decoder: Decoder) throws {
+extension ConsumptionMetricValue {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.metricName) else {
-            throw SdkValidationError(
-                field: "metric_name",
-                code: "required",
-                message: "Validation failed for 'metric_name': value is required"
-            )
+            throw SdkValidationError(field: "metric_name", code: "required", message: "Validation failed for 'metric_name': value is required")
         }
         guard container.contains(.value) else {
-            throw SdkValidationError(
-                field: "value",
-                code: "required",
-                message: "Validation failed for 'value': value is required"
-            )
+            throw SdkValidationError(field: "value", code: "required", message: "Validation failed for 'value': value is required")
         }
-        metricName = try container.sdkDecodeRequired(.metricName)
-        value = try container.sdkDecodeRequired(.value)
+        self.metricName = try container.sdkDecodeRequired(.metricName)
+        self.value = try container.sdkDecodeRequired(.value)
     }
 }
 
-public extension ConsumptionMetricValue {
-    init(metricName: String, value: Int) {
+extension ConsumptionMetricValue {
+    public init(metricName: String, value: Int) {
         (self.metricName, self.value) = (metricName, value)
     }
 }
@@ -236,27 +204,21 @@ public struct ConsumptionHistoryPerProjectV2Response: Codable {
         case projects
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConsumptionHistoryPerProjectV2Response {
-    init(from decoder: Decoder) throws {
+extension ConsumptionHistoryPerProjectV2Response {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.projects) else {
-            throw SdkValidationError(
-                field: "projects",
-                code: "required",
-                message: "Validation failed for 'projects': value is required"
-            )
+            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
         }
-        projects = try container.sdkDecodeRequired(.projects)
+        self.projects = try container.sdkDecodeRequired(.projects)
     }
 }
 
-public extension ConsumptionHistoryPerProjectV2Response {
-    init(projects: [ConsumptionHistoryPerProjectV2]) {
+extension ConsumptionHistoryPerProjectV2Response {
+    public init(projects: [ConsumptionHistoryPerProjectV2]) {
         self.projects = projects
     }
 }
@@ -277,49 +239,35 @@ public struct ConsumptionHistoryPerBranchV2: Codable {
         case periods
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConsumptionHistoryPerBranchV2 {
-    init(from decoder: Decoder) throws {
+extension ConsumptionHistoryPerBranchV2 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.projectId) else {
-            throw SdkValidationError(
-                field: "project_id",
-                code: "required",
-                message: "Validation failed for 'project_id': value is required"
-            )
+            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
         }
         guard container.contains(.branchId) else {
-            throw SdkValidationError(
-                field: "branch_id",
-                code: "required",
-                message: "Validation failed for 'branch_id': value is required"
-            )
+            throw SdkValidationError(field: "branch_id", code: "required", message: "Validation failed for 'branch_id': value is required")
         }
         guard container.contains(.periods) else {
-            throw SdkValidationError(
-                field: "periods",
-                code: "required",
-                message: "Validation failed for 'periods': value is required"
-            )
+            throw SdkValidationError(field: "periods", code: "required", message: "Validation failed for 'periods': value is required")
         }
-        projectId = try container.sdkDecodeRequired(.projectId)
-        branchId = try container.sdkDecodeRequired(.branchId)
-        periods = try container.sdkDecodeRequired(.periods)
-        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
-        try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
+        self.projectId = try container.sdkDecodeRequired(.projectId)
+        self.branchId = try container.sdkDecodeRequired(.branchId)
+        self.periods = try container.sdkDecodeRequired(.periods)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
     }
 }
 
-public extension ConsumptionHistoryPerBranchV2 {
-    init(projectId: String, branchId: String, periods: [ConsumptionHistoryPerPeriodV2]) throws {
+extension ConsumptionHistoryPerBranchV2 {
+    public init(projectId: String, branchId: String, periods: [ConsumptionHistoryPerPeriodV2]) throws {
         (self.projectId, self.branchId) = (projectId, branchId)
         self.periods = periods
-        try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-        try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
     }
 }
 
@@ -335,38 +283,28 @@ public struct ConsumptionHistoryPerProjectV2: Codable {
         case periods
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConsumptionHistoryPerProjectV2 {
-    init(from decoder: Decoder) throws {
+extension ConsumptionHistoryPerProjectV2 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.projectId) else {
-            throw SdkValidationError(
-                field: "project_id",
-                code: "required",
-                message: "Validation failed for 'project_id': value is required"
-            )
+            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
         }
         guard container.contains(.periods) else {
-            throw SdkValidationError(
-                field: "periods",
-                code: "required",
-                message: "Validation failed for 'periods': value is required"
-            )
+            throw SdkValidationError(field: "periods", code: "required", message: "Validation failed for 'periods': value is required")
         }
-        projectId = try container.sdkDecodeRequired(.projectId)
-        periods = try container.sdkDecodeRequired(.periods)
-        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
+        self.projectId = try container.sdkDecodeRequired(.projectId)
+        self.periods = try container.sdkDecodeRequired(.periods)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
     }
 }
 
-public extension ConsumptionHistoryPerProjectV2 {
-    init(projectId: String, periods: [ConsumptionHistoryPerPeriodV2]) throws {
+extension ConsumptionHistoryPerProjectV2 {
+    public init(projectId: String, periods: [ConsumptionHistoryPerPeriodV2]) throws {
         (self.projectId, self.periods) = (projectId, periods)
-        try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
     }
 }
 
@@ -391,68 +329,44 @@ public struct ConsumptionHistoryPerPeriod: Codable {
         case periodEnd = "period_end"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConsumptionHistoryPerPeriod {
-    init(from decoder: Decoder) throws {
+extension ConsumptionHistoryPerPeriod {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.periodId) else {
-            throw SdkValidationError(
-                field: "period_id",
-                code: "required",
-                message: "Validation failed for 'period_id': value is required"
-            )
+            throw SdkValidationError(field: "period_id", code: "required", message: "Validation failed for 'period_id': value is required")
         }
         guard container.contains(.periodPlan) else {
-            throw SdkValidationError(
-                field: "period_plan",
-                code: "required",
-                message: "Validation failed for 'period_plan': value is required"
-            )
+            throw SdkValidationError(field: "period_plan", code: "required", message: "Validation failed for 'period_plan': value is required")
         }
         guard container.contains(.periodStart) else {
-            throw SdkValidationError(
-                field: "period_start",
-                code: "required",
-                message: "Validation failed for 'period_start': value is required"
-            )
+            throw SdkValidationError(field: "period_start", code: "required", message: "Validation failed for 'period_start': value is required")
         }
         guard container.contains(.consumption) else {
-            throw SdkValidationError(
-                field: "consumption",
-                code: "required",
-                message: "Validation failed for 'consumption': value is required"
-            )
+            throw SdkValidationError(field: "consumption", code: "required", message: "Validation failed for 'consumption': value is required")
         }
-        periodId = try container.sdkDecodeRequired(.periodId)
-        periodPlan = try container.sdkDecodeRequired(.periodPlan)
-        periodStart = try container.sdkDecodeRequired(.periodStart)
-        consumption = try container.sdkDecodeRequired(.consumption)
-        periodEnd = try container.sdkDecodeIfPresent(.periodEnd)
-        try sdkValidateUuid("period_id", periodId)
-        try sdkValidateDateTime("period_start", sdkWireString(periodStart))
-        if let value = periodEnd {
+        self.periodId = try container.sdkDecodeRequired(.periodId)
+        self.periodPlan = try container.sdkDecodeRequired(.periodPlan)
+        self.periodStart = try container.sdkDecodeRequired(.periodStart)
+        self.consumption = try container.sdkDecodeRequired(.consumption)
+        self.periodEnd = try container.sdkDecodeIfPresent(.periodEnd)
+            try sdkValidateUuid("period_id", self.periodId)
+            try sdkValidateDateTime("period_start", sdkWireString(self.periodStart))
+        if let value = self.periodEnd {
             try sdkValidateDateTime("period_end", sdkWireString(value))
         }
     }
 }
 
-public extension ConsumptionHistoryPerPeriod {
-    init(
-        periodId: String,
-        periodPlan: String,
-        periodStart: Date,
-        consumption: [ConsumptionHistoryPerTimeframe],
-        periodEnd: Date? = nil
-    ) throws {
+extension ConsumptionHistoryPerPeriod {
+    public init(periodId: String, periodPlan: String, periodStart: Date, consumption: [ConsumptionHistoryPerTimeframe], periodEnd: Date? = nil) throws {
         (self.periodId, self.periodPlan) = (periodId, periodPlan)
         (self.periodStart, self.consumption) = (periodStart, consumption)
         self.periodEnd = periodEnd
-        try sdkValidateUuid("period_id", self.periodId)
-        try sdkValidateDateTime("period_start", sdkWireString(self.periodStart))
+            try sdkValidateUuid("period_id", self.periodId)
+            try sdkValidateDateTime("period_start", sdkWireString(self.periodStart))
         if let value = self.periodEnd {
             try sdkValidateDateTime("period_end", sdkWireString(value))
         }
@@ -468,27 +382,21 @@ public struct ConsumptionHistoryPerBranchV2Response: Codable {
         case branches
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConsumptionHistoryPerBranchV2Response {
-    init(from decoder: Decoder) throws {
+extension ConsumptionHistoryPerBranchV2Response {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.branches) else {
-            throw SdkValidationError(
-                field: "branches",
-                code: "required",
-                message: "Validation failed for 'branches': value is required"
-            )
+            throw SdkValidationError(field: "branches", code: "required", message: "Validation failed for 'branches': value is required")
         }
-        branches = try container.sdkDecodeRequired(.branches)
+        self.branches = try container.sdkDecodeRequired(.branches)
     }
 }
 
-public extension ConsumptionHistoryPerBranchV2Response {
-    init(branches: [ConsumptionHistoryPerBranchV2]) {
+extension ConsumptionHistoryPerBranchV2Response {
+    public init(branches: [ConsumptionHistoryPerBranchV2]) {
         self.branches = branches
     }
 }
@@ -530,96 +438,56 @@ public struct ConsumptionHistoryPerTimeframe: Codable {
         case logicalSizeBytesHour = "logical_size_bytes_hour"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConsumptionHistoryPerTimeframe {
-    init(from decoder: Decoder) throws {
+extension ConsumptionHistoryPerTimeframe {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.timeframeStart) else {
-            throw SdkValidationError(
-                field: "timeframe_start",
-                code: "required",
-                message: "Validation failed for 'timeframe_start': value is required"
-            )
+            throw SdkValidationError(field: "timeframe_start", code: "required", message: "Validation failed for 'timeframe_start': value is required")
         }
         guard container.contains(.timeframeEnd) else {
-            throw SdkValidationError(
-                field: "timeframe_end",
-                code: "required",
-                message: "Validation failed for 'timeframe_end': value is required"
-            )
+            throw SdkValidationError(field: "timeframe_end", code: "required", message: "Validation failed for 'timeframe_end': value is required")
         }
         guard container.contains(.activeTimeSeconds) else {
-            throw SdkValidationError(
-                field: "active_time_seconds",
-                code: "required",
-                message: "Validation failed for 'active_time_seconds': value is required"
-            )
+            throw SdkValidationError(field: "active_time_seconds", code: "required", message: "Validation failed for 'active_time_seconds': value is required")
         }
         guard container.contains(.computeTimeSeconds) else {
-            throw SdkValidationError(
-                field: "compute_time_seconds",
-                code: "required",
-                message: "Validation failed for 'compute_time_seconds': value is required"
-            )
+            throw SdkValidationError(field: "compute_time_seconds", code: "required", message: "Validation failed for 'compute_time_seconds': value is required")
         }
         guard container.contains(.writtenDataBytes) else {
-            throw SdkValidationError(
-                field: "written_data_bytes",
-                code: "required",
-                message: "Validation failed for 'written_data_bytes': value is required"
-            )
+            throw SdkValidationError(field: "written_data_bytes", code: "required", message: "Validation failed for 'written_data_bytes': value is required")
         }
         guard container.contains(.syntheticStorageSizeBytes) else {
-            throw SdkValidationError(
-                field: "synthetic_storage_size_bytes",
-                code: "required",
-                message: "Validation failed for 'synthetic_storage_size_bytes': value is required"
-            )
+            throw SdkValidationError(field: "synthetic_storage_size_bytes", code: "required", message: "Validation failed for 'synthetic_storage_size_bytes': value is required")
         }
         guard container.contains(.dataStorageBytesHour) else {
-            throw SdkValidationError(
-                field: "data_storage_bytes_hour",
-                code: "required",
-                message: "Validation failed for 'data_storage_bytes_hour': value is required"
-            )
+            throw SdkValidationError(field: "data_storage_bytes_hour", code: "required", message: "Validation failed for 'data_storage_bytes_hour': value is required")
         }
-        timeframeStart = try container.sdkDecodeRequired(.timeframeStart)
-        timeframeEnd = try container.sdkDecodeRequired(.timeframeEnd)
-        activeTimeSeconds = try container.sdkDecodeRequired(.activeTimeSeconds)
-        computeTimeSeconds = try container.sdkDecodeRequired(.computeTimeSeconds)
-        writtenDataBytes = try container.sdkDecodeRequired(.writtenDataBytes)
-        syntheticStorageSizeBytes = try container.sdkDecodeRequired(.syntheticStorageSizeBytes)
-        dataStorageBytesHour = try container.sdkDecodeRequired(.dataStorageBytesHour)
-        logicalSizeBytes = try container.sdkDecodeIfPresent(.logicalSizeBytes)
-        logicalSizeBytesHour = try container.sdkDecodeIfPresent(.logicalSizeBytesHour)
-        try sdkValidateDateTime("timeframe_start", sdkWireString(timeframeStart))
-        try sdkValidateDateTime("timeframe_end", sdkWireString(timeframeEnd))
+        self.timeframeStart = try container.sdkDecodeRequired(.timeframeStart)
+        self.timeframeEnd = try container.sdkDecodeRequired(.timeframeEnd)
+        self.activeTimeSeconds = try container.sdkDecodeRequired(.activeTimeSeconds)
+        self.computeTimeSeconds = try container.sdkDecodeRequired(.computeTimeSeconds)
+        self.writtenDataBytes = try container.sdkDecodeRequired(.writtenDataBytes)
+        self.syntheticStorageSizeBytes = try container.sdkDecodeRequired(.syntheticStorageSizeBytes)
+        self.dataStorageBytesHour = try container.sdkDecodeRequired(.dataStorageBytesHour)
+        self.logicalSizeBytes = try container.sdkDecodeIfPresent(.logicalSizeBytes)
+        self.logicalSizeBytesHour = try container.sdkDecodeIfPresent(.logicalSizeBytesHour)
+            try sdkValidateDateTime("timeframe_start", sdkWireString(self.timeframeStart))
+            try sdkValidateDateTime("timeframe_end", sdkWireString(self.timeframeEnd))
     }
 }
 
-public extension ConsumptionHistoryPerTimeframe {
-    init(
-        timeframeStart: Date,
-        timeframeEnd: Date,
-        activeTimeSeconds: UInt64,
-        computeTimeSeconds: UInt64,
-        writtenDataBytes: UInt64,
-        syntheticStorageSizeBytes: UInt64,
-        dataStorageBytesHour: UInt64,
-        logicalSizeBytes: UInt64? = nil,
-        logicalSizeBytesHour: UInt64? = nil
-    ) throws {
+extension ConsumptionHistoryPerTimeframe {
+    public init(timeframeStart: Date, timeframeEnd: Date, activeTimeSeconds: UInt64, computeTimeSeconds: UInt64, writtenDataBytes: UInt64, syntheticStorageSizeBytes: UInt64, dataStorageBytesHour: UInt64, logicalSizeBytes: UInt64? = nil, logicalSizeBytesHour: UInt64? = nil) throws {
         (self.timeframeStart, self.timeframeEnd) = (timeframeStart, timeframeEnd)
         (self.activeTimeSeconds, self.computeTimeSeconds) = (activeTimeSeconds, computeTimeSeconds)
         self.writtenDataBytes = writtenDataBytes
         self.syntheticStorageSizeBytes = syntheticStorageSizeBytes
         (self.dataStorageBytesHour, self.logicalSizeBytes) = (dataStorageBytesHour, logicalSizeBytes)
         self.logicalSizeBytesHour = logicalSizeBytesHour
-        try sdkValidateDateTime("timeframe_start", sdkWireString(self.timeframeStart))
-        try sdkValidateDateTime("timeframe_end", sdkWireString(self.timeframeEnd))
+            try sdkValidateDateTime("timeframe_start", sdkWireString(self.timeframeStart))
+            try sdkValidateDateTime("timeframe_end", sdkWireString(self.timeframeEnd))
     }
 }

@@ -6,104 +6,43 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension RealtimeMethods {
+extension RealtimeMethods {
     /// Disables Realtime for the branch and discards its shared secret. Deprovisioning is asynchronous.
     ///
     /// - Parameters:
     /// - projectId: The project ID
     /// - branchId: The branch ID
-    static func disableRealtime(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
+    public static func disableRealtime(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "DELETE",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/realtime",
-            ].joined(),
-            config: config,
-            decoder: .empty,
-            operationId: "disableRealtime",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/realtime"].joined(), config: config, decoder: .empty, operationId: "disableRealtime", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Retrieves the secret the application backend issues Realtime tokens with. Requires permission to read the
-    /// project's credentials. Returns 404 while Realtime is disabled or before the secret is provisioned. After a
-    /// rotation, this returns the previous secret until `pending` is false.
+    /// Retrieves the secret the application backend issues Realtime tokens with. Requires permission to read the project's credentials. Returns 404 while Realtime is disabled or before the secret is provisioned. After a rotation, this returns the previous secret until `pending` is false.
     ///
     /// - Parameters:
     /// - projectId: The project ID
     /// - branchId: The branch ID
-    static func getRealtimeSecret(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> RealtimeSecret {
+    public static func getRealtimeSecret(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> RealtimeSecret {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "GET",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/realtime/secret",
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "getRealtimeSecret",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/realtime/secret"].joined(), config: config, decoder: .json, operationId: "getRealtimeSecret", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Replaces the branch's Realtime shared secret. Rotation is asynchronous: once the Realtime state is no longer
-    /// pending, the previous secret stops working and `GET /projects/{project_id}/branches/{branch_id}/realtime/secret`
-    /// returns the new one.
+    /// Replaces the branch's Realtime shared secret. Rotation is asynchronous: once the Realtime state is no longer pending, the previous secret stops working and `GET /projects/{project_id}/branches/{branch_id}/realtime/secret` returns the new one.
     ///
     /// - Parameters:
     /// - projectId: The project ID
     /// - branchId: The branch ID
-    static func rotateRealtimeSecret(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
+    public static func rotateRealtimeSecret(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/realtime/rotate_secret",
-            ].joined(),
-            config: config,
-            decoder: .empty,
-            operationId: "rotateRealtimeSecret",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/realtime/rotate_secret"].joined(), config: config, decoder: .empty, operationId: "rotateRealtimeSecret", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

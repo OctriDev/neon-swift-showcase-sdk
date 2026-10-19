@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ConsumptionMethods {
-    struct GetConsumptionHistoryPerBranchV2Options: Codable {
+extension ConsumptionMethods {
+    public struct GetConsumptionHistoryPerBranchV2Options: Codable {
         public var projectIds: [String]
         public var from: Date
         public var to: Date
@@ -18,14 +18,7 @@ public extension ConsumptionMethods {
         public var limit: Int?
         public var branchIds: [String]?
 
-        public init(
-            projectIds: [String],
-            from: Date,
-            to: Date,
-            granularity: ConsumptionHistoryGranularity,
-            orgId: String,
-            metrics: ConsumptionHistoryQueryMetrics
-        ) {
+        public init(projectIds: [String], from: Date, to: Date, granularity: ConsumptionHistoryGranularity, orgId: String, metrics: ConsumptionHistoryQueryMetrics) {
             self.projectIds = projectIds
             self.from = from
             self.to = to
@@ -35,14 +28,7 @@ public extension ConsumptionMethods {
         }
     }
 
-    /// Returns consumption metrics for each branch across one or more projects listed in `project_ids` (1 to 100
-    /// projects). Available for accounts on paid usage-based Launch, Scale, Agent, and Enterprise plans. History starts
-    /// when the account first ingests branch-level consumption data. The `metrics` query parameter is required. Only
-    /// these six values are supported on this endpoint: `compute_unit_seconds`, `root_branch_bytes_month`,
-    /// `child_branch_bytes_month`, `instant_restore_bytes_month`, `public_network_transfer_bytes`,
-    /// `private_network_transfer_bytes`. This endpoint does not support `extra_branches_month` or
-    /// `snapshot_storage_bytes_month`. Use `GET /consumption_history/v2/projects` for those. Consumption metrics within
-    /// each branch are returned in ascending time order (oldest first). This request does not wake project computes.
+    /// Returns consumption metrics for each branch across one or more projects listed in `project_ids` (1 to 100 projects). Available for accounts on paid usage-based Launch, Scale, Agent, and Enterprise plans. History starts when the account first ingests branch-level consumption data. The `metrics` query parameter is required. Only these six values are supported on this endpoint: `compute_unit_seconds`, `root_branch_bytes_month`, `child_branch_bytes_month`, `instant_restore_bytes_month`, `public_network_transfer_bytes`, `private_network_transfer_bytes`. This endpoint does not support `extra_branches_month` or `snapshot_storage_bytes_month`. Use `GET /consumption_history/v2/projects` for those. Consumption metrics within each branch are returned in ascending time order (oldest first). This request does not wake project computes.
     ///
     /// - Parameters:
     /// - projectIds: Project IDs to include (required, 1 to 100). Returns metrics
@@ -93,11 +79,7 @@ public extension ConsumptionMethods {
     ///   as repeated query parameters or a comma-separated list: -
     ///   `branch_ids=br-aged-salad-637688&branch_ids=br-sweet-breeze-497520` -
     ///   `branch_ids=br-aged-salad-637688,br-sweet-breeze-497520`
-    static func getConsumptionHistoryPerBranchV2(
-        config: ClientConfig,
-        options: GetConsumptionHistoryPerBranchV2Options,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> GetConsumptionHistoryPerBranchV2Response {
+    public static func getConsumptionHistoryPerBranchV2(config: ClientConfig, options: GetConsumptionHistoryPerBranchV2Options, requestOptions: RequestOptions? = nil) async throws -> GetConsumptionHistoryPerBranchV2Response {
         try validateItems("project_ids", options.projectIds, min: 1, max: 100)
 
         try sdkValidateDateTime("from", options.from)
@@ -114,31 +96,16 @@ public extension ConsumptionMethods {
             try validateItems("branch_ids", branchIds, min: 0, max: 100)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            "/consumption_history/v2/branches",
-            config: config,
-            query: [
-                SdkQueryParameter("project_ids", values: options.projectIds, style: "form", explode: true),
-                SdkQueryParameter("from", value: options.from),
-                SdkQueryParameter("to", value: options.to),
-                SdkQueryParameter("granularity", value: options.granularity),
-                SdkQueryParameter("org_id", value: options.orgId),
-                SdkQueryParameter("metrics", values: options.metrics, style: "form", explode: true),
-                SdkQueryParameter("cursor", value: options.cursor),
-                SdkQueryParameter("limit", value: options.limit),
-                SdkQueryParameter("branch_ids", values: options.branchIds, style: "form", explode: true),
-            ],
-            decoder: .json,
-            operationId: "getConsumptionHistoryPerBranchV2",
-            options: requestOptions,
-            errors: [
-                "403": GeneralError.self,
-                "404": GeneralError.self,
-                "406": GeneralError.self,
-                "429": GeneralError.self,
-                "default": GeneralError.self,
-            ]
-        )).data
+        return try (await sdkRequest("GET", "/consumption_history/v2/branches", config: config, query: [
+            SdkQueryParameter("project_ids", values: options.projectIds, style: "form", explode: true),
+            SdkQueryParameter("from", value: options.from),
+            SdkQueryParameter("to", value: options.to),
+            SdkQueryParameter("granularity", value: options.granularity),
+            SdkQueryParameter("org_id", value: options.orgId),
+            SdkQueryParameter("metrics", values: options.metrics, style: "form", explode: true),
+            SdkQueryParameter("cursor", value: options.cursor),
+            SdkQueryParameter("limit", value: options.limit),
+            SdkQueryParameter("branch_ids", values: options.branchIds, style: "form", explode: true),
+        ], decoder: .json, operationId: "getConsumptionHistoryPerBranchV2", options: requestOptions, errors: ["403": GeneralError.self, "404": GeneralError.self, "406": GeneralError.self, "429": GeneralError.self, "default": GeneralError.self])).data
     }
 }

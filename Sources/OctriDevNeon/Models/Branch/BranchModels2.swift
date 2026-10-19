@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// TaggedModelsBranch domain models
+// TaggedModelsBranch domain models
 public typealias AnnotationValueData = [String: String]
 
 /// Typed representation of the `AnnotationData` API schema.
@@ -28,48 +28,33 @@ public struct AnnotationData: Codable {
         case updatedAt = "updated_at"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AnnotationData {
-    init(from decoder: Decoder) throws {
+extension AnnotationData {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.value) else {
-            throw SdkValidationError(
-                field: "value",
-                code: "required",
-                message: "Validation failed for 'value': value is required"
-            )
+            throw SdkValidationError(field: "value", code: "required", message: "Validation failed for 'value': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        value = try container.sdkDecodeRequired(.value)
-        createdAt = try container.sdkDecodeIfPresent(.createdAt)
-        updatedAt = try container.sdkDecodeIfPresent(.updatedAt)
-        if let value = createdAt {
+        self.object = try container.sdkDecodeRequired(.object)
+        self.value = try container.sdkDecodeRequired(.value)
+        self.createdAt = try container.sdkDecodeIfPresent(.createdAt)
+        self.updatedAt = try container.sdkDecodeIfPresent(.updatedAt)
+        if let value = self.createdAt {
             try sdkValidateDateTime("created_at", sdkWireString(value))
         }
-        if let value = updatedAt {
+        if let value = self.updatedAt {
             try sdkValidateDateTime("updated_at", sdkWireString(value))
         }
     }
 }
 
-public extension AnnotationData {
-    init(
-        object: AnnotationObjectData,
-        value: AnnotationValueData,
-        createdAt: Date? = nil,
-        updatedAt: Date? = nil
-    ) throws {
+extension AnnotationData {
+    public init(object: AnnotationObjectData, value: AnnotationValueData, createdAt: Date? = nil, updatedAt: Date? = nil) throws {
         (self.object, self.value) = (object, value)
         (self.createdAt, self.updatedAt) = (createdAt, updatedAt)
         if let value = self.createdAt {
@@ -93,35 +78,25 @@ public struct AnnotationObjectData: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AnnotationObjectData {
-    init(from decoder: Decoder) throws {
+extension AnnotationObjectData {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
     }
 }
 
-public extension AnnotationObjectData {
-    init(type: String, id: String) {
+extension AnnotationObjectData {
+    public init(type: String, id: String) {
         (self.type, self.id) = (type, id)
     }
 }
@@ -138,19 +113,19 @@ public struct AnnotationCreateValueRequest: Codable {
     }
 
     init() {
-        annotationValue = nil
+        self.annotationValue = nil
     }
 }
 
-public extension AnnotationCreateValueRequest {
-    init(from decoder: Decoder) throws {
+extension AnnotationCreateValueRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        annotationValue = try container.sdkDecodeIfPresent(.annotationValue)
+        self.annotationValue = try container.sdkDecodeIfPresent(.annotationValue)
     }
 }
 
-public extension AnnotationCreateValueRequest {
-    init(annotationValue: AnnotationValueData? = nil) {
+extension AnnotationCreateValueRequest {
+    public init(annotationValue: AnnotationValueData? = nil) {
         self.init()
         self.annotationValue = annotationValue
     }
@@ -165,27 +140,21 @@ public struct AnnotationResponse: Codable {
         case annotation
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AnnotationResponse {
-    init(from decoder: Decoder) throws {
+extension AnnotationResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.annotation) else {
-            throw SdkValidationError(
-                field: "annotation",
-                code: "required",
-                message: "Validation failed for 'annotation': value is required"
-            )
+            throw SdkValidationError(field: "annotation", code: "required", message: "Validation failed for 'annotation': value is required")
         }
-        annotation = try container.sdkDecodeRequired(.annotation)
+        self.annotation = try container.sdkDecodeRequired(.annotation)
     }
 }
 
-public extension AnnotationResponse {
-    init(annotation: AnnotationData) {
+extension AnnotationResponse {
+    public init(annotation: AnnotationData) {
         self.annotation = annotation
     }
 }
@@ -200,27 +169,21 @@ public struct AnnotationsMapResponse: Codable {
         case annotations
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AnnotationsMapResponse {
-    init(from decoder: Decoder) throws {
+extension AnnotationsMapResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.annotations) else {
-            throw SdkValidationError(
-                field: "annotations",
-                code: "required",
-                message: "Validation failed for 'annotations': value is required"
-            )
+            throw SdkValidationError(field: "annotations", code: "required", message: "Validation failed for 'annotations': value is required")
         }
-        annotations = try container.sdkDecodeRequired(.annotations)
+        self.annotations = try container.sdkDecodeRequired(.annotations)
     }
 }
 
-public extension AnnotationsMapResponse {
-    init(annotations: [String: AnnotationData]) {
+extension AnnotationsMapResponse {
+    public init(annotations: [String: AnnotationData]) {
         self.annotations = annotations
     }
 }

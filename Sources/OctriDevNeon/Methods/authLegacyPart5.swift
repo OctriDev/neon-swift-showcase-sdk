@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthLegacyMethods {
-    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/users` instead. Removal scheduled for March 1,
-    /// 2026. The user will be created in your neon_auth.users_sync table and automatically propagated to your auth
-    /// project, whether Neon-managed or provider-owned.
+extension AuthLegacyMethods {
+    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/users` instead. Removal scheduled for March 1, 2026. The user will be created in your neon_auth.users_sync table and automatically propagated to your auth project, whether Neon-managed or provider-owned.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID. Returned as `id` from `GET /projects`.
@@ -22,39 +20,18 @@ public extension AuthLegacyMethods {
     ///   display name.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func createAuthLegacyUser(
-        config: ClientConfig,
-        projectId: String,
-        authProvider: NeonAuthSupportedAuthProvider,
-        email: String,
-        name: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonAuthCreateNewUserResponse {
+    public static func createAuthLegacyUser(config: ClientConfig, projectId: String, authProvider: NeonAuthSupportedAuthProvider, email: String, name: String? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonAuthCreateNewUserResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try validateLength("email", email, min: 1, max: 256)
         try sdkValidateEmail("email", email)
 
-        if let name {
+        if let name = name {
             try validateLength("name", name, min: 1, max: 255)
         }
 
-        let requestBody = CreateAuthLegacyUserRequestBody(
-            projectId: projectId,
-            authProvider: authProvider,
-            email: email,
-            name: name
-        )
+        let requestBody = CreateAuthLegacyUserRequestBody(projectId: projectId, authProvider: authProvider, email: email, name: name)
 
-        return try await (sdkRequest(
-            "POST",
-            "/projects/auth/user",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createAuthLegacyUser",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", "/projects/auth/user", config: config, body: requestBody, decoder: .json, operationId: "createAuthLegacyUser", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

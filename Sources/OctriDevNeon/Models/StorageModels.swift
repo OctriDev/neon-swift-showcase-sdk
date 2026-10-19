@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Storage domain models
+// Storage domain models
 /// Typed representation of the `BranchStorageNotEnabled` API schema.
 public struct BranchStorageNotEnabled: Codable {
     /// Required `string` value serialized in the `code` wire field.
@@ -24,43 +24,29 @@ public struct BranchStorageNotEnabled: Codable {
         case reason
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BranchStorageNotEnabled {
-    init(from decoder: Decoder) throws {
+extension BranchStorageNotEnabled {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
         guard container.contains(.message) else {
-            throw SdkValidationError(
-                field: "message",
-                code: "required",
-                message: "Validation failed for 'message': value is required"
-            )
+            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
         }
         guard container.contains(.reason) else {
-            throw SdkValidationError(
-                field: "reason",
-                code: "required",
-                message: "Validation failed for 'reason': value is required"
-            )
+            throw SdkValidationError(field: "reason", code: "required", message: "Validation failed for 'reason': value is required")
         }
-        code = try container.sdkDecodeRequired(.code)
-        message = try container.sdkDecodeRequired(.message)
-        reason = try container.sdkDecodeRequired(.reason)
+        self.code = try container.sdkDecodeRequired(.code)
+        self.message = try container.sdkDecodeRequired(.message)
+        self.reason = try container.sdkDecodeRequired(.reason)
     }
 }
 
-public extension BranchStorageNotEnabled {
-    init(code: String, message: String, reason: BranchStorageNotEnabledReason) {
+extension BranchStorageNotEnabled {
+    public init(code: String, message: String, reason: BranchStorageNotEnabledReason) {
         (self.code, self.message) = (code, message)
         self.reason = reason
     }
@@ -93,55 +79,37 @@ public struct BranchStorage: Codable {
         case forcePathStyle = "force_path_style"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BranchStorage {
-    init(from decoder: Decoder) throws {
+extension BranchStorage {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.enabled) else {
-            throw SdkValidationError(
-                field: "enabled",
-                code: "required",
-                message: "Validation failed for 'enabled': value is required"
-            )
+            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
         }
         guard container.contains(.s3Endpoint) else {
-            throw SdkValidationError(
-                field: "s3_endpoint",
-                code: "required",
-                message: "Validation failed for 's3_endpoint': value is required"
-            )
+            throw SdkValidationError(field: "s3_endpoint", code: "required", message: "Validation failed for 's3_endpoint': value is required")
         }
         guard container.contains(.region) else {
-            throw SdkValidationError(
-                field: "region",
-                code: "required",
-                message: "Validation failed for 'region': value is required"
-            )
+            throw SdkValidationError(field: "region", code: "required", message: "Validation failed for 'region': value is required")
         }
         guard container.contains(.forcePathStyle) else {
-            throw SdkValidationError(
-                field: "force_path_style",
-                code: "required",
-                message: "Validation failed for 'force_path_style': value is required"
-            )
+            throw SdkValidationError(field: "force_path_style", code: "required", message: "Validation failed for 'force_path_style': value is required")
         }
-        enabled = try container.sdkDecodeRequired(.enabled)
-        s3Endpoint = try container.sdkDecodeRequired(.s3Endpoint)
-        region = try container.sdkDecodeRequired(.region)
-        forcePathStyle = try container.sdkDecodeRequired(.forcePathStyle)
-        try sdkValidateUri("s3_endpoint", s3Endpoint)
+        self.enabled = try container.sdkDecodeRequired(.enabled)
+        self.s3Endpoint = try container.sdkDecodeRequired(.s3Endpoint)
+        self.region = try container.sdkDecodeRequired(.region)
+        self.forcePathStyle = try container.sdkDecodeRequired(.forcePathStyle)
+            try sdkValidateUri("s3_endpoint", self.s3Endpoint)
     }
 }
 
-public extension BranchStorage {
-    init(enabled: Bool, s3Endpoint: String, region: String, forcePathStyle: Bool) throws {
+extension BranchStorage {
+    public init(enabled: Bool, s3Endpoint: String, region: String, forcePathStyle: Bool) throws {
         (self.enabled, self.s3Endpoint) = (enabled, s3Endpoint)
         (self.region, self.forcePathStyle) = (region, forcePathStyle)
-        try sdkValidateUri("s3_endpoint", self.s3Endpoint)
+            try sdkValidateUri("s3_endpoint", self.s3Endpoint)
     }
 }
 
@@ -153,10 +121,7 @@ public extension BranchStorage {
 public struct BranchStorageNotEnabledReason: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let orgNotEntitled = BranchStorageNotEnabledReason(rawValue: "org_not_entitled")
     public static let regionUnavailable = BranchStorageNotEnabledReason(rawValue: "region_unavailable")
     public static let branchDirectoryMissing = BranchStorageNotEnabledReason(rawValue: "branch_directory_missing")
@@ -164,7 +129,7 @@ public struct BranchStorageNotEnabledReason: RawRepresentable, Hashable, Codable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

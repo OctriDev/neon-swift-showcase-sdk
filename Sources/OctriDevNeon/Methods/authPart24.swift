@@ -6,20 +6,14 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthMethods {
+extension AuthMethods {
     /// Deletes an OAuth client. Tokens already issued to the client are not revoked.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
     /// - clientId: The OAuth client ID
-    static func deleteAuthOAuthClient(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        clientId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
+    public static func deleteAuthOAuthClient(config: ClientConfig, projectId: String, branchId: String, clientId: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -27,38 +21,16 @@ public extension AuthMethods {
         try validateLength("client_id", clientId, max: 64)
         try sdkValidatePattern("client_id", clientId, sdkPattern3ecc8fcd9733)
 
-        return try await (sdkRequest(
-            "DELETE",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/auth/oauth-provider/clients/",
-                sdkEncodePathSegment(sdkWireString(clientId)),
-            ].joined(),
-            config: config,
-            decoder: .empty,
-            operationId: "deleteAuthOAuthClient",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/oauth-provider/clients/", sdkEncodePathSegment(sdkWireString(clientId))].joined(), config: config, decoder: .empty, operationId: "deleteAuthOAuthClient", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Generates a new secret for a confidential OAuth client and invalidates the previous one. The new secret is shown
-    /// only once.
+    /// Generates a new secret for a confidential OAuth client and invalidates the previous one. The new secret is shown only once.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
     /// - clientId: The OAuth client ID
-    static func rotateAuthOAuthClientSecret(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        clientId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonAuthOAuthClientSecret {
+    public static func rotateAuthOAuthClientSecret(config: ClientConfig, projectId: String, branchId: String, clientId: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthOAuthClientSecret {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -66,22 +38,6 @@ public extension AuthMethods {
         try validateLength("client_id", clientId, max: 64)
         try sdkValidatePattern("client_id", clientId, sdkPattern3ecc8fcd9733)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/auth/oauth-provider/clients/",
-                sdkEncodePathSegment(sdkWireString(clientId)),
-                "/rotate_secret",
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "rotateAuthOAuthClientSecret",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/oauth-provider/clients/", sdkEncodePathSegment(sdkWireString(clientId)), "/rotate_secret"].joined(), config: config, decoder: .json, operationId: "rotateAuthOAuthClientSecret", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

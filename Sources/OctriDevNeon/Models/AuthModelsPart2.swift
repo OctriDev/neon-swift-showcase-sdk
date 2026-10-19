@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Auth domain models
+// Auth domain models
 /// Typed representation of the `NeonAuthOAuthProviderConfigUpdate` API schema.
 public struct NeonAuthOAuthProviderConfigUpdate: Codable {
     /// Whether the OAuth provider plugin is enabled.
@@ -27,29 +27,23 @@ public struct NeonAuthOAuthProviderConfigUpdate: Codable {
     }
 
     init() {
-        (enabled, loginPage, consentPage, mcp, resources) = (nil, nil, nil, nil, nil)
+        (self.enabled, self.loginPage, self.consentPage, self.mcp, self.resources) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension NeonAuthOAuthProviderConfigUpdate {
-    init(from decoder: Decoder) throws {
+extension NeonAuthOAuthProviderConfigUpdate {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        enabled = try container.sdkDecodeIfPresent(.enabled)
-        loginPage = try container.sdkDecodeIfPresent(.loginPage)
-        consentPage = try container.sdkDecodeIfPresent(.consentPage)
-        mcp = try container.sdkDecodeIfPresent(.mcp)
-        resources = try container.sdkDecodeIfPresent(.resources)
+        self.enabled = try container.sdkDecodeIfPresent(.enabled)
+        self.loginPage = try container.sdkDecodeIfPresent(.loginPage)
+        self.consentPage = try container.sdkDecodeIfPresent(.consentPage)
+        self.mcp = try container.sdkDecodeIfPresent(.mcp)
+        self.resources = try container.sdkDecodeIfPresent(.resources)
     }
 }
 
-public extension NeonAuthOAuthProviderConfigUpdate {
-    init(
-        enabled: Bool? = nil,
-        loginPage: String? = nil,
-        consentPage: String? = nil,
-        mcp: NeonAuthOAuthProviderMcpUpdate? = nil,
-        resources: [NeonAuthOAuthProviderResource]? = nil
-    ) {
+extension NeonAuthOAuthProviderConfigUpdate {
+    public init(enabled: Bool? = nil, loginPage: String? = nil, consentPage: String? = nil, mcp: NeonAuthOAuthProviderMcpUpdate? = nil, resources: [NeonAuthOAuthProviderResource]? = nil) {
         self.init()
         (self.enabled, self.loginPage) = (enabled, loginPage)
         (self.consentPage, self.mcp) = (consentPage, mcp)
@@ -70,43 +64,27 @@ public struct NeonAuthPhoneNumberConfigUpdate: Codable {
     }
 
     init() {
-        (enabled, otpExpiresIn) = (nil, nil)
+        (self.enabled, self.otpExpiresIn) = (nil, nil)
     }
 }
 
-public extension NeonAuthPhoneNumberConfigUpdate {
-    init(from decoder: Decoder) throws {
+extension NeonAuthPhoneNumberConfigUpdate {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        enabled = try container.sdkDecodeIfPresent(.enabled)
-        otpExpiresIn = try container.sdkDecodeIfPresent(.otpExpiresIn)
-        if let value = otpExpiresIn {
-            try validateRange(
-                "otp_expires_in",
-                Double(value),
-                min: 60,
-                max: 600,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.enabled = try container.sdkDecodeIfPresent(.enabled)
+        self.otpExpiresIn = try container.sdkDecodeIfPresent(.otpExpiresIn)
+        if let value = self.otpExpiresIn {
+            try validateRange("otp_expires_in", Double(value), min: 60, max: 600, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension NeonAuthPhoneNumberConfigUpdate {
-    init(enabled: Bool? = nil, otpExpiresIn: Int? = nil) throws {
+extension NeonAuthPhoneNumberConfigUpdate {
+    public init(enabled: Bool? = nil, otpExpiresIn: Int? = nil) throws {
         self.init()
         (self.enabled, self.otpExpiresIn) = (enabled, otpExpiresIn)
         if let value = self.otpExpiresIn {
-            try validateRange(
-                "otp_expires_in",
-                Double(value),
-                min: 60,
-                max: 600,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("otp_expires_in", Double(value), min: 60, max: 600, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -123,28 +101,22 @@ public struct SendNeonAuthTestEmailResponse: Codable {
         case errorMessage = "error_message"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SendNeonAuthTestEmailResponse {
-    init(from decoder: Decoder) throws {
+extension SendNeonAuthTestEmailResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.success) else {
-            throw SdkValidationError(
-                field: "success",
-                code: "required",
-                message: "Validation failed for 'success': value is required"
-            )
+            throw SdkValidationError(field: "success", code: "required", message: "Validation failed for 'success': value is required")
         }
-        success = try container.sdkDecodeRequired(.success)
-        errorMessage = try container.sdkDecodeIfPresent(.errorMessage)
+        self.success = try container.sdkDecodeRequired(.success)
+        self.errorMessage = try container.sdkDecodeIfPresent(.errorMessage)
     }
 }
 
-public extension SendNeonAuthTestEmailResponse {
-    init(success: Bool, errorMessage: String? = nil) {
+extension SendNeonAuthTestEmailResponse {
+    public init(success: Bool, errorMessage: String? = nil) {
         (self.success, self.errorMessage) = (success, errorMessage)
     }
 }
@@ -176,91 +148,53 @@ public struct SendNeonAuthTestEmailRequest: Codable {
         case recipientEmail = "recipient_email"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SendNeonAuthTestEmailRequest {
-    init(from decoder: Decoder) throws {
+extension SendNeonAuthTestEmailRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.host) else {
-            throw SdkValidationError(
-                field: "host",
-                code: "required",
-                message: "Validation failed for 'host': value is required"
-            )
+            throw SdkValidationError(field: "host", code: "required", message: "Validation failed for 'host': value is required")
         }
         guard container.contains(.port) else {
-            throw SdkValidationError(
-                field: "port",
-                code: "required",
-                message: "Validation failed for 'port': value is required"
-            )
+            throw SdkValidationError(field: "port", code: "required", message: "Validation failed for 'port': value is required")
         }
         guard container.contains(.username) else {
-            throw SdkValidationError(
-                field: "username",
-                code: "required",
-                message: "Validation failed for 'username': value is required"
-            )
+            throw SdkValidationError(field: "username", code: "required", message: "Validation failed for 'username': value is required")
         }
         guard container.contains(.password) else {
-            throw SdkValidationError(
-                field: "password",
-                code: "required",
-                message: "Validation failed for 'password': value is required"
-            )
+            throw SdkValidationError(field: "password", code: "required", message: "Validation failed for 'password': value is required")
         }
         guard container.contains(.senderEmail) else {
-            throw SdkValidationError(
-                field: "sender_email",
-                code: "required",
-                message: "Validation failed for 'sender_email': value is required"
-            )
+            throw SdkValidationError(field: "sender_email", code: "required", message: "Validation failed for 'sender_email': value is required")
         }
         guard container.contains(.senderName) else {
-            throw SdkValidationError(
-                field: "sender_name",
-                code: "required",
-                message: "Validation failed for 'sender_name': value is required"
-            )
+            throw SdkValidationError(field: "sender_name", code: "required", message: "Validation failed for 'sender_name': value is required")
         }
         guard container.contains(.recipientEmail) else {
-            throw SdkValidationError(
-                field: "recipient_email",
-                code: "required",
-                message: "Validation failed for 'recipient_email': value is required"
-            )
+            throw SdkValidationError(field: "recipient_email", code: "required", message: "Validation failed for 'recipient_email': value is required")
         }
-        host = try container.sdkDecodeRequired(.host)
-        port = try container.sdkDecodeRequired(.port)
-        username = try container.sdkDecodeRequired(.username)
-        password = try container.sdkDecodeRequired(.password)
-        senderEmail = try container.sdkDecodeRequired(.senderEmail)
-        senderName = try container.sdkDecodeRequired(.senderName)
-        recipientEmail = try container.sdkDecodeRequired(.recipientEmail)
-        try validateLength("recipient_email", recipientEmail, min: 1, max: 256)
-        try sdkValidateEmail("recipient_email", recipientEmail)
+        self.host = try container.sdkDecodeRequired(.host)
+        self.port = try container.sdkDecodeRequired(.port)
+        self.username = try container.sdkDecodeRequired(.username)
+        self.password = try container.sdkDecodeRequired(.password)
+        self.senderEmail = try container.sdkDecodeRequired(.senderEmail)
+        self.senderName = try container.sdkDecodeRequired(.senderName)
+        self.recipientEmail = try container.sdkDecodeRequired(.recipientEmail)
+            try validateLength("recipient_email", self.recipientEmail, min: 1, max: 256)
+            try sdkValidateEmail("recipient_email", self.recipientEmail)
     }
 }
 
-public extension SendNeonAuthTestEmailRequest {
-    init(
-        host: String,
-        port: Int,
-        username: String,
-        password: String,
-        senderEmail: String,
-        senderName: String,
-        recipientEmail: String
-    ) throws {
+extension SendNeonAuthTestEmailRequest {
+    public init(host: String, port: Int, username: String, password: String, senderEmail: String, senderName: String, recipientEmail: String) throws {
         (self.host, self.port) = (host, port)
         (self.username, self.password) = (username, password)
         (self.senderEmail, self.senderName) = (senderEmail, senderName)
         self.recipientEmail = recipientEmail
-        try validateLength("recipient_email", self.recipientEmail, min: 1, max: 256)
-        try sdkValidateEmail("recipient_email", self.recipientEmail)
+            try validateLength("recipient_email", self.recipientEmail, min: 1, max: 256)
+            try sdkValidateEmail("recipient_email", self.recipientEmail)
     }
 }
 
@@ -276,35 +210,25 @@ public struct NeonAuthOAuthClientSecret: Codable {
         case clientSecret = "client_secret"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonAuthOAuthClientSecret {
-    init(from decoder: Decoder) throws {
+extension NeonAuthOAuthClientSecret {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.clientId) else {
-            throw SdkValidationError(
-                field: "client_id",
-                code: "required",
-                message: "Validation failed for 'client_id': value is required"
-            )
+            throw SdkValidationError(field: "client_id", code: "required", message: "Validation failed for 'client_id': value is required")
         }
         guard container.contains(.clientSecret) else {
-            throw SdkValidationError(
-                field: "client_secret",
-                code: "required",
-                message: "Validation failed for 'client_secret': value is required"
-            )
+            throw SdkValidationError(field: "client_secret", code: "required", message: "Validation failed for 'client_secret': value is required")
         }
-        clientId = try container.sdkDecodeRequired(.clientId)
-        clientSecret = try container.sdkDecodeRequired(.clientSecret)
+        self.clientId = try container.sdkDecodeRequired(.clientId)
+        self.clientSecret = try container.sdkDecodeRequired(.clientSecret)
     }
 }
 
-public extension NeonAuthOAuthClientSecret {
-    init(clientId: String, clientSecret: String) {
+extension NeonAuthOAuthClientSecret {
+    public init(clientId: String, clientSecret: String) {
         (self.clientId, self.clientSecret) = (clientId, clientSecret)
     }
 }
@@ -318,27 +242,21 @@ public struct ListNeonAuthOAuthClientsResponse: Codable {
         case clients
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ListNeonAuthOAuthClientsResponse {
-    init(from decoder: Decoder) throws {
+extension ListNeonAuthOAuthClientsResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.clients) else {
-            throw SdkValidationError(
-                field: "clients",
-                code: "required",
-                message: "Validation failed for 'clients': value is required"
-            )
+            throw SdkValidationError(field: "clients", code: "required", message: "Validation failed for 'clients': value is required")
         }
-        clients = try container.sdkDecodeRequired(.clients)
+        self.clients = try container.sdkDecodeRequired(.clients)
     }
 }
 
-public extension ListNeonAuthOAuthClientsResponse {
-    init(clients: [NeonAuthOAuthClient]) {
+extension ListNeonAuthOAuthClientsResponse {
+    public init(clients: [NeonAuthOAuthClient]) {
         self.clients = clients
     }
 }
@@ -377,36 +295,27 @@ public struct NeonAuthPluginConfigs: Codable {
     }
 
     init() {
-        (organization, magicLink, phoneNumber, oauthProvider, emailProvider) = (nil, nil, nil, nil, nil)
-        (emailAndPassword, oauthProviders, allowLocalhost) = (nil, nil, nil)
+        (self.organization, self.magicLink, self.phoneNumber, self.oauthProvider, self.emailProvider) = (nil, nil, nil, nil, nil)
+        (self.emailAndPassword, self.oauthProviders, self.allowLocalhost) = (nil, nil, nil)
     }
 }
 
-public extension NeonAuthPluginConfigs {
-    init(from decoder: Decoder) throws {
+extension NeonAuthPluginConfigs {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        organization = try container.sdkDecodeIfPresent(.organization)
-        magicLink = try container.sdkDecodeIfPresent(.magicLink)
-        phoneNumber = try container.sdkDecodeIfPresent(.phoneNumber)
-        oauthProvider = try container.sdkDecodeIfPresent(.oauthProvider)
-        emailProvider = try container.sdkDecodeIfPresent(.emailProvider)
-        emailAndPassword = try container.sdkDecodeIfPresent(.emailAndPassword)
-        oauthProviders = try container.sdkDecodeIfPresent(.oauthProviders)
-        allowLocalhost = try container.sdkDecodeIfPresent(.allowLocalhost)
+        self.organization = try container.sdkDecodeIfPresent(.organization)
+        self.magicLink = try container.sdkDecodeIfPresent(.magicLink)
+        self.phoneNumber = try container.sdkDecodeIfPresent(.phoneNumber)
+        self.oauthProvider = try container.sdkDecodeIfPresent(.oauthProvider)
+        self.emailProvider = try container.sdkDecodeIfPresent(.emailProvider)
+        self.emailAndPassword = try container.sdkDecodeIfPresent(.emailAndPassword)
+        self.oauthProviders = try container.sdkDecodeIfPresent(.oauthProviders)
+        self.allowLocalhost = try container.sdkDecodeIfPresent(.allowLocalhost)
     }
 }
 
-public extension NeonAuthPluginConfigs {
-    init(
-        organization: NeonAuthOrganizationConfig? = nil,
-        magicLink: NeonAuthMagicLinkConfig? = nil,
-        phoneNumber: NeonAuthPhoneNumberConfig? = nil,
-        oauthProvider: NeonAuthOAuthProviderConfig? = nil,
-        emailProvider: NeonAuthEmailServerConfigResponse? = nil,
-        emailAndPassword: NeonAuthEmailAndPasswordConfig? = nil,
-        oauthProviders: [NeonAuthOauthProvider]? = nil,
-        allowLocalhost: Bool? = nil
-    ) {
+extension NeonAuthPluginConfigs {
+    public init(organization: NeonAuthOrganizationConfig? = nil, magicLink: NeonAuthMagicLinkConfig? = nil, phoneNumber: NeonAuthPhoneNumberConfig? = nil, oauthProvider: NeonAuthOAuthProviderConfig? = nil, emailProvider: NeonAuthEmailServerConfigResponse? = nil, emailAndPassword: NeonAuthEmailAndPasswordConfig? = nil, oauthProviders: [NeonAuthOauthProvider]? = nil, allowLocalhost: Bool? = nil) {
         self.init()
         (self.organization, self.magicLink) = (organization, magicLink)
         (self.phoneNumber, self.oauthProvider) = (phoneNumber, oauthProvider)
@@ -437,67 +346,43 @@ public struct NeonAuthOAuthClientCreateRequest: Codable {
         case skipConsent = "skip_consent"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonAuthOAuthClientCreateRequest {
-    init(from decoder: Decoder) throws {
+extension NeonAuthOAuthClientCreateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.redirectUris) else {
-            throw SdkValidationError(
-                field: "redirect_uris",
-                code: "required",
-                message: "Validation failed for 'redirect_uris': value is required"
-            )
+            throw SdkValidationError(field: "redirect_uris", code: "required", message: "Validation failed for 'redirect_uris': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.resources) else {
-            throw SdkValidationError(
-                field: "resources",
-                code: "required",
-                message: "Validation failed for 'resources': value is required"
-            )
+            throw SdkValidationError(field: "resources", code: "required", message: "Validation failed for 'resources': value is required")
         }
-        name = try container.sdkDecodeRequired(.name)
-        redirectUris = try container.sdkDecodeRequired(.redirectUris)
-        type = try container.sdkDecodeRequired(.type)
-        resources = try container.sdkDecodeRequired(.resources)
-        skipConsent = try container.sdkDecodeIfPresent(.skipConsent)
-        try validateLength("name", name, min: 1, max: 100)
-        try validateItems("redirect_uris", redirectUris, min: 1, max: 10)
-        try validateItems("resources", resources, min: 1, max: 11)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.redirectUris = try container.sdkDecodeRequired(.redirectUris)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.resources = try container.sdkDecodeRequired(.resources)
+        self.skipConsent = try container.sdkDecodeIfPresent(.skipConsent)
+            try validateLength("name", self.name, min: 1, max: 100)
+            try validateItems("redirect_uris", self.redirectUris, min: 1, max: 10)
+            try validateItems("resources", self.resources, min: 1, max: 11)
     }
 }
 
-public extension NeonAuthOAuthClientCreateRequest {
-    init(
-        name: String,
-        redirectUris: [String],
-        type: NeonAuthOAuthClientType,
-        resources: [String],
-        skipConsent: Bool? = nil
-    ) throws {
+extension NeonAuthOAuthClientCreateRequest {
+    public init(name: String, redirectUris: [String], type: NeonAuthOAuthClientType, resources: [String], skipConsent: Bool? = nil) throws {
         (self.name, self.redirectUris) = (name, redirectUris)
         (self.type, self.resources) = (type, resources)
         self.skipConsent = skipConsent
-        try validateLength("name", self.name, min: 1, max: 100)
-        try validateItems("redirect_uris", self.redirectUris, min: 1, max: 10)
-        try validateItems("resources", self.resources, min: 1, max: 11)
+            try validateLength("name", self.name, min: 1, max: 100)
+            try validateItems("redirect_uris", self.redirectUris, min: 1, max: 10)
+            try validateItems("resources", self.resources, min: 1, max: 11)
     }
 }
 
@@ -512,30 +397,24 @@ public struct UpdateNeonAuthUserRoleRequest: Codable {
         case roles
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension UpdateNeonAuthUserRoleRequest {
-    init(from decoder: Decoder) throws {
+extension UpdateNeonAuthUserRoleRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.roles) else {
-            throw SdkValidationError(
-                field: "roles",
-                code: "required",
-                message: "Validation failed for 'roles': value is required"
-            )
+            throw SdkValidationError(field: "roles", code: "required", message: "Validation failed for 'roles': value is required")
         }
-        roles = try container.sdkDecodeRequired(.roles)
-        try validateItems("roles", roles, min: 1, max: nil)
+        self.roles = try container.sdkDecodeRequired(.roles)
+            try validateItems("roles", self.roles, min: 1, max: nil)
     }
 }
 
-public extension UpdateNeonAuthUserRoleRequest {
-    init(roles: [String]) throws {
+extension UpdateNeonAuthUserRoleRequest {
+    public init(roles: [String]) throws {
         self.roles = roles
-        try validateItems("roles", self.roles, min: 1, max: nil)
+            try validateItems("roles", self.roles, min: 1, max: nil)
     }
 }
 
@@ -548,30 +427,24 @@ public struct NeonAuthConfigUpdate: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonAuthConfigUpdate {
-    init(from decoder: Decoder) throws {
+extension NeonAuthConfigUpdate {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
-        name = try container.sdkDecodeRequired(.name)
-        try validateLength("name", name, min: 1, max: 256)
+        self.name = try container.sdkDecodeRequired(.name)
+            try validateLength("name", self.name, min: 1, max: 256)
     }
 }
 
-public extension NeonAuthConfigUpdate {
-    init(name: String) throws {
+extension NeonAuthConfigUpdate {
+    public init(name: String) throws {
         self.name = name
-        try validateLength("name", self.name, min: 1, max: 256)
+            try validateLength("name", self.name, min: 1, max: 256)
     }
 }
 
@@ -597,25 +470,25 @@ public struct NeonAuthOAuthClientUpdateRequest: Codable {
     }
 
     init() {
-        (name, redirectUris, skipConsent, disabled, resources) = (nil, nil, nil, nil, nil)
+        (self.name, self.redirectUris, self.skipConsent, self.disabled, self.resources) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension NeonAuthOAuthClientUpdateRequest {
-    init(from decoder: Decoder) throws {
+extension NeonAuthOAuthClientUpdateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        name = try container.sdkDecodeIfPresent(.name)
-        redirectUris = try container.sdkDecodeIfPresent(.redirectUris)
-        skipConsent = try container.sdkDecodeIfPresent(.skipConsent)
-        disabled = try container.sdkDecodeIfPresent(.disabled)
-        resources = try container.sdkDecodeIfPresent(.resources)
-        if let value = name {
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.redirectUris = try container.sdkDecodeIfPresent(.redirectUris)
+        self.skipConsent = try container.sdkDecodeIfPresent(.skipConsent)
+        self.disabled = try container.sdkDecodeIfPresent(.disabled)
+        self.resources = try container.sdkDecodeIfPresent(.resources)
+        if let value = self.name {
             try validateLength("name", value, min: 1, max: 100)
         }
-        if let value = redirectUris {
+        if let value = self.redirectUris {
             try validateItems("redirect_uris", value, min: nil, max: 10)
         }
-        if let value = resources {
+        if let value = self.resources {
             try validateItems("resources", value, min: nil, max: 11)
         }
     }

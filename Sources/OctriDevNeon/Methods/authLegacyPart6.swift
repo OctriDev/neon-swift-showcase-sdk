@@ -6,37 +6,18 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthLegacyMethods {
-    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/users/{auth_user_id}` instead. Removal
-    /// scheduled for March 1, 2026.
+extension AuthLegacyMethods {
+    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/users/{auth_user_id}` instead. Removal scheduled for March 1, 2026.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - authUserId: The Neon user ID
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func deleteAuthLegacyUser(
-        config: ClientConfig,
-        projectId: String,
-        authUserId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
+    public static func deleteAuthLegacyUser(config: ClientConfig, projectId: String, authUserId: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "DELETE",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/auth/users/",
-                sdkEncodePathSegment(sdkWireString(authUserId)),
-            ].joined(),
-            config: config,
-            decoder: .empty,
-            operationId: "deleteAuthLegacyUser",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/users/", sdkEncodePathSegment(sdkWireString(authUserId))].joined(), config: config, decoder: .empty, operationId: "deleteAuthLegacyUser", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
     /// Transfers ownership of your Neon-managed auth project to your own auth provider account.
@@ -47,25 +28,11 @@ public extension AuthLegacyMethods {
     ///   configuration. `better_auth` integrates with Better Auth (the current,
     ///   recommended provider). `stack` integrates with Stack Auth (deprecated).
     ///   `mock` is a simulated provider for local development and testing only.
-    static func transferAuthLegacyProvider(
-        config: ClientConfig,
-        projectId: String,
-        authProvider: NeonAuthSupportedAuthProvider,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonAuthTransferAuthProviderProjectResponse {
+    public static func transferAuthLegacyProvider(config: ClientConfig, projectId: String, authProvider: NeonAuthSupportedAuthProvider, requestOptions: RequestOptions? = nil) async throws -> NeonAuthTransferAuthProviderProjectResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         let requestBody = TransferAuthLegacyProviderRequestBody(projectId: projectId, authProvider: authProvider)
 
-        return try await (sdkRequest(
-            "POST",
-            "/projects/auth/transfer_ownership",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "transferAuthLegacyProvider",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", "/projects/auth/transfer_ownership", config: config, body: requestBody, decoder: .json, operationId: "transferAuthLegacyProvider", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

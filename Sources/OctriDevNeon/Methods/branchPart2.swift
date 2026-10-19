@@ -6,32 +6,14 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension BranchMethods {
-    /// Creates a branch in the specified project. No request body is required, but you can specify one to create a
-    /// compute endpoint or select a non-default parent branch. By default, the branch is created from the project's
-    /// default branch with no compute endpoint, and the branch name is auto-generated. To access the branch, add a
-    /// `read_write` endpoint. Each branch supports one read-write endpoint and multiple read-only endpoints. For
-    /// related information, see [Manage branches](https://neon.com/docs/manage/branches/).
+extension BranchMethods {
+    /// Creates a branch in the specified project. No request body is required, but you can specify one to create a compute endpoint or select a non-default parent branch. By default, the branch is created from the project's default branch with no compute endpoint, and the branch name is auto-generated. To access the branch, add a `read_write` endpoint. Each branch supports one read-write endpoint and multiple read-only endpoints. For related information, see [Manage branches](https://neon.com/docs/manage/branches/).
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
-    static func createBranch(
-        config: ClientConfig,
-        projectId: String,
-        body: CreateBranchRequestBody? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CreateBranchResponse {
+    public static func createBranch(config: ClientConfig, projectId: String, body: CreateBranchRequestBody? = nil, requestOptions: RequestOptions? = nil) async throws -> CreateBranchResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches"].joined(),
-            config: config,
-            rawBody: (body.map { try sdkEncodeBody($0, contentType: "application/json") }),
-            decoder: .json,
-            operationId: "createBranch",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches"].joined(), config: config, rawBody: (try body.map { try sdkEncodeBody($0, contentType: "application/json") }), decoder: .json, operationId: "createBranch", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

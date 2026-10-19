@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthLegacyMethods {
-    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/oauth_providers/{oauth_provider_id}` instead.
-    /// Removal scheduled for March 1, 2026.
+extension AuthLegacyMethods {
+    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/oauth_providers/{oauth_provider_id}` instead. Removal scheduled for March 1, 2026.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -22,37 +21,11 @@ public extension AuthLegacyMethods {
     ///   other provider types.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func updateAuthLegacyOauthProvider(
-        config: ClientConfig,
-        projectId: String,
-        oauthProviderId: NeonAuthOauthProviderId,
-        clientId: String? = nil,
-        clientSecret: String? = nil,
-        microsoftTenantId: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonAuthOauthProvider {
+    public static func updateAuthLegacyOauthProvider(config: ClientConfig, projectId: String, oauthProviderId: NeonAuthOauthProviderId, clientId: String? = nil, clientSecret: String? = nil, microsoftTenantId: String? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonAuthOauthProvider {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        let requestBody = UpdateAuthLegacyOauthProviderRequestBody(
-            clientId: clientId,
-            clientSecret: clientSecret,
-            microsoftTenantId: microsoftTenantId
-        )
+        let requestBody = UpdateAuthLegacyOauthProviderRequestBody(clientId: clientId, clientSecret: clientSecret, microsoftTenantId: microsoftTenantId)
 
-        return try await (sdkRequest(
-            "PATCH",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/auth/oauth_providers/",
-                sdkEncodePathSegment(sdkWireString(oauthProviderId)),
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateAuthLegacyOauthProvider",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("PATCH", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/oauth_providers/", sdkEncodePathSegment(sdkWireString(oauthProviderId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateAuthLegacyOauthProvider", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

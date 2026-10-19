@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedEndpoint domain models
+// SharedEndpoint domain models
 /// A collection of settings for a compute endpoint
 public struct EndpointSettingsData: Codable {
     /// A raw representation of Postgres settings
@@ -20,25 +20,21 @@ public struct EndpointSettingsData: Codable {
     }
 
     init() {
-        (pgSettings, pgbouncerSettings, preloadLibraries) = (nil, nil, nil)
+        (self.pgSettings, self.pgbouncerSettings, self.preloadLibraries) = (nil, nil, nil)
     }
 }
 
-public extension EndpointSettingsData {
-    init(from decoder: Decoder) throws {
+extension EndpointSettingsData {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        pgSettings = try container.sdkDecodeIfPresent(.pgSettings)
-        pgbouncerSettings = try container.sdkDecodeIfPresent(.pgbouncerSettings)
-        preloadLibraries = try container.sdkDecodeIfPresent(.preloadLibraries)
+        self.pgSettings = try container.sdkDecodeIfPresent(.pgSettings)
+        self.pgbouncerSettings = try container.sdkDecodeIfPresent(.pgbouncerSettings)
+        self.preloadLibraries = try container.sdkDecodeIfPresent(.preloadLibraries)
     }
 }
 
-public extension EndpointSettingsData {
-    init(
-        pgSettings: PgSettingsData? = nil,
-        pgbouncerSettings: PgbouncerSettingsData? = nil,
-        preloadLibraries: PreloadLibraries? = nil
-    ) {
+extension EndpointSettingsData {
+    public init(pgSettings: PgSettingsData? = nil, pgbouncerSettings: PgbouncerSettingsData? = nil, preloadLibraries: PreloadLibraries? = nil) {
         self.init()
         (self.pgSettings, self.pgbouncerSettings) = (pgSettings, pgbouncerSettings)
         self.preloadLibraries = preloadLibraries
@@ -137,73 +133,44 @@ public struct Endpoint: Codable {
         case computeReleaseVersion = "compute_release_version"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension Endpoint {
-    init(from decoder: Decoder) throws {
+extension Endpoint {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        host = try container.sdkDecodeRequired(.host)
-        id = try container.sdkDecodeRequired(.id)
-        projectId = try container.sdkDecodeRequired(.projectId)
-        branchId = try container.sdkDecodeRequired(.branchId)
-        autoscalingLimitMinCu = try container.sdkDecodeRequired(.autoscalingLimitMinCu)
-        autoscalingLimitMaxCu = try container.sdkDecodeRequired(.autoscalingLimitMaxCu)
-        regionId = try container.sdkDecodeRequired(.regionId)
-        type = try container.sdkDecodeRequired(.type)
-        currentState = try container.sdkDecodeRequired(.currentState)
-        settings = try container.sdkDecodeRequired(.settings)
-        poolerEnabled = try container.sdkDecodeRequired(.poolerEnabled)
-        poolerMode = try container.sdkDecodeRequired(.poolerMode)
-        disabled = try container.sdkDecodeRequired(.disabled)
-        passwordlessAccess = try container.sdkDecodeRequired(.passwordlessAccess)
-        creationSource = try container.sdkDecodeRequired(.creationSource)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        updatedAt = try container.sdkDecodeRequired(.updatedAt)
-        proxyHost = try container.sdkDecodeRequired(.proxyHost)
-        suspendTimeoutSeconds = try container.sdkDecodeRequired(.suspendTimeoutSeconds)
-        provisioner = try container.sdkDecodeRequired(.provisioner)
-        name = try container.sdkDecodeIfPresent(.name)
-        pendingState = try container.sdkDecodeIfPresent(.pendingState)
-        lastActive = try container.sdkDecodeIfPresent(.lastActive)
-        startedAt = try container.sdkDecodeIfPresent(.startedAt)
-        suspendedAt = try container.sdkDecodeIfPresent(.suspendedAt)
-        computeReleaseVersion = try container.sdkDecodeIfPresent(.computeReleaseVersion)
+        self.host = try container.sdkDecodeRequired(.host)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.projectId = try container.sdkDecodeRequired(.projectId)
+        self.branchId = try container.sdkDecodeRequired(.branchId)
+        self.autoscalingLimitMinCu = try container.sdkDecodeRequired(.autoscalingLimitMinCu)
+        self.autoscalingLimitMaxCu = try container.sdkDecodeRequired(.autoscalingLimitMaxCu)
+        self.regionId = try container.sdkDecodeRequired(.regionId)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.currentState = try container.sdkDecodeRequired(.currentState)
+        self.settings = try container.sdkDecodeRequired(.settings)
+        self.poolerEnabled = try container.sdkDecodeRequired(.poolerEnabled)
+        self.poolerMode = try container.sdkDecodeRequired(.poolerMode)
+        self.disabled = try container.sdkDecodeRequired(.disabled)
+        self.passwordlessAccess = try container.sdkDecodeRequired(.passwordlessAccess)
+        self.creationSource = try container.sdkDecodeRequired(.creationSource)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.updatedAt = try container.sdkDecodeRequired(.updatedAt)
+        self.proxyHost = try container.sdkDecodeRequired(.proxyHost)
+        self.suspendTimeoutSeconds = try container.sdkDecodeRequired(.suspendTimeoutSeconds)
+        self.provisioner = try container.sdkDecodeRequired(.provisioner)
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.pendingState = try container.sdkDecodeIfPresent(.pendingState)
+        self.lastActive = try container.sdkDecodeIfPresent(.lastActive)
+        self.startedAt = try container.sdkDecodeIfPresent(.startedAt)
+        self.suspendedAt = try container.sdkDecodeIfPresent(.suspendedAt)
+        self.computeReleaseVersion = try container.sdkDecodeIfPresent(.computeReleaseVersion)
         try sdkValidateConstraints()
     }
 }
 
-public extension Endpoint {
-    init(
-        host: String,
-        id: String,
-        projectId: String,
-        branchId: String,
-        autoscalingLimitMinCu: ComputeUnit,
-        autoscalingLimitMaxCu: ComputeUnit,
-        regionId: String,
-        type: EndpointType,
-        currentState: EndpointState,
-        settings: EndpointSettingsData,
-        poolerEnabled: Bool,
-        poolerMode: EndpointPoolerMode,
-        disabled: Bool,
-        passwordlessAccess: Bool,
-        creationSource: String,
-        createdAt: Date,
-        updatedAt: Date,
-        proxyHost: String,
-        suspendTimeoutSeconds: SuspendTimeoutSeconds,
-        provisioner: Provisioner,
-        name: String? = nil,
-        pendingState: EndpointState? = nil,
-        lastActive: Date? = nil,
-        startedAt: Date? = nil,
-        suspendedAt: Date? = nil,
-        computeReleaseVersion: String? = nil
-    ) throws {
+extension Endpoint {
+    public init(host: String, id: String, projectId: String, branchId: String, autoscalingLimitMinCu: ComputeUnit, autoscalingLimitMaxCu: ComputeUnit, regionId: String, type: EndpointType, currentState: EndpointState, settings: EndpointSettingsData, poolerEnabled: Bool, poolerMode: EndpointPoolerMode, disabled: Bool, passwordlessAccess: Bool, creationSource: String, createdAt: Date, updatedAt: Date, proxyHost: String, suspendTimeoutSeconds: SuspendTimeoutSeconds, provisioner: Provisioner, name: String? = nil, pendingState: EndpointState? = nil, lastActive: Date? = nil, startedAt: Date? = nil, suspendedAt: Date? = nil, computeReleaseVersion: String? = nil) throws {
         (self.host, self.id) = (host, id)
         (self.projectId, self.branchId) = (projectId, branchId)
         self.autoscalingLimitMinCu = autoscalingLimitMinCu
@@ -224,45 +191,21 @@ public extension Endpoint {
 
 extension Endpoint {
     func sdkValidateConstraints() throws {
-        try sdkValidatePattern("id", id, sdkPatternead2b03f7a95)
-        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
-        try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
-        try validateRange(
-            "autoscaling_limit_min_cu",
-            Double(autoscalingLimitMinCu),
-            min: 0.25,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try validateRange(
-            "autoscaling_limit_max_cu",
-            Double(autoscalingLimitMaxCu),
-            min: 0.25,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
-        try sdkValidateDateTime("updated_at", sdkWireString(updatedAt))
-        try validateRange(
-            "suspend_timeout_seconds",
-            Double(suspendTimeoutSeconds),
-            min: -1,
-            max: 604_800,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        if let value = lastActive {
+            try sdkValidatePattern("id", self.id, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
+            try validateRange("autoscaling_limit_min_cu", Double(self.autoscalingLimitMinCu), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange("autoscaling_limit_max_cu", Double(self.autoscalingLimitMaxCu), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+            try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
+            try validateRange("suspend_timeout_seconds", Double(self.suspendTimeoutSeconds), min: -1, max: 604800, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = self.lastActive {
             try sdkValidateDateTime("last_active", sdkWireString(value))
         }
-        if let value = startedAt {
+        if let value = self.startedAt {
             try sdkValidateDateTime("started_at", sdkWireString(value))
         }
-        if let value = suspendedAt {
+        if let value = self.suspendedAt {
             try sdkValidateDateTime("suspended_at", sdkWireString(value))
         }
     }
@@ -273,17 +216,14 @@ extension Endpoint {
 public struct EndpointState: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let `init` = EndpointState(rawValue: "init")
     public static let active = EndpointState(rawValue: "active")
     public static let idle = EndpointState(rawValue: "idle")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -297,16 +237,13 @@ public struct EndpointState: RawRepresentable, Hashable, Codable, Sendable, SdkW
 public struct EndpointType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let readOnly = EndpointType(rawValue: "read_only")
     public static let readWrite = EndpointType(rawValue: "read_write")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -320,15 +257,12 @@ public struct EndpointType: RawRepresentable, Hashable, Codable, Sendable, SdkWi
 public struct EndpointPoolerMode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let transaction = EndpointPoolerMode(rawValue: "transaction")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

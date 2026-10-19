@@ -6,35 +6,19 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthLegacyMethods {
-    /// Updates the email server configuration for a Neon project. This operation is closing down and will be removed on
-    /// March 1, 2026. Use `PATCH /projects/{project_id}/branches/{branch_id}/auth/email_provider` instead.
+extension AuthLegacyMethods {
+    /// Updates the email server configuration for a Neon project. This operation is closing down and will be removed on March 1, 2026. Use `PATCH /projects/{project_id}/branches/{branch_id}/auth/email_provider` instead.
     ///
-    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/email_provider` instead. Removal scheduled for
-    /// March 1, 2026.
+    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/email_provider` instead. Removal scheduled for March 1, 2026.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func updateAuthLegacyEmailServer(
-        config: ClientConfig,
-        projectId: String,
-        body: NeonAuthEmailServerConfig,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonAuthEmailServerConfigResponse {
+    public static func updateAuthLegacyEmailServer(config: ClientConfig, projectId: String, body: NeonAuthEmailServerConfig, requestOptions: RequestOptions? = nil) async throws -> NeonAuthEmailServerConfigResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "PATCH",
-            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/email_server"].joined(),
-            config: config,
-            rawBody: sdkEncodeBody(body, contentType: "application/json"),
-            decoder: .json,
-            operationId: "updateAuthLegacyEmailServer",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("PATCH", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/email_server"].joined(), config: config, rawBody: (try sdkEncodeBody(body, contentType: "application/json")), decoder: .json, operationId: "updateAuthLegacyEmailServer", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
     /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth` instead. Removal scheduled for March 1, 2026.
@@ -45,31 +29,11 @@ public extension AuthLegacyMethods {
     /// - deleteData: If true, deletes the `neon_auth` schema from the database
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func deleteAuthLegacyIntegration(
-        config: ClientConfig,
-        projectId: String,
-        authProvider: NeonAuthSupportedAuthProvider,
-        deleteData: Bool? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
+    public static func deleteAuthLegacyIntegration(config: ClientConfig, projectId: String, authProvider: NeonAuthSupportedAuthProvider, deleteData: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         let requestBody = DeleteAuthLegacyIntegrationRequestBody(deleteData: deleteData)
 
-        return try await (sdkRequest(
-            "DELETE",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/auth/integration/",
-                sdkEncodePathSegment(sdkWireString(authProvider)),
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .empty,
-            operationId: "deleteAuthLegacyIntegration",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/integration/", sdkEncodePathSegment(sdkWireString(authProvider))].joined(), config: config, body: requestBody, decoder: .empty, operationId: "deleteAuthLegacyIntegration", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

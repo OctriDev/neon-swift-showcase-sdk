@@ -7,7 +7,7 @@ import Foundation
     import FoundationNetworking
 #endif
 
-/// Canonical branch operation model declarations
+// Canonical branch operation model declarations
 public struct CreateBranchRequestBody: Codable {
     /// Compute endpoints to create together with the branch. If omitted, the branch is created without any compute
     /// endpoint. Endpoints can be added to the branch separately after creation.
@@ -27,25 +27,21 @@ public struct CreateBranchRequestBody: Codable {
     }
 
     init() {
-        (endpoints, branch, annotationValue) = (nil, nil, nil)
+        (self.endpoints, self.branch, self.annotationValue) = (nil, nil, nil)
     }
 }
 
-public extension CreateBranchRequestBody {
-    init(from decoder: Decoder) throws {
+extension CreateBranchRequestBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        endpoints = try container.sdkDecodeIfPresent(.endpoints)
-        branch = try container.sdkDecodeIfPresent(.branch)
-        annotationValue = try container.sdkDecodeIfPresent(.annotationValue)
+        self.endpoints = try container.sdkDecodeIfPresent(.endpoints)
+        self.branch = try container.sdkDecodeIfPresent(.branch)
+        self.annotationValue = try container.sdkDecodeIfPresent(.annotationValue)
     }
 }
 
-public extension CreateBranchRequestBody {
-    init(
-        endpoints: [BranchCreateRequestEndpointOptions]? = nil,
-        branch: BranchCreateRequestBranch? = nil,
-        annotationValue: AnnotationValueData? = nil
-    ) {
+extension CreateBranchRequestBody {
+    public init(endpoints: [BranchCreateRequestEndpointOptions]? = nil, branch: BranchCreateRequestBranch? = nil, annotationValue: AnnotationValueData? = nil) {
         self.init()
         (self.endpoints, self.branch) = (endpoints, branch)
         self.annotationValue = annotationValue

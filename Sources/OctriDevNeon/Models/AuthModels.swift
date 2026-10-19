@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Auth domain models
+// Auth domain models
 /// Typed representation of the `NeonAuthOAuthProviderMcpUpdate` API schema.
 public struct NeonAuthOAuthProviderMcpUpdate: Codable {
     /// The MCP server URL that dynamically registered clients are linked to.
@@ -17,28 +17,22 @@ public struct NeonAuthOAuthProviderMcpUpdate: Codable {
         case dynamicRegistration = "dynamic_registration"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonAuthOAuthProviderMcpUpdate {
-    init(from decoder: Decoder) throws {
+extension NeonAuthOAuthProviderMcpUpdate {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.resource) else {
-            throw SdkValidationError(
-                field: "resource",
-                code: "required",
-                message: "Validation failed for 'resource': value is required"
-            )
+            throw SdkValidationError(field: "resource", code: "required", message: "Validation failed for 'resource': value is required")
         }
-        resource = try container.sdkDecodeRequired(.resource)
-        dynamicRegistration = try container.sdkDecodeIfPresent(.dynamicRegistration)
+        self.resource = try container.sdkDecodeRequired(.resource)
+        self.dynamicRegistration = try container.sdkDecodeIfPresent(.dynamicRegistration)
     }
 }
 
-public extension NeonAuthOAuthProviderMcpUpdate {
-    init(resource: String, dynamicRegistration: Bool? = nil) {
+extension NeonAuthOAuthProviderMcpUpdate {
+    public init(resource: String, dynamicRegistration: Bool? = nil) {
         (self.resource, self.dynamicRegistration) = (resource, dynamicRegistration)
     }
 }
@@ -52,27 +46,21 @@ public struct UpdateNeonAuthUserRoleResponse: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension UpdateNeonAuthUserRoleResponse {
-    init(from decoder: Decoder) throws {
+extension UpdateNeonAuthUserRoleResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
+        self.id = try container.sdkDecodeRequired(.id)
     }
 }
 
-public extension UpdateNeonAuthUserRoleResponse {
-    init(id: String) {
+extension UpdateNeonAuthUserRoleResponse {
+    public init(id: String) {
         self.id = id
     }
 }
@@ -92,28 +80,22 @@ public struct EnableNeonAuthIntegrationRequest: Codable {
         case databaseName = "database_name"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EnableNeonAuthIntegrationRequest {
-    init(from decoder: Decoder) throws {
+extension EnableNeonAuthIntegrationRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.authProvider) else {
-            throw SdkValidationError(
-                field: "auth_provider",
-                code: "required",
-                message: "Validation failed for 'auth_provider': value is required"
-            )
+            throw SdkValidationError(field: "auth_provider", code: "required", message: "Validation failed for 'auth_provider': value is required")
         }
-        authProvider = try container.sdkDecodeRequired(.authProvider)
-        databaseName = try container.sdkDecodeIfPresent(.databaseName)
+        self.authProvider = try container.sdkDecodeRequired(.authProvider)
+        self.databaseName = try container.sdkDecodeIfPresent(.databaseName)
     }
 }
 
-public extension EnableNeonAuthIntegrationRequest {
-    init(authProvider: NeonAuthSupportedAuthProvider, databaseName: String? = nil) {
+extension EnableNeonAuthIntegrationRequest {
+    public init(authProvider: NeonAuthSupportedAuthProvider, databaseName: String? = nil) {
         (self.authProvider, self.databaseName) = (authProvider, databaseName)
     }
 }
@@ -128,32 +110,26 @@ public struct SendNeonAuthEmailProviderTestRequest: Codable {
         case recipientEmail = "recipient_email"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SendNeonAuthEmailProviderTestRequest {
-    init(from decoder: Decoder) throws {
+extension SendNeonAuthEmailProviderTestRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.recipientEmail) else {
-            throw SdkValidationError(
-                field: "recipient_email",
-                code: "required",
-                message: "Validation failed for 'recipient_email': value is required"
-            )
+            throw SdkValidationError(field: "recipient_email", code: "required", message: "Validation failed for 'recipient_email': value is required")
         }
-        recipientEmail = try container.sdkDecodeRequired(.recipientEmail)
-        try validateLength("recipient_email", recipientEmail, min: 1, max: 256)
-        try sdkValidateEmail("recipient_email", recipientEmail)
+        self.recipientEmail = try container.sdkDecodeRequired(.recipientEmail)
+            try validateLength("recipient_email", self.recipientEmail, min: 1, max: 256)
+            try sdkValidateEmail("recipient_email", self.recipientEmail)
     }
 }
 
-public extension SendNeonAuthEmailProviderTestRequest {
-    init(recipientEmail: String) throws {
+extension SendNeonAuthEmailProviderTestRequest {
+    public init(recipientEmail: String) throws {
         self.recipientEmail = recipientEmail
-        try validateLength("recipient_email", self.recipientEmail, min: 1, max: 256)
-        try sdkValidateEmail("recipient_email", self.recipientEmail)
+            try validateLength("recipient_email", self.recipientEmail, min: 1, max: 256)
+            try sdkValidateEmail("recipient_email", self.recipientEmail)
     }
 }
 
@@ -166,27 +142,21 @@ public struct NeonAuthOAuthProviderResource: Codable {
         case identifier
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonAuthOAuthProviderResource {
-    init(from decoder: Decoder) throws {
+extension NeonAuthOAuthProviderResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.identifier) else {
-            throw SdkValidationError(
-                field: "identifier",
-                code: "required",
-                message: "Validation failed for 'identifier': value is required"
-            )
+            throw SdkValidationError(field: "identifier", code: "required", message: "Validation failed for 'identifier': value is required")
         }
-        identifier = try container.sdkDecodeRequired(.identifier)
+        self.identifier = try container.sdkDecodeRequired(.identifier)
     }
 }
 
-public extension NeonAuthOAuthProviderResource {
-    init(identifier: String) {
+extension NeonAuthOAuthProviderResource {
+    public init(identifier: String) {
         self.identifier = identifier
     }
 }
@@ -206,63 +176,33 @@ public struct NeonAuthMagicLinkConfig: Codable {
         case disableSignUp = "disable_sign_up"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonAuthMagicLinkConfig {
-    init(from decoder: Decoder) throws {
+extension NeonAuthMagicLinkConfig {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.enabled) else {
-            throw SdkValidationError(
-                field: "enabled",
-                code: "required",
-                message: "Validation failed for 'enabled': value is required"
-            )
+            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
         }
         guard container.contains(.expiresIn) else {
-            throw SdkValidationError(
-                field: "expires_in",
-                code: "required",
-                message: "Validation failed for 'expires_in': value is required"
-            )
+            throw SdkValidationError(field: "expires_in", code: "required", message: "Validation failed for 'expires_in': value is required")
         }
         guard container.contains(.disableSignUp) else {
-            throw SdkValidationError(
-                field: "disable_sign_up",
-                code: "required",
-                message: "Validation failed for 'disable_sign_up': value is required"
-            )
+            throw SdkValidationError(field: "disable_sign_up", code: "required", message: "Validation failed for 'disable_sign_up': value is required")
         }
-        enabled = try container.sdkDecodeRequired(.enabled)
-        expiresIn = try container.sdkDecodeRequired(.expiresIn)
-        disableSignUp = try container.sdkDecodeRequired(.disableSignUp)
-        try validateRange(
-            "expires_in",
-            Double(expiresIn),
-            min: 5,
-            max: 1440,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.enabled = try container.sdkDecodeRequired(.enabled)
+        self.expiresIn = try container.sdkDecodeRequired(.expiresIn)
+        self.disableSignUp = try container.sdkDecodeRequired(.disableSignUp)
+            try validateRange("expires_in", Double(self.expiresIn), min: 5, max: 1440, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension NeonAuthMagicLinkConfig {
-    init(enabled: Bool, expiresIn: Int, disableSignUp: Bool) throws {
+extension NeonAuthMagicLinkConfig {
+    public init(enabled: Bool, expiresIn: Int, disableSignUp: Bool) throws {
         (self.enabled, self.expiresIn) = (enabled, expiresIn)
         self.disableSignUp = disableSignUp
-        try validateRange(
-            "expires_in",
-            Double(self.expiresIn),
-            min: 5,
-            max: 1440,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try validateRange("expires_in", Double(self.expiresIn), min: 5, max: 1440, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
@@ -291,76 +231,38 @@ public struct NeonAuthOrganizationConfigUpdate: Codable {
     }
 
     init() {
-        (enabled, organizationLimit, membershipLimit, creatorRole, sendInvitationEmail) = (nil, nil, nil, nil, nil)
+        (self.enabled, self.organizationLimit, self.membershipLimit, self.creatorRole, self.sendInvitationEmail) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension NeonAuthOrganizationConfigUpdate {
-    init(from decoder: Decoder) throws {
+extension NeonAuthOrganizationConfigUpdate {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        enabled = try container.sdkDecodeIfPresent(.enabled)
-        organizationLimit = try container.sdkDecodeIfPresent(.organizationLimit)
-        membershipLimit = try container.sdkDecodeIfPresent(.membershipLimit)
-        creatorRole = try container.sdkDecodeIfPresent(.creatorRole)
-        sendInvitationEmail = try container.sdkDecodeIfPresent(.sendInvitationEmail)
-        if let value = organizationLimit {
-            try validateRange(
-                "organization_limit",
-                Double(value),
-                min: 1,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.enabled = try container.sdkDecodeIfPresent(.enabled)
+        self.organizationLimit = try container.sdkDecodeIfPresent(.organizationLimit)
+        self.membershipLimit = try container.sdkDecodeIfPresent(.membershipLimit)
+        self.creatorRole = try container.sdkDecodeIfPresent(.creatorRole)
+        self.sendInvitationEmail = try container.sdkDecodeIfPresent(.sendInvitationEmail)
+        if let value = self.organizationLimit {
+            try validateRange("organization_limit", Double(value), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = membershipLimit {
-            try validateRange(
-                "membership_limit",
-                Double(value),
-                min: 1,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.membershipLimit {
+            try validateRange("membership_limit", Double(value), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension NeonAuthOrganizationConfigUpdate {
-    init(
-        enabled: Bool? = nil,
-        organizationLimit: Int? = nil,
-        membershipLimit: Int? = nil,
-        creatorRole: NeonAuthOrganizationConfigUpdateCreatorRole? = nil,
-        sendInvitationEmail: Bool? = nil
-    ) throws {
+extension NeonAuthOrganizationConfigUpdate {
+    public init(enabled: Bool? = nil, organizationLimit: Int? = nil, membershipLimit: Int? = nil, creatorRole: NeonAuthOrganizationConfigUpdateCreatorRole? = nil, sendInvitationEmail: Bool? = nil) throws {
         self.init()
         (self.enabled, self.organizationLimit) = (enabled, organizationLimit)
         (self.membershipLimit, self.creatorRole) = (membershipLimit, creatorRole)
         self.sendInvitationEmail = sendInvitationEmail
         if let value = self.organizationLimit {
-            try validateRange(
-                "organization_limit",
-                Double(value),
-                min: 1,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("organization_limit", Double(value), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.membershipLimit {
-            try validateRange(
-                "membership_limit",
-                Double(value),
-                min: 1,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("membership_limit", Double(value), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -377,36 +279,30 @@ public struct CreateBranchNeonAuthNewUserRequest: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateBranchNeonAuthNewUserRequest {
-    init(from decoder: Decoder) throws {
+extension CreateBranchNeonAuthNewUserRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.email) else {
-            throw SdkValidationError(
-                field: "email",
-                code: "required",
-                message: "Validation failed for 'email': value is required"
-            )
+            throw SdkValidationError(field: "email", code: "required", message: "Validation failed for 'email': value is required")
         }
-        email = try container.sdkDecodeRequired(.email)
-        name = try container.sdkDecodeIfPresent(.name)
-        try validateLength("email", email, min: 1, max: 256)
-        try sdkValidateEmail("email", email)
-        if let value = name {
+        self.email = try container.sdkDecodeRequired(.email)
+        self.name = try container.sdkDecodeIfPresent(.name)
+            try validateLength("email", self.email, min: 1, max: 256)
+            try sdkValidateEmail("email", self.email)
+        if let value = self.name {
             try validateLength("name", value, min: 1, max: 255)
         }
     }
 }
 
-public extension CreateBranchNeonAuthNewUserRequest {
-    init(email: String, name: String? = nil) throws {
+extension CreateBranchNeonAuthNewUserRequest {
+    public init(email: String, name: String? = nil) throws {
         (self.email, self.name) = (email, name)
-        try validateLength("email", self.email, min: 1, max: 256)
-        try sdkValidateEmail("email", self.email)
+            try validateLength("email", self.email, min: 1, max: 256)
+            try sdkValidateEmail("email", self.email)
         if let value = self.name {
             try validateLength("name", value, min: 1, max: 255)
         }
@@ -436,104 +332,44 @@ public struct NeonAuthOrganizationConfig: Codable {
         case sendInvitationEmail = "send_invitation_email"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonAuthOrganizationConfig {
-    init(from decoder: Decoder) throws {
+extension NeonAuthOrganizationConfig {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.enabled) else {
-            throw SdkValidationError(
-                field: "enabled",
-                code: "required",
-                message: "Validation failed for 'enabled': value is required"
-            )
+            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
         }
         guard container.contains(.organizationLimit) else {
-            throw SdkValidationError(
-                field: "organization_limit",
-                code: "required",
-                message: "Validation failed for 'organization_limit': value is required"
-            )
+            throw SdkValidationError(field: "organization_limit", code: "required", message: "Validation failed for 'organization_limit': value is required")
         }
         guard container.contains(.membershipLimit) else {
-            throw SdkValidationError(
-                field: "membership_limit",
-                code: "required",
-                message: "Validation failed for 'membership_limit': value is required"
-            )
+            throw SdkValidationError(field: "membership_limit", code: "required", message: "Validation failed for 'membership_limit': value is required")
         }
         guard container.contains(.creatorRole) else {
-            throw SdkValidationError(
-                field: "creator_role",
-                code: "required",
-                message: "Validation failed for 'creator_role': value is required"
-            )
+            throw SdkValidationError(field: "creator_role", code: "required", message: "Validation failed for 'creator_role': value is required")
         }
         guard container.contains(.sendInvitationEmail) else {
-            throw SdkValidationError(
-                field: "send_invitation_email",
-                code: "required",
-                message: "Validation failed for 'send_invitation_email': value is required"
-            )
+            throw SdkValidationError(field: "send_invitation_email", code: "required", message: "Validation failed for 'send_invitation_email': value is required")
         }
-        enabled = try container.sdkDecodeRequired(.enabled)
-        organizationLimit = try container.sdkDecodeRequired(.organizationLimit)
-        membershipLimit = try container.sdkDecodeRequired(.membershipLimit)
-        creatorRole = try container.sdkDecodeRequired(.creatorRole)
-        sendInvitationEmail = try container.sdkDecodeRequired(.sendInvitationEmail)
-        try validateRange(
-            "organization_limit",
-            Double(organizationLimit),
-            min: 1,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try validateRange(
-            "membership_limit",
-            Double(membershipLimit),
-            min: 1,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.enabled = try container.sdkDecodeRequired(.enabled)
+        self.organizationLimit = try container.sdkDecodeRequired(.organizationLimit)
+        self.membershipLimit = try container.sdkDecodeRequired(.membershipLimit)
+        self.creatorRole = try container.sdkDecodeRequired(.creatorRole)
+        self.sendInvitationEmail = try container.sdkDecodeRequired(.sendInvitationEmail)
+            try validateRange("organization_limit", Double(self.organizationLimit), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange("membership_limit", Double(self.membershipLimit), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension NeonAuthOrganizationConfig {
-    init(
-        enabled: Bool,
-        organizationLimit: Int,
-        membershipLimit: Int,
-        creatorRole: NeonAuthOrganizationConfigCreatorRole,
-        sendInvitationEmail: Bool
-    ) throws {
+extension NeonAuthOrganizationConfig {
+    public init(enabled: Bool, organizationLimit: Int, membershipLimit: Int, creatorRole: NeonAuthOrganizationConfigCreatorRole, sendInvitationEmail: Bool) throws {
         (self.enabled, self.organizationLimit) = (enabled, organizationLimit)
         (self.membershipLimit, self.creatorRole) = (membershipLimit, creatorRole)
         self.sendInvitationEmail = sendInvitationEmail
-        try validateRange(
-            "organization_limit",
-            Double(self.organizationLimit),
-            min: 1,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try validateRange(
-            "membership_limit",
-            Double(self.membershipLimit),
-            min: 1,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try validateRange("organization_limit", Double(self.organizationLimit), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange("membership_limit", Double(self.membershipLimit), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
@@ -546,27 +382,21 @@ public struct NeonAuthAllowLocalhostResponse: Codable {
         case allowLocalhost = "allow_localhost"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonAuthAllowLocalhostResponse {
-    init(from decoder: Decoder) throws {
+extension NeonAuthAllowLocalhostResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.allowLocalhost) else {
-            throw SdkValidationError(
-                field: "allow_localhost",
-                code: "required",
-                message: "Validation failed for 'allow_localhost': value is required"
-            )
+            throw SdkValidationError(field: "allow_localhost", code: "required", message: "Validation failed for 'allow_localhost': value is required")
         }
-        allowLocalhost = try container.sdkDecodeRequired(.allowLocalhost)
+        self.allowLocalhost = try container.sdkDecodeRequired(.allowLocalhost)
     }
 }
 
-public extension NeonAuthAllowLocalhostResponse {
-    init(allowLocalhost: Bool) {
+extension NeonAuthAllowLocalhostResponse {
+    public init(allowLocalhost: Bool) {
         self.allowLocalhost = allowLocalhost
     }
 }
@@ -592,37 +422,25 @@ public struct NeonAuthOAuthProviderConfig: Codable {
         case resources
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonAuthOAuthProviderConfig {
-    init(from decoder: Decoder) throws {
+extension NeonAuthOAuthProviderConfig {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.enabled) else {
-            throw SdkValidationError(
-                field: "enabled",
-                code: "required",
-                message: "Validation failed for 'enabled': value is required"
-            )
+            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
         }
-        enabled = try container.sdkDecodeRequired(.enabled)
-        loginPage = try container.sdkDecodeIfPresent(.loginPage)
-        consentPage = try container.sdkDecodeIfPresent(.consentPage)
-        mcp = try container.sdkDecodeIfPresent(.mcp)
-        resources = try container.sdkDecodeIfPresent(.resources)
+        self.enabled = try container.sdkDecodeRequired(.enabled)
+        self.loginPage = try container.sdkDecodeIfPresent(.loginPage)
+        self.consentPage = try container.sdkDecodeIfPresent(.consentPage)
+        self.mcp = try container.sdkDecodeIfPresent(.mcp)
+        self.resources = try container.sdkDecodeIfPresent(.resources)
     }
 }
 
-public extension NeonAuthOAuthProviderConfig {
-    init(
-        enabled: Bool,
-        loginPage: String? = nil,
-        consentPage: String? = nil,
-        mcp: NeonAuthOAuthProviderMcp? = nil,
-        resources: [NeonAuthOAuthProviderResource]? = nil
-    ) {
+extension NeonAuthOAuthProviderConfig {
+    public init(enabled: Bool, loginPage: String? = nil, consentPage: String? = nil, mcp: NeonAuthOAuthProviderMcp? = nil, resources: [NeonAuthOAuthProviderResource]? = nil) {
         (self.enabled, self.loginPage) = (enabled, loginPage)
         (self.consentPage, self.mcp) = (consentPage, mcp)
         self.resources = resources

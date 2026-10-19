@@ -15,11 +15,11 @@ struct CreateAuthLegacyIntegrationRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(authProvider, forKey: SdkCodingKey("auth_provider"))
-        try keyedContainer.encode(projectId, forKey: SdkCodingKey("project_id"))
-        try keyedContainer.encode(branchId, forKey: SdkCodingKey("branch_id"))
-        try keyedContainer.encodeIfPresent(databaseName, forKey: SdkCodingKey("database_name"))
-        try keyedContainer.encodeIfPresent(roleName, forKey: SdkCodingKey("role_name"))
+        try keyedContainer.encode(self.authProvider, forKey: SdkCodingKey("auth_provider"))
+        try keyedContainer.encode(self.projectId, forKey: SdkCodingKey("project_id"))
+        try keyedContainer.encode(self.branchId, forKey: SdkCodingKey("branch_id"))
+        try keyedContainer.encodeIfPresent(self.databaseName, forKey: SdkCodingKey("database_name"))
+        try keyedContainer.encodeIfPresent(self.roleName, forKey: SdkCodingKey("role_name"))
     }
 }
 
@@ -29,8 +29,8 @@ struct AddAuthLegacyDomainToRedirectUriAllowlistRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(domain, forKey: SdkCodingKey("domain"))
-        try keyedContainer.encode(authProvider, forKey: SdkCodingKey("auth_provider"))
+        try keyedContainer.encode(self.domain, forKey: SdkCodingKey("domain"))
+        try keyedContainer.encode(self.authProvider, forKey: SdkCodingKey("auth_provider"))
     }
 }
 
@@ -40,8 +40,8 @@ struct DeleteAuthLegacyDomainFromRedirectUriAllowlistRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(authProvider, forKey: SdkCodingKey("auth_provider"))
-        try keyedContainer.encode(domains, forKey: SdkCodingKey("domains"))
+        try keyedContainer.encode(self.authProvider, forKey: SdkCodingKey("auth_provider"))
+        try keyedContainer.encode(self.domains, forKey: SdkCodingKey("domains"))
     }
 }
 
@@ -51,8 +51,8 @@ struct CreateAuthLegacyProviderSdkKeysRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(projectId, forKey: SdkCodingKey("project_id"))
-        try keyedContainer.encode(authProvider, forKey: SdkCodingKey("auth_provider"))
+        try keyedContainer.encode(self.projectId, forKey: SdkCodingKey("project_id"))
+        try keyedContainer.encode(self.authProvider, forKey: SdkCodingKey("auth_provider"))
     }
 }
 
@@ -64,10 +64,10 @@ struct CreateAuthLegacyUserRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(projectId, forKey: SdkCodingKey("project_id"))
-        try keyedContainer.encode(authProvider, forKey: SdkCodingKey("auth_provider"))
-        try keyedContainer.encode(email, forKey: SdkCodingKey("email"))
-        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encode(self.projectId, forKey: SdkCodingKey("project_id"))
+        try keyedContainer.encode(self.authProvider, forKey: SdkCodingKey("auth_provider"))
+        try keyedContainer.encode(self.email, forKey: SdkCodingKey("email"))
+        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
     }
 }
 
@@ -77,8 +77,8 @@ struct TransferAuthLegacyProviderRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(projectId, forKey: SdkCodingKey("project_id"))
-        try keyedContainer.encode(authProvider, forKey: SdkCodingKey("auth_provider"))
+        try keyedContainer.encode(self.projectId, forKey: SdkCodingKey("project_id"))
+        try keyedContainer.encode(self.authProvider, forKey: SdkCodingKey("auth_provider"))
     }
 }
 
@@ -90,10 +90,10 @@ struct AddAuthLegacyOauthProviderRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(id, forKey: SdkCodingKey("id"))
-        try keyedContainer.encodeIfPresent(clientId, forKey: SdkCodingKey("client_id"))
-        try keyedContainer.encodeIfPresent(clientSecret, forKey: SdkCodingKey("client_secret"))
-        try keyedContainer.encodeIfPresent(microsoftTenantId, forKey: SdkCodingKey("microsoft_tenant_id"))
+        try keyedContainer.encode(self.id, forKey: SdkCodingKey("id"))
+        try keyedContainer.encodeIfPresent(self.clientId, forKey: SdkCodingKey("client_id"))
+        try keyedContainer.encodeIfPresent(self.clientSecret, forKey: SdkCodingKey("client_secret"))
+        try keyedContainer.encodeIfPresent(self.microsoftTenantId, forKey: SdkCodingKey("microsoft_tenant_id"))
     }
 }
 
@@ -104,9 +104,9 @@ struct UpdateAuthLegacyOauthProviderRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(clientId, forKey: SdkCodingKey("client_id"))
-        try keyedContainer.encodeIfPresent(clientSecret, forKey: SdkCodingKey("client_secret"))
-        try keyedContainer.encodeIfPresent(microsoftTenantId, forKey: SdkCodingKey("microsoft_tenant_id"))
+        try keyedContainer.encodeIfPresent(self.clientId, forKey: SdkCodingKey("client_id"))
+        try keyedContainer.encodeIfPresent(self.clientSecret, forKey: SdkCodingKey("client_secret"))
+        try keyedContainer.encodeIfPresent(self.microsoftTenantId, forKey: SdkCodingKey("microsoft_tenant_id"))
     }
 }
 
@@ -115,7 +115,7 @@ struct DeleteAuthLegacyIntegrationRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(deleteData, forKey: SdkCodingKey("delete_data"))
+        try keyedContainer.encodeIfPresent(self.deleteData, forKey: SdkCodingKey("delete_data"))
     }
 }
 
@@ -125,8 +125,8 @@ struct CreateAuthRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(authProvider, forKey: SdkCodingKey("auth_provider"))
-        try keyedContainer.encodeIfPresent(databaseName, forKey: SdkCodingKey("database_name"))
+        try keyedContainer.encode(self.authProvider, forKey: SdkCodingKey("auth_provider"))
+        try keyedContainer.encodeIfPresent(self.databaseName, forKey: SdkCodingKey("database_name"))
     }
 }
 
@@ -135,7 +135,7 @@ struct DisableAuthRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(deleteData, forKey: SdkCodingKey("delete_data"))
+        try keyedContainer.encodeIfPresent(self.deleteData, forKey: SdkCodingKey("delete_data"))
     }
 }
 
@@ -145,8 +145,8 @@ struct AddAuthTrustedDomainRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(domain, forKey: SdkCodingKey("domain"))
-        try keyedContainer.encode(authProvider, forKey: SdkCodingKey("auth_provider"))
+        try keyedContainer.encode(self.domain, forKey: SdkCodingKey("domain"))
+        try keyedContainer.encode(self.authProvider, forKey: SdkCodingKey("auth_provider"))
     }
 }
 
@@ -156,8 +156,8 @@ struct DeleteAuthTrustedDomainRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(authProvider, forKey: SdkCodingKey("auth_provider"))
-        try keyedContainer.encode(domains, forKey: SdkCodingKey("domains"))
+        try keyedContainer.encode(self.authProvider, forKey: SdkCodingKey("auth_provider"))
+        try keyedContainer.encode(self.domains, forKey: SdkCodingKey("domains"))
     }
 }
 
@@ -167,8 +167,8 @@ struct CreateAuthUserRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(email, forKey: SdkCodingKey("email"))
-        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encode(self.email, forKey: SdkCodingKey("email"))
+        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
     }
 }
 
@@ -177,7 +177,7 @@ struct UpdateAuthUserRoleRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(roles, forKey: SdkCodingKey("roles"))
+        try keyedContainer.encode(self.roles, forKey: SdkCodingKey("roles"))
     }
 }
 
@@ -189,10 +189,10 @@ struct AddAuthOauthProviderRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(id, forKey: SdkCodingKey("id"))
-        try keyedContainer.encodeIfPresent(clientId, forKey: SdkCodingKey("client_id"))
-        try keyedContainer.encodeIfPresent(clientSecret, forKey: SdkCodingKey("client_secret"))
-        try keyedContainer.encodeIfPresent(microsoftTenantId, forKey: SdkCodingKey("microsoft_tenant_id"))
+        try keyedContainer.encode(self.id, forKey: SdkCodingKey("id"))
+        try keyedContainer.encodeIfPresent(self.clientId, forKey: SdkCodingKey("client_id"))
+        try keyedContainer.encodeIfPresent(self.clientSecret, forKey: SdkCodingKey("client_secret"))
+        try keyedContainer.encodeIfPresent(self.microsoftTenantId, forKey: SdkCodingKey("microsoft_tenant_id"))
     }
 }
 
@@ -203,8 +203,8 @@ struct UpdateAuthOauthProviderRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(clientId, forKey: SdkCodingKey("client_id"))
-        try keyedContainer.encodeIfPresent(clientSecret, forKey: SdkCodingKey("client_secret"))
-        try keyedContainer.encodeIfPresent(microsoftTenantId, forKey: SdkCodingKey("microsoft_tenant_id"))
+        try keyedContainer.encodeIfPresent(self.clientId, forKey: SdkCodingKey("client_id"))
+        try keyedContainer.encodeIfPresent(self.clientSecret, forKey: SdkCodingKey("client_secret"))
+        try keyedContainer.encodeIfPresent(self.microsoftTenantId, forKey: SdkCodingKey("microsoft_tenant_id"))
     }
 }

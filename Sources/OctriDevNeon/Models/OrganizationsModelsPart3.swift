@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Organizations domain models
+// Organizations domain models
 /// Typed representation of the `VPCEndpointsWithRegionResponse` API schema.
 public struct VPCEndpointsWithRegionResponse: Codable {
     /// VPC endpoints associated with the region.
@@ -13,27 +13,21 @@ public struct VPCEndpointsWithRegionResponse: Codable {
         case endpoints
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VPCEndpointsWithRegionResponse {
-    init(from decoder: Decoder) throws {
+extension VPCEndpointsWithRegionResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.endpoints) else {
-            throw SdkValidationError(
-                field: "endpoints",
-                code: "required",
-                message: "Validation failed for 'endpoints': value is required"
-            )
+            throw SdkValidationError(field: "endpoints", code: "required", message: "Validation failed for 'endpoints': value is required")
         }
-        endpoints = try container.sdkDecodeRequired(.endpoints)
+        self.endpoints = try container.sdkDecodeRequired(.endpoints)
     }
 }
 
-public extension VPCEndpointsWithRegionResponse {
-    init(endpoints: [VPCEndpointWithRegion]) {
+extension VPCEndpointsWithRegionResponse {
+    public init(endpoints: [VPCEndpointWithRegion]) {
         self.endpoints = endpoints
     }
 }
@@ -47,22 +41,22 @@ public struct OrgApiKeysListResponseItemVariant1: Codable {
     }
 
     init() {
-        projectId = nil
+        self.projectId = nil
     }
 }
 
-public extension OrgApiKeysListResponseItemVariant1 {
-    init(from decoder: Decoder) throws {
+extension OrgApiKeysListResponseItemVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        projectId = try container.sdkDecodeIfPresent(.projectId)
-        if let value = projectId {
+        self.projectId = try container.sdkDecodeIfPresent(.projectId)
+        if let value = self.projectId {
             try sdkValidatePattern("project_id", value, sdkPatternead2b03f7a95)
         }
     }
 }
 
-public extension OrgApiKeysListResponseItemVariant1 {
-    init(projectId: String? = nil) throws {
+extension OrgApiKeysListResponseItemVariant1 {
+    public init(projectId: String? = nil) throws {
         self.init()
         self.projectId = projectId
         if let value = self.projectId {
@@ -77,10 +71,7 @@ public extension OrgApiKeysListResponseItemVariant1 {
 public struct MemberRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let admin = MemberRole(rawValue: "admin")
     public static let member = MemberRole(rawValue: "member")
     public static let editor = MemberRole(rawValue: "editor")
@@ -89,7 +80,7 @@ public struct MemberRole: RawRepresentable, Hashable, Codable, Sendable, SdkWire
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

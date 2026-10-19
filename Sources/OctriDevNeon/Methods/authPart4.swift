@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthMethods {
-    /// Adds a domain to the redirect URI whitelist for the specified branch. Only domains in this list are permitted as
-    /// redirect targets after authentication.
+extension AuthMethods {
+    /// Adds a domain to the redirect URI whitelist for the specified branch. Only domains in this list are permitted as redirect targets after authentication.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -18,14 +17,7 @@ public extension AuthMethods {
     ///   configuration. `better_auth` integrates with Better Auth (the current,
     ///   recommended provider). `stack` integrates with Stack Auth (deprecated).
     ///   `mock` is a simulated provider for local development and testing only.
-    static func addAuthTrustedDomain(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        domain: String,
-        authProvider: NeonAuthSupportedAuthProvider,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
+    public static func addAuthTrustedDomain(config: ClientConfig, projectId: String, branchId: String, domain: String, authProvider: NeonAuthSupportedAuthProvider, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -34,21 +26,6 @@ public extension AuthMethods {
 
         let requestBody = AddAuthTrustedDomainRequestBody(domain: domain, authProvider: authProvider)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/auth/domains",
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .empty,
-            operationId: "addAuthTrustedDomain",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/domains"].joined(), config: config, body: requestBody, decoder: .empty, operationId: "addAuthTrustedDomain", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

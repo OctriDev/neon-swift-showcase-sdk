@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension LogsMethods {
-    struct ListLogsFieldValuesOptions: Codable {
+extension LogsMethods {
+    public struct ListLogsFieldValuesOptions: Codable {
         public var projectId: String
         public var branchId: String
         public var fieldName: String
@@ -24,11 +24,7 @@ public extension LogsMethods {
         }
     }
 
-    /// Lists the distinct values observed for a low-cardinality log field in the requested time range. Call the log
-    /// fields endpoint first to learn which `field_name` values this branch supports; a field that branch has never
-    /// emitted is rejected with `unknown_field`. Give the window either as `since` or as an explicit `start_time`;
-    /// supplying both is rejected. If neither is given, the previous six hours are used. The maximum supported time
-    /// range is seven days. **Note**: This endpoint is currently in Private Beta.
+    /// Lists the distinct values observed for a low-cardinality log field in the requested time range. Call the log fields endpoint first to learn which `field_name` values this branch supports; a field that branch has never emitted is rejected with `unknown_field`. Give the window either as `since` or as an explicit `start_time`; supplying both is rejected. If neither is given, the previous six hours are used. The maximum supported time range is seven days. **Note**: This endpoint is currently in Private Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -45,11 +41,7 @@ public extension LogsMethods {
     /// - limit: Maximum number of distinct values to return. The response sets
     ///   `is_truncated` when this bound, or the server's own scan cap, cut the list
     ///   short.
-    static func listLogsFieldValues(
-        config: ClientConfig,
-        options: ListLogsFieldValuesOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectBranchLogFieldValuesResponse {
+    public static func listLogsFieldValues(config: ClientConfig, options: ListLogsFieldValuesOptions, requestOptions: RequestOptions? = nil) async throws -> ProjectBranchLogFieldValuesResponse {
         try sdkValidatePattern("project_id", options.projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", options.branchId, sdkPatternead2b03f7a95)
@@ -72,33 +64,12 @@ public extension LogsMethods {
             try validateRange("limit", Double(limit), min: 1, max: 1000)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(options.projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(options.branchId)),
-                "/logs/fields/",
-                sdkEncodePathSegment(sdkWireString(options.fieldName)),
-                "/values",
-            ].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("since", value: options.since),
-                SdkQueryParameter("start_time", value: options.startTime),
-                SdkQueryParameter("end_time", value: options.endTime),
-                SdkQueryParameter("source", value: options.source),
-                SdkQueryParameter("limit", value: options.limit),
-            ],
-            decoder: .json,
-            operationId: "listLogsFieldValues",
-            options: requestOptions,
-            errors: [
-                "400": ProjectBranchLogsInvalidQuery.self,
-                "404": ProjectBranchLogsNotAvailable.self,
-                "default": GeneralError.self,
-            ]
-        )).data
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(options.projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(options.branchId)), "/logs/fields/", sdkEncodePathSegment(sdkWireString(options.fieldName)), "/values"].joined(), config: config, query: [
+            SdkQueryParameter("since", value: options.since),
+            SdkQueryParameter("start_time", value: options.startTime),
+            SdkQueryParameter("end_time", value: options.endTime),
+            SdkQueryParameter("source", value: options.source),
+            SdkQueryParameter("limit", value: options.limit),
+        ], decoder: .json, operationId: "listLogsFieldValues", options: requestOptions, errors: ["400": ProjectBranchLogsInvalidQuery.self, "404": ProjectBranchLogsNotAvailable.self, "default": GeneralError.self])).data
     }
 }

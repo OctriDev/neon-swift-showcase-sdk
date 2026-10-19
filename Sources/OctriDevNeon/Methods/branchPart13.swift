@@ -6,75 +6,33 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension BranchMethods {
-    /// Retrieves a list of databases for the specified branch. A branch can have multiple databases. For related
-    /// information, see [Manage databases](https://neon.com/docs/manage/databases/).
+extension BranchMethods {
+    /// Retrieves a list of databases for the specified branch. A branch can have multiple databases. For related information, see [Manage databases](https://neon.com/docs/manage/databases/).
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The branch ID
-    static func listBranchDatabases(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DatabasesResponse {
+    public static func listBranchDatabases(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> DatabasesResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "GET",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/databases",
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "listBranchDatabases",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/databases"].joined(), config: config, decoder: .json, operationId: "listBranchDatabases", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Creates a database in the specified branch. A branch can have multiple databases. For related information, see
-    /// [Manage databases](https://neon.com/docs/manage/databases/).
+    /// Creates a database in the specified branch. A branch can have multiple databases. For related information, see [Manage databases](https://neon.com/docs/manage/databases/).
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The branch ID
     /// - database: Configuration for the new Postgres database.
-    static func createBranchDatabase(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        database: DatabaseCreateRequestDatabase,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DatabaseOperations {
+    public static func createBranchDatabase(config: ClientConfig, projectId: String, branchId: String, database: DatabaseCreateRequestDatabase, requestOptions: RequestOptions? = nil) async throws -> DatabaseOperations {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
         let requestBody = CreateBranchDatabaseRequestBody(database: database)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/databases",
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createBranchDatabase",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/databases"].joined(), config: config, body: requestBody, decoder: .json, operationId: "createBranchDatabase", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

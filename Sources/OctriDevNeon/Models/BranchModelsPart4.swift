@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Branch domain models
+// Branch domain models
 /// Typed representation of the `AnonymizedBranchStatusResponse` API schema.
 public struct AnonymizedBranchStatusResponse: Codable {
     /// The ID of the project this branch belongs to.
@@ -38,86 +38,55 @@ public struct AnonymizedBranchStatusResponse: Codable {
         case lastRun = "last_run"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AnonymizedBranchStatusResponse {
-    init(from decoder: Decoder) throws {
+extension AnonymizedBranchStatusResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.projectId) else {
-            throw SdkValidationError(
-                field: "project_id",
-                code: "required",
-                message: "Validation failed for 'project_id': value is required"
-            )
+            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
         }
         guard container.contains(.branchId) else {
-            throw SdkValidationError(
-                field: "branch_id",
-                code: "required",
-                message: "Validation failed for 'branch_id': value is required"
-            )
+            throw SdkValidationError(field: "branch_id", code: "required", message: "Validation failed for 'branch_id': value is required")
         }
         guard container.contains(.state) else {
-            throw SdkValidationError(
-                field: "state",
-                code: "required",
-                message: "Validation failed for 'state': value is required"
-            )
+            throw SdkValidationError(field: "state", code: "required", message: "Validation failed for 'state': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.updatedAt) else {
-            throw SdkValidationError(
-                field: "updated_at",
-                code: "required",
-                message: "Validation failed for 'updated_at': value is required"
-            )
+            throw SdkValidationError(field: "updated_at", code: "required", message: "Validation failed for 'updated_at': value is required")
         }
-        projectId = try container.sdkDecodeRequired(.projectId)
-        branchId = try container.sdkDecodeRequired(.branchId)
-        state = try container.sdkDecodeRequired(.state)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        updatedAt = try container.sdkDecodeRequired(.updatedAt)
-        statusMessage = try container.sdkDecodeIfPresent(.statusMessage)
-        failedAt = try container.sdkDecodeIfPresent(.failedAt)
-        lastRun = try container.sdkDecodeIfPresent(.lastRun)
-        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
-        try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
-        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
-        try sdkValidateDateTime("updated_at", sdkWireString(updatedAt))
-        if let value = failedAt {
+        self.projectId = try container.sdkDecodeRequired(.projectId)
+        self.branchId = try container.sdkDecodeRequired(.branchId)
+        self.state = try container.sdkDecodeRequired(.state)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.updatedAt = try container.sdkDecodeRequired(.updatedAt)
+        self.statusMessage = try container.sdkDecodeIfPresent(.statusMessage)
+        self.failedAt = try container.sdkDecodeIfPresent(.failedAt)
+        self.lastRun = try container.sdkDecodeIfPresent(.lastRun)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
+            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+            try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
+        if let value = self.failedAt {
             try sdkValidateDateTime("failed_at", sdkWireString(value))
         }
     }
 }
 
-public extension AnonymizedBranchStatusResponse {
-    init(
-        projectId: String,
-        branchId: String,
-        state: String,
-        createdAt: Date,
-        updatedAt: Date,
-        statusMessage: String? = nil,
-        failedAt: Date? = nil,
-        lastRun: AnonymizationRunMetadata? = nil
-    ) throws {
+extension AnonymizedBranchStatusResponse {
+    public init(projectId: String, branchId: String, state: String, createdAt: Date, updatedAt: Date, statusMessage: String? = nil, failedAt: Date? = nil, lastRun: AnonymizationRunMetadata? = nil) throws {
         (self.projectId, self.branchId) = (projectId, branchId)
         (self.state, self.createdAt) = (state, createdAt)
         (self.updatedAt, self.statusMessage) = (updatedAt, statusMessage)
         (self.failedAt, self.lastRun) = (failedAt, lastRun)
-        try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-        try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
-        try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-        try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
+            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+            try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
         if let value = self.failedAt {
             try sdkValidateDateTime("failed_at", sdkWireString(value))
         }

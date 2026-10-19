@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Operation domain models
+// Operation domain models
 /// Typed representation of the `OperationResponse` API schema.
 public struct OperationResponse: Codable {
     /// An asynchronous action Neon performs on your resources (for example, starting a compute or creating a
@@ -18,27 +18,21 @@ public struct OperationResponse: Codable {
         case operation
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OperationResponse {
-    init(from decoder: Decoder) throws {
+extension OperationResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.operation) else {
-            throw SdkValidationError(
-                field: "operation",
-                code: "required",
-                message: "Validation failed for 'operation': value is required"
-            )
+            throw SdkValidationError(field: "operation", code: "required", message: "Validation failed for 'operation': value is required")
         }
-        operation = try container.sdkDecodeRequired(.operation)
+        self.operation = try container.sdkDecodeRequired(.operation)
     }
 }
 
-public extension OperationResponse {
-    init(operation: Operation) {
+extension OperationResponse {
+    public init(operation: Operation) {
         self.operation = operation
     }
 }
@@ -57,28 +51,22 @@ public struct ListOperationResponse: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ListOperationResponse {
-    init(from decoder: Decoder) throws {
+extension ListOperationResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.operations) else {
-            throw SdkValidationError(
-                field: "operations",
-                code: "required",
-                message: "Validation failed for 'operations': value is required"
-            )
+            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
         }
-        operations = try container.sdkDecodeRequired(.operations)
-        pagination = try container.sdkDecodeIfPresent(.pagination)
+        self.operations = try container.sdkDecodeRequired(.operations)
+        self.pagination = try container.sdkDecodeIfPresent(.pagination)
     }
 }
 
-public extension ListOperationResponse {
-    init(operations: [Operation], pagination: Pagination? = nil) {
+extension ListOperationResponse {
+    public init(operations: [Operation], pagination: Pagination? = nil) {
         (self.operations, self.pagination) = (operations, pagination)
     }
 }

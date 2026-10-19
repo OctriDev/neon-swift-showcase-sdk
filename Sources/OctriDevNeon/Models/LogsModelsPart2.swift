@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Logs domain models
+// Logs domain models
 /// Machine-readable reason why the request was rejected: - `time_range_too_large`: the requested window spans
 /// more than seven days. - `invalid_time_range`: `end_time` is not after `start_time`. -
 /// `conflicting_time_range`: both `since` and `start_time` were supplied. - `invalid_cursor`: the supplied
@@ -12,10 +12,7 @@ import Foundation
 public struct ProjectBranchLogsInvalidQueryReason: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let timeRangeTooLarge = ProjectBranchLogsInvalidQueryReason(rawValue: "time_range_too_large")
     public static let invalidTimeRange = ProjectBranchLogsInvalidQueryReason(rawValue: "invalid_time_range")
     public static let conflictingTimeRange = ProjectBranchLogsInvalidQueryReason(rawValue: "conflicting_time_range")
@@ -26,7 +23,7 @@ public struct ProjectBranchLogsInvalidQueryReason: RawRepresentable, Hashable, C
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -39,17 +36,14 @@ public struct ProjectBranchLogsInvalidQueryReason: RawRepresentable, Hashable, C
 public struct ProjectBranchLogSource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let function = ProjectBranchLogSource(rawValue: "function")
     public static let storage = ProjectBranchLogSource(rawValue: "storage")
     public static let pgEndpoint = ProjectBranchLogSource(rawValue: "pg_endpoint")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

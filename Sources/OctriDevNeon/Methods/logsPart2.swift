@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension LogsMethods {
-    struct QueryLogsOptions: Codable {
+extension LogsMethods {
+    public struct QueryLogsOptions: Codable {
         public var projectId: String
         public var branchId: String
         public var since: ProjectBranchLogDuration?
@@ -31,18 +31,7 @@ public extension LogsMethods {
         }
     }
 
-    /// Returns logs emitted by services running on the specified branch, ordered by timestamp according to
-    /// `sort_order`. All supplied filters are combined with `AND`: a record is returned only when it matches every
-    /// filter. `minimum_severity` and `severity_text` are independent filters, so setting both requires a record to
-    /// clear the severity floor *and* match the exact severity text. Supply `logql` instead of the structured filters
-    /// to run a raw LogQL expression. Combining it with any structured filter is rejected rather than silently ignored;
-    /// `limit`, `sort_order`, and the time window still apply, because those bound the query rather than form part of
-    /// the expression. Give the window either as `since` — a duration ending at `end_time`, or at the current time when
-    /// `end_time` is omitted — or as an explicit `start_time`. Supplying both is rejected. A single response holds at
-    /// most 1,000 records. When `is_truncated` is `true`, pass the returned `next_cursor` back as `cursor` to fetch the
-    /// next page, repeating the time range and every filter unchanged. If no time range is supplied, the query covers
-    /// the previous hour. The maximum supported time range is seven days. `end_time` is exclusive. **Note**: This
-    /// endpoint is currently in Private Beta.
+    /// Returns logs emitted by services running on the specified branch, ordered by timestamp according to `sort_order`. All supplied filters are combined with `AND`: a record is returned only when it matches every filter. `minimum_severity` and `severity_text` are independent filters, so setting both requires a record to clear the severity floor *and* match the exact severity text. Supply `logql` instead of the structured filters to run a raw LogQL expression. Combining it with any structured filter is rejected rather than silently ignored; `limit`, `sort_order`, and the time window still apply, because those bound the query rather than form part of the expression. Give the window either as `since` — a duration ending at `end_time`, or at the current time when `end_time` is omitted — or as an explicit `start_time`. Supplying both is rejected. A single response holds at most 1,000 records. When `is_truncated` is `true`, pass the returned `next_cursor` back as `cursor` to fetch the next page, repeating the time range and every filter unchanged. If no time range is supplied, the query covers the previous hour. The maximum supported time range is seven days. `end_time` is exclusive. **Note**: This endpoint is currently in Private Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -88,11 +77,7 @@ public extension LogsMethods {
     ///   the underlying query language through to the caller, so unlike the rest of
     ///   this contract it may change as that backend changes. Prefer the structured
     ///   filters where they suffice.
-    static func queryLogs(
-        config: ClientConfig,
-        options: QueryLogsOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectBranchLogsQueryResponse {
+    public static func queryLogs(config: ClientConfig, options: QueryLogsOptions, requestOptions: RequestOptions? = nil) async throws -> ProjectBranchLogsQueryResponse {
         try sdkValidatePattern("project_id", options.projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", options.branchId, sdkPatternead2b03f7a95)
@@ -135,25 +120,6 @@ public extension LogsMethods {
 
         let requestBody = QueryLogsRequestBody(options: options)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(options.projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(options.branchId)),
-                "/logs/query",
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "queryLogs",
-            options: requestOptions,
-            errors: [
-                "400": ProjectBranchLogsInvalidQuery.self,
-                "404": ProjectBranchLogsNotAvailable.self,
-                "default": GeneralError.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(options.projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(options.branchId)), "/logs/query"].joined(), config: config, body: requestBody, decoder: .json, operationId: "queryLogs", options: requestOptions, errors: ["400": ProjectBranchLogsInvalidQuery.self, "404": ProjectBranchLogsNotAvailable.self, "default": GeneralError.self])).data
     }
 }

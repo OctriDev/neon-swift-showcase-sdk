@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthMethods {
-    struct UpdateAuthOAuthClientOptions: Codable {
+extension AuthMethods {
+    public struct UpdateAuthOAuthClientOptions: Codable {
         public var projectId: String
         public var branchId: String
         public var clientId: String
@@ -24,8 +24,7 @@ public extension AuthMethods {
         }
     }
 
-    /// Updates an OAuth client. Only the fields provided in the request body are updated. A provided `resources` list
-    /// replaces the client's stored list. The client `type` cannot be changed.
+    /// Updates an OAuth client. Only the fields provided in the request body are updated. A provided `resources` list replaces the client's stored list. The client `type` cannot be changed.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -38,11 +37,7 @@ public extension AuthMethods {
     /// - disabled: Whether the client is disabled.
     /// - resources: Identifiers of the protected resources to link the client to.
     ///   When provided, replaces the stored list.
-    static func updateAuthOAuthClient(
-        config: ClientConfig,
-        options: UpdateAuthOAuthClientOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonAuthOAuthClient {
+    public static func updateAuthOAuthClient(config: ClientConfig, options: UpdateAuthOAuthClientOptions, requestOptions: RequestOptions? = nil) async throws -> NeonAuthOAuthClient {
         try sdkValidatePattern("project_id", options.projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", options.branchId, sdkPatternead2b03f7a95)
@@ -64,22 +59,6 @@ public extension AuthMethods {
 
         let requestBody = UpdateAuthOAuthClientRequestBody(options: options)
 
-        return try await (sdkRequest(
-            "PATCH",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(options.projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(options.branchId)),
-                "/auth/oauth-provider/clients/",
-                sdkEncodePathSegment(sdkWireString(options.clientId)),
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateAuthOAuthClient",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("PATCH", ["/projects/", sdkEncodePathSegment(sdkWireString(options.projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(options.branchId)), "/auth/oauth-provider/clients/", sdkEncodePathSegment(sdkWireString(options.clientId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateAuthOAuthClient", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension BranchMethods {
-    /// Restores a branch to an earlier state in its own or another branch's history by specifying an LSN or timestamp.
-    /// Creates a new branch from the historical state.
+extension BranchMethods {
+    /// Restores a branch to an earlier state in its own or another branch's history by specifying an LSN or timestamp. Creates a new branch from the historical state.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -28,48 +27,19 @@ public extension BranchMethods {
     ///   `source_branch_id` equals the branch being restored; in those cases all
     ///   existing child branches are moved to the newly created branch. If omitted
     ///   and not required, the previous state is not preserved.
-    static func restoreBranch(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        sourceBranchId: String,
-        sourceLsn: String? = nil,
-        sourceTimestamp: Date? = nil,
-        preserveUnderName: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BranchOperations {
+    public static func restoreBranch(config: ClientConfig, projectId: String, branchId: String, sourceBranchId: String, sourceLsn: String? = nil, sourceTimestamp: Date? = nil, preserveUnderName: String? = nil, requestOptions: RequestOptions? = nil) async throws -> BranchOperations {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("source_branch_id", sourceBranchId, sdkPatternead2b03f7a95)
 
-        if let sourceTimestamp {
+        if let sourceTimestamp = sourceTimestamp {
             try sdkValidateDateTime("source_timestamp", sourceTimestamp)
         }
 
-        let requestBody = RestoreBranchRequestBody(
-            sourceBranchId: sourceBranchId,
-            sourceLsn: sourceLsn,
-            sourceTimestamp: sourceTimestamp,
-            preserveUnderName: preserveUnderName
-        )
+        let requestBody = RestoreBranchRequestBody(sourceBranchId: sourceBranchId, sourceLsn: sourceLsn, sourceTimestamp: sourceTimestamp, preserveUnderName: preserveUnderName)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/restore",
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "restoreBranch",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/restore"].joined(), config: config, body: requestBody, decoder: .json, operationId: "restoreBranch", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

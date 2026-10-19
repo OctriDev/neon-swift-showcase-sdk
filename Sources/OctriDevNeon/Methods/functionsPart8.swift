@@ -6,14 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension FunctionsMethods {
-    /// Registers a customer-owned domain (for example `dashboard.acme.com`) on the branch and points it at a target
-    /// entity, chosen by `entity_type` + `entity_id`. In v1 only `entity_type: function` is supported (an unsupported
-    /// type is rejected with `400`), where `entity_id` is the function slug and the function must already exist on the
-    /// branch (else `404`). The response includes the `cname_target` the customer must point their domain at with a
-    /// CNAME record; the domain goes live only once that DNS resolves and a certificate is issued on the first request.
-    /// A domain already registered to another resource is rejected with `409` and no detail about the owner.
-    /// Re-registering the same domain for the same entity is idempotent. **Note**: This endpoint is currently in Beta.
+extension FunctionsMethods {
+    /// Registers a customer-owned domain (for example `dashboard.acme.com`) on the branch and points it at a target entity, chosen by `entity_type` + `entity_id`. In v1 only `entity_type: function` is supported (an unsupported type is rejected with `400`), where `entity_id` is the function slug and the function must already exist on the branch (else `404`). The response includes the `cname_target` the customer must point their domain at with a CNAME record; the domain goes live only once that DNS resolves and a certificate is issued on the first request. A domain already registered to another resource is rejected with `409` and no detail about the owner. Re-registering the same domain for the same entity is idempotent. **Note**: This endpoint is currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -26,15 +20,7 @@ public extension FunctionsMethods {
     ///   only `function`; any other value is rejected with `invalid_entity_type`.
     /// - entityId: The target entity's identifier within the branch. For `function`
     ///   this is the function slug (which must already exist on the branch).
-    static func registerFunctionsCustomDomain(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        domain: String,
-        entityType: String,
-        entityId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CustomDomain {
+    public static func registerFunctionsCustomDomain(config: ClientConfig, projectId: String, branchId: String, domain: String, entityType: String, entityId: String, requestOptions: RequestOptions? = nil) async throws -> CustomDomain {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -45,27 +31,8 @@ public extension FunctionsMethods {
 
         try validateLength("entity_id", entityId, min: 1, max: 255)
 
-        let requestBody = RegisterFunctionsCustomDomainRequestBody(
-            domain: domain,
-            entityType: entityType,
-            entityId: entityId
-        )
+        let requestBody = RegisterFunctionsCustomDomainRequestBody(domain: domain, entityType: entityType, entityId: entityId)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/custom-domains",
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "registerFunctionsCustomDomain",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/custom-domains"].joined(), config: config, body: requestBody, decoder: .json, operationId: "registerFunctionsCustomDomain", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }
