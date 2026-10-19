@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Consumption domain models
+/// Consumption domain models
 /// Typed representation of the `ConsumptionHistoryPerPeriodV2` API schema.
 public struct ConsumptionHistoryPerPeriodV2: Codable {
     /// The ID assigned to the specified billing period.
@@ -25,44 +25,68 @@ public struct ConsumptionHistoryPerPeriodV2: Codable {
         case periodEnd = "period_end"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension ConsumptionHistoryPerPeriodV2 {
-    public init(from decoder: Decoder) throws {
+public extension ConsumptionHistoryPerPeriodV2 {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.periodId) else {
-            throw SdkValidationError(field: "period_id", code: "required", message: "Validation failed for 'period_id': value is required")
+            throw SdkValidationError(
+                field: "period_id",
+                code: "required",
+                message: "Validation failed for 'period_id': value is required"
+            )
         }
         guard container.contains(.periodPlan) else {
-            throw SdkValidationError(field: "period_plan", code: "required", message: "Validation failed for 'period_plan': value is required")
+            throw SdkValidationError(
+                field: "period_plan",
+                code: "required",
+                message: "Validation failed for 'period_plan': value is required"
+            )
         }
         guard container.contains(.periodStart) else {
-            throw SdkValidationError(field: "period_start", code: "required", message: "Validation failed for 'period_start': value is required")
+            throw SdkValidationError(
+                field: "period_start",
+                code: "required",
+                message: "Validation failed for 'period_start': value is required"
+            )
         }
         guard container.contains(.consumption) else {
-            throw SdkValidationError(field: "consumption", code: "required", message: "Validation failed for 'consumption': value is required")
+            throw SdkValidationError(
+                field: "consumption",
+                code: "required",
+                message: "Validation failed for 'consumption': value is required"
+            )
         }
-        self.periodId = try container.sdkDecodeRequired(.periodId)
-        self.periodPlan = try container.sdkDecodeRequired(.periodPlan)
-        self.periodStart = try container.sdkDecodeRequired(.periodStart)
-        self.consumption = try container.sdkDecodeRequired(.consumption)
-        self.periodEnd = try container.sdkDecodeIfPresent(.periodEnd)
-            try sdkValidateUuid("period_id", self.periodId)
-            try sdkValidateDateTime("period_start", sdkWireString(self.periodStart))
-        if let value = self.periodEnd {
+        periodId = try container.sdkDecodeRequired(.periodId)
+        periodPlan = try container.sdkDecodeRequired(.periodPlan)
+        periodStart = try container.sdkDecodeRequired(.periodStart)
+        consumption = try container.sdkDecodeRequired(.consumption)
+        periodEnd = try container.sdkDecodeIfPresent(.periodEnd)
+        try sdkValidateUuid("period_id", periodId)
+        try sdkValidateDateTime("period_start", sdkWireString(periodStart))
+        if let value = periodEnd {
             try sdkValidateDateTime("period_end", sdkWireString(value))
         }
     }
 }
 
-extension ConsumptionHistoryPerPeriodV2 {
-    public init(periodId: String, periodPlan: String, periodStart: Date, consumption: [ConsumptionHistoryPerTimeframeV2], periodEnd: Date? = nil) throws {
+public extension ConsumptionHistoryPerPeriodV2 {
+    init(
+        periodId: String,
+        periodPlan: String,
+        periodStart: Date,
+        consumption: [ConsumptionHistoryPerTimeframeV2],
+        periodEnd: Date? = nil
+    ) throws {
         (self.periodId, self.periodPlan) = (periodId, periodPlan)
         (self.periodStart, self.consumption) = (periodStart, consumption)
         self.periodEnd = periodEnd
-            try sdkValidateUuid("period_id", self.periodId)
-            try sdkValidateDateTime("period_start", sdkWireString(self.periodStart))
+        try sdkValidateUuid("period_id", self.periodId)
+        try sdkValidateDateTime("period_start", sdkWireString(self.periodStart))
         if let value = self.periodEnd {
             try sdkValidateDateTime("period_end", sdkWireString(value))
         }
@@ -83,22 +107,28 @@ public struct GetConsumptionHistoryPerProjectV2Response: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension GetConsumptionHistoryPerProjectV2Response {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projects) else {
-            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
-        }
-        self.projects = try container.sdkDecodeRequired(.projects)
-        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension GetConsumptionHistoryPerProjectV2Response {
-    public init(projects: [ConsumptionHistoryPerProjectV2], pagination: Pagination? = nil) {
+public extension GetConsumptionHistoryPerProjectV2Response {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.projects) else {
+            throw SdkValidationError(
+                field: "projects",
+                code: "required",
+                message: "Validation failed for 'projects': value is required"
+            )
+        }
+        projects = try container.sdkDecodeRequired(.projects)
+        pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+public extension GetConsumptionHistoryPerProjectV2Response {
+    init(projects: [ConsumptionHistoryPerProjectV2], pagination: Pagination? = nil) {
         (self.projects, self.pagination) = (projects, pagination)
     }
 }
@@ -112,21 +142,27 @@ public struct ConsumptionHistoryPerProjectResponse: Codable {
         case projects
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ConsumptionHistoryPerProjectResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projects) else {
-            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
-        }
-        self.projects = try container.sdkDecodeRequired(.projects)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ConsumptionHistoryPerProjectResponse {
-    public init(projects: [ConsumptionHistoryPerProject]) {
+public extension ConsumptionHistoryPerProjectResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.projects) else {
+            throw SdkValidationError(
+                field: "projects",
+                code: "required",
+                message: "Validation failed for 'projects': value is required"
+            )
+        }
+        projects = try container.sdkDecodeRequired(.projects)
+    }
+}
+
+public extension ConsumptionHistoryPerProjectResponse {
+    init(projects: [ConsumptionHistoryPerProject]) {
         self.projects = projects
     }
 }
@@ -135,14 +171,17 @@ extension ConsumptionHistoryPerProjectResponse {
 public struct ConsumptionHistoryGranularity: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let hourly = ConsumptionHistoryGranularity(rawValue: "hourly")
     public static let daily = ConsumptionHistoryGranularity(rawValue: "daily")
     public static let monthly = ConsumptionHistoryGranularity(rawValue: "monthly")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

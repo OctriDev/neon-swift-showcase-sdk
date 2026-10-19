@@ -6,27 +6,55 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension OrganizationsMethods {
+public extension OrganizationsMethods {
     /// Retrieves pending and accepted invitations for the specified organization.
     ///
     /// - Parameters:
     /// - orgId: The Neon organization ID
-    public static func listOrganizationsInvitations(config: ClientConfig, orgId: String, requestOptions: RequestOptions? = nil) async throws -> OrganizationInvitationsResponse {
+    static func listOrganizationsInvitations(
+        config: ClientConfig,
+        orgId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> OrganizationInvitationsResponse {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/invitations"].joined(), config: config, decoder: .json, operationId: "listOrganizationsInvitations", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/invitations"].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "listOrganizationsInvitations",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
-    /// Creates invitations for a specific organization. If the invited user has an existing account, they automatically join as a member. If they don't yet have an account, they are invited to create one, after which they become a member. Each invited user receives an email notification.
+    /// Creates invitations for a specific organization. If the invited user has an existing account, they automatically
+    /// join as a member. If they don't yet have an account, they are invited to create one, after which they become a
+    /// member. Each invited user receives an email notification.
     ///
     /// - Parameters:
     /// - orgId: The Neon organization ID
     /// - invitations: Invitations to create for the organization.
-    public static func createOrganizationInvitations(config: ClientConfig, orgId: String, invitations: [OrganizationInviteCreateRequest], requestOptions: RequestOptions? = nil) async throws -> OrganizationInvitationsResponse {
+    static func createOrganizationInvitations(
+        config: ClientConfig,
+        orgId: String,
+        invitations: [OrganizationInviteCreateRequest],
+        requestOptions: RequestOptions? = nil
+    ) async throws -> OrganizationInvitationsResponse {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
         let requestBody = CreateOrganizationInvitationsRequestBody(invitations: invitations)
 
-        return try (await sdkRequest("POST", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/invitations"].joined(), config: config, body: requestBody, decoder: .json, operationId: "createOrganizationInvitations", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/invitations"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createOrganizationInvitations",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

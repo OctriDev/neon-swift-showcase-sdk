@@ -7,7 +7,7 @@ import Foundation
     import FoundationNetworking
 #endif
 
-// Canonical organizations operation model declarations
+/// Canonical organizations operation model declarations
 public struct ListOrganizationsMembersResponse: Codable {
     /// Members of the organization, each combining membership details (role, status) with the associated user's
     /// identity.
@@ -23,22 +23,28 @@ public struct ListOrganizationsMembersResponse: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ListOrganizationsMembersResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.members) else {
-            throw SdkValidationError(field: "members", code: "required", message: "Validation failed for 'members': value is required")
-        }
-        self.members = try container.sdkDecodeRequired(.members)
-        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ListOrganizationsMembersResponse {
-    public init(members: [MemberWithUser], pagination: CursorPagination? = nil) {
+public extension ListOrganizationsMembersResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.members) else {
+            throw SdkValidationError(
+                field: "members",
+                code: "required",
+                message: "Validation failed for 'members': value is required"
+            )
+        }
+        members = try container.sdkDecodeRequired(.members)
+        pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+public extension ListOrganizationsMembersResponse {
+    init(members: [MemberWithUser], pagination: CursorPagination? = nil) {
         (self.members, self.pagination) = (members, pagination)
     }
 }

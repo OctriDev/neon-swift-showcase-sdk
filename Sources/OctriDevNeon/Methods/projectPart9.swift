@@ -6,22 +6,39 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ProjectMethods {
-    /// Creates a transfer request for the specified project. The request expires after a set period. To accept the request, the recipient calls `PUT /projects/{project_id}/transfer_requests/{request_id}` or uses the Neon Console claim link. The optional `ru` parameter redirects the recipient after acceptance.
+public extension ProjectMethods {
+    /// Creates a transfer request for the specified project. The request expires after a set period. To accept the
+    /// request, the recipient calls `PUT /projects/{project_id}/transfer_requests/{request_id}` or uses the Neon
+    /// Console claim link. The optional `ru` parameter redirects the recipient after acceptance.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - ttlSeconds: Number of seconds the transfer request stays valid before it
     ///   expires. Defaults to 86400 (24 hours).
-    public static func createProjectTransferRequest(config: ClientConfig, projectId: String, ttlSeconds: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectTransferRequestResponse {
+    static func createProjectTransferRequest(
+        config: ClientConfig,
+        projectId: String,
+        ttlSeconds: Int? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectTransferRequestResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         let requestBody = CreateProjectTransferRequestRequestBody(ttlSeconds: ttlSeconds)
 
-        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/transfer_requests"].joined(), config: config, body: requestBody, decoder: .json, operationId: "createProjectTransferRequest", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/transfer_requests"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createProjectTransferRequest",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
-    /// Accepts a transfer request for the specified project, transferring it to the specified organization or user. If org_id is not passed, the project will be transferred to the current user or organization account.
+    /// Accepts a transfer request for the specified project, transferring it to the specified organization or user. If
+    /// org_id is not passed, the project will be transferred to the current user or organization account.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -29,17 +46,37 @@ extension ProjectMethods {
     /// - orgId: The Neon organization ID to transfer the project to. If not
     ///   provided, the project will be transferred to the current user or
     ///   organization account.
-    public static func acceptProjectTransferRequest(config: ClientConfig, projectId: String, requestId: String, orgId: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+    static func acceptProjectTransferRequest(
+        config: ClientConfig,
+        projectId: String,
+        requestId: String,
+        orgId: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("request_id", requestId, sdkPatternead2b03f7a95)
 
-        if let orgId = orgId {
+        if let orgId {
             try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
         }
 
         let requestBody = AcceptProjectTransferRequestRequestBody(orgId: orgId)
 
-        return try (await sdkRequest("PUT", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/transfer_requests/", sdkEncodePathSegment(sdkWireString(requestId))].joined(), config: config, body: requestBody, decoder: .empty, operationId: "acceptProjectTransferRequest", options: requestOptions, errors: ["406": AcceptProjectTransferRequestSatisfiesPlanError.self, "default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "PUT",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/transfer_requests/",
+                sdkEncodePathSegment(sdkWireString(requestId)),
+            ].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .empty,
+            operationId: "acceptProjectTransferRequest",
+            options: requestOptions,
+            errors: ["406": AcceptProjectTransferRequestSatisfiesPlanError.self, "default": GeneralError.self]
+        )).data
     }
 }

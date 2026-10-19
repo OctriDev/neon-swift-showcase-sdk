@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ProjectList domain models
+/// ProjectList domain models
 /// Typed representation of the `ListSharedProjectsResponse` API schema.
 public struct ListSharedProjectsResponse: Codable {
     /// List of projects accessible to the caller. Projects that exist but could not be retrieved are identified in
@@ -23,23 +23,29 @@ public struct ListSharedProjectsResponse: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ListSharedProjectsResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projects) else {
-            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
-        }
-        self.projects = try container.sdkDecodeRequired(.projects)
-        self.unavailableProjectIds = try container.sdkDecodeIfPresent(.unavailableProjectIds)
-        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ListSharedProjectsResponse {
-    public init(projects: [ProjectListItem], unavailableProjectIds: [String]? = nil, pagination: Pagination? = nil) {
+public extension ListSharedProjectsResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.projects) else {
+            throw SdkValidationError(
+                field: "projects",
+                code: "required",
+                message: "Validation failed for 'projects': value is required"
+            )
+        }
+        projects = try container.sdkDecodeRequired(.projects)
+        unavailableProjectIds = try container.sdkDecodeIfPresent(.unavailableProjectIds)
+        pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+public extension ListSharedProjectsResponse {
+    init(projects: [ProjectListItem], unavailableProjectIds: [String]? = nil, pagination: Pagination? = nil) {
         (self.projects, self.unavailableProjectIds) = (projects, unavailableProjectIds)
         self.pagination = pagination
     }
@@ -71,31 +77,51 @@ public struct ListProjectsResponse: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ListProjectsResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projects) else {
-            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
-        }
-        guard container.contains(.applications) else {
-            throw SdkValidationError(field: "applications", code: "required", message: "Validation failed for 'applications': value is required")
-        }
-        guard container.contains(.integrations) else {
-            throw SdkValidationError(field: "integrations", code: "required", message: "Validation failed for 'integrations': value is required")
-        }
-        self.projects = try container.sdkDecodeRequired(.projects)
-        self.applications = try container.sdkDecodeRequired(.applications)
-        self.integrations = try container.sdkDecodeRequired(.integrations)
-        self.unavailableProjectIds = try container.sdkDecodeIfPresent(.unavailableProjectIds)
-        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ListProjectsResponse {
-    public init(projects: [ProjectListItem], applications: [String: [ApplicationType]], integrations: [String: [ApplicationType]], unavailableProjectIds: [String]? = nil, pagination: Pagination? = nil) {
+public extension ListProjectsResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.projects) else {
+            throw SdkValidationError(
+                field: "projects",
+                code: "required",
+                message: "Validation failed for 'projects': value is required"
+            )
+        }
+        guard container.contains(.applications) else {
+            throw SdkValidationError(
+                field: "applications",
+                code: "required",
+                message: "Validation failed for 'applications': value is required"
+            )
+        }
+        guard container.contains(.integrations) else {
+            throw SdkValidationError(
+                field: "integrations",
+                code: "required",
+                message: "Validation failed for 'integrations': value is required"
+            )
+        }
+        projects = try container.sdkDecodeRequired(.projects)
+        applications = try container.sdkDecodeRequired(.applications)
+        integrations = try container.sdkDecodeRequired(.integrations)
+        unavailableProjectIds = try container.sdkDecodeIfPresent(.unavailableProjectIds)
+        pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+public extension ListProjectsResponse {
+    init(
+        projects: [ProjectListItem],
+        applications: [String: [ApplicationType]],
+        integrations: [String: [ApplicationType]],
+        unavailableProjectIds: [String]? = nil,
+        pagination: Pagination? = nil
+    ) {
         (self.projects, self.applications) = (projects, applications)
         (self.integrations, self.unavailableProjectIds) = (integrations, unavailableProjectIds)
         self.pagination = pagination

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Buckets domain models
+/// Buckets domain models
 /// Typed representation of the `PresignResponse` API schema.
 public struct PresignResponse: Codable {
     /// The presigned URL. Transfer the object bytes by issuing `method url` with the returned `headers`.
@@ -23,37 +23,55 @@ public struct PresignResponse: Codable {
         case expiresAt = "expires_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension PresignResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.url) else {
-            throw SdkValidationError(field: "url", code: "required", message: "Validation failed for 'url': value is required")
-        }
-        guard container.contains(.method) else {
-            throw SdkValidationError(field: "method", code: "required", message: "Validation failed for 'method': value is required")
-        }
-        guard container.contains(.headers) else {
-            throw SdkValidationError(field: "headers", code: "required", message: "Validation failed for 'headers': value is required")
-        }
-        guard container.contains(.expiresAt) else {
-            throw SdkValidationError(field: "expires_at", code: "required", message: "Validation failed for 'expires_at': value is required")
-        }
-        self.url = try container.sdkDecodeRequired(.url)
-        self.method = try container.sdkDecodeRequired(.method)
-        self.headers = try container.sdkDecodeRequired(.headers)
-        self.expiresAt = try container.sdkDecodeRequired(.expiresAt)
-            try sdkValidateDateTime("expires_at", sdkWireString(self.expiresAt))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension PresignResponse {
-    public init(url: String, method: String, headers: [String: String], expiresAt: Date) throws {
+public extension PresignResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.url) else {
+            throw SdkValidationError(
+                field: "url",
+                code: "required",
+                message: "Validation failed for 'url': value is required"
+            )
+        }
+        guard container.contains(.method) else {
+            throw SdkValidationError(
+                field: "method",
+                code: "required",
+                message: "Validation failed for 'method': value is required"
+            )
+        }
+        guard container.contains(.headers) else {
+            throw SdkValidationError(
+                field: "headers",
+                code: "required",
+                message: "Validation failed for 'headers': value is required"
+            )
+        }
+        guard container.contains(.expiresAt) else {
+            throw SdkValidationError(
+                field: "expires_at",
+                code: "required",
+                message: "Validation failed for 'expires_at': value is required"
+            )
+        }
+        url = try container.sdkDecodeRequired(.url)
+        method = try container.sdkDecodeRequired(.method)
+        headers = try container.sdkDecodeRequired(.headers)
+        expiresAt = try container.sdkDecodeRequired(.expiresAt)
+        try sdkValidateDateTime("expires_at", sdkWireString(expiresAt))
+    }
+}
+
+public extension PresignResponse {
+    init(url: String, method: String, headers: [String: String], expiresAt: Date) throws {
         (self.url, self.method) = (url, method)
         (self.headers, self.expiresAt) = (headers, expiresAt)
-            try sdkValidateDateTime("expires_at", sdkWireString(self.expiresAt))
+        try sdkValidateDateTime("expires_at", sdkWireString(self.expiresAt))
     }
 }
 
@@ -75,30 +93,52 @@ public struct PresignRequest: Codable {
         case expiresInSeconds = "expires_in_seconds"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension PresignRequest {
-    public init(from decoder: Decoder) throws {
+public extension PresignRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.operation) else {
-            throw SdkValidationError(field: "operation", code: "required", message: "Validation failed for 'operation': value is required")
+            throw SdkValidationError(
+                field: "operation",
+                code: "required",
+                message: "Validation failed for 'operation': value is required"
+            )
         }
-        self.operation = try container.sdkDecodeRequired(.operation)
-        self.contentType = try container.sdkDecodeIfPresent(.contentType)
-        self.expiresInSeconds = try container.sdkDecodeIfPresent(.expiresInSeconds)
-        if let value = self.expiresInSeconds {
-            try validateRange("expires_in_seconds", Double(value), min: 1, max: 604800, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        operation = try container.sdkDecodeRequired(.operation)
+        contentType = try container.sdkDecodeIfPresent(.contentType)
+        expiresInSeconds = try container.sdkDecodeIfPresent(.expiresInSeconds)
+        if let value = expiresInSeconds {
+            try validateRange(
+                "expires_in_seconds",
+                Double(value),
+                min: 1,
+                max: 604_800,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension PresignRequest {
-    public init(operation: PresignRequestOperation, contentType: String? = nil, expiresInSeconds: Int? = nil) throws {
+public extension PresignRequest {
+    init(operation: PresignRequestOperation, contentType: String? = nil, expiresInSeconds: Int? = nil) throws {
         (self.operation, self.contentType) = (operation, contentType)
         self.expiresInSeconds = expiresInSeconds
         if let value = self.expiresInSeconds {
-            try validateRange("expires_in_seconds", Double(value), min: 1, max: 604800, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "expires_in_seconds",
+                Double(value),
+                min: 1,
+                max: 604_800,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -125,34 +165,52 @@ public struct BucketObjectsListResponse: Codable {
         case nextCursor = "next_cursor"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BucketObjectsListResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.folders) else {
-            throw SdkValidationError(field: "folders", code: "required", message: "Validation failed for 'folders': value is required")
-        }
-        guard container.contains(.objects) else {
-            throw SdkValidationError(field: "objects", code: "required", message: "Validation failed for 'objects': value is required")
-        }
-        guard container.contains(.prefix) else {
-            throw SdkValidationError(field: "prefix", code: "required", message: "Validation failed for 'prefix': value is required")
-        }
-        guard container.contains(.isTruncated) else {
-            throw SdkValidationError(field: "is_truncated", code: "required", message: "Validation failed for 'is_truncated': value is required")
-        }
-        self.folders = try container.sdkDecodeRequired(.folders)
-        self.objects = try container.sdkDecodeRequired(.objects)
-        self.prefix = try container.sdkDecodeRequired(.prefix)
-        self.isTruncated = try container.sdkDecodeRequired(.isTruncated)
-        self.nextCursor = try container.sdkDecodeIfPresent(.nextCursor)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BucketObjectsListResponse {
-    public init(folders: [String], objects: [BucketObject], prefix: String, isTruncated: Bool, nextCursor: String? = nil) {
+public extension BucketObjectsListResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.folders) else {
+            throw SdkValidationError(
+                field: "folders",
+                code: "required",
+                message: "Validation failed for 'folders': value is required"
+            )
+        }
+        guard container.contains(.objects) else {
+            throw SdkValidationError(
+                field: "objects",
+                code: "required",
+                message: "Validation failed for 'objects': value is required"
+            )
+        }
+        guard container.contains(.prefix) else {
+            throw SdkValidationError(
+                field: "prefix",
+                code: "required",
+                message: "Validation failed for 'prefix': value is required"
+            )
+        }
+        guard container.contains(.isTruncated) else {
+            throw SdkValidationError(
+                field: "is_truncated",
+                code: "required",
+                message: "Validation failed for 'is_truncated': value is required"
+            )
+        }
+        folders = try container.sdkDecodeRequired(.folders)
+        objects = try container.sdkDecodeRequired(.objects)
+        prefix = try container.sdkDecodeRequired(.prefix)
+        isTruncated = try container.sdkDecodeRequired(.isTruncated)
+        nextCursor = try container.sdkDecodeIfPresent(.nextCursor)
+    }
+}
+
+public extension BucketObjectsListResponse {
+    init(folders: [String], objects: [BucketObject], prefix: String, isTruncated: Bool, nextCursor: String? = nil) {
         (self.folders, self.objects) = (folders, objects)
         (self.prefix, self.isTruncated) = (prefix, isTruncated)
         self.nextCursor = nextCursor
@@ -169,21 +227,27 @@ public struct BucketObjectsDeletePrefixResponse: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BucketObjectsDeletePrefixResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        self.deleted = try container.sdkDecodeRequired(.deleted)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BucketObjectsDeletePrefixResponse {
-    public init(deleted: Int) {
+public extension BucketObjectsDeletePrefixResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        deleted = try container.sdkDecodeRequired(.deleted)
+    }
+}
+
+public extension BucketObjectsDeletePrefixResponse {
+    init(deleted: Int) {
         self.deleted = deleted
     }
 }
@@ -206,37 +270,55 @@ public struct BucketObject: Codable {
         case etag
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BucketObject {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.key) else {
-            throw SdkValidationError(field: "key", code: "required", message: "Validation failed for 'key': value is required")
-        }
-        guard container.contains(.size) else {
-            throw SdkValidationError(field: "size", code: "required", message: "Validation failed for 'size': value is required")
-        }
-        guard container.contains(.lastModified) else {
-            throw SdkValidationError(field: "last_modified", code: "required", message: "Validation failed for 'last_modified': value is required")
-        }
-        guard container.contains(.etag) else {
-            throw SdkValidationError(field: "etag", code: "required", message: "Validation failed for 'etag': value is required")
-        }
-        self.key = try container.sdkDecodeRequired(.key)
-        self.size = try container.sdkDecodeRequired(.size)
-        self.lastModified = try container.sdkDecodeRequired(.lastModified)
-        self.etag = try container.sdkDecodeRequired(.etag)
-            try sdkValidateDateTime("last_modified", sdkWireString(self.lastModified))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BucketObject {
-    public init(key: String, size: Int, lastModified: Date, etag: String) throws {
+public extension BucketObject {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.key) else {
+            throw SdkValidationError(
+                field: "key",
+                code: "required",
+                message: "Validation failed for 'key': value is required"
+            )
+        }
+        guard container.contains(.size) else {
+            throw SdkValidationError(
+                field: "size",
+                code: "required",
+                message: "Validation failed for 'size': value is required"
+            )
+        }
+        guard container.contains(.lastModified) else {
+            throw SdkValidationError(
+                field: "last_modified",
+                code: "required",
+                message: "Validation failed for 'last_modified': value is required"
+            )
+        }
+        guard container.contains(.etag) else {
+            throw SdkValidationError(
+                field: "etag",
+                code: "required",
+                message: "Validation failed for 'etag': value is required"
+            )
+        }
+        key = try container.sdkDecodeRequired(.key)
+        size = try container.sdkDecodeRequired(.size)
+        lastModified = try container.sdkDecodeRequired(.lastModified)
+        etag = try container.sdkDecodeRequired(.etag)
+        try sdkValidateDateTime("last_modified", sdkWireString(lastModified))
+    }
+}
+
+public extension BucketObject {
+    init(key: String, size: Int, lastModified: Date, etag: String) throws {
         (self.key, self.size) = (key, size)
         (self.lastModified, self.etag) = (lastModified, etag)
-            try sdkValidateDateTime("last_modified", sdkWireString(self.lastModified))
+        try sdkValidateDateTime("last_modified", sdkWireString(self.lastModified))
     }
 }
 
@@ -249,21 +331,27 @@ public struct BucketResponse: Codable {
         case bucket
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BucketResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.bucket) else {
-            throw SdkValidationError(field: "bucket", code: "required", message: "Validation failed for 'bucket': value is required")
-        }
-        self.bucket = try container.sdkDecodeRequired(.bucket)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BucketResponse {
-    public init(bucket: Bucket) {
+public extension BucketResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.bucket) else {
+            throw SdkValidationError(
+                field: "bucket",
+                code: "required",
+                message: "Validation failed for 'bucket': value is required"
+            )
+        }
+        bucket = try container.sdkDecodeRequired(.bucket)
+    }
+}
+
+public extension BucketResponse {
+    init(bucket: Bucket) {
         self.bucket = bucket
     }
 }
@@ -277,21 +365,27 @@ public struct BucketsListResponse: Codable {
         case buckets
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BucketsListResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.buckets) else {
-            throw SdkValidationError(field: "buckets", code: "required", message: "Validation failed for 'buckets': value is required")
-        }
-        self.buckets = try container.sdkDecodeRequired(.buckets)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BucketsListResponse {
-    public init(buckets: [Bucket]) {
+public extension BucketsListResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.buckets) else {
+            throw SdkValidationError(
+                field: "buckets",
+                code: "required",
+                message: "Validation failed for 'buckets': value is required"
+            )
+        }
+        buckets = try container.sdkDecodeRequired(.buckets)
+    }
+}
+
+public extension BucketsListResponse {
+    init(buckets: [Bucket]) {
         self.buckets = buckets
     }
 }
@@ -309,25 +403,31 @@ public struct BucketCreateRequest: Codable {
         case accessLevel = "access_level"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BucketCreateRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.accessLevel = try container.sdkDecodeIfPresent(.accessLevel)
-            try validateLength("name", self.name, min: 1, max: 255)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BucketCreateRequest {
-    public init(name: String, accessLevel: BucketCreateRequestAccessLevel? = nil) throws {
+public extension BucketCreateRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+        accessLevel = try container.sdkDecodeIfPresent(.accessLevel)
+        try validateLength("name", name, min: 1, max: 255)
+    }
+}
+
+public extension BucketCreateRequest {
+    init(name: String, accessLevel: BucketCreateRequestAccessLevel? = nil) throws {
         (self.name, self.accessLevel) = (name, accessLevel)
-            try validateLength("name", self.name, min: 1, max: 255)
+        try validateLength("name", self.name, min: 1, max: 255)
     }
 }
 
@@ -349,33 +449,47 @@ public struct Bucket: Codable {
         case createdAt = "created_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension Bucket {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.accessLevel) else {
-            throw SdkValidationError(field: "access_level", code: "required", message: "Validation failed for 'access_level': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.accessLevel = try container.sdkDecodeRequired(.accessLevel)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension Bucket {
-    public init(name: String, accessLevel: BucketAccessLevel, createdAt: Date) throws {
+public extension Bucket {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.accessLevel) else {
+            throw SdkValidationError(
+                field: "access_level",
+                code: "required",
+                message: "Validation failed for 'access_level': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+        accessLevel = try container.sdkDecodeRequired(.accessLevel)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
+    }
+}
+
+public extension Bucket {
+    init(name: String, accessLevel: BucketAccessLevel, createdAt: Date) throws {
         (self.name, self.accessLevel) = (name, accessLevel)
         self.createdAt = createdAt
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+        try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
     }
 }
 
@@ -383,13 +497,16 @@ extension Bucket {
 public struct PresignRequestOperation: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let upload = PresignRequestOperation(rawValue: "upload")
     public static let download = PresignRequestOperation(rawValue: "download")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -404,13 +521,16 @@ public struct PresignRequestOperation: RawRepresentable, Hashable, Codable, Send
 public struct BucketAccessLevel: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let `private` = BucketAccessLevel(rawValue: "private")
     public static let publicRead = BucketAccessLevel(rawValue: "public_read")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -424,13 +544,16 @@ public struct BucketAccessLevel: RawRepresentable, Hashable, Codable, Sendable, 
 public struct BucketCreateRequestAccessLevel: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let `private` = BucketCreateRequestAccessLevel(rawValue: "private")
     public static let publicRead = BucketCreateRequestAccessLevel(rawValue: "public_read")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
