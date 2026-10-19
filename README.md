@@ -6,7 +6,7 @@ The Neon API is the management API for Neon. Use it to provision, configure, and
 
 See the [Neon API reference](https://neon.com/docs/reference/api) for details, and [Manage API keys](https://neon.com/docs/manage/api-keys/) to create and use API keys.
 
-> Package `Octridevneon` · Version `1.0.0` · 192 operations
+> Package `OctriDevNeon` · Version `1.0.0` · 192 operations
 
 ## Installation
 
@@ -20,7 +20,7 @@ The example calls `client.branch.getMaskingRules` (GET `/projects/{project_id}/b
 
 ```swift
 import Foundation
-import Octridevneon
+import OctriDevNeon
 
 @main
 struct Example {
@@ -85,8 +85,8 @@ Pagination follows the cursor, offset, page-number, or next-URL contract declare
 
 ## Project layout and API discovery
 
-- Operation implementations are grouped under `Sources/Octridevneon/Methods/`.
-- 319 component models are split by API domain under `Sources/Octridevneon/Models/<Domain>Models.swift` or `Models/<Tag Path>/<TagPath>Models.swift` in the same Swift module.
+- Operation implementations are grouped under `Sources/OctriDevNeon/Methods/`.
+- 319 component models are split by API domain under `Sources/OctriDevNeon/Models/<Domain>Models.swift` or `Models/<Tag Path>/<TagPath>Models.swift` in the same Swift module.
 - Component schemas can choose a nested model folder with `x-octri-sdk-tags: ["Billing/Invoices"]`; the first tag owns the model and `/` creates nesting. This specification assigns 13 models explicitly.
 - [`sdk-manifest.json`](sdk-manifest.json) is the language-neutral public API index: operations, request/response modes, model properties, enum values, and generation settings.
 - Public barrel/module exports are the compatibility boundary. Import public model names from those exports; internal domain filenames may evolve without changing model names.
