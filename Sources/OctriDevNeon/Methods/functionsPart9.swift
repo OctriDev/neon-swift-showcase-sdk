@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension FunctionsMethods {
-    /// Lists all custom domains registered on the branch, across every target entity. **Note**: This endpoint is currently in Beta.
+public extension FunctionsMethods {
+    /// Lists all custom domains registered on the branch, across every target entity. **Note**: This endpoint is
+    /// currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -17,28 +18,57 @@ extension FunctionsMethods {
     ///   fetch next page of the list.
     /// - limit: Specify a value from 1 to 1000 to limit number of domains in the
     ///   response
-    public static func listFunctionsCustomDomains(config: ClientConfig, projectId: String, branchId: String, cursor: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> ListFunctionsCustomDomainsResponse {
+    static func listFunctionsCustomDomains(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        cursor: String? = nil,
+        limit: Int? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListFunctionsCustomDomainsResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        if let limit = limit {
+        if let limit {
             try validateRange("limit", Double(limit), min: 1, max: 1000)
         }
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/custom-domains"].joined(), config: config, query: [
-            SdkQueryParameter("cursor", value: cursor),
-            SdkQueryParameter("limit", value: limit),
-        ], decoder: .json, operationId: "listFunctionsCustomDomains", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/custom-domains",
+            ].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("cursor", value: cursor),
+                SdkQueryParameter("limit", value: limit),
+            ],
+            decoder: .json,
+            operationId: "listFunctionsCustomDomains",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
-    /// Removes a custom domain registered on the branch and stops routing it. **Note**: This endpoint is currently in Beta.
+    /// Removes a custom domain registered on the branch and stops routing it. **Note**: This endpoint is currently in
+    /// Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
     /// - domain: The registered custom domain (case-insensitive).
-    public static func deleteFunctionsCustomDomain(config: ClientConfig, projectId: String, branchId: String, domain: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+    static func deleteFunctionsCustomDomain(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        domain: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -46,6 +76,21 @@ extension FunctionsMethods {
         try validateLength("domain", domain, min: 3, max: 254)
         try sdkValidatePattern("domain", domain, sdkPattern0f1f46a139d3)
 
-        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/custom-domains/", sdkEncodePathSegment(sdkWireString(domain))].joined(), config: config, decoder: .empty, operationId: "deleteFunctionsCustomDomain", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "DELETE",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/custom-domains/",
+                sdkEncodePathSegment(sdkWireString(domain)),
+            ].joined(),
+            config: config,
+            decoder: .empty,
+            operationId: "deleteFunctionsCustomDomain",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

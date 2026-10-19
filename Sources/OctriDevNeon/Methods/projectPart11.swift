@@ -6,8 +6,13 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ProjectMethods {
-    /// Adds a JWKS URL to the specified project for verifying JWTs used as the authentication mechanism. The URL must be a valid HTTPS URL that returns a JSON Web Key Set. The `provider_name` field allows you to specify which authentication provider you're using (e.g., Clerk, Auth0, AWS Cognito). The `branch_id` scopes the JWKS URL to specific branches; if not specified, it applies to all branches. The `role_names` scopes the URL to specific roles; if not specified, default roles are used (`authenticator`, `authenticated`, `anonymous`). The `jwt_audience` specifies which `aud` values are accepted in JWTs.
+public extension ProjectMethods {
+    /// Adds a JWKS URL to the specified project for verifying JWTs used as the authentication mechanism. The URL must
+    /// be a valid HTTPS URL that returns a JSON Web Key Set. The `provider_name` field allows you to specify which
+    /// authentication provider you're using (e.g., Clerk, Auth0, AWS Cognito). The `branch_id` scopes the JWKS URL to
+    /// specific branches; if not specified, it applies to all branches. The `role_names` scopes the URL to specific
+    /// roles; if not specified, default roles are used (`authenticator`, `authenticated`, `anonymous`). The
+    /// `jwt_audience` specifies which `aud` values are accepted in JWTs.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -24,19 +29,45 @@ extension ProjectMethods {
     ///   roles.
     /// - skipRoleCreation: Deprecated. Only used with Neon RLS. If true, role
     ///   creation is skipped.
-    public static func addProjectJwks(config: ClientConfig, projectId: String, jwksUrl: String, providerName: String, branchId: String? = nil, jwtAudience: String? = nil, roleNames: [String]? = nil, skipRoleCreation: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> JWKSCreationOperation {
+    static func addProjectJwks(
+        config: ClientConfig,
+        projectId: String,
+        jwksUrl: String,
+        providerName: String,
+        branchId: String? = nil,
+        jwtAudience: String? = nil,
+        roleNames: [String]? = nil,
+        skipRoleCreation: Bool? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> JWKSCreationOperation {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        if let branchId = branchId {
+        if let branchId {
             try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
         }
 
-        if let roleNames = roleNames {
+        if let roleNames {
             try validateItems("role_names", roleNames, min: 0, max: 10)
         }
 
-        let requestBody = AddProjectJwksRequestBody(jwksUrl: jwksUrl, providerName: providerName, branchId: branchId, jwtAudience: jwtAudience, roleNames: roleNames, skipRoleCreation: skipRoleCreation)
+        let requestBody = AddProjectJwksRequestBody(
+            jwksUrl: jwksUrl,
+            providerName: providerName,
+            branchId: branchId,
+            jwtAudience: jwtAudience,
+            roleNames: roleNames,
+            skipRoleCreation: skipRoleCreation
+        )
 
-        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/jwks"].joined(), config: config, body: requestBody, decoder: .json, operationId: "addProjectJWKS", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/jwks"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "addProjectJWKS",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

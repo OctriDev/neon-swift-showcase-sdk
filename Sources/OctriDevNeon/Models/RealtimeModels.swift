@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Realtime domain models
+/// Realtime domain models
 /// Typed representation of the `RealtimeSecret` API schema.
 public struct RealtimeSecret: Codable {
     /// The key the application backend issues Realtime tokens with, `nrt_live_1` followed by the unpadded base64url
@@ -17,28 +17,38 @@ public struct RealtimeSecret: Codable {
         case pending
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeSecret {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.secret) else {
-            throw SdkValidationError(field: "secret", code: "required", message: "Validation failed for 'secret': value is required")
-        }
-        guard container.contains(.pending) else {
-            throw SdkValidationError(field: "pending", code: "required", message: "Validation failed for 'pending': value is required")
-        }
-        self.secret = try container.sdkDecodeRequired(.secret)
-        self.pending = try container.sdkDecodeRequired(.pending)
-            try validateLength("secret", self.secret, min: 1, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeSecret {
-    public init(secret: String, pending: Bool) throws {
+public extension RealtimeSecret {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.secret) else {
+            throw SdkValidationError(
+                field: "secret",
+                code: "required",
+                message: "Validation failed for 'secret': value is required"
+            )
+        }
+        guard container.contains(.pending) else {
+            throw SdkValidationError(
+                field: "pending",
+                code: "required",
+                message: "Validation failed for 'pending': value is required"
+            )
+        }
+        secret = try container.sdkDecodeRequired(.secret)
+        pending = try container.sdkDecodeRequired(.pending)
+        try validateLength("secret", secret, min: 1, max: nil)
+    }
+}
+
+public extension RealtimeSecret {
+    init(secret: String, pending: Bool) throws {
         (self.secret, self.pending) = (secret, pending)
-            try validateLength("secret", self.secret, min: 1, max: nil)
+        try validateLength("secret", self.secret, min: 1, max: nil)
     }
 }
 
@@ -63,36 +73,68 @@ public struct Realtime: Codable {
         case allowedOrigins = "allowed_origins"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension Realtime {
-    public init(from decoder: Decoder) throws {
+public extension Realtime {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.enabled) else {
-            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
+            throw SdkValidationError(
+                field: "enabled",
+                code: "required",
+                message: "Validation failed for 'enabled': value is required"
+            )
         }
         guard container.contains(.pending) else {
-            throw SdkValidationError(field: "pending", code: "required", message: "Validation failed for 'pending': value is required")
+            throw SdkValidationError(
+                field: "pending",
+                code: "required",
+                message: "Validation failed for 'pending': value is required"
+            )
         }
-        self.enabled = try container.sdkDecodeRequired(.enabled)
-        self.pending = try container.sdkDecodeRequired(.pending)
-        self.invocationUrl = try container.sdkDecodeIfPresent(.invocationUrl)
-        self.revision = try container.sdkDecodeIfPresent(.revision)
-        self.allowedOrigins = try container.sdkDecodeIfPresent(.allowedOrigins)
-        if let value = self.revision {
-            try validateRange("revision", Double(value), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        enabled = try container.sdkDecodeRequired(.enabled)
+        pending = try container.sdkDecodeRequired(.pending)
+        invocationUrl = try container.sdkDecodeIfPresent(.invocationUrl)
+        revision = try container.sdkDecodeIfPresent(.revision)
+        allowedOrigins = try container.sdkDecodeIfPresent(.allowedOrigins)
+        if let value = revision {
+            try validateRange(
+                "revision",
+                Double(value),
+                min: 1,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension Realtime {
-    public init(enabled: Bool, pending: Bool, invocationUrl: String? = nil, revision: Int? = nil, allowedOrigins: [String]? = nil) throws {
+public extension Realtime {
+    init(
+        enabled: Bool,
+        pending: Bool,
+        invocationUrl: String? = nil,
+        revision: Int? = nil,
+        allowedOrigins: [String]? = nil
+    ) throws {
         (self.enabled, self.pending) = (enabled, pending)
         (self.invocationUrl, self.revision) = (invocationUrl, revision)
         self.allowedOrigins = allowedOrigins
         if let value = self.revision {
-            try validateRange("revision", Double(value), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "revision",
+                Double(value),
+                min: 1,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }

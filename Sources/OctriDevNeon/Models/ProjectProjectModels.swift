@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ProjectProject domain models
+/// ProjectProject domain models
 /// Configuration for the initial branch created with the project.
 public struct ProjectCreateRequestProjectBranch: Codable {
     /// The default branch name. If not specified, the default branch name, `main`, will be used.
@@ -24,25 +24,30 @@ public struct ProjectCreateRequestProjectBranch: Codable {
     }
 
     init() {
-        (self.name, self.roleName, self.databaseName, self.annotations) = (nil, nil, nil, nil)
+        (name, roleName, databaseName, annotations) = (nil, nil, nil, nil)
     }
 }
 
-extension ProjectCreateRequestProjectBranch {
-    public init(from decoder: Decoder) throws {
+public extension ProjectCreateRequestProjectBranch {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.roleName = try container.sdkDecodeIfPresent(.roleName)
-        self.databaseName = try container.sdkDecodeIfPresent(.databaseName)
-        self.annotations = try container.sdkDecodeIfPresent(.annotations)
-        if let value = self.name {
+        name = try container.sdkDecodeIfPresent(.name)
+        roleName = try container.sdkDecodeIfPresent(.roleName)
+        databaseName = try container.sdkDecodeIfPresent(.databaseName)
+        annotations = try container.sdkDecodeIfPresent(.annotations)
+        if let value = name {
             try validateLength("name", value, min: 1, max: 256)
         }
     }
 }
 
-extension ProjectCreateRequestProjectBranch {
-    public init(name: String? = nil, roleName: String? = nil, databaseName: String? = nil, annotations: AnnotationValueData? = nil) throws {
+public extension ProjectCreateRequestProjectBranch {
+    init(
+        name: String? = nil,
+        roleName: String? = nil,
+        databaseName: String? = nil,
+        annotations: AnnotationValueData? = nil
+    ) throws {
         self.init()
         (self.name, self.roleName) = (name, roleName)
         (self.databaseName, self.annotations) = (databaseName, annotations)
@@ -98,28 +103,44 @@ public struct ProjectSettingsData: Codable {
     }
 
     init() {
-        (self.quota, self.allowedIps, self.enableLogicalReplication, self.maintenanceWindow, self.blockPublicConnections) = (nil, nil, nil, nil, nil)
-        (self.blockVpcConnections, self.auditLogLevel, self.hipaa, self.preloadLibraries) = (nil, nil, nil, nil)
+        (quota, allowedIps, enableLogicalReplication, maintenanceWindow, blockPublicConnections) = (
+            nil,
+            nil,
+            nil,
+            nil,
+            nil
+        )
+        (blockVpcConnections, auditLogLevel, hipaa, preloadLibraries) = (nil, nil, nil, nil)
     }
 }
 
-extension ProjectSettingsData {
-    public init(from decoder: Decoder) throws {
+public extension ProjectSettingsData {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.quota = try container.sdkDecodeIfPresent(.quota)
-        self.allowedIps = try container.sdkDecodeIfPresent(.allowedIps)
-        self.enableLogicalReplication = try container.sdkDecodeIfPresent(.enableLogicalReplication)
-        self.maintenanceWindow = try container.sdkDecodeIfPresent(.maintenanceWindow)
-        self.blockPublicConnections = try container.sdkDecodeIfPresent(.blockPublicConnections)
-        self.blockVpcConnections = try container.sdkDecodeIfPresent(.blockVpcConnections)
-        self.auditLogLevel = try container.sdkDecodeIfPresent(.auditLogLevel)
-        self.hipaa = try container.sdkDecodeIfPresent(.hipaa)
-        self.preloadLibraries = try container.sdkDecodeIfPresent(.preloadLibraries)
+        quota = try container.sdkDecodeIfPresent(.quota)
+        allowedIps = try container.sdkDecodeIfPresent(.allowedIps)
+        enableLogicalReplication = try container.sdkDecodeIfPresent(.enableLogicalReplication)
+        maintenanceWindow = try container.sdkDecodeIfPresent(.maintenanceWindow)
+        blockPublicConnections = try container.sdkDecodeIfPresent(.blockPublicConnections)
+        blockVpcConnections = try container.sdkDecodeIfPresent(.blockVpcConnections)
+        auditLogLevel = try container.sdkDecodeIfPresent(.auditLogLevel)
+        hipaa = try container.sdkDecodeIfPresent(.hipaa)
+        preloadLibraries = try container.sdkDecodeIfPresent(.preloadLibraries)
     }
 }
 
-extension ProjectSettingsData {
-    public init(quota: ProjectQuota? = nil, allowedIps: AllowedIps? = nil, enableLogicalReplication: Bool? = nil, maintenanceWindow: MaintenanceWindow? = nil, blockPublicConnections: Bool? = nil, blockVpcConnections: Bool? = nil, auditLogLevel: ProjectAuditLogLevel? = nil, hipaa: Bool? = nil, preloadLibraries: PreloadLibraries? = nil) {
+public extension ProjectSettingsData {
+    init(
+        quota: ProjectQuota? = nil,
+        allowedIps: AllowedIps? = nil,
+        enableLogicalReplication: Bool? = nil,
+        maintenanceWindow: MaintenanceWindow? = nil,
+        blockPublicConnections: Bool? = nil,
+        blockVpcConnections: Bool? = nil,
+        auditLogLevel: ProjectAuditLogLevel? = nil,
+        hipaa: Bool? = nil,
+        preloadLibraries: PreloadLibraries? = nil
+    ) {
         self.init()
         (self.quota, self.allowedIps) = (quota, allowedIps)
         self.enableLogicalReplication = enableLogicalReplication
@@ -148,21 +169,27 @@ public struct ProjectResponse: Codable {
         case project
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.project) else {
-            throw SdkValidationError(field: "project", code: "required", message: "Validation failed for 'project': value is required")
-        }
-        self.project = try container.sdkDecodeRequired(.project)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectResponse {
-    public init(project: Project) {
+public extension ProjectResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.project) else {
+            throw SdkValidationError(
+                field: "project",
+                code: "required",
+                message: "Validation failed for 'project': value is required"
+            )
+        }
+        project = try container.sdkDecodeRequired(.project)
+    }
+}
+
+public extension ProjectResponse {
+    init(project: Project) {
         self.project = project
     }
 }
@@ -185,39 +212,57 @@ public struct ProjectOwnerData: Codable {
         case subscriptionType = "subscription_type"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectOwnerData {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.email) else {
-            throw SdkValidationError(field: "email", code: "required", message: "Validation failed for 'email': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.branchesLimit) else {
-            throw SdkValidationError(field: "branches_limit", code: "required", message: "Validation failed for 'branches_limit': value is required")
-        }
-        guard container.contains(.subscriptionType) else {
-            throw SdkValidationError(field: "subscription_type", code: "required", message: "Validation failed for 'subscription_type': value is required")
-        }
-        self.email = try container.sdkDecodeRequired(.email)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.branchesLimit = try container.sdkDecodeRequired(.branchesLimit)
-        self.subscriptionType = try container.sdkDecodeRequired(.subscriptionType)
-            try validateLength("email", self.email, min: 1, max: 256)
-            try sdkValidateEmail("email", self.email)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectOwnerData {
-    public init(email: String, name: String, branchesLimit: Int, subscriptionType: BillingSubscriptionType) throws {
+public extension ProjectOwnerData {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.email) else {
+            throw SdkValidationError(
+                field: "email",
+                code: "required",
+                message: "Validation failed for 'email': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.branchesLimit) else {
+            throw SdkValidationError(
+                field: "branches_limit",
+                code: "required",
+                message: "Validation failed for 'branches_limit': value is required"
+            )
+        }
+        guard container.contains(.subscriptionType) else {
+            throw SdkValidationError(
+                field: "subscription_type",
+                code: "required",
+                message: "Validation failed for 'subscription_type': value is required"
+            )
+        }
+        email = try container.sdkDecodeRequired(.email)
+        name = try container.sdkDecodeRequired(.name)
+        branchesLimit = try container.sdkDecodeRequired(.branchesLimit)
+        subscriptionType = try container.sdkDecodeRequired(.subscriptionType)
+        try validateLength("email", email, min: 1, max: 256)
+        try sdkValidateEmail("email", email)
+    }
+}
+
+public extension ProjectOwnerData {
+    init(email: String, name: String, branchesLimit: Int, subscriptionType: BillingSubscriptionType) throws {
         (self.email, self.name) = (email, name)
         (self.branchesLimit, self.subscriptionType) = (branchesLimit, subscriptionType)
-            try validateLength("email", self.email, min: 1, max: 256)
-            try sdkValidateEmail("email", self.email)
+        try validateLength("email", self.email, min: 1, max: 256)
+        try sdkValidateEmail("email", self.email)
     }
 }
 
@@ -263,50 +308,75 @@ public struct ProjectMember: Codable {
         case grantSource = "grant_source"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension ProjectMember {
-    public init(from decoder: Decoder) throws {
+public extension ProjectMember {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.memberId) else {
-            throw SdkValidationError(field: "member_id", code: "required", message: "Validation failed for 'member_id': value is required")
+            throw SdkValidationError(
+                field: "member_id",
+                code: "required",
+                message: "Validation failed for 'member_id': value is required"
+            )
         }
         guard container.contains(.userId) else {
-            throw SdkValidationError(field: "user_id", code: "required", message: "Validation failed for 'user_id': value is required")
+            throw SdkValidationError(
+                field: "user_id",
+                code: "required",
+                message: "Validation failed for 'user_id': value is required"
+            )
         }
         guard container.contains(.orgRole) else {
-            throw SdkValidationError(field: "org_role", code: "required", message: "Validation failed for 'org_role': value is required")
+            throw SdkValidationError(
+                field: "org_role",
+                code: "required",
+                message: "Validation failed for 'org_role': value is required"
+            )
         }
-        self.memberId = try container.sdkDecodeRequired(.memberId)
-        self.userId = try container.sdkDecodeRequired(.userId)
-        self.orgRole = try container.sdkDecodeRequired(.orgRole)
-        self.email = try container.sdkDecodeIfPresent(.email)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.projectRole = try container.sdkDecodeIfPresent(.projectRole)
-        self.orgDefaultProjectPermission = try container.sdkDecodeIfPresent(.orgDefaultProjectPermission)
-        self.explicitProjectPermission = try container.sdkDecodeIfPresent(.explicitProjectPermission)
-        self.effectiveProjectPermission = try container.sdkDecodeIfPresent(.effectiveProjectPermission)
-        self.grantSource = try container.sdkDecodeIfPresent(.grantSource)
-            try sdkValidateUuid("member_id", self.memberId)
-            try sdkValidateUuid("user_id", self.userId)
-        if let value = self.email {
+        memberId = try container.sdkDecodeRequired(.memberId)
+        userId = try container.sdkDecodeRequired(.userId)
+        orgRole = try container.sdkDecodeRequired(.orgRole)
+        email = try container.sdkDecodeIfPresent(.email)
+        name = try container.sdkDecodeIfPresent(.name)
+        projectRole = try container.sdkDecodeIfPresent(.projectRole)
+        orgDefaultProjectPermission = try container.sdkDecodeIfPresent(.orgDefaultProjectPermission)
+        explicitProjectPermission = try container.sdkDecodeIfPresent(.explicitProjectPermission)
+        effectiveProjectPermission = try container.sdkDecodeIfPresent(.effectiveProjectPermission)
+        grantSource = try container.sdkDecodeIfPresent(.grantSource)
+        try sdkValidateUuid("member_id", memberId)
+        try sdkValidateUuid("user_id", userId)
+        if let value = email {
             try validateLength("email", value, min: 1, max: 256)
             try sdkValidateEmail("email", value)
         }
     }
 }
 
-extension ProjectMember {
-    public init(memberId: String, userId: String, orgRole: ProjectMemberOrgRole, email: String? = nil, name: String? = nil, projectRole: ProjectRole? = nil, orgDefaultProjectPermission: ProjectPermissionLevel? = nil, explicitProjectPermission: ProjectPermissionLevel? = nil, effectiveProjectPermission: ProjectPermissionLevel? = nil, grantSource: ProjectMemberGrantSource? = nil) throws {
+public extension ProjectMember {
+    init(
+        memberId: String,
+        userId: String,
+        orgRole: ProjectMemberOrgRole,
+        email: String? = nil,
+        name: String? = nil,
+        projectRole: ProjectRole? = nil,
+        orgDefaultProjectPermission: ProjectPermissionLevel? = nil,
+        explicitProjectPermission: ProjectPermissionLevel? = nil,
+        effectiveProjectPermission: ProjectPermissionLevel? = nil,
+        grantSource: ProjectMemberGrantSource? = nil
+    ) throws {
         (self.memberId, self.userId) = (memberId, userId)
         (self.orgRole, self.email) = (orgRole, email)
         (self.name, self.projectRole) = (name, projectRole)
         self.orgDefaultProjectPermission = orgDefaultProjectPermission
         self.explicitProjectPermission = explicitProjectPermission
         (self.effectiveProjectPermission, self.grantSource) = (effectiveProjectPermission, grantSource)
-            try sdkValidateUuid("member_id", self.memberId)
-            try sdkValidateUuid("user_id", self.userId)
+        try sdkValidateUuid("member_id", self.memberId)
+        try sdkValidateUuid("user_id", self.userId)
         if let value = self.email {
             try validateLength("email", value, min: 1, max: 256)
             try sdkValidateEmail("email", value)
@@ -329,22 +399,28 @@ public struct ProjectMembers: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectMembers {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projectMembers) else {
-            throw SdkValidationError(field: "project_members", code: "required", message: "Validation failed for 'project_members': value is required")
-        }
-        self.projectMembers = try container.sdkDecodeRequired(.projectMembers)
-        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectMembers {
-    public init(projectMembers: [ProjectMember], pagination: CursorPagination? = nil) {
+public extension ProjectMembers {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.projectMembers) else {
+            throw SdkValidationError(
+                field: "project_members",
+                code: "required",
+                message: "Validation failed for 'project_members': value is required"
+            )
+        }
+        projectMembers = try container.sdkDecodeRequired(.projectMembers)
+        pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+public extension ProjectMembers {
+    init(projectMembers: [ProjectMember], pagination: CursorPagination? = nil) {
         (self.projectMembers, self.pagination) = (projectMembers, pagination)
     }
 }
@@ -358,21 +434,27 @@ public struct ProjectJWKSResponse: Codable {
         case jwks
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectJWKSResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.jwks) else {
-            throw SdkValidationError(field: "jwks", code: "required", message: "Validation failed for 'jwks': value is required")
-        }
-        self.jwks = try container.sdkDecodeRequired(.jwks)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectJWKSResponse {
-    public init(jwks: [JWKS]) {
+public extension ProjectJWKSResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.jwks) else {
+            throw SdkValidationError(
+                field: "jwks",
+                code: "required",
+                message: "Validation failed for 'jwks': value is required"
+            )
+        }
+        jwks = try container.sdkDecodeRequired(.jwks)
+    }
+}
+
+public extension ProjectJWKSResponse {
+    init(jwks: [JWKS]) {
         self.jwks = jwks
     }
 }
@@ -434,44 +516,76 @@ public struct ProjectCreateRequestProject: Codable {
     }
 
     init() {
-        (self.settings, self.name, self.realtime, self.branch, self.autoscalingLimitMinCu) = (nil, nil, nil, nil, nil)
-        (self.autoscalingLimitMaxCu, self.provisioner, self.regionId, self.defaultEndpointSettings, self.pgVersion) = (nil, nil, nil, nil, nil)
-        (self.storePasswords, self.historyRetentionSeconds, self.orgId) = (nil, nil, nil)
+        (settings, name, realtime, branch, autoscalingLimitMinCu) = (nil, nil, nil, nil, nil)
+        (autoscalingLimitMaxCu, provisioner, regionId, defaultEndpointSettings, pgVersion) = (nil, nil, nil, nil, nil)
+        (storePasswords, historyRetentionSeconds, orgId) = (nil, nil, nil)
     }
 }
 
-extension ProjectCreateRequestProject {
-    public init(from decoder: Decoder) throws {
+public extension ProjectCreateRequestProject {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.settings = try container.sdkDecodeIfPresent(.settings)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.realtime = try container.sdkDecodeIfPresent(.realtime)
-        self.branch = try container.sdkDecodeIfPresent(.branch)
-        self.autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
-        self.autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
-        self.provisioner = try container.sdkDecodeIfPresent(.provisioner)
-        self.regionId = try container.sdkDecodeIfPresent(.regionId)
-        self.defaultEndpointSettings = try container.sdkDecodeIfPresent(.defaultEndpointSettings)
-        self.pgVersion = try container.sdkDecodeIfPresent(.pgVersion)
-        self.storePasswords = try container.sdkDecodeIfPresent(.storePasswords)
-        self.historyRetentionSeconds = try container.sdkDecodeIfPresent(.historyRetentionSeconds)
-        self.orgId = try container.sdkDecodeIfPresent(.orgId)
-        if let value = self.name {
+        settings = try container.sdkDecodeIfPresent(.settings)
+        name = try container.sdkDecodeIfPresent(.name)
+        realtime = try container.sdkDecodeIfPresent(.realtime)
+        branch = try container.sdkDecodeIfPresent(.branch)
+        autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
+        autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
+        provisioner = try container.sdkDecodeIfPresent(.provisioner)
+        regionId = try container.sdkDecodeIfPresent(.regionId)
+        defaultEndpointSettings = try container.sdkDecodeIfPresent(.defaultEndpointSettings)
+        pgVersion = try container.sdkDecodeIfPresent(.pgVersion)
+        storePasswords = try container.sdkDecodeIfPresent(.storePasswords)
+        historyRetentionSeconds = try container.sdkDecodeIfPresent(.historyRetentionSeconds)
+        orgId = try container.sdkDecodeIfPresent(.orgId)
+        if let value = name {
             try validateLength("name", value, min: 1, max: 256)
         }
-        if let value = self.autoscalingLimitMinCu {
-            try validateRange("autoscaling_limit_min_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = autoscalingLimitMinCu {
+            try validateRange(
+                "autoscaling_limit_min_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.autoscalingLimitMaxCu {
-            try validateRange("autoscaling_limit_max_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = autoscalingLimitMaxCu {
+            try validateRange(
+                "autoscaling_limit_max_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.pgVersion {
-            try validateRange("pg_version", Double(value), min: 14, max: 19, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = pgVersion {
+            try validateRange(
+                "pg_version",
+                Double(value),
+                min: 14,
+                max: 19,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.historyRetentionSeconds {
-            try validateRange("history_retention_seconds", Double(value), min: 0, max: 2592000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = historyRetentionSeconds {
+            try validateRange(
+                "history_retention_seconds",
+                Double(value),
+                min: 0,
+                max: 2_592_000,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.orgId {
+        if let value = orgId {
             try sdkValidatePattern("org_id", value, sdkPatternead2b03f7a95)
         }
     }
