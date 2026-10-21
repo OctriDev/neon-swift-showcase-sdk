@@ -7,3 +7,94 @@ import Foundation
     import FoundationNetworking
 #endif
 public enum CredentialsMethods {}
+
+public extension CredentialsMethods {
+    /// Creates a scoped service credential for a specified project branch. Provide `scopes` and `principal_type` to
+    /// define the credential's capabilities and principal. The endpoint is in beta, and returns `api_token` and
+    /// `s3_secret_access_key` only once; they are not stored server-side.
+    ///
+    /// Issues a new scoped service credential anchored to the specified branch. The response carries `api_token` and
+    /// `s3_secret_access_key` exactly once — they are not stored server-side. **Note**: This endpoint is currently in
+    /// Beta.
+    ///
+    /// - Parameters:
+    /// - projectId: The Neon project ID
+    /// - branchId: The Neon branch ID
+    /// - scopes: Required array value serialized in the `scopes` wire field.
+    /// - principalType: Principal type for the credential. Only `user` is
+    ///   customer-managed and accepted here. `function` and `system` credentials are
+    ///   platform-internal (e.g. function-serve auto-mint, presign signer) and are
+    ///   never issued through the customer-facing API.
+    /// - name: Free-form customer label for the credential.
+    static func createCredential(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        scopes: [CredentialScope],
+        principalType: CreateCredentialRequestPrincipalType,
+        name: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> CreateCredentialResponse {
+        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
+
+        try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
+
+        try validateItems("scopes", scopes, min: 1, max: 16)
+
+        if let name {
+            try validateLength("name", name, max: 256)
+        }
+
+        let requestBody = CreateCredentialRequestBody(scopes: scopes, principalType: principalType, name: name)
+
+        return try await (sdkRequest(
+            "POST",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/credentials",
+            ].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createCredential",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
+    }
+
+    /// Returns metadata for customer-issued credentials on the branch. Secrets are never included. **Note**: This
+    /// endpoint is currently in Beta.
+    ///
+    /// - Parameters:
+    /// - projectId: The Neon project ID
+    /// - branchId: The Neon branch ID
+    static func listCredentials(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListCredentialsResponse {
+        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
+
+        try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
+
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/credentials",
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "listCredentials",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
+    }
+}

@@ -15648,9 +15648,9 @@
       }
     },
     {
-      "id": "updateFunctionsTrigger:updateFunctionsTrigger",
-      "operationId": "updateFunctionsTrigger",
-      "methodName": "updateFunctionsTrigger",
+      "id": "updateFunctionTrigger:updateFunctionTrigger",
+      "operationId": "updateFunctionTrigger",
+      "methodName": "updateFunctionTrigger",
       "namespace": [
         "functions"
       ],
@@ -15705,9 +15705,9 @@
       }
     },
     {
-      "id": "updateFunctionsTrigger:updateFunctionsTrigger:418",
-      "operationId": "updateFunctionsTrigger",
-      "methodName": "updateFunctionsTrigger",
+      "id": "updateFunctionTrigger:updateFunctionTrigger:418",
+      "operationId": "updateFunctionTrigger",
+      "methodName": "updateFunctionTrigger",
       "namespace": [
         "functions"
       ],

@@ -386,7 +386,7 @@ public extension FunctionsNamespace {
         body: TriggerUpdateRequest,
         requestOptions: RequestOptions? = nil
     ) async throws -> TriggerResponse {
-        try await FunctionsMethods.updateFunctionsTrigger(
+        try await FunctionsMethods.updateFunctionTrigger(
             config: config,
             projectId: projectId,
             branchId: branchId,

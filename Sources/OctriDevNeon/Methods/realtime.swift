@@ -7,3 +7,83 @@ import Foundation
     import FoundationNetworking
 #endif
 public enum RealtimeMethods {}
+
+public extension RealtimeMethods {
+    /// Retrieves whether Realtime is enabled for the branch, whether a change is still being applied, and, once
+    /// provisioned, its invocation URL and allowed origins. The shared secret is returned by `GET
+    /// /projects/{project_id}/branches/{branch_id}/realtime/secret`.
+    ///
+    /// - Parameters:
+    /// - projectId: The project ID
+    /// - branchId: The branch ID
+    static func getRealtime(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Realtime {
+        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
+
+        try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
+
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/realtime",
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getRealtime",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
+    }
+
+    /// Enables Realtime for the branch, or applies new options to an enabled branch. Provisioning is asynchronous; poll
+    /// the Realtime state until it is no longer pending.
+    ///
+    /// - Parameters:
+    /// - projectId: The project ID
+    /// - branchId: The branch ID
+    /// - allowedOrigins: The browser origins allowed to connect, each `http` or
+    ///   `https` with a host and optional port and no path. An empty list, or `*`
+    ///   alone, allows any origin. Omitted keeps the current or inherited value.
+    static func enableRealtime(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        allowedOrigins: [String]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SdkEmptyResponse {
+        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
+
+        try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
+
+        if let allowedOrigins {
+            try validateItems("allowed_origins", allowedOrigins, max: 16)
+        }
+
+        let requestBody = EnableRealtimeRequestBody(allowedOrigins: allowedOrigins)
+
+        return try await (sdkRequest(
+            "POST",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/realtime",
+            ].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .empty,
+            operationId: "enableRealtime",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
+    }
+}
