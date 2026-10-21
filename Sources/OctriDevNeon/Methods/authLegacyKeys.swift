@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthLegacyMethods {
-    /// Generates SDK or API Keys for the auth provider. These might be called different things depending on the auth
-    /// provider you're using, but are generally used for setting up the frontend and backend SDKs.
+extension AuthLegacyMethods {
+    /// Generates SDK or API Keys for the auth provider. These might be called different things depending on the auth provider you're using, but are generally used for setting up the frontend and backend SDKs.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID. Returned as `id` from `GET /projects`.
@@ -16,25 +15,11 @@ public extension AuthLegacyMethods {
     ///   configuration. `better_auth` integrates with Better Auth (the current,
     ///   recommended provider). `stack` integrates with Stack Auth (deprecated).
     ///   `mock` is a simulated provider for local development and testing only.
-    static func createAuthLegacyProviderSdkKeys(
-        config: ClientConfig,
-        projectId: String,
-        authProvider: NeonAuthSupportedAuthProvider,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonAuthCreateIntegrationResponse {
+    public static func createAuthLegacyProviderSdkKeys(config: ClientConfig, projectId: String, authProvider: NeonAuthSupportedAuthProvider, requestOptions: RequestOptions? = nil) async throws -> NeonAuthCreateIntegrationResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         let requestBody = CreateAuthLegacyProviderSdkKeysRequestBody(projectId: projectId, authProvider: authProvider)
 
-        return try await (sdkRequest(
-            "POST",
-            "/projects/auth/keys",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createAuthLegacyProviderSdkKeys",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", "/projects/auth/keys", config: config, body: requestBody, decoder: .json, operationId: "createAuthLegacyProviderSdkKeys", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

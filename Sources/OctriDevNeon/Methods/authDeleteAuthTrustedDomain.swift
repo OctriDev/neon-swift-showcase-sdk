@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthMethods {
-    /// Removes a domain from the redirect URI whitelist for the specified branch. After removal, the domain can no
-    /// longer be used as a redirect target after authentication.
+extension AuthMethods {
+    /// Removes a domain from the redirect URI whitelist for the specified branch. After removal, the domain can no longer be used as a redirect target after authentication.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -19,35 +18,13 @@ public extension AuthMethods {
     ///   `mock` is a simulated provider for local development and testing only.
     /// - domains: Domain names to remove from the redirect URI whitelist for the
     ///   specified auth provider.
-    static func deleteAuthTrustedDomain(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        authProvider: NeonAuthSupportedAuthProvider,
-        domains: [NeonAuthDeleteDomainFromRedirectURIAllowlistItem],
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
+    public static func deleteAuthTrustedDomain(config: ClientConfig, projectId: String, branchId: String, authProvider: NeonAuthSupportedAuthProvider, domains: [NeonAuthDeleteDomainFromRedirectURIAllowlistItem], requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
         let requestBody = DeleteAuthTrustedDomainRequestBody(authProvider: authProvider, domains: domains)
 
-        return try await (sdkRequest(
-            "DELETE",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/auth/domains",
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .empty,
-            operationId: "deleteAuthTrustedDomain",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/domains"].joined(), config: config, body: requestBody, decoder: .empty, operationId: "deleteAuthTrustedDomain", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Project domain models
+// Project domain models
 /// Required object value serialized in the `reasons[]` wire field.
 public struct AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem: Codable {
     /// Description of why the plan is not satisfied
@@ -16,35 +16,25 @@ public struct AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem: Codable
         case code
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem {
-    init(from decoder: Decoder) throws {
+extension AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.message) else {
-            throw SdkValidationError(
-                field: "message",
-                code: "required",
-                message: "Validation failed for 'message': value is required"
-            )
+            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
         }
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
-        message = try container.sdkDecodeRequired(.message)
-        code = try container.sdkDecodeRequired(.code)
+        self.message = try container.sdkDecodeRequired(.message)
+        self.code = try container.sdkDecodeRequired(.code)
     }
 }
 
-public extension AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem {
-    init(message: String, code: String) {
+extension AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem {
+    public init(message: String, code: String) {
         (self.message, self.code) = (message, code)
     }
 }
@@ -59,27 +49,21 @@ public struct AcceptProjectTransferRequestSatisfiesPlanError: Codable {
         case reasons
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AcceptProjectTransferRequestSatisfiesPlanError {
-    init(from decoder: Decoder) throws {
+extension AcceptProjectTransferRequestSatisfiesPlanError {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.reasons) else {
-            throw SdkValidationError(
-                field: "reasons",
-                code: "required",
-                message: "Validation failed for 'reasons': value is required"
-            )
+            throw SdkValidationError(field: "reasons", code: "required", message: "Validation failed for 'reasons': value is required")
         }
-        reasons = try container.sdkDecodeRequired(.reasons)
+        self.reasons = try container.sdkDecodeRequired(.reasons)
     }
 }
 
-public extension AcceptProjectTransferRequestSatisfiesPlanError {
-    init(reasons: [AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem]) {
+extension AcceptProjectTransferRequestSatisfiesPlanError {
+    public init(reasons: [AcceptProjectTransferRequestSatisfiesPlanErrorReasonsItem]) {
         self.reasons = reasons
     }
 }

@@ -6,24 +6,14 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthMethods {
-    /// Sends a test email using the branch's already-saved custom SMTP configuration. Only the `recipient_email` is
-    /// provided — the stored SMTP settings and password are used server-side, so the caller does not need to re-supply
-    /// (or be able to read) the password. This avoids the GET response's masked password being sent back, which would
-    /// fail SMTP authentication. Requires a configured custom SMTP provider on a Better Auth integration. A shared
-    /// provider, a missing configuration, or a non-Better-Auth integration is rejected.
+extension AuthMethods {
+    /// Sends a test email using the branch's already-saved custom SMTP configuration. Only the `recipient_email` is provided — the stored SMTP settings and password are used server-side, so the caller does not need to re-supply (or be able to read) the password. This avoids the GET response's masked password being sent back, which would fail SMTP authentication. Requires a configured custom SMTP provider on a Better Auth integration. A shared provider, a missing configuration, or a non-Better-Auth integration is rejected.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
     /// - recipientEmail: The email address to send the test email to.
-    static func sendAuthEmailProviderTest(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        recipientEmail: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SendNeonAuthTestEmailResponse {
+    public static func sendAuthEmailProviderTest(config: ClientConfig, projectId: String, branchId: String, recipientEmail: String, requestOptions: RequestOptions? = nil) async throws -> SendNeonAuthTestEmailResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -33,54 +23,19 @@ public extension AuthMethods {
 
         let requestBody = SendAuthEmailProviderTestRequestBody(recipientEmail: recipientEmail)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/auth/email_provider/test",
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "sendAuthEmailProviderTest",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/email_provider/test"].joined(), config: config, body: requestBody, decoder: .json, operationId: "sendAuthEmailProviderTest", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Retrieves the email provider configuration for the specified branch's Neon Auth integration, including the
-    /// provider type and server settings.
+    /// Retrieves the email provider configuration for the specified branch's Neon Auth integration, including the provider type and server settings.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
-    static func getAuthEmailProvider(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonAuthEmailServerConfigResponse {
+    public static func getAuthEmailProvider(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthEmailServerConfigResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "GET",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/auth/email_provider",
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "getAuthEmailProvider",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/email_provider"].joined(), config: config, decoder: .json, operationId: "getAuthEmailProvider", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

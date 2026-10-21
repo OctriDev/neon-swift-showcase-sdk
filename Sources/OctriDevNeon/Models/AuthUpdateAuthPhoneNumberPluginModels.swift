@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Auth domain models
+// Auth domain models
 /// Typed representation of the `NeonAuthPhoneNumberConfigUpdate` API schema.
 public struct NeonAuthPhoneNumberConfigUpdate: Codable {
     /// Whether the phone number plugin is enabled.
@@ -17,43 +17,27 @@ public struct NeonAuthPhoneNumberConfigUpdate: Codable {
     }
 
     init() {
-        (enabled, otpExpiresIn) = (nil, nil)
+        (self.enabled, self.otpExpiresIn) = (nil, nil)
     }
 }
 
-public extension NeonAuthPhoneNumberConfigUpdate {
-    init(from decoder: Decoder) throws {
+extension NeonAuthPhoneNumberConfigUpdate {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        enabled = try container.sdkDecodeIfPresent(.enabled)
-        otpExpiresIn = try container.sdkDecodeIfPresent(.otpExpiresIn)
-        if let value = otpExpiresIn {
-            try validateRange(
-                "otp_expires_in",
-                Double(value),
-                min: 60,
-                max: 600,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.enabled = try container.sdkDecodeIfPresent(.enabled)
+        self.otpExpiresIn = try container.sdkDecodeIfPresent(.otpExpiresIn)
+        if let value = self.otpExpiresIn {
+            try validateRange("otp_expires_in", Double(value), min: 60, max: 600, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension NeonAuthPhoneNumberConfigUpdate {
-    init(enabled: Bool? = nil, otpExpiresIn: Int? = nil) throws {
+extension NeonAuthPhoneNumberConfigUpdate {
+    public init(enabled: Bool? = nil, otpExpiresIn: Int? = nil) throws {
         self.init()
         (self.enabled, self.otpExpiresIn) = (enabled, otpExpiresIn)
         if let value = self.otpExpiresIn {
-            try validateRange(
-                "otp_expires_in",
-                Double(value),
-                min: 60,
-                max: 600,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("otp_expires_in", Double(value), min: 60, max: 600, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }

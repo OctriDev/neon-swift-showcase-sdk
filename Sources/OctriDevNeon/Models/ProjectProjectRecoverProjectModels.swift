@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ProjectProject domain models
+// ProjectProject domain models
 /// Typed representation of the `ProjectRecoverResponse` API schema.
 public struct ProjectRecoverResponse: Codable {
     /// Full details of the project, including configuration, consumption metrics, and ownership.
@@ -26,35 +26,25 @@ public struct ProjectRecoverResponse: Codable {
         case branches
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectRecoverResponse {
-    init(from decoder: Decoder) throws {
+extension ProjectRecoverResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.project) else {
-            throw SdkValidationError(
-                field: "project",
-                code: "required",
-                message: "Validation failed for 'project': value is required"
-            )
+            throw SdkValidationError(field: "project", code: "required", message: "Validation failed for 'project': value is required")
         }
         guard container.contains(.branches) else {
-            throw SdkValidationError(
-                field: "branches",
-                code: "required",
-                message: "Validation failed for 'branches': value is required"
-            )
+            throw SdkValidationError(field: "branches", code: "required", message: "Validation failed for 'branches': value is required")
         }
-        project = try container.sdkDecodeRequired(.project)
-        branches = try container.sdkDecodeRequired(.branches)
+        self.project = try container.sdkDecodeRequired(.project)
+        self.branches = try container.sdkDecodeRequired(.branches)
     }
 }
 
-public extension ProjectRecoverResponse {
-    init(project: Project, branches: [Branch]) {
+extension ProjectRecoverResponse {
+    public init(project: Project, branches: [Branch]) {
         (self.project, self.branches) = (project, branches)
     }
 }

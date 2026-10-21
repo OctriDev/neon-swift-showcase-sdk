@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Auth domain models
+// Auth domain models
 /// Typed representation of the `NeonAuthOAuthClientCreateRequest` API schema.
 public struct NeonAuthOAuthClientCreateRequest: Codable {
     /// Display name of the client.
@@ -26,67 +26,43 @@ public struct NeonAuthOAuthClientCreateRequest: Codable {
         case skipConsent = "skip_consent"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonAuthOAuthClientCreateRequest {
-    init(from decoder: Decoder) throws {
+extension NeonAuthOAuthClientCreateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.redirectUris) else {
-            throw SdkValidationError(
-                field: "redirect_uris",
-                code: "required",
-                message: "Validation failed for 'redirect_uris': value is required"
-            )
+            throw SdkValidationError(field: "redirect_uris", code: "required", message: "Validation failed for 'redirect_uris': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.resources) else {
-            throw SdkValidationError(
-                field: "resources",
-                code: "required",
-                message: "Validation failed for 'resources': value is required"
-            )
+            throw SdkValidationError(field: "resources", code: "required", message: "Validation failed for 'resources': value is required")
         }
-        name = try container.sdkDecodeRequired(.name)
-        redirectUris = try container.sdkDecodeRequired(.redirectUris)
-        type = try container.sdkDecodeRequired(.type)
-        resources = try container.sdkDecodeRequired(.resources)
-        skipConsent = try container.sdkDecodeIfPresent(.skipConsent)
-        try validateLength("name", name, min: 1, max: 100)
-        try validateItems("redirect_uris", redirectUris, min: 1, max: 10)
-        try validateItems("resources", resources, min: 1, max: 11)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.redirectUris = try container.sdkDecodeRequired(.redirectUris)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.resources = try container.sdkDecodeRequired(.resources)
+        self.skipConsent = try container.sdkDecodeIfPresent(.skipConsent)
+            try validateLength("name", self.name, min: 1, max: 100)
+            try validateItems("redirect_uris", self.redirectUris, min: 1, max: 10)
+            try validateItems("resources", self.resources, min: 1, max: 11)
     }
 }
 
-public extension NeonAuthOAuthClientCreateRequest {
-    init(
-        name: String,
-        redirectUris: [String],
-        type: NeonAuthOAuthClientType,
-        resources: [String],
-        skipConsent: Bool? = nil
-    ) throws {
+extension NeonAuthOAuthClientCreateRequest {
+    public init(name: String, redirectUris: [String], type: NeonAuthOAuthClientType, resources: [String], skipConsent: Bool? = nil) throws {
         (self.name, self.redirectUris) = (name, redirectUris)
         (self.type, self.resources) = (type, resources)
         self.skipConsent = skipConsent
-        try validateLength("name", self.name, min: 1, max: 100)
-        try validateItems("redirect_uris", self.redirectUris, min: 1, max: 10)
-        try validateItems("resources", self.resources, min: 1, max: 11)
+            try validateLength("name", self.name, min: 1, max: 100)
+            try validateItems("redirect_uris", self.redirectUris, min: 1, max: 10)
+            try validateItems("resources", self.resources, min: 1, max: 11)
     }
 }
 
@@ -99,19 +75,19 @@ public struct NeonAuthOAuthClientCreatedVariant1: Codable {
     }
 
     init() {
-        clientSecret = nil
+        self.clientSecret = nil
     }
 }
 
-public extension NeonAuthOAuthClientCreatedVariant1 {
-    init(from decoder: Decoder) throws {
+extension NeonAuthOAuthClientCreatedVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        clientSecret = try container.sdkDecodeIfPresent(.clientSecret)
+        self.clientSecret = try container.sdkDecodeIfPresent(.clientSecret)
     }
 }
 
-public extension NeonAuthOAuthClientCreatedVariant1 {
-    init(clientSecret: String? = nil) {
+extension NeonAuthOAuthClientCreatedVariant1 {
+    public init(clientSecret: String? = nil) {
         self.init()
         self.clientSecret = clientSecret
     }
@@ -150,90 +126,50 @@ public struct NeonAuthOAuthClientCreated: Codable {
         case clientSecret = "client_secret"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonAuthOAuthClientCreated {
-    init(from decoder: Decoder) throws {
+extension NeonAuthOAuthClientCreated {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.clientId) else {
-            throw SdkValidationError(
-                field: "client_id",
-                code: "required",
-                message: "Validation failed for 'client_id': value is required"
-            )
+            throw SdkValidationError(field: "client_id", code: "required", message: "Validation failed for 'client_id': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.redirectUris) else {
-            throw SdkValidationError(
-                field: "redirect_uris",
-                code: "required",
-                message: "Validation failed for 'redirect_uris': value is required"
-            )
+            throw SdkValidationError(field: "redirect_uris", code: "required", message: "Validation failed for 'redirect_uris': value is required")
         }
         guard container.contains(.resources) else {
-            throw SdkValidationError(
-                field: "resources",
-                code: "required",
-                message: "Validation failed for 'resources': value is required"
-            )
+            throw SdkValidationError(field: "resources", code: "required", message: "Validation failed for 'resources': value is required")
         }
         guard container.contains(.skipConsent) else {
-            throw SdkValidationError(
-                field: "skip_consent",
-                code: "required",
-                message: "Validation failed for 'skip_consent': value is required"
-            )
+            throw SdkValidationError(field: "skip_consent", code: "required", message: "Validation failed for 'skip_consent': value is required")
         }
         guard container.contains(.disabled) else {
-            throw SdkValidationError(
-                field: "disabled",
-                code: "required",
-                message: "Validation failed for 'disabled': value is required"
-            )
+            throw SdkValidationError(field: "disabled", code: "required", message: "Validation failed for 'disabled': value is required")
         }
-        clientId = try container.sdkDecodeRequired(.clientId)
-        name = try container.sdkDecodeRequired(.name)
-        type = try container.sdkDecodeRequired(.type)
-        redirectUris = try container.sdkDecodeRequired(.redirectUris)
-        resources = try container.sdkDecodeRequired(.resources)
-        skipConsent = try container.sdkDecodeRequired(.skipConsent)
-        disabled = try container.sdkDecodeRequired(.disabled)
-        createdAt = try container.sdkDecodeIfPresent(.createdAt)
-        clientSecret = try container.sdkDecodeIfPresent(.clientSecret)
-        if let value = createdAt {
+        self.clientId = try container.sdkDecodeRequired(.clientId)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.redirectUris = try container.sdkDecodeRequired(.redirectUris)
+        self.resources = try container.sdkDecodeRequired(.resources)
+        self.skipConsent = try container.sdkDecodeRequired(.skipConsent)
+        self.disabled = try container.sdkDecodeRequired(.disabled)
+        self.createdAt = try container.sdkDecodeIfPresent(.createdAt)
+        self.clientSecret = try container.sdkDecodeIfPresent(.clientSecret)
+        if let value = self.createdAt {
             try sdkValidateDateTime("created_at", sdkWireString(value))
         }
     }
 }
 
-public extension NeonAuthOAuthClientCreated {
-    init(
-        clientId: String,
-        name: String,
-        type: NeonAuthOAuthClientType,
-        redirectUris: [String],
-        resources: [String],
-        skipConsent: Bool,
-        disabled: Bool,
-        createdAt: Date? = nil,
-        clientSecret: String? = nil
-    ) throws {
+extension NeonAuthOAuthClientCreated {
+    public init(clientId: String, name: String, type: NeonAuthOAuthClientType, redirectUris: [String], resources: [String], skipConsent: Bool, disabled: Bool, createdAt: Date? = nil, clientSecret: String? = nil) throws {
         (self.clientId, self.name) = (clientId, name)
         (self.type, self.redirectUris) = (type, redirectUris)
         (self.resources, self.skipConsent) = (resources, skipConsent)

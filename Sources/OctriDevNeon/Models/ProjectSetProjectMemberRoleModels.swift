@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Project domain models
+// Project domain models
 /// Typed representation of the `SetProjectMemberRoleRequest` API schema.
 public struct SetProjectMemberRoleRequest: Codable {
     /// Per-project role. `viewer` maps to `VIEWER`, `editor` maps to `EDITOR`, and `admin` maps to `ADMIN`.
@@ -13,27 +13,21 @@ public struct SetProjectMemberRoleRequest: Codable {
         case role
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SetProjectMemberRoleRequest {
-    init(from decoder: Decoder) throws {
+extension SetProjectMemberRoleRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
-        role = try container.sdkDecodeRequired(.role)
+        self.role = try container.sdkDecodeRequired(.role)
     }
 }
 
-public extension SetProjectMemberRoleRequest {
-    init(role: ProjectRole) {
+extension SetProjectMemberRoleRequest {
+    public init(role: ProjectRole) {
         self.role = role
     }
 }

@@ -7,7 +7,7 @@ import Foundation
     import FoundationNetworking
 #endif
 
-/// Canonical project operation model declarations
+// Canonical project operation model declarations
 public struct GetProjectAdvisorSecurityIssuesResponse: Codable {
     public var issues: [AdvisorIssue]
 
@@ -15,27 +15,21 @@ public struct GetProjectAdvisorSecurityIssuesResponse: Codable {
         case issues
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension GetProjectAdvisorSecurityIssuesResponse {
-    init(from decoder: Decoder) throws {
+extension GetProjectAdvisorSecurityIssuesResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.issues) else {
-            throw SdkValidationError(
-                field: "issues",
-                code: "required",
-                message: "Validation failed for 'issues': value is required"
-            )
+            throw SdkValidationError(field: "issues", code: "required", message: "Validation failed for 'issues': value is required")
         }
-        issues = try container.sdkDecodeRequired(.issues)
+        self.issues = try container.sdkDecodeRequired(.issues)
     }
 }
 
-public extension GetProjectAdvisorSecurityIssuesResponse {
-    init(issues: [AdvisorIssue]) {
+extension GetProjectAdvisorSecurityIssuesResponse {
+    public init(issues: [AdvisorIssue]) {
         self.issues = issues
     }
 }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Users domain models
+// Users domain models
 /// Typed representation of the `AuthDetailsResponse` API schema.
 public struct AuthDetailsResponse: Codable {
     /// The ID of the account associated with this authentication record.
@@ -21,36 +21,26 @@ public struct AuthDetailsResponse: Codable {
         case authData = "auth_data"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AuthDetailsResponse {
-    init(from decoder: Decoder) throws {
+extension AuthDetailsResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.accountId) else {
-            throw SdkValidationError(
-                field: "account_id",
-                code: "required",
-                message: "Validation failed for 'account_id': value is required"
-            )
+            throw SdkValidationError(field: "account_id", code: "required", message: "Validation failed for 'account_id': value is required")
         }
         guard container.contains(.authMethod) else {
-            throw SdkValidationError(
-                field: "auth_method",
-                code: "required",
-                message: "Validation failed for 'auth_method': value is required"
-            )
+            throw SdkValidationError(field: "auth_method", code: "required", message: "Validation failed for 'auth_method': value is required")
         }
-        accountId = try container.sdkDecodeRequired(.accountId)
-        authMethod = try container.sdkDecodeRequired(.authMethod)
-        authData = try container.sdkDecodeIfPresent(.authData)
+        self.accountId = try container.sdkDecodeRequired(.accountId)
+        self.authMethod = try container.sdkDecodeRequired(.authMethod)
+        self.authData = try container.sdkDecodeIfPresent(.authData)
     }
 }
 
-public extension AuthDetailsResponse {
-    init(accountId: String, authMethod: AuthDetailsResponseAuthMethod, authData: String? = nil) {
+extension AuthDetailsResponse {
+    public init(accountId: String, authMethod: AuthDetailsResponseAuthMethod, authData: String? = nil) {
         (self.accountId, self.authMethod) = (accountId, authMethod)
         self.authData = authData
     }
@@ -62,10 +52,7 @@ public extension AuthDetailsResponse {
 public struct AuthDetailsResponseAuthMethod: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let keycloak = AuthDetailsResponseAuthMethod(rawValue: "keycloak")
     public static let sessionCookie = AuthDetailsResponseAuthMethod(rawValue: "session_cookie")
     public static let apiKeyUser = AuthDetailsResponseAuthMethod(rawValue: "api_key_user")
@@ -74,7 +61,7 @@ public struct AuthDetailsResponseAuthMethod: RawRepresentable, Hashable, Codable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

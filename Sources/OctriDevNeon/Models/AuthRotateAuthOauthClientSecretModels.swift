@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Auth domain models
+// Auth domain models
 /// Typed representation of the `NeonAuthOAuthClientSecret` API schema.
 public struct NeonAuthOAuthClientSecret: Codable {
     /// The OAuth client ID.
@@ -16,35 +16,25 @@ public struct NeonAuthOAuthClientSecret: Codable {
         case clientSecret = "client_secret"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonAuthOAuthClientSecret {
-    init(from decoder: Decoder) throws {
+extension NeonAuthOAuthClientSecret {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.clientId) else {
-            throw SdkValidationError(
-                field: "client_id",
-                code: "required",
-                message: "Validation failed for 'client_id': value is required"
-            )
+            throw SdkValidationError(field: "client_id", code: "required", message: "Validation failed for 'client_id': value is required")
         }
         guard container.contains(.clientSecret) else {
-            throw SdkValidationError(
-                field: "client_secret",
-                code: "required",
-                message: "Validation failed for 'client_secret': value is required"
-            )
+            throw SdkValidationError(field: "client_secret", code: "required", message: "Validation failed for 'client_secret': value is required")
         }
-        clientId = try container.sdkDecodeRequired(.clientId)
-        clientSecret = try container.sdkDecodeRequired(.clientSecret)
+        self.clientId = try container.sdkDecodeRequired(.clientId)
+        self.clientSecret = try container.sdkDecodeRequired(.clientSecret)
     }
 }
 
-public extension NeonAuthOAuthClientSecret {
-    init(clientId: String, clientSecret: String) {
+extension NeonAuthOAuthClientSecret {
+    public init(clientId: String, clientSecret: String) {
         (self.clientId, self.clientSecret) = (clientId, clientSecret)
     }
 }

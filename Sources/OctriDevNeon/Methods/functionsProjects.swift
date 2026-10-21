@@ -6,83 +6,32 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension FunctionsMethods {
-    /// Lists the complete project-bounded set of triggers visible on the branch, ordered by `trigger_id`. An inherited
-    /// trigger keeps its project-wide ID and configuration, and is disabled on the child until explicitly enabled
-    /// there. The supported trigger types are `schedule` and `storage_object_created`. A storage-object-created trigger
-    /// watches one exact bucket and fires only after an object upload succeeds. **Note**: This endpoint is currently in
-    /// Beta.
+extension FunctionsMethods {
+    /// Lists the complete project-bounded set of triggers visible on the branch, ordered by `trigger_id`. An inherited trigger keeps its project-wide ID and configuration, and is disabled on the child until explicitly enabled there. The supported trigger types are `schedule` and `storage_object_created`. A storage-object-created trigger watches one exact bucket and fires only after an object upload succeeds. **Note**: This endpoint is currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
-    static func listFunctionsTriggers(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> TriggersListResponse {
+    public static func listFunctionsTriggers(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> TriggersListResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "GET",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/triggers",
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "listFunctionsTriggers",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/triggers"].joined(), config: config, decoder: .json, operationId: "listFunctionsTriggers", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Creates a trigger for a function visible on a branch. Set `type` to `schedule` or `storage_object_created` and
-    /// provide the matching configuration; schedule expressions use five numeric cron fields interpreted in UTC. The
-    /// trigger name must be unique among triggers visible on the branch, including inherited triggers.
+    /// Creates a trigger for a function visible on a branch. Set `type` to `schedule` or `storage_object_created` and provide the matching configuration; schedule expressions use five numeric cron fields interpreted in UTC. The trigger name must be unique among triggers visible on the branch, including inherited triggers.
     ///
-    /// Creates a trigger for a Function visible on the branch. The required `type` discriminator selects the
-    /// trigger-specific configuration. The supported types are `schedule` and `storage_object_created`. A schedule
-    /// trigger uses a numeric five-field cron expression interpreted in UTC. A storage-object-created trigger fires
-    /// only after a successful upload to one exact bucket and may narrow matches to an object-key prefix. The name must
-    /// be unique among triggers visible on the branch, including inherited triggers. **Note**: This endpoint is
-    /// currently in Beta.
+    /// Creates a trigger for a Function visible on the branch. The required `type` discriminator selects the trigger-specific configuration. The supported types are `schedule` and `storage_object_created`. A schedule trigger uses a numeric five-field cron expression interpreted in UTC. A storage-object-created trigger fires only after a successful upload to one exact bucket and may narrow matches to an object-key prefix. The name must be unique among triggers visible on the branch, including inherited triggers. **Note**: This endpoint is currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
-    static func createFunctionsTrigger(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        body: TriggerCreateRequest,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> TriggerResponse {
+    public static func createFunctionsTrigger(config: ClientConfig, projectId: String, branchId: String, body: TriggerCreateRequest, requestOptions: RequestOptions? = nil) async throws -> TriggerResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/triggers",
-            ].joined(),
-            config: config,
-            rawBody: sdkEncodeBody(body, contentType: "application/json"),
-            decoder: .json,
-            operationId: "createFunctionsTrigger",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/triggers"].joined(), config: config, rawBody: (try sdkEncodeBody(body, contentType: "application/json")), decoder: .json, operationId: "createFunctionsTrigger", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

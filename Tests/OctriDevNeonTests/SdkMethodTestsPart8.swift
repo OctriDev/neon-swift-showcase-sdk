@@ -40,13 +40,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.project.getConnectionUri(
-                projectId: decoded("\"a\""),
-                databaseName: decoded("\"Example Name\""),
-                roleName: decoded("\"Example Name\""),
-                branchId: decoded("\"a\""),
-                endpointId: decoded("\"a\""),
-                pooled: decoded("false")
-            )
+            projectId: decoded("\"a\""),
+            databaseName: decoded("\"Example Name\""),
+            roleName: decoded("\"Example Name\""),
+            branchId: decoded("\"a\""),
+            endpointId: decoded("\"a\""),
+            pooled: decoded("false")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -62,20 +62,12 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testGetConsumptionHistoryPerBranchV2GetConsumptionHistoryPerBranchV2ReachesMockAndDecodesResponse(
-    ) async throws {
+    func testGetConsumptionHistoryPerBranchV2GetConsumptionHistoryPerBranchV2ReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient() else {
             return
         }
         _ = client
-        var options = try ConsumptionMethods.GetConsumptionHistoryPerBranchV2Options(
-            projectIds: decoded("[\"\"]"),
-            from: decoded("\"2024-01-01T00:00:00Z\""),
-            to: decoded("\"2024-01-01T00:00:00Z\""),
-            granularity: decoded("\"hourly\""),
-            orgId: decoded("\"a\""),
-            metrics: decoded("[\"metrics\"]")
-        )
+        var options = try ConsumptionMethods.GetConsumptionHistoryPerBranchV2Options(projectIds: decoded("[\"\"]"), from: decoded("\"2024-01-01T00:00:00Z\""), to: decoded("\"2024-01-01T00:00:00Z\""), granularity: decoded("\"hourly\""), orgId: decoded("\"a\""), metrics: decoded("[\"metrics\"]"))
         options.cursor = try decoded("\"cursor\"")
         options.limit = try decoded("100")
         options.branchIds = try decoded("[\"\"]")
@@ -92,20 +84,12 @@ extension SdkMethodTests {
         )
     }
 
-    func testGetConsumptionHistoryPerBranchV2GetConsumptionHistoryPerBranchV2403ReachesMockAndDecodesResponse(
-    ) async throws {
+    func testGetConsumptionHistoryPerBranchV2GetConsumptionHistoryPerBranchV2403ReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/403") else {
             return
         }
         _ = client
-        var options = try ConsumptionMethods.GetConsumptionHistoryPerBranchV2Options(
-            projectIds: decoded("[\"\"]"),
-            from: decoded("\"2024-01-01T00:00:00Z\""),
-            to: decoded("\"2024-01-01T00:00:00Z\""),
-            granularity: decoded("\"hourly\""),
-            orgId: decoded("\"a\""),
-            metrics: decoded("[\"metrics\"]")
-        )
+        var options = try ConsumptionMethods.GetConsumptionHistoryPerBranchV2Options(projectIds: decoded("[\"\"]"), from: decoded("\"2024-01-01T00:00:00Z\""), to: decoded("\"2024-01-01T00:00:00Z\""), granularity: decoded("\"hourly\""), orgId: decoded("\"a\""), metrics: decoded("[\"metrics\"]"))
         options.cursor = try decoded("\"cursor\"")
         options.limit = try decoded("100")
         options.branchIds = try decoded("[\"\"]")
@@ -115,8 +99,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.consumption.getHistoryPerBranchV2(
-                options: options
-            )
+            options: options
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 403)
@@ -137,11 +121,7 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try ConsumptionMethods.GetConsumptionHistoryPerProjectOptions(
-            from: decoded("\"2024-01-01T00:00:00Z\""),
-            to: decoded("\"2024-01-01T00:00:00Z\""),
-            granularity: decoded("\"hourly\"")
-        )
+        var options = try ConsumptionMethods.GetConsumptionHistoryPerProjectOptions(from: decoded("\"2024-01-01T00:00:00Z\""), to: decoded("\"2024-01-01T00:00:00Z\""), granularity: decoded("\"hourly\""))
         options.cursor = try decoded("\"cursor\"")
         options.limit = try decoded("10")
         options.projectIds = try decoded("[\"\"]")
@@ -161,17 +141,12 @@ extension SdkMethodTests {
         )
     }
 
-    func testGetConsumptionHistoryPerProjectGetConsumptionHistoryPerProject403ReachesMockAndDecodesResponse(
-    ) async throws {
+    func testGetConsumptionHistoryPerProjectGetConsumptionHistoryPerProject403ReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/403") else {
             return
         }
         _ = client
-        var options = try ConsumptionMethods.GetConsumptionHistoryPerProjectOptions(
-            from: decoded("\"2024-01-01T00:00:00Z\""),
-            to: decoded("\"2024-01-01T00:00:00Z\""),
-            granularity: decoded("\"hourly\"")
-        )
+        var options = try ConsumptionMethods.GetConsumptionHistoryPerProjectOptions(from: decoded("\"2024-01-01T00:00:00Z\""), to: decoded("\"2024-01-01T00:00:00Z\""), granularity: decoded("\"hourly\""))
         options.cursor = try decoded("\"cursor\"")
         options.limit = try decoded("10")
         options.projectIds = try decoded("[\"\"]")
@@ -184,8 +159,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.consumption.getHistoryPerProject(
-                options: options
-            )
+            options: options
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 403)
@@ -201,19 +176,12 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testGetConsumptionHistoryPerProjectV2GetConsumptionHistoryPerProjectV2ReachesMockAndDecodesResponse(
-    ) async throws {
+    func testGetConsumptionHistoryPerProjectV2GetConsumptionHistoryPerProjectV2ReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient() else {
             return
         }
         _ = client
-        var options = try ConsumptionMethods.GetConsumptionHistoryPerProjectV2Options(
-            from: decoded("\"2024-01-01T00:00:00Z\""),
-            to: decoded("\"2024-01-01T00:00:00Z\""),
-            granularity: decoded("\"hourly\""),
-            orgId: decoded("\"a\""),
-            metrics: decoded("[\"metrics\"]")
-        )
+        var options = try ConsumptionMethods.GetConsumptionHistoryPerProjectV2Options(from: decoded("\"2024-01-01T00:00:00Z\""), to: decoded("\"2024-01-01T00:00:00Z\""), granularity: decoded("\"hourly\""), orgId: decoded("\"a\""), metrics: decoded("[\"metrics\"]"))
         options.cursor = try decoded("\"cursor\"")
         options.limit = try decoded("10")
         options.projectIds = try decoded("[\"\"]")
@@ -230,19 +198,12 @@ extension SdkMethodTests {
         )
     }
 
-    func testGetConsumptionHistoryPerProjectV2GetConsumptionHistoryPerProjectV2403ReachesMockAndDecodesResponse(
-    ) async throws {
+    func testGetConsumptionHistoryPerProjectV2GetConsumptionHistoryPerProjectV2403ReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/403") else {
             return
         }
         _ = client
-        var options = try ConsumptionMethods.GetConsumptionHistoryPerProjectV2Options(
-            from: decoded("\"2024-01-01T00:00:00Z\""),
-            to: decoded("\"2024-01-01T00:00:00Z\""),
-            granularity: decoded("\"hourly\""),
-            orgId: decoded("\"a\""),
-            metrics: decoded("[\"metrics\"]")
-        )
+        var options = try ConsumptionMethods.GetConsumptionHistoryPerProjectV2Options(from: decoded("\"2024-01-01T00:00:00Z\""), to: decoded("\"2024-01-01T00:00:00Z\""), granularity: decoded("\"hourly\""), orgId: decoded("\"a\""), metrics: decoded("[\"metrics\"]"))
         options.cursor = try decoded("\"cursor\"")
         options.limit = try decoded("10")
         options.projectIds = try decoded("[\"\"]")
@@ -252,8 +213,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.consumption.getHistoryPerProjectV2(
-                options: options
-            )
+            options: options
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 403)
@@ -384,10 +345,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.dataApi.get(
-                projectId: decoded("\"a\""),
-                branchId: decoded("\"a\""),
-                databaseName: decoded("\"Example Name\"")
-            )
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\""),
+            databaseName: decoded("\"Example Name\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -433,9 +394,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.endpoint.get(
-                projectId: decoded("\"a\""),
-                endpointId: decoded("\"a\"")
-            )
+            projectId: decoded("\"a\""),
+            endpointId: decoded("\"a\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -482,10 +443,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.functions.get(
-                projectId: decoded("\"a\""),
-                branchId: decoded("\"a\""),
-                slug: decoded("\"a\"")
-            )
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\""),
+            slug: decoded("\"a\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -532,10 +493,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.functions.getTrigger(
-                projectId: decoded("\"a\""),
-                branchId: decoded("\"a\""),
-                triggerId: decoded("\"a\"")
-            )
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\""),
+            triggerId: decoded("\"a\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)

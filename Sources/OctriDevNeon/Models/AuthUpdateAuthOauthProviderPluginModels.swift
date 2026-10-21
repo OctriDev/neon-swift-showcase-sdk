@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Auth domain models
+// Auth domain models
 /// Typed representation of the `NeonAuthOAuthProviderMcpUpdate` API schema.
 public struct NeonAuthOAuthProviderMcpUpdate: Codable {
     /// The MCP server URL that dynamically registered clients are linked to.
@@ -17,28 +17,22 @@ public struct NeonAuthOAuthProviderMcpUpdate: Codable {
         case dynamicRegistration = "dynamic_registration"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonAuthOAuthProviderMcpUpdate {
-    init(from decoder: Decoder) throws {
+extension NeonAuthOAuthProviderMcpUpdate {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.resource) else {
-            throw SdkValidationError(
-                field: "resource",
-                code: "required",
-                message: "Validation failed for 'resource': value is required"
-            )
+            throw SdkValidationError(field: "resource", code: "required", message: "Validation failed for 'resource': value is required")
         }
-        resource = try container.sdkDecodeRequired(.resource)
-        dynamicRegistration = try container.sdkDecodeIfPresent(.dynamicRegistration)
+        self.resource = try container.sdkDecodeRequired(.resource)
+        self.dynamicRegistration = try container.sdkDecodeIfPresent(.dynamicRegistration)
     }
 }
 
-public extension NeonAuthOAuthProviderMcpUpdate {
-    init(resource: String, dynamicRegistration: Bool? = nil) {
+extension NeonAuthOAuthProviderMcpUpdate {
+    public init(resource: String, dynamicRegistration: Bool? = nil) {
         (self.resource, self.dynamicRegistration) = (resource, dynamicRegistration)
     }
 }
@@ -66,29 +60,23 @@ public struct NeonAuthOAuthProviderConfigUpdate: Codable {
     }
 
     init() {
-        (enabled, loginPage, consentPage, mcp, resources) = (nil, nil, nil, nil, nil)
+        (self.enabled, self.loginPage, self.consentPage, self.mcp, self.resources) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension NeonAuthOAuthProviderConfigUpdate {
-    init(from decoder: Decoder) throws {
+extension NeonAuthOAuthProviderConfigUpdate {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        enabled = try container.sdkDecodeIfPresent(.enabled)
-        loginPage = try container.sdkDecodeIfPresent(.loginPage)
-        consentPage = try container.sdkDecodeIfPresent(.consentPage)
-        mcp = try container.sdkDecodeIfPresent(.mcp)
-        resources = try container.sdkDecodeIfPresent(.resources)
+        self.enabled = try container.sdkDecodeIfPresent(.enabled)
+        self.loginPage = try container.sdkDecodeIfPresent(.loginPage)
+        self.consentPage = try container.sdkDecodeIfPresent(.consentPage)
+        self.mcp = try container.sdkDecodeIfPresent(.mcp)
+        self.resources = try container.sdkDecodeIfPresent(.resources)
     }
 }
 
-public extension NeonAuthOAuthProviderConfigUpdate {
-    init(
-        enabled: Bool? = nil,
-        loginPage: String? = nil,
-        consentPage: String? = nil,
-        mcp: NeonAuthOAuthProviderMcpUpdate? = nil,
-        resources: [NeonAuthOAuthProviderResource]? = nil
-    ) {
+extension NeonAuthOAuthProviderConfigUpdate {
+    public init(enabled: Bool? = nil, loginPage: String? = nil, consentPage: String? = nil, mcp: NeonAuthOAuthProviderMcpUpdate? = nil, resources: [NeonAuthOAuthProviderResource]? = nil) {
         self.init()
         (self.enabled, self.loginPage) = (enabled, loginPage)
         (self.consentPage, self.mcp) = (consentPage, mcp)

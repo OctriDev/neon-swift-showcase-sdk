@@ -6,27 +6,14 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ProjectMethods {
-    /// Returns the JWKS URLs available for verifying JWTs used as the authentication mechanism for the specified
-    /// project.
+extension ProjectMethods {
+    /// Returns the JWKS URLs available for verifying JWTs used as the authentication mechanism for the specified project.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
-    static func getProjectJwks(
-        config: ClientConfig,
-        projectId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectJWKSResponse {
+    public static func getProjectJwks(config: ClientConfig, projectId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectJWKSResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "GET",
-            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/jwks"].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "getProjectJWKS",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/jwks"].joined(), config: config, decoder: .json, operationId: "getProjectJWKS", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Functions domain models
+// Functions domain models
 /// Typed representation of the `ListFunctionsCustomDomainsResponse` API schema.
 public struct ListFunctionsCustomDomainsResponse: Codable {
     /// Required array value serialized in the `custom_domains` wire field.
@@ -19,28 +19,22 @@ public struct ListFunctionsCustomDomainsResponse: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ListFunctionsCustomDomainsResponse {
-    init(from decoder: Decoder) throws {
+extension ListFunctionsCustomDomainsResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.customDomains) else {
-            throw SdkValidationError(
-                field: "custom_domains",
-                code: "required",
-                message: "Validation failed for 'custom_domains': value is required"
-            )
+            throw SdkValidationError(field: "custom_domains", code: "required", message: "Validation failed for 'custom_domains': value is required")
         }
-        customDomains = try container.sdkDecodeRequired(.customDomains)
-        pagination = try container.sdkDecodeIfPresent(.pagination)
+        self.customDomains = try container.sdkDecodeRequired(.customDomains)
+        self.pagination = try container.sdkDecodeIfPresent(.pagination)
     }
 }
 
-public extension ListFunctionsCustomDomainsResponse {
-    init(customDomains: [CustomDomain], pagination: CursorPagination? = nil) {
+extension ListFunctionsCustomDomainsResponse {
+    public init(customDomains: [CustomDomain], pagination: CursorPagination? = nil) {
         (self.customDomains, self.pagination) = (customDomains, pagination)
     }
 }
@@ -54,27 +48,21 @@ public struct CustomDomainsListResponse: Codable {
         case customDomains = "custom_domains"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CustomDomainsListResponse {
-    init(from decoder: Decoder) throws {
+extension CustomDomainsListResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.customDomains) else {
-            throw SdkValidationError(
-                field: "custom_domains",
-                code: "required",
-                message: "Validation failed for 'custom_domains': value is required"
-            )
+            throw SdkValidationError(field: "custom_domains", code: "required", message: "Validation failed for 'custom_domains': value is required")
         }
-        customDomains = try container.sdkDecodeRequired(.customDomains)
+        self.customDomains = try container.sdkDecodeRequired(.customDomains)
     }
 }
 
-public extension CustomDomainsListResponse {
-    init(customDomains: [CustomDomain]) {
+extension CustomDomainsListResponse {
+    public init(customDomains: [CustomDomain]) {
         self.customDomains = customDomains
     }
 }

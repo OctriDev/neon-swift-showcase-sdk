@@ -6,27 +6,15 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension OrganizationsMethods {
+extension OrganizationsMethods {
     /// Retrieves the list of VPC endpoints for the specified Neon organization across all regions.
     ///
     /// - Parameters:
     /// - orgId: The Neon organization ID
-    static func listOrganizationVpcEndpointsAllRegions(
-        config: ClientConfig,
-        orgId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VPCEndpointsWithRegionResponse {
+    public static func listOrganizationVpcEndpointsAllRegions(config: ClientConfig, orgId: String, requestOptions: RequestOptions? = nil) async throws -> VPCEndpointsWithRegionResponse {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "GET",
-            ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/vpc/vpc_endpoints"].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "listOrganizationVPCEndpointsAllRegions",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/vpc/vpc_endpoints"].joined(), config: config, decoder: .json, operationId: "listOrganizationVPCEndpointsAllRegions", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
     /// Retrieves the list of VPC endpoints for the specified Neon organization.
@@ -34,29 +22,10 @@ public extension OrganizationsMethods {
     /// - Parameters:
     /// - orgId: The Neon organization ID
     /// - regionId: The Neon region ID
-    static func listOrganizationVpcEndpoints(
-        config: ClientConfig,
-        orgId: String,
-        regionId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VPCEndpointsResponse {
+    public static func listOrganizationVpcEndpoints(config: ClientConfig, orgId: String, regionId: String, requestOptions: RequestOptions? = nil) async throws -> VPCEndpointsResponse {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "GET",
-            [
-                "/organizations/",
-                sdkEncodePathSegment(sdkWireString(orgId)),
-                "/vpc/region/",
-                sdkEncodePathSegment(sdkWireString(regionId)),
-                "/vpc_endpoints",
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "listOrganizationVPCEndpoints",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/vpc/region/", sdkEncodePathSegment(sdkWireString(regionId)), "/vpc_endpoints"].joined(), config: config, decoder: .json, operationId: "listOrganizationVPCEndpoints", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
     /// Retrieves the current state and configuration details of a specified VPC endpoint.
@@ -65,30 +34,9 @@ public extension OrganizationsMethods {
     /// - orgId: The Neon organization ID
     /// - regionId: The Neon region ID. Azure regions are currently not supported.
     /// - vpcEndpointId: The VPC endpoint ID
-    static func getOrganizationsVpcEndpoint(
-        config: ClientConfig,
-        orgId: String,
-        regionId: String,
-        vpcEndpointId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VPCEndpointDetails {
+    public static func getOrganizationsVpcEndpoint(config: ClientConfig, orgId: String, regionId: String, vpcEndpointId: String, requestOptions: RequestOptions? = nil) async throws -> VPCEndpointDetails {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "GET",
-            [
-                "/organizations/",
-                sdkEncodePathSegment(sdkWireString(orgId)),
-                "/vpc/region/",
-                sdkEncodePathSegment(sdkWireString(regionId)),
-                "/vpc_endpoints/",
-                sdkEncodePathSegment(sdkWireString(vpcEndpointId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "getOrganizationsVpcEndpoint",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/vpc/region/", sdkEncodePathSegment(sdkWireString(regionId)), "/vpc_endpoints/", sdkEncodePathSegment(sdkWireString(vpcEndpointId))].joined(), config: config, decoder: .json, operationId: "getOrganizationsVpcEndpoint", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

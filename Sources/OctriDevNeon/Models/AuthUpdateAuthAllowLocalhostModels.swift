@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Auth domain models
+// Auth domain models
 /// Typed representation of the `UpdateNeonAuthAllowLocalhostRequest` API schema.
 public struct UpdateNeonAuthAllowLocalhostRequest: Codable {
     /// Whether to allow localhost connections
@@ -13,27 +13,21 @@ public struct UpdateNeonAuthAllowLocalhostRequest: Codable {
         case allowLocalhost = "allow_localhost"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension UpdateNeonAuthAllowLocalhostRequest {
-    init(from decoder: Decoder) throws {
+extension UpdateNeonAuthAllowLocalhostRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.allowLocalhost) else {
-            throw SdkValidationError(
-                field: "allow_localhost",
-                code: "required",
-                message: "Validation failed for 'allow_localhost': value is required"
-            )
+            throw SdkValidationError(field: "allow_localhost", code: "required", message: "Validation failed for 'allow_localhost': value is required")
         }
-        allowLocalhost = try container.sdkDecodeRequired(.allowLocalhost)
+        self.allowLocalhost = try container.sdkDecodeRequired(.allowLocalhost)
     }
 }
 
-public extension UpdateNeonAuthAllowLocalhostRequest {
-    init(allowLocalhost: Bool) {
+extension UpdateNeonAuthAllowLocalhostRequest {
+    public init(allowLocalhost: Bool) {
         self.allowLocalhost = allowLocalhost
     }
 }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Branch domain models
+// Branch domain models
 /// Typed representation of the `GetBranchResponse` API schema.
 public struct GetBranchResponse: Codable {
     /// Branch returned by the request.
@@ -22,35 +22,25 @@ public struct GetBranchResponse: Codable {
         case annotation
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension GetBranchResponse {
-    init(from decoder: Decoder) throws {
+extension GetBranchResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.branch) else {
-            throw SdkValidationError(
-                field: "branch",
-                code: "required",
-                message: "Validation failed for 'branch': value is required"
-            )
+            throw SdkValidationError(field: "branch", code: "required", message: "Validation failed for 'branch': value is required")
         }
         guard container.contains(.annotation) else {
-            throw SdkValidationError(
-                field: "annotation",
-                code: "required",
-                message: "Validation failed for 'annotation': value is required"
-            )
+            throw SdkValidationError(field: "annotation", code: "required", message: "Validation failed for 'annotation': value is required")
         }
-        branch = try container.sdkDecodeRequired(.branch)
-        annotation = try container.sdkDecodeRequired(.annotation)
+        self.branch = try container.sdkDecodeRequired(.branch)
+        self.annotation = try container.sdkDecodeRequired(.annotation)
     }
 }
 
-public extension GetBranchResponse {
-    init(branch: Branch, annotation: AnnotationData) {
+extension GetBranchResponse {
+    public init(branch: Branch, annotation: AnnotationData) {
         (self.branch, self.annotation) = (branch, annotation)
     }
 }

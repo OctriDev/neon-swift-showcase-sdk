@@ -6,34 +6,20 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthLegacyMethods {
-    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/oauth_providers` instead. Removal scheduled
-    /// for March 1, 2026.
+extension AuthLegacyMethods {
+    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/oauth_providers` instead. Removal scheduled for March 1, 2026.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func listAuthLegacyOauthProviders(
-        config: ClientConfig,
-        projectId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListNeonAuthOauthProvidersResponse {
+    public static func listAuthLegacyOauthProviders(config: ClientConfig, projectId: String, requestOptions: RequestOptions? = nil) async throws -> ListNeonAuthOauthProvidersResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "GET",
-            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/oauth_providers"].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "listAuthLegacyOauthProviders",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/oauth_providers"].joined(), config: config, decoder: .json, operationId: "listAuthLegacyOauthProviders", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/oauth_providers` instead. Removal scheduled
-    /// for March 1, 2026.
+    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/oauth_providers` instead. Removal scheduled for March 1, 2026.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -47,33 +33,11 @@ public extension AuthLegacyMethods {
     ///   providers.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func addAuthLegacyOauthProvider(
-        config: ClientConfig,
-        projectId: String,
-        id: NeonAuthOauthProviderId,
-        clientId: String? = nil,
-        clientSecret: String? = nil,
-        microsoftTenantId: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonAuthOauthProvider {
+    public static func addAuthLegacyOauthProvider(config: ClientConfig, projectId: String, id: NeonAuthOauthProviderId, clientId: String? = nil, clientSecret: String? = nil, microsoftTenantId: String? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonAuthOauthProvider {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        let requestBody = AddAuthLegacyOauthProviderRequestBody(
-            id: id,
-            clientId: clientId,
-            clientSecret: clientSecret,
-            microsoftTenantId: microsoftTenantId
-        )
+        let requestBody = AddAuthLegacyOauthProviderRequestBody(id: id, clientId: clientId, clientSecret: clientSecret, microsoftTenantId: microsoftTenantId)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/oauth_providers"].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "addAuthLegacyOauthProvider",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/oauth_providers"].joined(), config: config, body: requestBody, decoder: .json, operationId: "addAuthLegacyOauthProvider", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

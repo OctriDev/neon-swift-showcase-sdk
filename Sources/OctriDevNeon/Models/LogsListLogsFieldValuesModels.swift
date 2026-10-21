@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Logs domain models
+// Logs domain models
 /// Typed representation of the `ProjectBranchLogFieldValuesResponse` API schema.
 public struct ProjectBranchLogFieldValuesResponse: Codable {
     /// Required array value serialized in the `values` wire field.
@@ -18,35 +18,25 @@ public struct ProjectBranchLogFieldValuesResponse: Codable {
         case isTruncated = "is_truncated"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectBranchLogFieldValuesResponse {
-    init(from decoder: Decoder) throws {
+extension ProjectBranchLogFieldValuesResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.values) else {
-            throw SdkValidationError(
-                field: "values",
-                code: "required",
-                message: "Validation failed for 'values': value is required"
-            )
+            throw SdkValidationError(field: "values", code: "required", message: "Validation failed for 'values': value is required")
         }
         guard container.contains(.isTruncated) else {
-            throw SdkValidationError(
-                field: "is_truncated",
-                code: "required",
-                message: "Validation failed for 'is_truncated': value is required"
-            )
+            throw SdkValidationError(field: "is_truncated", code: "required", message: "Validation failed for 'is_truncated': value is required")
         }
-        values = try container.sdkDecodeRequired(.values)
-        isTruncated = try container.sdkDecodeRequired(.isTruncated)
+        self.values = try container.sdkDecodeRequired(.values)
+        self.isTruncated = try container.sdkDecodeRequired(.isTruncated)
     }
 }
 
-public extension ProjectBranchLogFieldValuesResponse {
-    init(values: [String], isTruncated: Bool) {
+extension ProjectBranchLogFieldValuesResponse {
+    public init(values: [String], isTruncated: Bool) {
         (self.values, self.isTruncated) = (values, isTruncated)
     }
 }

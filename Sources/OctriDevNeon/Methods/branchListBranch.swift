@@ -6,11 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension BranchMethods {
-    /// Retrieves a list of branches for the specified project. Each Neon project has a root branch named `main`. A
-    /// `branch_id` value has a `br-` prefix. A project may contain child branches that were branched from `main` or
-    /// from another branch. A parent branch is identified by the `parent_id` value, which is the `id` of the parent
-    /// branch. For related information, see [Manage branches](https://neon.com/docs/manage/branches/).
+extension BranchMethods {
+    /// Retrieves a list of branches for the specified project. Each Neon project has a root branch named `main`. A `branch_id` value has a `br-` prefix. A project may contain child branches that were branched from `main` or from another branch. A parent branch is identified by the `parent_id` value, which is the `id` of the parent branch. For related information, see [Manage branches](https://neon.com/docs/manage/branches/).
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -27,40 +24,20 @@ public extension BranchMethods {
     ///   (soft-deleted within the recovery window). If false or not provided, return
     ///   only active (non-deleted) branches. This parameter is part of the Branch
     ///   Recovery feature, which is in preview and not available to all users.
-    static func listBranch(
-        config: ClientConfig,
-        projectId: String,
-        search: String? = nil,
-        sortBy: ListBranchParameter? = nil,
-        cursor: String? = nil,
-        sortOrder: ListOrganizationsMembersParameter? = nil,
-        limit: Int? = nil,
-        includeDeleted: Bool? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListBranchResponse {
+    public static func listBranch(config: ClientConfig, projectId: String, search: String? = nil, sortBy: ListBranchParameter? = nil, cursor: String? = nil, sortOrder: ListOrganizationsMembersParameter? = nil, limit: Int? = nil, includeDeleted: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> ListBranchResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        if let limit {
+        if let limit = limit {
             try validateRange("limit", Double(limit), min: 1, max: 10000)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches"].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("search", value: search),
-                SdkQueryParameter("sort_by", value: sortBy),
-                SdkQueryParameter("cursor", value: cursor),
-                SdkQueryParameter("sort_order", value: sortOrder),
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("include_deleted", value: includeDeleted),
-            ],
-            decoder: .json,
-            operationId: "listBranch",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        ))
-        .data
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches"].joined(), config: config, query: [
+            SdkQueryParameter("search", value: search),
+            SdkQueryParameter("sort_by", value: sortBy),
+            SdkQueryParameter("cursor", value: cursor),
+            SdkQueryParameter("sort_order", value: sortOrder),
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("include_deleted", value: includeDeleted),
+        ], decoder: .json, operationId: "listBranch", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

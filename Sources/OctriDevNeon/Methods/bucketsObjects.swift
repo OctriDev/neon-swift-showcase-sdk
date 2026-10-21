@@ -6,12 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension BucketsMethods {
-    /// Lists objects visible in the named bucket on the specified branch, including those inherited from ancestor
-    /// branches. Listing is served by the user's session (no customer S3 credentials required). When `delimiter` is
-    /// supplied (typically `/`), keys are collapsed into common prefixes (`folders`) so callers can render a
-    /// folder-style browser; keys that do not contain the delimiter after `prefix` are returned as `objects`. **Note**:
-    /// This endpoint is currently in Beta.
+extension BucketsMethods {
+    /// Lists objects visible in the named bucket on the specified branch, including those inherited from ancestor branches. Listing is served by the user's session (no customer S3 credentials required). When `delimiter` is supplied (typically `/`), keys are collapsed into common prefixes (`folders`) so callers can render a folder-style browser; keys that do not contain the delimiter after `prefix` are returned as `objects`. **Note**: This endpoint is currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -23,57 +19,26 @@ public extension BucketsMethods {
     /// - cursor: Opaque pagination cursor returned as `next_cursor` by a previous
     ///   call. Resume listing after the last item of the previous page.
     /// - limit: Maximum number of items (objects + folders) to return.
-    static func listBucketsObjects(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        bucketName: String,
-        prefix: String? = nil,
-        delimiter: String? = nil,
-        cursor: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BucketObjectsListResponse {
+    public static func listBucketsObjects(config: ClientConfig, projectId: String, branchId: String, bucketName: String, prefix: String? = nil, delimiter: String? = nil, cursor: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> BucketObjectsListResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
         try validateLength("bucket_name", bucketName, min: 1, max: 255)
 
-        if let limit {
+        if let limit = limit {
             try validateRange("limit", Double(limit), min: 1, max: 1000)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/buckets/",
-                sdkEncodePathSegment(sdkWireString(bucketName)),
-                "/objects",
-            ].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("prefix", value: prefix),
-                SdkQueryParameter("delimiter", value: delimiter),
-                SdkQueryParameter("cursor", value: cursor),
-                SdkQueryParameter("limit", value: limit),
-            ],
-            decoder: .json,
-            operationId: "listBucketsObjects",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/buckets/", sdkEncodePathSegment(sdkWireString(bucketName)), "/objects"].joined(), config: config, query: [
+            SdkQueryParameter("prefix", value: prefix),
+            SdkQueryParameter("delimiter", value: delimiter),
+            SdkQueryParameter("cursor", value: cursor),
+            SdkQueryParameter("limit", value: limit),
+        ], decoder: .json, operationId: "listBucketsObjects", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Lists objects visible in the named bucket on the specified branch, including those inherited from ancestor
-    /// branches. Listing is served by the user's session (no customer S3 credentials required). When `delimiter` is
-    /// supplied (typically `/`), keys are collapsed into common prefixes (`folders`) so callers can render a
-    /// folder-style browser; keys that do not contain the delimiter after `prefix` are returned as `objects`. **Note**:
-    /// This endpoint is currently in Beta.
+    /// Lists objects visible in the named bucket on the specified branch, including those inherited from ancestor branches. Listing is served by the user's session (no customer S3 credentials required). When `delimiter` is supplied (typically `/`), keys are collapsed into common prefixes (`folders`) so callers can render a folder-style browser; keys that do not contain the delimiter after `prefix` are returned as `objects`. **Note**: This endpoint is currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -85,49 +50,18 @@ public extension BucketsMethods {
     /// - cursor: Opaque pagination cursor returned as `next_cursor` by a previous
     ///   call. Resume listing after the last item of the previous page.
     /// - limit: Maximum number of items (objects + folders) to return.
-    static func listBucketsObjectsPaginated(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        bucketName: String,
-        prefix: String? = nil,
-        delimiter: String? = nil,
-        cursor: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<BucketObject, Swift.Error> {
-        AsyncThrowingStream<BucketObject, Swift.Error> { (continuation: AsyncThrowingStream<
-            BucketObject,
-            Swift.Error
-        >.Continuation) in
+    public static func listBucketsObjectsPaginated(config: ClientConfig, projectId: String, branchId: String, bucketName: String, prefix: String? = nil, delimiter: String? = nil, cursor: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<BucketObject, Swift.Error> {
+        return AsyncThrowingStream<BucketObject, Swift.Error> { (continuation: AsyncThrowingStream<BucketObject, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = cursor
                     while true {
-                        let pageResponse = try await listBucketsObjects(
-                            config: config,
-                            projectId: projectId,
-                            branchId: branchId,
-                            bucketName: bucketName,
-                            prefix: prefix,
-                            delimiter: delimiter,
-                            cursor: pageCursor,
-                            limit: limit,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listBucketsObjects(config: config, projectId: projectId, branchId: branchId, bucketName: bucketName, prefix: prefix, delimiter: delimiter, cursor: pageCursor, limit: limit, requestOptions: requestOptions)
                         let pageItems = pageResponse.objects
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.isTruncated {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.nextCursor else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.isTruncated { break }
+                        guard let nextCursor = pageResponse.nextCursor else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -140,58 +74,25 @@ public extension BucketsMethods {
         }
     }
 
-    struct ListBucketsObjectsPage {
+    public struct ListBucketsObjectsPage {
         public let data: BucketObjectsListResponse
         public let items: [BucketObject]
         public let hasMore: Bool
     }
 
-    static func listBucketsObjectsPages(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        bucketName: String,
-        prefix: String? = nil,
-        delimiter: String? = nil,
-        cursor: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListBucketsObjectsPage, Swift.Error> {
-        AsyncThrowingStream<ListBucketsObjectsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListBucketsObjectsPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listBucketsObjectsPages(config: ClientConfig, projectId: String, branchId: String, bucketName: String, prefix: String? = nil, delimiter: String? = nil, cursor: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListBucketsObjectsPage, Swift.Error> {
+        return AsyncThrowingStream<ListBucketsObjectsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListBucketsObjectsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = cursor
                     while true {
-                        let pageResponse = try await listBucketsObjects(
-                            config: config,
-                            projectId: projectId,
-                            branchId: branchId,
-                            bucketName: bucketName,
-                            prefix: prefix,
-                            delimiter: delimiter,
-                            cursor: pageCursor,
-                            limit: limit,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listBucketsObjects(config: config, projectId: projectId, branchId: branchId, bucketName: bucketName, prefix: prefix, delimiter: delimiter, cursor: pageCursor, limit: limit, requestOptions: requestOptions)
                         let pageItems = pageResponse.objects
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.isTruncated && pageResponse.nextCursor != nil
-                        pageContinuation.yield(ListBucketsObjectsPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.nextCursor else {
-                            break
-                        }
+                        pageContinuation.yield(ListBucketsObjectsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.nextCursor else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

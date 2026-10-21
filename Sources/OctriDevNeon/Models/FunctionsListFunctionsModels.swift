@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Functions domain models
+// Functions domain models
 /// Typed representation of the `NeonFunctionsListResponse` API schema.
 public struct NeonFunctionsListResponse: Codable {
     /// Required array value serialized in the `functions` wire field.
@@ -13,27 +13,21 @@ public struct NeonFunctionsListResponse: Codable {
         case functions
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonFunctionsListResponse {
-    init(from decoder: Decoder) throws {
+extension NeonFunctionsListResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.functions) else {
-            throw SdkValidationError(
-                field: "functions",
-                code: "required",
-                message: "Validation failed for 'functions': value is required"
-            )
+            throw SdkValidationError(field: "functions", code: "required", message: "Validation failed for 'functions': value is required")
         }
-        functions = try container.sdkDecodeRequired(.functions)
+        self.functions = try container.sdkDecodeRequired(.functions)
     }
 }
 
-public extension NeonFunctionsListResponse {
-    init(functions: [NeonFunction]) {
+extension NeonFunctionsListResponse {
+    public init(functions: [NeonFunction]) {
         self.functions = functions
     }
 }
@@ -53,28 +47,22 @@ public struct ListFunctionsResponse: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ListFunctionsResponse {
-    init(from decoder: Decoder) throws {
+extension ListFunctionsResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.functions) else {
-            throw SdkValidationError(
-                field: "functions",
-                code: "required",
-                message: "Validation failed for 'functions': value is required"
-            )
+            throw SdkValidationError(field: "functions", code: "required", message: "Validation failed for 'functions': value is required")
         }
-        functions = try container.sdkDecodeRequired(.functions)
-        pagination = try container.sdkDecodeIfPresent(.pagination)
+        self.functions = try container.sdkDecodeRequired(.functions)
+        self.pagination = try container.sdkDecodeIfPresent(.pagination)
     }
 }
 
-public extension ListFunctionsResponse {
-    init(functions: [NeonFunction], pagination: CursorPagination? = nil) {
+extension ListFunctionsResponse {
+    public init(functions: [NeonFunction], pagination: CursorPagination? = nil) {
         (self.functions, self.pagination) = (functions, pagination)
     }
 }

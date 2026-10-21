@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Project domain models
+// Project domain models
 /// Typed representation of the `UpdateProjectResponse` API schema.
 public struct UpdateProjectResponse: Codable {
     /// Full details of the project, including configuration, consumption metrics, and ownership.
@@ -26,35 +26,25 @@ public struct UpdateProjectResponse: Codable {
         case operations
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension UpdateProjectResponse {
-    init(from decoder: Decoder) throws {
+extension UpdateProjectResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.project) else {
-            throw SdkValidationError(
-                field: "project",
-                code: "required",
-                message: "Validation failed for 'project': value is required"
-            )
+            throw SdkValidationError(field: "project", code: "required", message: "Validation failed for 'project': value is required")
         }
         guard container.contains(.operations) else {
-            throw SdkValidationError(
-                field: "operations",
-                code: "required",
-                message: "Validation failed for 'operations': value is required"
-            )
+            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
         }
-        project = try container.sdkDecodeRequired(.project)
-        operations = try container.sdkDecodeRequired(.operations)
+        self.project = try container.sdkDecodeRequired(.project)
+        self.operations = try container.sdkDecodeRequired(.operations)
     }
 }
 
-public extension UpdateProjectResponse {
-    init(project: Project, operations: [Operation]) {
+extension UpdateProjectResponse {
+    public init(project: Project, operations: [Operation]) {
         (self.project, self.operations) = (project, operations)
     }
 }

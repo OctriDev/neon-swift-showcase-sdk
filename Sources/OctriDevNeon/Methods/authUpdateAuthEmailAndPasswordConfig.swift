@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthMethods {
-    struct UpdateAuthEmailAndPasswordConfigOptions: Codable {
+extension AuthMethods {
+    public struct UpdateAuthEmailAndPasswordConfigOptions: Codable {
         public var projectId: String
         public var branchId: String
         public var enabled: Bool?
@@ -24,8 +24,7 @@ public extension AuthMethods {
         }
     }
 
-    /// Updates the email and password authentication configuration for the specified branch's Neon Auth integration.
-    /// Only the fields provided in the request body are updated.
+    /// Updates the email and password authentication configuration for the specified branch's Neon Auth integration. Only the fields provided in the request body are updated.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -46,32 +45,13 @@ public extension AuthMethods {
     ///   user with an unverified email signs in.
     /// - disableSignUp: Whether to disable new user sign ups. When omitted, the
     ///   current setting is not changed.
-    static func updateAuthEmailAndPasswordConfig(
-        config: ClientConfig,
-        options: UpdateAuthEmailAndPasswordConfigOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonAuthEmailAndPasswordConfig {
+    public static func updateAuthEmailAndPasswordConfig(config: ClientConfig, options: UpdateAuthEmailAndPasswordConfigOptions, requestOptions: RequestOptions? = nil) async throws -> NeonAuthEmailAndPasswordConfig {
         try sdkValidatePattern("project_id", options.projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", options.branchId, sdkPatternead2b03f7a95)
 
         let requestBody = UpdateAuthEmailAndPasswordConfigRequestBody(options: options)
 
-        return try await (sdkRequest(
-            "PATCH",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(options.projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(options.branchId)),
-                "/auth/email_and_password",
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateAuthEmailAndPasswordConfig",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("PATCH", ["/projects/", sdkEncodePathSegment(sdkWireString(options.projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(options.branchId)), "/auth/email_and_password"].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateAuthEmailAndPasswordConfig", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

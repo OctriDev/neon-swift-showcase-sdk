@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthLegacyMethods {
-    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/domains` instead. Removal scheduled for March
-    /// 1, 2026.
+extension AuthLegacyMethods {
+    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/domains` instead. Removal scheduled for March 1, 2026.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -20,29 +19,11 @@ public extension AuthLegacyMethods {
     ///   specified auth provider.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func deleteAuthLegacyDomainFromRedirectUriAllowlist(
-        config: ClientConfig,
-        projectId: String,
-        authProvider: NeonAuthSupportedAuthProvider,
-        domains: [NeonAuthDeleteDomainFromRedirectURIAllowlistItem],
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
+    public static func deleteAuthLegacyDomainFromRedirectUriAllowlist(config: ClientConfig, projectId: String, authProvider: NeonAuthSupportedAuthProvider, domains: [NeonAuthDeleteDomainFromRedirectURIAllowlistItem], requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        let requestBody = DeleteAuthLegacyDomainFromRedirectUriAllowlistRequestBody(
-            authProvider: authProvider,
-            domains: domains
-        )
+        let requestBody = DeleteAuthLegacyDomainFromRedirectUriAllowlistRequestBody(authProvider: authProvider, domains: domains)
 
-        return try await (sdkRequest(
-            "DELETE",
-            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/domains"].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .empty,
-            operationId: "deleteAuthLegacyDomainFromRedirectUriWhitelist",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/domains"].joined(), config: config, body: requestBody, decoder: .empty, operationId: "deleteAuthLegacyDomainFromRedirectUriWhitelist", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

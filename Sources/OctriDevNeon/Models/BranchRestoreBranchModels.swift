@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Branch domain models
+// Branch domain models
 /// Typed representation of the `BranchRestoreRequest` API schema.
 public struct BranchRestoreRequest: Codable {
     /// The `branch_id` of the restore source branch. If `source_timestamp` and `source_lsn` are omitted, the branch
@@ -29,42 +29,31 @@ public struct BranchRestoreRequest: Codable {
         case preserveUnderName = "preserve_under_name"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BranchRestoreRequest {
-    init(from decoder: Decoder) throws {
+extension BranchRestoreRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.sourceBranchId) else {
-            throw SdkValidationError(
-                field: "source_branch_id",
-                code: "required",
-                message: "Validation failed for 'source_branch_id': value is required"
-            )
+            throw SdkValidationError(field: "source_branch_id", code: "required", message: "Validation failed for 'source_branch_id': value is required")
         }
-        sourceBranchId = try container.sdkDecodeRequired(.sourceBranchId)
-        sourceLsn = try container.sdkDecodeIfPresent(.sourceLsn)
-        sourceTimestamp = try container.sdkDecodeIfPresent(.sourceTimestamp)
-        preserveUnderName = try container.sdkDecodeIfPresent(.preserveUnderName)
-        try sdkValidatePattern("source_branch_id", sourceBranchId, sdkPatternead2b03f7a95)
-        if let value = sourceTimestamp {
+        self.sourceBranchId = try container.sdkDecodeRequired(.sourceBranchId)
+        self.sourceLsn = try container.sdkDecodeIfPresent(.sourceLsn)
+        self.sourceTimestamp = try container.sdkDecodeIfPresent(.sourceTimestamp)
+        self.preserveUnderName = try container.sdkDecodeIfPresent(.preserveUnderName)
+            try sdkValidatePattern("source_branch_id", self.sourceBranchId, sdkPatternead2b03f7a95)
+        if let value = self.sourceTimestamp {
             try sdkValidateDateTime("source_timestamp", sdkWireString(value))
         }
     }
 }
 
-public extension BranchRestoreRequest {
-    init(
-        sourceBranchId: String,
-        sourceLsn: String? = nil,
-        sourceTimestamp: Date? = nil,
-        preserveUnderName: String? = nil
-    ) throws {
+extension BranchRestoreRequest {
+    public init(sourceBranchId: String, sourceLsn: String? = nil, sourceTimestamp: Date? = nil, preserveUnderName: String? = nil) throws {
         (self.sourceBranchId, self.sourceLsn) = (sourceBranchId, sourceLsn)
         (self.sourceTimestamp, self.preserveUnderName) = (sourceTimestamp, preserveUnderName)
-        try sdkValidatePattern("source_branch_id", self.sourceBranchId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("source_branch_id", self.sourceBranchId, sdkPatternead2b03f7a95)
         if let value = self.sourceTimestamp {
             try sdkValidateDateTime("source_timestamp", sdkWireString(value))
         }

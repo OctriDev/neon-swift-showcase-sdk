@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension OrganizationsMethods {
+extension OrganizationsMethods {
     /// Transfers selected projects, identified by their IDs, from your organization to another specified organization.
     ///
     /// - Parameters:
@@ -15,37 +15,15 @@ public extension OrganizationsMethods {
     /// - destinationOrgId: The destination organization identifier
     /// - projectIds: The list of projects ids to transfer. Maximum of 400 project
     ///   ids
-    static func transferOrganizationsProjects(
-        config: ClientConfig,
-        sourceOrgId: String,
-        destinationOrgId: String,
-        projectIds: [String],
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EmptyResponse {
+    public static func transferOrganizationsProjects(config: ClientConfig, sourceOrgId: String, destinationOrgId: String, projectIds: [String], requestOptions: RequestOptions? = nil) async throws -> EmptyResponse {
         try sdkValidatePattern("source_org_id", sourceOrgId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("destination_org_id", destinationOrgId, sdkPatternead2b03f7a95)
 
         try validateItems("project_ids", projectIds, min: 1, max: 400)
 
-        let requestBody = TransferOrganizationsProjectsRequestBody(
-            destinationOrgId: destinationOrgId,
-            projectIds: projectIds
-        )
+        let requestBody = TransferOrganizationsProjectsRequestBody(destinationOrgId: destinationOrgId, projectIds: projectIds)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/organizations/", sdkEncodePathSegment(sdkWireString(sourceOrgId)), "/projects/transfer"].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "transferOrganizationsProjects",
-            options: requestOptions,
-            errors: [
-                "406": LimitsUnsatisfiedResponse.self,
-                "422": ProjectsWithIntegrationResponse.self,
-                "default": GeneralError.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/organizations/", sdkEncodePathSegment(sdkWireString(sourceOrgId)), "/projects/transfer"].joined(), config: config, body: requestBody, decoder: .json, operationId: "transferOrganizationsProjects", options: requestOptions, errors: ["406": LimitsUnsatisfiedResponse.self, "422": ProjectsWithIntegrationResponse.self, "default": GeneralError.self])).data
     }
 }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Consumption domain models
+// Consumption domain models
 public typealias ConsumptionHistoryQueryMetrics = [String]
 
 /// Typed representation of the `ConsumptionHistoryPerTimeframeV2` API schema.
@@ -22,27 +22,27 @@ public struct ConsumptionHistoryPerTimeframeV2: Codable {
     }
 
     init() {
-        (timeframeStart, timeframeEnd, metrics) = (nil, nil, nil)
+        (self.timeframeStart, self.timeframeEnd, self.metrics) = (nil, nil, nil)
     }
 }
 
-public extension ConsumptionHistoryPerTimeframeV2 {
-    init(from decoder: Decoder) throws {
+extension ConsumptionHistoryPerTimeframeV2 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        timeframeStart = try container.sdkDecodeIfPresent(.timeframeStart)
-        timeframeEnd = try container.sdkDecodeIfPresent(.timeframeEnd)
-        metrics = try container.sdkDecodeIfPresent(.metrics)
-        if let value = timeframeStart {
+        self.timeframeStart = try container.sdkDecodeIfPresent(.timeframeStart)
+        self.timeframeEnd = try container.sdkDecodeIfPresent(.timeframeEnd)
+        self.metrics = try container.sdkDecodeIfPresent(.metrics)
+        if let value = self.timeframeStart {
             try sdkValidateDateTime("timeframe_start", sdkWireString(value))
         }
-        if let value = timeframeEnd {
+        if let value = self.timeframeEnd {
             try sdkValidateDateTime("timeframe_end", sdkWireString(value))
         }
     }
 }
 
-public extension ConsumptionHistoryPerTimeframeV2 {
-    init(timeframeStart: Date? = nil, timeframeEnd: Date? = nil, metrics: [ConsumptionMetricValue]? = nil) throws {
+extension ConsumptionHistoryPerTimeframeV2 {
+    public init(timeframeStart: Date? = nil, timeframeEnd: Date? = nil, metrics: [ConsumptionMetricValue]? = nil) throws {
         self.init()
         (self.timeframeStart, self.timeframeEnd) = (timeframeStart, timeframeEnd)
         self.metrics = metrics
@@ -67,35 +67,25 @@ public struct ConsumptionMetricValue: Codable {
         case value
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConsumptionMetricValue {
-    init(from decoder: Decoder) throws {
+extension ConsumptionMetricValue {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.metricName) else {
-            throw SdkValidationError(
-                field: "metric_name",
-                code: "required",
-                message: "Validation failed for 'metric_name': value is required"
-            )
+            throw SdkValidationError(field: "metric_name", code: "required", message: "Validation failed for 'metric_name': value is required")
         }
         guard container.contains(.value) else {
-            throw SdkValidationError(
-                field: "value",
-                code: "required",
-                message: "Validation failed for 'value': value is required"
-            )
+            throw SdkValidationError(field: "value", code: "required", message: "Validation failed for 'value': value is required")
         }
-        metricName = try container.sdkDecodeRequired(.metricName)
-        value = try container.sdkDecodeRequired(.value)
+        self.metricName = try container.sdkDecodeRequired(.metricName)
+        self.value = try container.sdkDecodeRequired(.value)
     }
 }
 
-public extension ConsumptionMetricValue {
-    init(metricName: String, value: Int) {
+extension ConsumptionMetricValue {
+    public init(metricName: String, value: Int) {
         (self.metricName, self.value) = (metricName, value)
     }
 }
@@ -121,68 +111,44 @@ public struct ConsumptionHistoryPerPeriodV2: Codable {
         case periodEnd = "period_end"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConsumptionHistoryPerPeriodV2 {
-    init(from decoder: Decoder) throws {
+extension ConsumptionHistoryPerPeriodV2 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.periodId) else {
-            throw SdkValidationError(
-                field: "period_id",
-                code: "required",
-                message: "Validation failed for 'period_id': value is required"
-            )
+            throw SdkValidationError(field: "period_id", code: "required", message: "Validation failed for 'period_id': value is required")
         }
         guard container.contains(.periodPlan) else {
-            throw SdkValidationError(
-                field: "period_plan",
-                code: "required",
-                message: "Validation failed for 'period_plan': value is required"
-            )
+            throw SdkValidationError(field: "period_plan", code: "required", message: "Validation failed for 'period_plan': value is required")
         }
         guard container.contains(.periodStart) else {
-            throw SdkValidationError(
-                field: "period_start",
-                code: "required",
-                message: "Validation failed for 'period_start': value is required"
-            )
+            throw SdkValidationError(field: "period_start", code: "required", message: "Validation failed for 'period_start': value is required")
         }
         guard container.contains(.consumption) else {
-            throw SdkValidationError(
-                field: "consumption",
-                code: "required",
-                message: "Validation failed for 'consumption': value is required"
-            )
+            throw SdkValidationError(field: "consumption", code: "required", message: "Validation failed for 'consumption': value is required")
         }
-        periodId = try container.sdkDecodeRequired(.periodId)
-        periodPlan = try container.sdkDecodeRequired(.periodPlan)
-        periodStart = try container.sdkDecodeRequired(.periodStart)
-        consumption = try container.sdkDecodeRequired(.consumption)
-        periodEnd = try container.sdkDecodeIfPresent(.periodEnd)
-        try sdkValidateUuid("period_id", periodId)
-        try sdkValidateDateTime("period_start", sdkWireString(periodStart))
-        if let value = periodEnd {
+        self.periodId = try container.sdkDecodeRequired(.periodId)
+        self.periodPlan = try container.sdkDecodeRequired(.periodPlan)
+        self.periodStart = try container.sdkDecodeRequired(.periodStart)
+        self.consumption = try container.sdkDecodeRequired(.consumption)
+        self.periodEnd = try container.sdkDecodeIfPresent(.periodEnd)
+            try sdkValidateUuid("period_id", self.periodId)
+            try sdkValidateDateTime("period_start", sdkWireString(self.periodStart))
+        if let value = self.periodEnd {
             try sdkValidateDateTime("period_end", sdkWireString(value))
         }
     }
 }
 
-public extension ConsumptionHistoryPerPeriodV2 {
-    init(
-        periodId: String,
-        periodPlan: String,
-        periodStart: Date,
-        consumption: [ConsumptionHistoryPerTimeframeV2],
-        periodEnd: Date? = nil
-    ) throws {
+extension ConsumptionHistoryPerPeriodV2 {
+    public init(periodId: String, periodPlan: String, periodStart: Date, consumption: [ConsumptionHistoryPerTimeframeV2], periodEnd: Date? = nil) throws {
         (self.periodId, self.periodPlan) = (periodId, periodPlan)
         (self.periodStart, self.consumption) = (periodStart, consumption)
         self.periodEnd = periodEnd
-        try sdkValidateUuid("period_id", self.periodId)
-        try sdkValidateDateTime("period_start", sdkWireString(self.periodStart))
+            try sdkValidateUuid("period_id", self.periodId)
+            try sdkValidateDateTime("period_start", sdkWireString(self.periodStart))
         if let value = self.periodEnd {
             try sdkValidateDateTime("period_end", sdkWireString(value))
         }
@@ -193,17 +159,14 @@ public extension ConsumptionHistoryPerPeriodV2 {
 public struct ConsumptionHistoryGranularity: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let hourly = ConsumptionHistoryGranularity(rawValue: "hourly")
     public static let daily = ConsumptionHistoryGranularity(rawValue: "daily")
     public static let monthly = ConsumptionHistoryGranularity(rawValue: "monthly")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ProjectProject domain models
+// ProjectProject domain models
 /// The list of configured JWKS definitions for a project
 public struct ProjectJWKSResponse: Codable {
     /// JWKS configurations associated with the project.
@@ -13,27 +13,21 @@ public struct ProjectJWKSResponse: Codable {
         case jwks
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectJWKSResponse {
-    init(from decoder: Decoder) throws {
+extension ProjectJWKSResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.jwks) else {
-            throw SdkValidationError(
-                field: "jwks",
-                code: "required",
-                message: "Validation failed for 'jwks': value is required"
-            )
+            throw SdkValidationError(field: "jwks", code: "required", message: "Validation failed for 'jwks': value is required")
         }
-        jwks = try container.sdkDecodeRequired(.jwks)
+        self.jwks = try container.sdkDecodeRequired(.jwks)
     }
 }
 
-public extension ProjectJWKSResponse {
-    init(jwks: [JWKS]) {
+extension ProjectJWKSResponse {
+    public init(jwks: [JWKS]) {
         self.jwks = jwks
     }
 }

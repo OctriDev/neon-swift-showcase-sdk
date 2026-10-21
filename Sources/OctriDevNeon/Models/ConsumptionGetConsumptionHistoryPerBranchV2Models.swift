@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Consumption domain models
+// Consumption domain models
 /// Typed representation of the `GetConsumptionHistoryPerBranchV2Response` API schema.
 public struct GetConsumptionHistoryPerBranchV2Response: Codable {
     /// Per-branch consumption history records returned for the requested time range.
@@ -18,28 +18,22 @@ public struct GetConsumptionHistoryPerBranchV2Response: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension GetConsumptionHistoryPerBranchV2Response {
-    init(from decoder: Decoder) throws {
+extension GetConsumptionHistoryPerBranchV2Response {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.branches) else {
-            throw SdkValidationError(
-                field: "branches",
-                code: "required",
-                message: "Validation failed for 'branches': value is required"
-            )
+            throw SdkValidationError(field: "branches", code: "required", message: "Validation failed for 'branches': value is required")
         }
-        branches = try container.sdkDecodeRequired(.branches)
-        pagination = try container.sdkDecodeIfPresent(.pagination)
+        self.branches = try container.sdkDecodeRequired(.branches)
+        self.pagination = try container.sdkDecodeIfPresent(.pagination)
     }
 }
 
-public extension GetConsumptionHistoryPerBranchV2Response {
-    init(branches: [ConsumptionHistoryPerBranchV2], pagination: Pagination? = nil) {
+extension GetConsumptionHistoryPerBranchV2Response {
+    public init(branches: [ConsumptionHistoryPerBranchV2], pagination: Pagination? = nil) {
         (self.branches, self.pagination) = (branches, pagination)
     }
 }
@@ -60,49 +54,35 @@ public struct ConsumptionHistoryPerBranchV2: Codable {
         case periods
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConsumptionHistoryPerBranchV2 {
-    init(from decoder: Decoder) throws {
+extension ConsumptionHistoryPerBranchV2 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.projectId) else {
-            throw SdkValidationError(
-                field: "project_id",
-                code: "required",
-                message: "Validation failed for 'project_id': value is required"
-            )
+            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
         }
         guard container.contains(.branchId) else {
-            throw SdkValidationError(
-                field: "branch_id",
-                code: "required",
-                message: "Validation failed for 'branch_id': value is required"
-            )
+            throw SdkValidationError(field: "branch_id", code: "required", message: "Validation failed for 'branch_id': value is required")
         }
         guard container.contains(.periods) else {
-            throw SdkValidationError(
-                field: "periods",
-                code: "required",
-                message: "Validation failed for 'periods': value is required"
-            )
+            throw SdkValidationError(field: "periods", code: "required", message: "Validation failed for 'periods': value is required")
         }
-        projectId = try container.sdkDecodeRequired(.projectId)
-        branchId = try container.sdkDecodeRequired(.branchId)
-        periods = try container.sdkDecodeRequired(.periods)
-        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
-        try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
+        self.projectId = try container.sdkDecodeRequired(.projectId)
+        self.branchId = try container.sdkDecodeRequired(.branchId)
+        self.periods = try container.sdkDecodeRequired(.periods)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
     }
 }
 
-public extension ConsumptionHistoryPerBranchV2 {
-    init(projectId: String, branchId: String, periods: [ConsumptionHistoryPerPeriodV2]) throws {
+extension ConsumptionHistoryPerBranchV2 {
+    public init(projectId: String, branchId: String, periods: [ConsumptionHistoryPerPeriodV2]) throws {
         (self.projectId, self.branchId) = (projectId, branchId)
         self.periods = periods
-        try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-        try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("branch_id", self.branchId, sdkPatternead2b03f7a95)
     }
 }
 
@@ -115,27 +95,21 @@ public struct ConsumptionHistoryPerBranchV2Response: Codable {
         case branches
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConsumptionHistoryPerBranchV2Response {
-    init(from decoder: Decoder) throws {
+extension ConsumptionHistoryPerBranchV2Response {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.branches) else {
-            throw SdkValidationError(
-                field: "branches",
-                code: "required",
-                message: "Validation failed for 'branches': value is required"
-            )
+            throw SdkValidationError(field: "branches", code: "required", message: "Validation failed for 'branches': value is required")
         }
-        branches = try container.sdkDecodeRequired(.branches)
+        self.branches = try container.sdkDecodeRequired(.branches)
     }
 }
 
-public extension ConsumptionHistoryPerBranchV2Response {
-    init(branches: [ConsumptionHistoryPerBranchV2]) {
+extension ConsumptionHistoryPerBranchV2Response {
+    public init(branches: [ConsumptionHistoryPerBranchV2]) {
         self.branches = branches
     }
 }

@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension OrganizationsMethods {
+extension OrganizationsMethods {
     /// Assigns a VPC endpoint to a Neon organization or updates its existing assignment.
     ///
     /// - Parameters:
@@ -15,68 +15,23 @@ public extension OrganizationsMethods {
     /// - vpcEndpointId: The VPC endpoint ID
     /// - label: Human-readable name for the VPC endpoint assignment, used to
     ///   identify it within the organization.
-    static func assignOrganizationVpcEndpoint(
-        config: ClientConfig,
-        orgId: String,
-        regionId: String,
-        vpcEndpointId: String,
-        label: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
+    public static func assignOrganizationVpcEndpoint(config: ClientConfig, orgId: String, regionId: String, vpcEndpointId: String, label: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
         let requestBody = AssignOrganizationVpcEndpointRequestBody(label: label)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/organizations/",
-                sdkEncodePathSegment(sdkWireString(orgId)),
-                "/vpc/region/",
-                sdkEncodePathSegment(sdkWireString(regionId)),
-                "/vpc_endpoints/",
-                sdkEncodePathSegment(sdkWireString(vpcEndpointId)),
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .empty,
-            operationId: "assignOrganizationVPCEndpoint",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/vpc/region/", sdkEncodePathSegment(sdkWireString(regionId)), "/vpc_endpoints/", sdkEncodePathSegment(sdkWireString(vpcEndpointId))].joined(), config: config, body: requestBody, decoder: .empty, operationId: "assignOrganizationVPCEndpoint", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Deletes the VPC endpoint from the specified Neon organization. If you delete a VPC endpoint from a Neon
-    /// organization, that VPC endpoint cannot be added back to the Neon organization.
+    /// Deletes the VPC endpoint from the specified Neon organization. If you delete a VPC endpoint from a Neon organization, that VPC endpoint cannot be added back to the Neon organization.
     ///
     /// - Parameters:
     /// - orgId: The Neon organization ID
     /// - regionId: The Neon region ID. Azure regions are currently not supported.
     /// - vpcEndpointId: The VPC endpoint ID
-    static func deleteOrganizationVpcEndpoint(
-        config: ClientConfig,
-        orgId: String,
-        regionId: String,
-        vpcEndpointId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
+    public static func deleteOrganizationVpcEndpoint(config: ClientConfig, orgId: String, regionId: String, vpcEndpointId: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "DELETE",
-            [
-                "/organizations/",
-                sdkEncodePathSegment(sdkWireString(orgId)),
-                "/vpc/region/",
-                sdkEncodePathSegment(sdkWireString(regionId)),
-                "/vpc_endpoints/",
-                sdkEncodePathSegment(sdkWireString(vpcEndpointId)),
-            ].joined(),
-            config: config,
-            decoder: .empty,
-            operationId: "deleteOrganizationVPCEndpoint",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("DELETE", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/vpc/region/", sdkEncodePathSegment(sdkWireString(regionId)), "/vpc_endpoints/", sdkEncodePathSegment(sdkWireString(vpcEndpointId))].joined(), config: config, decoder: .empty, operationId: "deleteOrganizationVPCEndpoint", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

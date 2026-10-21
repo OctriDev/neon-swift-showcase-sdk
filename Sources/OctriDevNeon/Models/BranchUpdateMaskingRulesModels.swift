@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Branch domain models
+// Branch domain models
 /// Typed representation of the `MaskingRulesUpdateRequest` API schema.
 public struct MaskingRulesUpdateRequest: Codable {
     /// List of masking rules to apply to the branch. This will replace all existing masking rules for the branch.
@@ -13,27 +13,21 @@ public struct MaskingRulesUpdateRequest: Codable {
         case maskingRules = "masking_rules"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MaskingRulesUpdateRequest {
-    init(from decoder: Decoder) throws {
+extension MaskingRulesUpdateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.maskingRules) else {
-            throw SdkValidationError(
-                field: "masking_rules",
-                code: "required",
-                message: "Validation failed for 'masking_rules': value is required"
-            )
+            throw SdkValidationError(field: "masking_rules", code: "required", message: "Validation failed for 'masking_rules': value is required")
         }
-        maskingRules = try container.sdkDecodeRequired(.maskingRules)
+        self.maskingRules = try container.sdkDecodeRequired(.maskingRules)
     }
 }
 
-public extension MaskingRulesUpdateRequest {
-    init(maskingRules: [MaskingRule]) {
+extension MaskingRulesUpdateRequest {
+    public init(maskingRules: [MaskingRule]) {
         self.maskingRules = maskingRules
     }
 }

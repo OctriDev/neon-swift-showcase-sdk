@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Logs domain models
+// Logs domain models
 /// Typed representation of the `ProjectBranchLogFieldsResponse` API schema.
 public struct ProjectBranchLogFieldsResponse: Codable {
     /// Log field names observed on this branch, each usable as `field_name` on the log field-values endpoint.
@@ -14,27 +14,21 @@ public struct ProjectBranchLogFieldsResponse: Codable {
         case fields
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectBranchLogFieldsResponse {
-    init(from decoder: Decoder) throws {
+extension ProjectBranchLogFieldsResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.fields) else {
-            throw SdkValidationError(
-                field: "fields",
-                code: "required",
-                message: "Validation failed for 'fields': value is required"
-            )
+            throw SdkValidationError(field: "fields", code: "required", message: "Validation failed for 'fields': value is required")
         }
-        fields = try container.sdkDecodeRequired(.fields)
+        self.fields = try container.sdkDecodeRequired(.fields)
     }
 }
 
-public extension ProjectBranchLogFieldsResponse {
-    init(fields: [String]) {
+extension ProjectBranchLogFieldsResponse {
+    public init(fields: [String]) {
         self.fields = fields
     }
 }

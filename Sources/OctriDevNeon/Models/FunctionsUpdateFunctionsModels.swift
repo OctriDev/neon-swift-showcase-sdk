@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Functions domain models
+// Functions domain models
 /// Typed representation of the `NeonFunctionUpdateRequest` API schema.
 public struct NeonFunctionUpdateRequest: Codable {
     /// New display name for the function. `null` clears the display name; the function's `name` then falls back to
@@ -14,30 +14,24 @@ public struct NeonFunctionUpdateRequest: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonFunctionUpdateRequest {
-    init(from decoder: Decoder) throws {
+extension NeonFunctionUpdateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
-        name = try container.sdkDecodeNullable(.name)
-        if let value = name {
+        self.name = try container.sdkDecodeNullable(.name)
+        if let value = self.name {
             try validateLength("name", value, min: 1, max: 256)
         }
     }
 }
 
-public extension NeonFunctionUpdateRequest {
-    init(name: String?) throws {
+extension NeonFunctionUpdateRequest {
+    public init(name: String?) throws {
         self.name = name
         if let value = self.name {
             try validateLength("name", value, min: 1, max: 256)

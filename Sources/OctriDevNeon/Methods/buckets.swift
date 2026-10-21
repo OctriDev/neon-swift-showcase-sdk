@@ -8,9 +8,8 @@ import Foundation
 #endif
 public enum BucketsMethods {}
 
-public extension BucketsMethods {
-    /// Creates a new branchable object storage bucket on the specified branch. Buckets are managed by the Neon Platform
-    /// branchable object storage service. **Note**: This endpoint is currently in Beta.
+extension BucketsMethods {
+    /// Creates a new branchable object storage bucket on the specified branch. Buckets are managed by the Neon Platform branchable object storage service. **Note**: This endpoint is currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -19,14 +18,7 @@ public extension BucketsMethods {
     /// - accessLevel: Access level for the bucket. Defaults to `private`. Set to
     ///   `public_read` to allow anonymous `GetObject`/`HeadObject` on objects in this
     ///   bucket.
-    static func createBuckets(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        name: String,
-        accessLevel: BucketCreateRequestAccessLevel? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BucketResponse {
+    public static func createBuckets(config: ClientConfig, projectId: String, branchId: String, name: String, accessLevel: BucketCreateRequestAccessLevel? = nil, requestOptions: RequestOptions? = nil) async throws -> BucketResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -35,54 +27,19 @@ public extension BucketsMethods {
 
         let requestBody = CreateBucketsRequestBody(name: name, accessLevel: accessLevel)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/buckets",
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createBuckets",
-            options: requestOptions,
-            errors: ["410": GeneralError.self, "default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/buckets"].joined(), config: config, body: requestBody, decoder: .json, operationId: "createBuckets", options: requestOptions, errors: ["410": GeneralError.self, "default": GeneralError.self])).data
     }
 
-    /// Lists branchable object storage buckets visible on the specified branch, including those inherited from ancestor
-    /// branches. **Note**: This endpoint is currently in Beta.
+    /// Lists branchable object storage buckets visible on the specified branch, including those inherited from ancestor branches. **Note**: This endpoint is currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
-    static func listBuckets(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BucketsListResponse {
+    public static func listBuckets(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> BucketsListResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "GET",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/buckets",
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "listBuckets",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/buckets"].joined(), config: config, decoder: .json, operationId: "listBuckets", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

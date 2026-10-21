@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Organizations domain models
+// Organizations domain models
 public struct OrgApiKeyCreateRequestVariant1: Codable {
     /// If set, the API key can access only this project
     public var projectId: String?
@@ -13,22 +13,22 @@ public struct OrgApiKeyCreateRequestVariant1: Codable {
     }
 
     init() {
-        projectId = nil
+        self.projectId = nil
     }
 }
 
-public extension OrgApiKeyCreateRequestVariant1 {
-    init(from decoder: Decoder) throws {
+extension OrgApiKeyCreateRequestVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        projectId = try container.sdkDecodeIfPresent(.projectId)
-        if let value = projectId {
+        self.projectId = try container.sdkDecodeIfPresent(.projectId)
+        if let value = self.projectId {
             try sdkValidatePattern("project_id", value, sdkPatternead2b03f7a95)
         }
     }
 }
 
-public extension OrgApiKeyCreateRequestVariant1 {
-    init(projectId: String? = nil) throws {
+extension OrgApiKeyCreateRequestVariant1 {
+    public init(projectId: String? = nil) throws {
         self.init()
         self.projectId = projectId
         if let value = self.projectId {
@@ -49,34 +49,28 @@ public struct OrgApiKeyCreateRequest: Codable {
         case projectId = "project_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OrgApiKeyCreateRequest {
-    init(from decoder: Decoder) throws {
+extension OrgApiKeyCreateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.keyName) else {
-            throw SdkValidationError(
-                field: "key_name",
-                code: "required",
-                message: "Validation failed for 'key_name': value is required"
-            )
+            throw SdkValidationError(field: "key_name", code: "required", message: "Validation failed for 'key_name': value is required")
         }
-        keyName = try container.sdkDecodeRequired(.keyName)
-        projectId = try container.sdkDecodeIfPresent(.projectId)
-        try validateLength("key_name", keyName, min: nil, max: 64)
-        if let value = projectId {
+        self.keyName = try container.sdkDecodeRequired(.keyName)
+        self.projectId = try container.sdkDecodeIfPresent(.projectId)
+            try validateLength("key_name", self.keyName, min: nil, max: 64)
+        if let value = self.projectId {
             try sdkValidatePattern("project_id", value, sdkPatternead2b03f7a95)
         }
     }
 }
 
-public extension OrgApiKeyCreateRequest {
-    init(keyName: String, projectId: String? = nil) throws {
+extension OrgApiKeyCreateRequest {
+    public init(keyName: String, projectId: String? = nil) throws {
         (self.keyName, self.projectId) = (keyName, projectId)
-        try validateLength("key_name", self.keyName, min: nil, max: 64)
+            try validateLength("key_name", self.keyName, min: nil, max: 64)
         if let value = self.projectId {
             try sdkValidatePattern("project_id", value, sdkPatternead2b03f7a95)
         }
@@ -92,22 +86,22 @@ public struct OrgApiKeyCreateResponseVariant1: Codable {
     }
 
     init() {
-        projectId = nil
+        self.projectId = nil
     }
 }
 
-public extension OrgApiKeyCreateResponseVariant1 {
-    init(from decoder: Decoder) throws {
+extension OrgApiKeyCreateResponseVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        projectId = try container.sdkDecodeIfPresent(.projectId)
-        if let value = projectId {
+        self.projectId = try container.sdkDecodeIfPresent(.projectId)
+        if let value = self.projectId {
             try sdkValidatePattern("project_id", value, sdkPatternead2b03f7a95)
         }
     }
 }
 
-public extension OrgApiKeyCreateResponseVariant1 {
-    init(projectId: String? = nil) throws {
+extension OrgApiKeyCreateResponseVariant1 {
+    public init(projectId: String? = nil) throws {
         self.init()
         self.projectId = projectId
         if let value = self.projectId {
@@ -140,70 +134,48 @@ public struct OrgApiKeyCreateResponse: Codable {
         case projectId = "project_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OrgApiKeyCreateResponse {
-    init(from decoder: Decoder) throws {
+extension OrgApiKeyCreateResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.key) else {
-            throw SdkValidationError(
-                field: "key",
-                code: "required",
-                message: "Validation failed for 'key': value is required"
-            )
+            throw SdkValidationError(field: "key", code: "required", message: "Validation failed for 'key': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.createdBy) else {
-            throw SdkValidationError(
-                field: "created_by",
-                code: "required",
-                message: "Validation failed for 'created_by': value is required"
-            )
+            throw SdkValidationError(field: "created_by", code: "required", message: "Validation failed for 'created_by': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        key = try container.sdkDecodeRequired(.key)
-        name = try container.sdkDecodeRequired(.name)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        createdBy = try container.sdkDecodeRequired(.createdBy)
-        projectId = try container.sdkDecodeIfPresent(.projectId)
-        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
-        try sdkValidateUuid("created_by", createdBy)
-        if let value = projectId {
+        self.id = try container.sdkDecodeRequired(.id)
+        self.key = try container.sdkDecodeRequired(.key)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.createdBy = try container.sdkDecodeRequired(.createdBy)
+        self.projectId = try container.sdkDecodeIfPresent(.projectId)
+            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+            try sdkValidateUuid("created_by", self.createdBy)
+        if let value = self.projectId {
             try sdkValidatePattern("project_id", value, sdkPatternead2b03f7a95)
         }
     }
 }
 
-public extension OrgApiKeyCreateResponse {
-    init(id: Int, key: String, name: String, createdAt: Date, createdBy: String, projectId: String? = nil) throws {
+extension OrgApiKeyCreateResponse {
+    public init(id: Int, key: String, name: String, createdAt: Date, createdBy: String, projectId: String? = nil) throws {
         (self.id, self.key) = (id, key)
         (self.name, self.createdAt) = (name, createdAt)
         (self.createdBy, self.projectId) = (createdBy, projectId)
-        try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-        try sdkValidateUuid("created_by", self.createdBy)
+            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+            try sdkValidateUuid("created_by", self.createdBy)
         if let value = self.projectId {
             try sdkValidatePattern("project_id", value, sdkPatternead2b03f7a95)
         }

@@ -8,7 +8,7 @@ import Foundation
 #endif
 public enum SnapshotMethods {}
 
-public extension SnapshotMethods {
+extension SnapshotMethods {
     /// Creates a snapshot from the specified branch. This operation may initiate an asynchronous process.
     ///
     /// - Parameters:
@@ -21,40 +21,16 @@ public extension SnapshotMethods {
     /// - name: A name for the snapshot.
     /// - expiresAt: The time at which the snapshot will be automatically deleted.
     ///   RFC 3339 format.
-    static func createSnapshot(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        lsn: String? = nil,
-        timestamp: String? = nil,
-        name: String? = nil,
-        expiresAt: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CreateSnapshotResponse {
+    public static func createSnapshot(config: ClientConfig, projectId: String, branchId: String, lsn: String? = nil, timestamp: String? = nil, name: String? = nil, expiresAt: String? = nil, requestOptions: RequestOptions? = nil) async throws -> CreateSnapshotResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/snapshot",
-            ].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("lsn", value: lsn),
-                SdkQueryParameter("timestamp", value: timestamp),
-                SdkQueryParameter("name", value: name),
-                SdkQueryParameter("expires_at", value: expiresAt),
-            ],
-            decoder: .json,
-            operationId: "createSnapshot",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/snapshot"].joined(), config: config, query: [
+            SdkQueryParameter("lsn", value: lsn),
+            SdkQueryParameter("timestamp", value: timestamp),
+            SdkQueryParameter("name", value: name),
+            SdkQueryParameter("expires_at", value: expiresAt),
+        ], decoder: .json, operationId: "createSnapshot", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

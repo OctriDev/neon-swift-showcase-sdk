@@ -7,42 +7,15 @@ import Foundation
     import FoundationNetworking
 #endif
 public enum UsersMethods {
-    /// Retrieves information about the currently authenticated Neon user, including account identifiers, plan details,
-    /// and linked auth accounts.
-    public static func getCurrentUserInfo(
-        config: ClientConfig,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CurrentUserInfoResponse {
-        try await (sdkRequest(
-            "GET",
-            "/users/me",
-            config: config,
-            decoder: .json,
-            operationId: "getCurrentUserInfo",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+    /// Retrieves information about the currently authenticated Neon user, including account identifiers, plan details, and linked auth accounts.
+    public static func getCurrentUserInfo(config: ClientConfig, requestOptions: RequestOptions? = nil) async throws -> CurrentUserInfoResponse {
+        return try (await sdkRequest("GET", "/users/me", config: config, decoder: .json, operationId: "getCurrentUserInfo", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
-
-    /// Retrieves the organizations that the currently authenticated user belongs to. When called with an organization-
-    /// or project-scoped API key (which is not tied to a user), this returns the single organization that owns the key.
-    public static func getCurrentUserOrganizations(
-        config: ClientConfig,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrganizationsResponse {
-        try await (sdkRequest(
-            "GET",
-            "/users/me/organizations",
-            config: config,
-            decoder: .json,
-            operationId: "getCurrentUserOrganizations",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+    /// Retrieves the organizations that the currently authenticated user belongs to. When called with an organization- or project-scoped API key (which is not tied to a user), this returns the single organization that owns the key.
+    public static func getCurrentUserOrganizations(config: ClientConfig, requestOptions: RequestOptions? = nil) async throws -> OrganizationsResponse {
+        return try (await sdkRequest("GET", "/users/me/organizations", config: config, decoder: .json, operationId: "getCurrentUserOrganizations", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
-
-    /// Deprecated. Personal accounts have been migrated to organizations, so this operation no longer applies. Removal
-    /// scheduled for July 1, 2026.
+    /// Deprecated. Personal accounts have been migrated to organizations, so this operation no longer applies. Removal scheduled for July 1, 2026.
     ///
     /// - Parameters:
     /// - destinationOrgId: The destination organization identifier
@@ -50,48 +23,17 @@ public enum UsersMethods {
     ///   ids
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public static func transferUsersProjects(
-        config: ClientConfig,
-        destinationOrgId: String,
-        projectIds: [String],
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EmptyResponse {
+    public static func transferUsersProjects(config: ClientConfig, destinationOrgId: String, projectIds: [String], requestOptions: RequestOptions? = nil) async throws -> EmptyResponse {
         try sdkValidatePattern("destination_org_id", destinationOrgId, sdkPatternead2b03f7a95)
 
         try validateItems("project_ids", projectIds, min: 1, max: 400)
 
         let requestBody = TransferUsersProjectsRequestBody(destinationOrgId: destinationOrgId, projectIds: projectIds)
 
-        return try await (sdkRequest(
-            "POST",
-            "/users/me/projects/transfer",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "transferUsersProjects",
-            options: requestOptions,
-            errors: [
-                "406": LimitsUnsatisfiedResponse.self,
-                "422": ProjectsWithIntegrationResponse.self,
-                "default": GeneralError.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", "/users/me/projects/transfer", config: config, body: requestBody, decoder: .json, operationId: "transferUsersProjects", options: requestOptions, errors: ["406": LimitsUnsatisfiedResponse.self, "422": ProjectsWithIntegrationResponse.self, "default": GeneralError.self])).data
     }
-
-    /// Returns authentication details for the credentials used in the request, including the credential type (API key,
-    /// Bearer token, or OAuth session) and the associated identity.
-    public static func getAuthDetails(
-        config: ClientConfig,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AuthDetailsResponse {
-        try await (sdkRequest(
-            "GET",
-            "/auth",
-            config: config,
-            decoder: .json,
-            operationId: "getAuthDetails",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+    /// Returns authentication details for the credentials used in the request, including the credential type (API key, Bearer token, or OAuth session) and the associated identity.
+    public static func getAuthDetails(config: ClientConfig, requestOptions: RequestOptions? = nil) async throws -> AuthDetailsResponse {
+        return try (await sdkRequest("GET", "/auth", config: config, decoder: .json, operationId: "getAuthDetails", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

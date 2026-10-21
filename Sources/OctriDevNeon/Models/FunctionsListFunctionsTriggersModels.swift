@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Functions domain models
+// Functions domain models
 /// Typed representation of the `TriggersListResponse` API schema.
 public struct TriggersListResponse: Codable {
     /// Required array value serialized in the `triggers` wire field.
@@ -13,27 +13,21 @@ public struct TriggersListResponse: Codable {
         case triggers
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension TriggersListResponse {
-    init(from decoder: Decoder) throws {
+extension TriggersListResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.triggers) else {
-            throw SdkValidationError(
-                field: "triggers",
-                code: "required",
-                message: "Validation failed for 'triggers': value is required"
-            )
+            throw SdkValidationError(field: "triggers", code: "required", message: "Validation failed for 'triggers': value is required")
         }
-        triggers = try container.sdkDecodeRequired(.triggers)
+        self.triggers = try container.sdkDecodeRequired(.triggers)
     }
 }
 
-public extension TriggersListResponse {
-    init(triggers: [Trigger]) {
+extension TriggersListResponse {
+    public init(triggers: [Trigger]) {
         self.triggers = triggers
     }
 }

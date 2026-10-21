@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Branch domain models
+// Branch domain models
 /// Typed representation of the `BranchAnonymizedCreateRequest` API schema.
 public struct BranchAnonymizedCreateRequest: Codable {
     /// A free-form map of string key-value pairs for attaching metadata to a resource (for example, a git commit
@@ -24,27 +24,22 @@ public struct BranchAnonymizedCreateRequest: Codable {
     }
 
     init() {
-        (annotationValue, branchCreate, maskingRules, startAnonymization) = (nil, nil, nil, nil)
+        (self.annotationValue, self.branchCreate, self.maskingRules, self.startAnonymization) = (nil, nil, nil, nil)
     }
 }
 
-public extension BranchAnonymizedCreateRequest {
-    init(from decoder: Decoder) throws {
+extension BranchAnonymizedCreateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        annotationValue = try container.sdkDecodeIfPresent(.annotationValue)
-        branchCreate = try container.sdkDecodeIfPresent(.branchCreate)
-        maskingRules = try container.sdkDecodeIfPresent(.maskingRules)
-        startAnonymization = try container.sdkDecodeIfPresent(.startAnonymization)
+        self.annotationValue = try container.sdkDecodeIfPresent(.annotationValue)
+        self.branchCreate = try container.sdkDecodeIfPresent(.branchCreate)
+        self.maskingRules = try container.sdkDecodeIfPresent(.maskingRules)
+        self.startAnonymization = try container.sdkDecodeIfPresent(.startAnonymization)
     }
 }
 
-public extension BranchAnonymizedCreateRequest {
-    init(
-        annotationValue: AnnotationValueData? = nil,
-        branchCreate: BranchCreateRequest? = nil,
-        maskingRules: [MaskingRule]? = nil,
-        startAnonymization: Bool? = nil
-    ) {
+extension BranchAnonymizedCreateRequest {
+    public init(annotationValue: AnnotationValueData? = nil, branchCreate: BranchCreateRequest? = nil, maskingRules: [MaskingRule]? = nil, startAnonymization: Bool? = nil) {
         self.init()
         (self.annotationValue, self.branchCreate) = (annotationValue, branchCreate)
         (self.maskingRules, self.startAnonymization) = (maskingRules, startAnonymization)
@@ -65,25 +60,21 @@ public struct BranchAnonymizedCreateRequestVariant1: Codable {
     }
 
     init() {
-        (branchCreate, maskingRules, startAnonymization) = (nil, nil, nil)
+        (self.branchCreate, self.maskingRules, self.startAnonymization) = (nil, nil, nil)
     }
 }
 
-public extension BranchAnonymizedCreateRequestVariant1 {
-    init(from decoder: Decoder) throws {
+extension BranchAnonymizedCreateRequestVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        branchCreate = try container.sdkDecodeIfPresent(.branchCreate)
-        maskingRules = try container.sdkDecodeIfPresent(.maskingRules)
-        startAnonymization = try container.sdkDecodeIfPresent(.startAnonymization)
+        self.branchCreate = try container.sdkDecodeIfPresent(.branchCreate)
+        self.maskingRules = try container.sdkDecodeIfPresent(.maskingRules)
+        self.startAnonymization = try container.sdkDecodeIfPresent(.startAnonymization)
     }
 }
 
-public extension BranchAnonymizedCreateRequestVariant1 {
-    init(
-        branchCreate: BranchCreateRequest? = nil,
-        maskingRules: [MaskingRule]? = nil,
-        startAnonymization: Bool? = nil
-    ) {
+extension BranchAnonymizedCreateRequestVariant1 {
+    public init(branchCreate: BranchCreateRequest? = nil, maskingRules: [MaskingRule]? = nil, startAnonymization: Bool? = nil) {
         self.init()
         (self.branchCreate, self.maskingRules) = (branchCreate, maskingRules)
         self.startAnonymization = startAnonymization

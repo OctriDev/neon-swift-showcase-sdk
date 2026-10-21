@@ -6,86 +6,35 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension OrganizationsMethods {
-    /// Retrieves the API keys for the specified organization. The response does not include API key tokens. A token is
-    /// only provided when creating an API key. API keys can also be managed in the Neon Console. For more information,
-    /// see [Manage API keys](https://neon.com/docs/manage/api-keys/).
+extension OrganizationsMethods {
+    /// Retrieves the API keys for the specified organization. The response does not include API key tokens. A token is only provided when creating an API key. API keys can also be managed in the Neon Console. For more information, see [Manage API keys](https://neon.com/docs/manage/api-keys/).
     ///
     /// - Parameters:
     /// - orgId: The Neon organization ID
-    static func listOrganizationsApiKeys(
-        config: ClientConfig,
-        orgId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> [OrgApiKeysListResponseItem] {
+    public static func listOrganizationsApiKeys(config: ClientConfig, orgId: String, requestOptions: RequestOptions? = nil) async throws -> [OrgApiKeysListResponseItem] {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "GET",
-            ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/api_keys"].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "listOrganizationsApiKeys",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/api_keys"].joined(), config: config, decoder: .json, operationId: "listOrganizationsApiKeys", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Creates an API key for the specified organization. The `key_name` is a user-specified name for the key. Returns
-    /// an `id` and `key`; the `key` is a randomly generated, 64-bit token required to access the Neon API. Store the
-    /// key securely — it is only returned once. API keys can also be managed in the Neon Console. See [Manage API
-    /// keys](https://neon.com/docs/manage/api-keys/).
+    /// Creates an API key for the specified organization. The `key_name` is a user-specified name for the key. Returns an `id` and `key`; the `key` is a randomly generated, 64-bit token required to access the Neon API. Store the key securely — it is only returned once. API keys can also be managed in the Neon Console. See [Manage API keys](https://neon.com/docs/manage/api-keys/).
     ///
     /// - Parameters:
     /// - orgId: The Neon organization ID
-    static func createOrganizationsApiKey(
-        config: ClientConfig,
-        orgId: String,
-        body: OrgApiKeyCreateRequest,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrgApiKeyCreateResponse {
+    public static func createOrganizationsApiKey(config: ClientConfig, orgId: String, body: OrgApiKeyCreateRequest, requestOptions: RequestOptions? = nil) async throws -> OrgApiKeyCreateResponse {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/api_keys"].joined(),
-            config: config,
-            rawBody: sdkEncodeBody(body, contentType: "application/json"),
-            decoder: .json,
-            operationId: "createOrganizationsApiKey",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/api_keys"].joined(), config: config, rawBody: (try sdkEncodeBody(body, contentType: "application/json")), decoder: .json, operationId: "createOrganizationsApiKey", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Revokes the specified organization API key. An API key that is no longer needed can be revoked. This action
-    /// cannot be reversed. API keys can also be managed in the Neon Console. See [Manage API
-    /// keys](https://neon.com/docs/manage/api-keys/).
+    /// Revokes the specified organization API key. An API key that is no longer needed can be revoked. This action cannot be reversed. API keys can also be managed in the Neon Console. See [Manage API keys](https://neon.com/docs/manage/api-keys/).
     ///
     /// - Parameters:
     /// - orgId: The Neon organization ID
     /// - keyId: The API key ID
-    static func revokeOrganizationsApiKey(
-        config: ClientConfig,
-        orgId: String,
-        keyId: Int,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrgApiKeyRevokeResponse {
+    public static func revokeOrganizationsApiKey(config: ClientConfig, orgId: String, keyId: Int, requestOptions: RequestOptions? = nil) async throws -> OrgApiKeyRevokeResponse {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "DELETE",
-            [
-                "/organizations/",
-                sdkEncodePathSegment(sdkWireString(orgId)),
-                "/api_keys/",
-                sdkEncodePathSegment(sdkWireString(keyId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "revokeOrganizationsApiKey",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("DELETE", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/api_keys/", sdkEncodePathSegment(sdkWireString(keyId))].joined(), config: config, decoder: .json, operationId: "revokeOrganizationsApiKey", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

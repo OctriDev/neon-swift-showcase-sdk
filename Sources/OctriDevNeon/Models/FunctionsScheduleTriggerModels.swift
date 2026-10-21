@@ -3,65 +3,38 @@
 
 import Foundation
 
-/// Functions domain models
-public extension ScheduleTrigger {
-    init(from decoder: Decoder) throws {
+// Functions domain models
+extension ScheduleTrigger {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeRequired(.type)
-        triggerId = try container.sdkDecodeRequired(.triggerId)
-        functionSlug = try container.sdkDecodeRequired(.functionSlug)
-        name = try container.sdkDecodeRequired(.name)
-        functionPath = try container.sdkDecodeRequired(.functionPath)
-        schedule = try container.sdkDecodeRequired(.schedule)
-        enabled = try container.sdkDecodeRequired(.enabled)
-        version = try container.sdkDecodeRequired(.version)
-        nextRunAt = try container.sdkDecodeNullable(.nextRunAt)
-        inherited = try container.sdkDecodeRequired(.inherited)
-        try sdkValidateRawEnum("type", type, ScheduleTriggerType.allCases.map(\.rawValue))
-        try validateLength("trigger_id", sdkWireString(triggerId), min: 1, max: 128)
-        try sdkValidatePattern("trigger_id", sdkWireString(triggerId), sdkPatternf7e1717946fc)
-        try validateRange(
-            "version",
-            Double(version),
-            min: 1,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.type = try container.sdkDecodeRequired(.type)
+        self.triggerId = try container.sdkDecodeRequired(.triggerId)
+        self.functionSlug = try container.sdkDecodeRequired(.functionSlug)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.functionPath = try container.sdkDecodeRequired(.functionPath)
+        self.schedule = try container.sdkDecodeRequired(.schedule)
+        self.enabled = try container.sdkDecodeRequired(.enabled)
+        self.version = try container.sdkDecodeRequired(.version)
+        self.nextRunAt = try container.sdkDecodeNullable(.nextRunAt)
+        self.inherited = try container.sdkDecodeRequired(.inherited)
+            try sdkValidateRawEnum("type", self.type, ScheduleTriggerType.allCases.map(\.rawValue))
+            try validateLength("trigger_id", sdkWireString(self.triggerId), min: 1, max: 128)
+            try sdkValidatePattern("trigger_id", sdkWireString(self.triggerId), sdkPatternf7e1717946fc)
+            try validateRange("version", Double(self.version), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension ScheduleTrigger {
-    init(
-        type: ScheduleTriggerType,
-        triggerId: TriggerID,
-        functionSlug: String,
-        name: String,
-        functionPath: String,
-        schedule: FunctionTriggerSchedule,
-        enabled: Bool,
-        version: Int,
-        nextRunAt: String?,
-        inherited: Bool
-    ) throws {
+extension ScheduleTrigger {
+    public init(type: ScheduleTriggerType, triggerId: TriggerID, functionSlug: String, name: String, functionPath: String, schedule: FunctionTriggerSchedule, enabled: Bool, version: Int, nextRunAt: String?, inherited: Bool) throws {
         (self.type, self.triggerId) = (type, triggerId)
         (self.functionSlug, self.name) = (functionSlug, name)
         (self.functionPath, self.schedule) = (functionPath, schedule)
         (self.enabled, self.version) = (enabled, version)
         (self.nextRunAt, self.inherited) = (nextRunAt, inherited)
-        try sdkValidateRawEnum("type", self.type, ScheduleTriggerType.allCases.map(\.rawValue))
-        try validateLength("trigger_id", sdkWireString(self.triggerId), min: 1, max: 128)
-        try sdkValidatePattern("trigger_id", sdkWireString(self.triggerId), sdkPatternf7e1717946fc)
-        try validateRange(
-            "version",
-            Double(self.version),
-            min: 1,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try sdkValidateRawEnum("type", self.type, ScheduleTriggerType.allCases.map(\.rawValue))
+            try validateLength("trigger_id", sdkWireString(self.triggerId), min: 1, max: 128)
+            try sdkValidatePattern("trigger_id", sdkWireString(self.triggerId), sdkPatternf7e1717946fc)
+            try validateRange("version", Double(self.version), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
@@ -74,27 +47,21 @@ public struct NeonFunctionResponse: Codable {
         case function
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonFunctionResponse {
-    init(from decoder: Decoder) throws {
+extension NeonFunctionResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.function) else {
-            throw SdkValidationError(
-                field: "function",
-                code: "required",
-                message: "Validation failed for 'function': value is required"
-            )
+            throw SdkValidationError(field: "function", code: "required", message: "Validation failed for 'function': value is required")
         }
-        function = try container.sdkDecodeRequired(.function)
+        self.function = try container.sdkDecodeRequired(.function)
     }
 }
 
-public extension NeonFunctionResponse {
-    init(function: NeonFunction) {
+extension NeonFunctionResponse {
+    public init(function: NeonFunction) {
         self.function = function
     }
 }
@@ -121,10 +88,7 @@ public enum ScheduleTriggerType: String, CaseIterable, Codable {
 public struct NeonFunctionDeploymentStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let pending = NeonFunctionDeploymentStatus(rawValue: "pending")
     public static let building = NeonFunctionDeploymentStatus(rawValue: "building")
     public static let completed = NeonFunctionDeploymentStatus(rawValue: "completed")
@@ -132,7 +96,7 @@ public struct NeonFunctionDeploymentStatus: RawRepresentable, Hashable, Codable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

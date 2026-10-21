@@ -6,61 +6,29 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension BranchMethods {
-    /// Creates a branch with anonymized data using PostgreSQL Anonymizer for static masking. Supply `branch_create` to
-    /// configure the branch and optionally provide `masking_rules` or set `start_anonymization` to true to apply
-    /// masking rules and start anonymization during creation. This endpoint is in beta; the response includes the
-    /// created branch, operations, and any endpoints specified in the request.
+extension BranchMethods {
+    /// Creates a branch with anonymized data using PostgreSQL Anonymizer for static masking. Supply `branch_create` to configure the branch and optionally provide `masking_rules` or set `start_anonymization` to true to apply masking rules and start anonymization during creation. This endpoint is in beta; the response includes the created branch, operations, and any endpoints specified in the request.
     ///
-    /// Creates a new branch with anonymized data using PostgreSQL Anonymizer for static masking. This allows developers
-    /// to work with masked production data. Optionally, provide `masking_rules` to set initial masking rules for the
-    /// branch and `start_anonymization` to automatically start anonymization after creation. This combines
-    /// functionality of updating masking rules and starting anonymization into the branch creation request. **Note**:
-    /// This endpoint is currently in Beta.
+    /// Creates a new branch with anonymized data using PostgreSQL Anonymizer for static masking. This allows developers to work with masked production data. Optionally, provide `masking_rules` to set initial masking rules for the branch and `start_anonymization` to automatically start anonymization after creation. This combines functionality of updating masking rules and starting anonymization into the branch creation request. **Note**: This endpoint is currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
-    static func createBranchAnonymized(
-        config: ClientConfig,
-        projectId: String,
-        body: BranchAnonymizedCreateRequest,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CreateBranchResponse {
+    public static func createBranchAnonymized(config: ClientConfig, projectId: String, body: BranchAnonymizedCreateRequest, requestOptions: RequestOptions? = nil) async throws -> CreateBranchResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branch_anonymized"].joined(),
-            config: config,
-            rawBody: sdkEncodeBody(body, contentType: "application/json"),
-            decoder: .json,
-            operationId: "createBranchAnonymized",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branch_anonymized"].joined(), config: config, rawBody: (try sdkEncodeBody(body, contentType: "application/json")), decoder: .json, operationId: "createBranchAnonymized", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Retrieves the total number of branches in the specified project. Supports an optional `search` parameter to
-    /// count branches matching a name filter.
+    /// Retrieves the total number of branches in the specified project. Supports an optional `search` parameter to count branches matching a name filter.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - search: Count branches matching the `name` in search query
-    static func countBranch(
-        config: ClientConfig,
-        projectId: String,
-        search: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BranchesCountResponse {
+    public static func countBranch(config: ClientConfig, projectId: String, search: String? = nil, requestOptions: RequestOptions? = nil) async throws -> BranchesCountResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest("GET", [
-            "/projects/",
-            sdkEncodePathSegment(sdkWireString(projectId)),
-            "/branches/count",
-        ].joined(), config: config, query: [
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/count"].joined(), config: config, query: [
             SdkQueryParameter("search", value: search),
-        ], decoder: .json, operationId: "countBranch", options: requestOptions, errors: ["default": GeneralError.self]))
-            .data
+        ], decoder: .json, operationId: "countBranch", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

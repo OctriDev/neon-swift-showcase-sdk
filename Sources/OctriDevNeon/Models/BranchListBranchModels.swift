@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Branch domain models
+// Branch domain models
 /// Typed representation of the `ListBranchResponse` API schema.
 public struct ListBranchResponse: Codable {
     /// Branches in the project. Each includes `id`, `name`, `current_state`, and `created_at`.
@@ -23,36 +23,26 @@ public struct ListBranchResponse: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ListBranchResponse {
-    init(from decoder: Decoder) throws {
+extension ListBranchResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.branches) else {
-            throw SdkValidationError(
-                field: "branches",
-                code: "required",
-                message: "Validation failed for 'branches': value is required"
-            )
+            throw SdkValidationError(field: "branches", code: "required", message: "Validation failed for 'branches': value is required")
         }
         guard container.contains(.annotations) else {
-            throw SdkValidationError(
-                field: "annotations",
-                code: "required",
-                message: "Validation failed for 'annotations': value is required"
-            )
+            throw SdkValidationError(field: "annotations", code: "required", message: "Validation failed for 'annotations': value is required")
         }
-        branches = try container.sdkDecodeRequired(.branches)
-        annotations = try container.sdkDecodeRequired(.annotations)
-        pagination = try container.sdkDecodeIfPresent(.pagination)
+        self.branches = try container.sdkDecodeRequired(.branches)
+        self.annotations = try container.sdkDecodeRequired(.annotations)
+        self.pagination = try container.sdkDecodeIfPresent(.pagination)
     }
 }
 
-public extension ListBranchResponse {
-    init(branches: [Branch], annotations: [String: AnnotationData], pagination: CursorPagination? = nil) {
+extension ListBranchResponse {
+    public init(branches: [Branch], annotations: [String: AnnotationData], pagination: CursorPagination? = nil) {
         (self.branches, self.annotations) = (branches, annotations)
         self.pagination = pagination
     }

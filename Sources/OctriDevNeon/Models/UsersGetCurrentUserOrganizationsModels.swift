@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Users domain models
+// Users domain models
 /// Typed representation of the `OrganizationsResponse` API schema.
 public struct OrganizationsResponse: Codable {
     /// Organizations returned by the request. Each includes `id`, `name`, `handle`, and `plan`.
@@ -13,27 +13,21 @@ public struct OrganizationsResponse: Codable {
         case organizations
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OrganizationsResponse {
-    init(from decoder: Decoder) throws {
+extension OrganizationsResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.organizations) else {
-            throw SdkValidationError(
-                field: "organizations",
-                code: "required",
-                message: "Validation failed for 'organizations': value is required"
-            )
+            throw SdkValidationError(field: "organizations", code: "required", message: "Validation failed for 'organizations': value is required")
         }
-        organizations = try container.sdkDecodeRequired(.organizations)
+        self.organizations = try container.sdkDecodeRequired(.organizations)
     }
 }
 
-public extension OrganizationsResponse {
-    init(organizations: [Organization]) {
+extension OrganizationsResponse {
+    public init(organizations: [Organization]) {
         self.organizations = organizations
     }
 }

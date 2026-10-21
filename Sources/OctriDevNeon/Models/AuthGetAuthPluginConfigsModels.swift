@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Auth domain models
+// Auth domain models
 /// Aggregated plugin configurations for Neon Auth
 public struct NeonAuthPluginConfigs: Codable {
     /// Configuration for the Neon Auth organization plugin, which enables user organizations within the
@@ -38,36 +38,27 @@ public struct NeonAuthPluginConfigs: Codable {
     }
 
     init() {
-        (organization, magicLink, phoneNumber, oauthProvider, emailProvider) = (nil, nil, nil, nil, nil)
-        (emailAndPassword, oauthProviders, allowLocalhost) = (nil, nil, nil)
+        (self.organization, self.magicLink, self.phoneNumber, self.oauthProvider, self.emailProvider) = (nil, nil, nil, nil, nil)
+        (self.emailAndPassword, self.oauthProviders, self.allowLocalhost) = (nil, nil, nil)
     }
 }
 
-public extension NeonAuthPluginConfigs {
-    init(from decoder: Decoder) throws {
+extension NeonAuthPluginConfigs {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        organization = try container.sdkDecodeIfPresent(.organization)
-        magicLink = try container.sdkDecodeIfPresent(.magicLink)
-        phoneNumber = try container.sdkDecodeIfPresent(.phoneNumber)
-        oauthProvider = try container.sdkDecodeIfPresent(.oauthProvider)
-        emailProvider = try container.sdkDecodeIfPresent(.emailProvider)
-        emailAndPassword = try container.sdkDecodeIfPresent(.emailAndPassword)
-        oauthProviders = try container.sdkDecodeIfPresent(.oauthProviders)
-        allowLocalhost = try container.sdkDecodeIfPresent(.allowLocalhost)
+        self.organization = try container.sdkDecodeIfPresent(.organization)
+        self.magicLink = try container.sdkDecodeIfPresent(.magicLink)
+        self.phoneNumber = try container.sdkDecodeIfPresent(.phoneNumber)
+        self.oauthProvider = try container.sdkDecodeIfPresent(.oauthProvider)
+        self.emailProvider = try container.sdkDecodeIfPresent(.emailProvider)
+        self.emailAndPassword = try container.sdkDecodeIfPresent(.emailAndPassword)
+        self.oauthProviders = try container.sdkDecodeIfPresent(.oauthProviders)
+        self.allowLocalhost = try container.sdkDecodeIfPresent(.allowLocalhost)
     }
 }
 
-public extension NeonAuthPluginConfigs {
-    init(
-        organization: NeonAuthOrganizationConfig? = nil,
-        magicLink: NeonAuthMagicLinkConfig? = nil,
-        phoneNumber: NeonAuthPhoneNumberConfig? = nil,
-        oauthProvider: NeonAuthOAuthProviderConfig? = nil,
-        emailProvider: NeonAuthEmailServerConfigResponse? = nil,
-        emailAndPassword: NeonAuthEmailAndPasswordConfig? = nil,
-        oauthProviders: [NeonAuthOauthProvider]? = nil,
-        allowLocalhost: Bool? = nil
-    ) {
+extension NeonAuthPluginConfigs {
+    public init(organization: NeonAuthOrganizationConfig? = nil, magicLink: NeonAuthMagicLinkConfig? = nil, phoneNumber: NeonAuthPhoneNumberConfig? = nil, oauthProvider: NeonAuthOAuthProviderConfig? = nil, emailProvider: NeonAuthEmailServerConfigResponse? = nil, emailAndPassword: NeonAuthEmailAndPasswordConfig? = nil, oauthProviders: [NeonAuthOauthProvider]? = nil, allowLocalhost: Bool? = nil) {
         self.init()
         (self.organization, self.magicLink) = (organization, magicLink)
         (self.phoneNumber, self.oauthProvider) = (phoneNumber, oauthProvider)

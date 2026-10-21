@@ -9,20 +9,9 @@ public class AiGatewayNamespace {
         self.config = config
     }
 
-    /// Returns the AI Gateway endpoint host for the specified branch, used to render code-snippet base URLs. A 200
-    /// response means the branch is registered and this region serves the AI gateway. A 404 response includes a
-    /// `reason` field indicating why the gateway is unavailable. **Note**: This endpoint is currently in Beta.
-    public func get(
-        projectId: String,
-        branchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BranchAiGateway {
-        try await AiGatewayMethods.getAiGateway(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            requestOptions: requestOptions
-        )
+/// Returns the AI Gateway endpoint host for the specified branch, used to render code-snippet base URLs. A 200 response means the branch is registered and this region serves the AI gateway. A 404 response includes a `reason` field indicating why the gateway is unavailable. **Note**: This endpoint is currently in Beta.
+    public func get(projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> BranchAiGateway {
+        return try await AiGatewayMethods.getAiGateway(config: config, projectId: projectId, branchId: branchId, requestOptions: requestOptions)
     }
 }
 
@@ -32,52 +21,19 @@ public class LogsNamespace {
         self.config = config
     }
 
-    /// Returns logs emitted by services running on the specified branch, ordered by timestamp according to
-    /// `sort_order`. All supplied filters are combined with `AND`: a record is returned only when it matches every
-    /// filter. `minimum_severity` and `severity_text` are independent filters, so setting both requires a record to
-    /// clear the severity floor *and* match the exact severity text. Supply `logql` instead of the structured filters
-    /// to run a raw LogQL expression. Combining it with any structured filter is rejected rather than silently ignored;
-    /// `limit`, `sort_order`, and the time window still apply, because those bound the query rather than form part of
-    /// the expression. Give the window either as `since` — a duration ending at `end_time`, or at the current time when
-    /// `end_time` is omitted — or as an explicit `start_time`. Supplying both is rejected. A single response holds at
-    /// most 1,000 records. When `is_truncated` is `true`, pass the returned `next_cursor` back as `cursor` to fetch the
-    /// next page, repeating the time range and every filter unchanged. If no time range is supplied, the query covers
-    /// the previous hour. The maximum supported time range is seven days. `end_time` is exclusive. **Note**: This
-    /// endpoint is currently in Private Beta.
-    public func query(
-        options: LogsMethods.QueryLogsOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectBranchLogsQueryResponse {
-        try await LogsMethods.queryLogs(config: config, options: options, requestOptions: requestOptions)
+/// Returns logs emitted by services running on the specified branch, ordered by timestamp according to `sort_order`. All supplied filters are combined with `AND`: a record is returned only when it matches every filter. `minimum_severity` and `severity_text` are independent filters, so setting both requires a record to clear the severity floor *and* match the exact severity text. Supply `logql` instead of the structured filters to run a raw LogQL expression. Combining it with any structured filter is rejected rather than silently ignored; `limit`, `sort_order`, and the time window still apply, because those bound the query rather than form part of the expression. Give the window either as `since` — a duration ending at `end_time`, or at the current time when `end_time` is omitted — or as an explicit `start_time`. Supplying both is rejected. A single response holds at most 1,000 records. When `is_truncated` is `true`, pass the returned `next_cursor` back as `cursor` to fetch the next page, repeating the time range and every filter unchanged. If no time range is supplied, the query covers the previous hour. The maximum supported time range is seven days. `end_time` is exclusive. **Note**: This endpoint is currently in Private Beta.
+    public func query(options: LogsMethods.QueryLogsOptions, requestOptions: RequestOptions? = nil) async throws -> ProjectBranchLogsQueryResponse {
+        return try await LogsMethods.queryLogs(config: config, options: options, requestOptions: requestOptions)
     }
 
-    /// Lists the low-cardinality log fields observed on this branch whose distinct values can be discovered with the
-    /// log field-values endpoint. The set is computed per branch and grows as new fields are observed, so treat it as
-    /// data rather than a fixed list: discover a field here, then pass it as `field_name` to the field-values endpoint.
-    /// **Note**: This endpoint is currently in Private Beta.
-    public func listFields(
-        projectId: String,
-        branchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectBranchLogFieldsResponse {
-        try await LogsMethods.listLogsFields(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            requestOptions: requestOptions
-        )
+/// Lists the low-cardinality log fields observed on this branch whose distinct values can be discovered with the log field-values endpoint. The set is computed per branch and grows as new fields are observed, so treat it as data rather than a fixed list: discover a field here, then pass it as `field_name` to the field-values endpoint. **Note**: This endpoint is currently in Private Beta.
+    public func listFields(projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectBranchLogFieldsResponse {
+        return try await LogsMethods.listLogsFields(config: config, projectId: projectId, branchId: branchId, requestOptions: requestOptions)
     }
 
-    /// Lists the distinct values observed for a low-cardinality log field in the requested time range. Call the log
-    /// fields endpoint first to learn which `field_name` values this branch supports; a field that branch has never
-    /// emitted is rejected with `unknown_field`. Give the window either as `since` or as an explicit `start_time`;
-    /// supplying both is rejected. If neither is given, the previous six hours are used. The maximum supported time
-    /// range is seven days. **Note**: This endpoint is currently in Private Beta.
-    public func listFieldValues(
-        options: LogsMethods.ListLogsFieldValuesOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectBranchLogFieldValuesResponse {
-        try await LogsMethods.listLogsFieldValues(config: config, options: options, requestOptions: requestOptions)
+/// Lists the distinct values observed for a low-cardinality log field in the requested time range. Call the log fields endpoint first to learn which `field_name` values this branch supports; a field that branch has never emitted is rejected with `unknown_field`. Give the window either as `since` or as an explicit `start_time`; supplying both is rejected. If neither is given, the previous six hours are used. The maximum supported time range is seven days. **Note**: This endpoint is currently in Private Beta.
+    public func listFieldValues(options: LogsMethods.ListLogsFieldValuesOptions, requestOptions: RequestOptions? = nil) async throws -> ProjectBranchLogFieldValuesResponse {
+        return try await LogsMethods.listLogsFieldValues(config: config, options: options, requestOptions: requestOptions)
     }
 }
 
@@ -87,113 +43,31 @@ public class CredentialsNamespace {
         self.config = config
     }
 
-    /// Creates a scoped service credential for a specified project branch. Provide `scopes` and `principal_type` to
-    /// define the credential's capabilities and principal. The endpoint is in beta, and returns `api_token` and
-    /// `s3_secret_access_key` only once; they are not stored server-side.
+/// Creates a scoped service credential for a specified project branch. Provide `scopes` and `principal_type` to define the credential's capabilities and principal. The endpoint is in beta, and returns `api_token` and `s3_secret_access_key` only once; they are not stored server-side.
     ///
-    /// Issues a new scoped service credential anchored to the specified branch. The response carries `api_token` and
-    /// `s3_secret_access_key` exactly once — they are not stored server-side. **Note**: This endpoint is currently in
-    /// Beta.
-    public func create(
-        projectId: String,
-        branchId: String,
-        scopes: [CredentialScope],
-        principalType: CreateCredentialRequestPrincipalType,
-        name: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CreateCredentialResponse {
-        try await CredentialsMethods.createCredential(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            scopes: scopes,
-            principalType: principalType,
-            name: name,
-            requestOptions: requestOptions
-        )
+    /// Issues a new scoped service credential anchored to the specified branch. The response carries `api_token` and `s3_secret_access_key` exactly once — they are not stored server-side. **Note**: This endpoint is currently in Beta.
+    public func create(projectId: String, branchId: String, scopes: [CredentialScope], principalType: CreateCredentialRequestPrincipalType, name: String? = nil, requestOptions: RequestOptions? = nil) async throws -> CreateCredentialResponse {
+        return try await CredentialsMethods.createCredential(config: config, projectId: projectId, branchId: branchId, scopes: scopes, principalType: principalType, name: name, requestOptions: requestOptions)
     }
 
-    /// Returns metadata for customer-issued credentials on the branch. Secrets are never included. **Note**: This
-    /// endpoint is currently in Beta.
-    public func list(
-        projectId: String,
-        branchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListCredentialsResponse {
-        try await CredentialsMethods.listCredentials(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            requestOptions: requestOptions
-        )
+/// Returns metadata for customer-issued credentials on the branch. Secrets are never included. **Note**: This endpoint is currently in Beta.
+    public func list(projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> ListCredentialsResponse {
+        return try await CredentialsMethods.listCredentials(config: config, projectId: projectId, branchId: branchId, requestOptions: requestOptions)
     }
 
-    /// Soft-deletes the credential. Idempotent. **Note**: This endpoint is currently in Beta.
-    public func revoke(
-        projectId: String,
-        branchId: String,
-        tokenId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await CredentialsMethods.revokeCredential(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            tokenId: tokenId,
-            requestOptions: requestOptions
-        )
+/// Soft-deletes the credential. Idempotent. **Note**: This endpoint is currently in Beta.
+    public func revoke(projectId: String, branchId: String, tokenId: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await CredentialsMethods.revokeCredential(config: config, projectId: projectId, branchId: branchId, tokenId: tokenId, requestOptions: requestOptions)
     }
 
-    /// Returns the live `api_token` and `s3_secret_access_key` of an existing credential, so a credential whose
-    /// issuance response was lost can be recovered without minting a new one. This is a POST with an explicit `/reveal`
-    /// verb so the secrets never ride a GET, where they would land in access logs, browser history and proxy caches.
-    /// Revoked and expired credentials return 404, as does a `token_id` that does not belong to this project. A
-    /// credential issued before secret retrieval was supported has no recoverable secret and returns 409 — rotate it to
-    /// obtain one. **Note**: This endpoint is currently in Beta.
-    public func reveal(
-        projectId: String,
-        branchId: String,
-        tokenId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CredentialSecret {
-        try await CredentialsMethods.revealCredential(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            tokenId: tokenId,
-            requestOptions: requestOptions
-        )
+/// Returns the live `api_token` and `s3_secret_access_key` of an existing credential, so a credential whose issuance response was lost can be recovered without minting a new one. This is a POST with an explicit `/reveal` verb so the secrets never ride a GET, where they would land in access logs, browser history and proxy caches. Revoked and expired credentials return 404, as does a `token_id` that does not belong to this project. A credential issued before secret retrieval was supported has no recoverable secret and returns 409 — rotate it to obtain one. **Note**: This endpoint is currently in Beta.
+    public func reveal(projectId: String, branchId: String, tokenId: String, requestOptions: RequestOptions? = nil) async throws -> CredentialSecret {
+        return try await CredentialsMethods.revealCredential(config: config, projectId: projectId, branchId: branchId, tokenId: tokenId, requestOptions: requestOptions)
     }
 
-    /// Replaces the secret material on an existing scoped credential in place. `token_id` is preserved — it is the
-    /// `AWS_ACCESS_KEY_ID` for S3-compatible clients, so the access key id your application already holds keeps working
-    /// and only the secret changes. This is the analog of resetting a Postgres password, not of issuing a second
-    /// credential. The response carries the new `api_token` and `s3_secret_access_key` exactly once. Rotation is
-    /// **not** idempotent: retrying after an ambiguous timeout mints another secret and supersedes the previous
-    /// replacement, so a retry does not recover a lost response — it only invalidates the secret you did not receive.
-    /// If you lose the response, issue a replacement credential and revoke this one. The old secret stops
-    /// authenticating as soon as the rotation commits. Where a region caches credentials on its data-plane verifiers, a
-    /// replica may briefly keep accepting the old secret — and rejecting the new one — until its cache entry expires;
-    /// where it does not, the cutover is immediate apart from requests already in flight. Either way the changeover is
-    /// not atomic across replicas, so retry an unexpected authentication failure right after rotating rather than
-    /// treating the new secret as bad. `last_used_at` continues to report the logical credential's prior usage and says
-    /// nothing about whether the new secret has been used yet. Only a live, unexpired, unrevoked customer-managed
-    /// (`user`) credential on a live project and live branch is eligible. Anything else — including the
-    /// platform-internal `function` and `system` credentials — is reported as not found, indistinguishable from an
-    /// unknown `token_id`. **Note**: This endpoint is currently in Beta.
-    public func rotate(
-        projectId: String,
-        branchId: String,
-        tokenId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> RotateCredentialResponse {
-        try await CredentialsMethods.rotateCredential(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            tokenId: tokenId,
-            requestOptions: requestOptions
-        )
+/// Replaces the secret material on an existing scoped credential in place. `token_id` is preserved — it is the `AWS_ACCESS_KEY_ID` for S3-compatible clients, so the access key id your application already holds keeps working and only the secret changes. This is the analog of resetting a Postgres password, not of issuing a second credential. The response carries the new `api_token` and `s3_secret_access_key` exactly once. Rotation is **not** idempotent: retrying after an ambiguous timeout mints another secret and supersedes the previous replacement, so a retry does not recover a lost response — it only invalidates the secret you did not receive. If you lose the response, issue a replacement credential and revoke this one. The old secret stops authenticating as soon as the rotation commits. Where a region caches credentials on its data-plane verifiers, a replica may briefly keep accepting the old secret — and rejecting the new one — until its cache entry expires; where it does not, the cutover is immediate apart from requests already in flight. Either way the changeover is not atomic across replicas, so retry an unexpected authentication failure right after rotating rather than treating the new secret as bad. `last_used_at` continues to report the logical credential's prior usage and says nothing about whether the new secret has been used yet. Only a live, unexpired, unrevoked customer-managed (`user`) credential on a live project and live branch is eligible. Anything else — including the platform-internal `function` and `system` credentials — is reported as not found, indistinguishable from an unknown `token_id`. **Note**: This endpoint is currently in Beta.
+    public func rotate(projectId: String, branchId: String, tokenId: String, requestOptions: RequestOptions? = nil) async throws -> RotateCredentialResponse {
+        return try await CredentialsMethods.rotateCredential(config: config, projectId: projectId, branchId: branchId, tokenId: tokenId, requestOptions: requestOptions)
     }
 }
 
@@ -203,303 +77,102 @@ public class FunctionsNamespace {
         self.config = config
     }
 
-    /// Lists functions on the specified branch. **Note**: This endpoint is currently in Beta.
-    public func list(
-        projectId: String,
-        branchId: String,
-        cursor: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListFunctionsResponse {
-        try await FunctionsMethods.listFunctions(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            cursor: cursor,
-            limit: limit,
-            requestOptions: requestOptions
-        )
+/// Lists functions on the specified branch. **Note**: This endpoint is currently in Beta.
+    public func list(projectId: String, branchId: String, cursor: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> ListFunctionsResponse {
+        return try await FunctionsMethods.listFunctions(config: config, projectId: projectId, branchId: branchId, cursor: cursor, limit: limit, requestOptions: requestOptions)
     }
 
-    /// Returns the function identified by its slug. **Note**: This endpoint is currently in Beta.
-    public func get(
-        projectId: String,
-        branchId: String,
-        slug: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonFunctionResponse {
-        try await FunctionsMethods.getFunctions(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            slug: slug,
-            requestOptions: requestOptions
-        )
+/// Returns the function identified by its slug. **Note**: This endpoint is currently in Beta.
+    public func get(projectId: String, branchId: String, slug: String, requestOptions: RequestOptions? = nil) async throws -> NeonFunctionResponse {
+        return try await FunctionsMethods.getFunctions(config: config, projectId: projectId, branchId: branchId, slug: slug, requestOptions: requestOptions)
     }
 
-    /// Updates the function's mutable metadata — currently only the display `name`. A string sets the display name;
-    /// `null` clears it, after which the function's `name` falls back to its slug. Leading and trailing whitespace is
-    /// trimmed; a whitespace-only name is rejected. Acts only on a function owned by the branch: a slug that is only
-    /// inherited from an ancestor branch returns 404 — rename it on the branch that owns it. Like every other change on
-    /// a branch, a rename is isolated per branch: a branch forked before the rename keeps the name it had at fork time.
-    /// **Note**: This endpoint is currently in Beta.
-    public func update(
-        projectId: String,
-        branchId: String,
-        slug: String,
-        name: String?,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonFunctionResponse {
-        try await FunctionsMethods.updateFunctions(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            slug: slug,
-            name: name,
-            requestOptions: requestOptions
-        )
+/// Updates the function's mutable metadata — currently only the display `name`. A string sets the display name; `null` clears it, after which the function's `name` falls back to its slug. Leading and trailing whitespace is trimmed; a whitespace-only name is rejected. Acts only on a function owned by the branch: a slug that is only inherited from an ancestor branch returns 404 — rename it on the branch that owns it. Like every other change on a branch, a rename is isolated per branch: a branch forked before the rename keeps the name it had at fork time. **Note**: This endpoint is currently in Beta.
+    public func update(projectId: String, branchId: String, slug: String, name: String?, requestOptions: RequestOptions? = nil) async throws -> NeonFunctionResponse {
+        return try await FunctionsMethods.updateFunctions(config: config, projectId: projectId, branchId: branchId, slug: slug, name: name, requestOptions: requestOptions)
     }
 
-    /// Deletes the function identified by its slug. **Note**: This endpoint is currently in Beta.
-    public func delete(
-        projectId: String,
-        branchId: String,
-        slug: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await FunctionsMethods.deleteFunctions(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            slug: slug,
-            requestOptions: requestOptions
-        )
+/// Deletes the function identified by its slug. **Note**: This endpoint is currently in Beta.
+    public func delete(projectId: String, branchId: String, slug: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await FunctionsMethods.deleteFunctions(config: config, projectId: projectId, branchId: branchId, slug: slug, requestOptions: requestOptions)
     }
 
-    /// Creates a deployment for a function on a branch. Supply at least one of `zip`, `environment`, or `runtime`;
-    /// omitted fields inherit the function's latest version. The first deployment must include `zip`, and the newest
-    /// deployment becomes active.
+/// Creates a deployment for a function on a branch. Supply at least one of `zip`, `environment`, or `runtime`; omitted fields inherit the function's latest version. The first deployment must include `zip`, and the newest deployment becomes active.
     ///
-    /// Creates a deployment for the function. Supply any subset of zip, environment, and runtime; omitted fields
-    /// inherit the function's latest version. At least one field must be supplied. The first deployment of a function
-    /// must include zip. The newest deployment becomes active. **Note**: This endpoint is currently in Beta.
-    public func createDeployment(
-        projectId: String,
-        branchId: String,
-        slug: String,
-        zip: SdkUploadFile? = nil,
-        runtime: FunctionDeployRequestRuntime? = nil,
-        environment: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonFunctionDeploymentResponse {
-        try await FunctionsMethods.createFunctionsDeployment(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            slug: slug,
-            zip: zip,
-            runtime: runtime,
-            environment: environment,
-            requestOptions: requestOptions
-        )
+    /// Creates a deployment for the function. Supply any subset of zip, environment, and runtime; omitted fields inherit the function's latest version. At least one field must be supplied. The first deployment of a function must include zip. The newest deployment becomes active. **Note**: This endpoint is currently in Beta.
+    public func createDeployment(projectId: String, branchId: String, slug: String, zip: SdkUploadFile? = nil, runtime: FunctionDeployRequestRuntime? = nil, environment: String? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonFunctionDeploymentResponse {
+        return try await FunctionsMethods.createFunctionsDeployment(config: config, projectId: projectId, branchId: branchId, slug: slug, zip: zip, runtime: runtime, environment: environment, requestOptions: requestOptions)
     }
 
-    /// Lists the complete project-bounded set of triggers visible on the branch, ordered by `trigger_id`. An inherited
-    /// trigger keeps its project-wide ID and configuration, and is disabled on the child until explicitly enabled
-    /// there. The supported trigger types are `schedule` and `storage_object_created`. A storage-object-created trigger
-    /// watches one exact bucket and fires only after an object upload succeeds. **Note**: This endpoint is currently in
-    /// Beta.
-    public func listTriggers(
-        projectId: String,
-        branchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> TriggersListResponse {
-        try await FunctionsMethods.listFunctionsTriggers(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            requestOptions: requestOptions
-        )
+/// Lists the complete project-bounded set of triggers visible on the branch, ordered by `trigger_id`. An inherited trigger keeps its project-wide ID and configuration, and is disabled on the child until explicitly enabled there. The supported trigger types are `schedule` and `storage_object_created`. A storage-object-created trigger watches one exact bucket and fires only after an object upload succeeds. **Note**: This endpoint is currently in Beta.
+    public func listTriggers(projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> TriggersListResponse {
+        return try await FunctionsMethods.listFunctionsTriggers(config: config, projectId: projectId, branchId: branchId, requestOptions: requestOptions)
     }
 
-    /// Creates a trigger for a function visible on a branch. Set `type` to `schedule` or `storage_object_created` and
-    /// provide the matching configuration; schedule expressions use five numeric cron fields interpreted in UTC. The
-    /// trigger name must be unique among triggers visible on the branch, including inherited triggers.
+/// Creates a trigger for a function visible on a branch. Set `type` to `schedule` or `storage_object_created` and provide the matching configuration; schedule expressions use five numeric cron fields interpreted in UTC. The trigger name must be unique among triggers visible on the branch, including inherited triggers.
     ///
-    /// Creates a trigger for a Function visible on the branch. The required `type` discriminator selects the
-    /// trigger-specific configuration. The supported types are `schedule` and `storage_object_created`. A schedule
-    /// trigger uses a numeric five-field cron expression interpreted in UTC. A storage-object-created trigger fires
-    /// only after a successful upload to one exact bucket and may narrow matches to an object-key prefix. The name must
-    /// be unique among triggers visible on the branch, including inherited triggers. **Note**: This endpoint is
-    /// currently in Beta.
-    public func createTrigger(
-        projectId: String,
-        branchId: String,
-        body: TriggerCreateRequest,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> TriggerResponse {
-        try await FunctionsMethods.createFunctionsTrigger(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            body: body,
-            requestOptions: requestOptions
-        )
+    /// Creates a trigger for a Function visible on the branch. The required `type` discriminator selects the trigger-specific configuration. The supported types are `schedule` and `storage_object_created`. A schedule trigger uses a numeric five-field cron expression interpreted in UTC. A storage-object-created trigger fires only after a successful upload to one exact bucket and may narrow matches to an object-key prefix. The name must be unique among triggers visible on the branch, including inherited triggers. **Note**: This endpoint is currently in Beta.
+    public func createTrigger(projectId: String, branchId: String, body: TriggerCreateRequest, requestOptions: RequestOptions? = nil) async throws -> TriggerResponse {
+        return try await FunctionsMethods.createFunctionsTrigger(config: config, projectId: projectId, branchId: branchId, body: body, requestOptions: requestOptions)
     }
 
-    /// Returns the trigger visible on the branch. The supported trigger types are `schedule` and
-    /// `storage_object_created`. **Note**: This endpoint is currently in Beta.
-    public func getTrigger(
-        projectId: String,
-        branchId: String,
-        triggerId: TriggerID,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> TriggerResponse {
-        try await FunctionsMethods.getFunctionsTrigger(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            triggerId: triggerId,
-            requestOptions: requestOptions
-        )
+/// Returns the trigger visible on the branch. The supported trigger types are `schedule` and `storage_object_created`. **Note**: This endpoint is currently in Beta.
+    public func getTrigger(projectId: String, branchId: String, triggerId: TriggerID, requestOptions: RequestOptions? = nil) async throws -> TriggerResponse {
+        return try await FunctionsMethods.getFunctionsTrigger(config: config, projectId: projectId, branchId: branchId, triggerId: triggerId, requestOptions: requestOptions)
     }
 }
 
-public extension FunctionsNamespace {
-    /// Updates a branch trigger using a partial configuration. Set `type` to the existing trigger kind and provide at
-    /// least one other field to change; supported kinds are `schedule` and `storage_object_created`. Editing an
-    /// inherited trigger creates a child-local shadow that remains disabled unless you explicitly enable it; disabling
-    /// a trigger does not cancel occurrences already committed for delivery.
+extension FunctionsNamespace {
+/// Updates a branch trigger using a partial configuration. Set `type` to the existing trigger kind and provide at least one other field to change; supported kinds are `schedule` and `storage_object_created`. Editing an inherited trigger creates a child-local shadow that remains disabled unless you explicitly enable it; disabling a trigger does not cancel occurrences already committed for delivery.
     ///
-    /// Applies a partial update. The required `type` discriminator must identify the existing trigger kind. The
-    /// supported types are `schedule` and `storage_object_created`. Editing an inherited trigger creates a child-local
-    /// shadow with the same `trigger_id`; it remains disabled unless this request explicitly enables it. For a schedule
-    /// trigger, updating the schedule or enabled state increments `version` and recomputes `next_run_at`. Disabling
-    /// stops future scheduling but does not cancel occurrences already committed for delivery. For
-    /// `storage_object_created`, the configuration selects one exact bucket. An omitted object-key prefix matches every
-    /// key in that bucket; a present prefix is matched byte-for-byte and case-sensitively against the full key, without
-    /// path normalization or a path-segment boundary. **Note**: This endpoint is currently in Beta.
-    func updateTrigger(
-        projectId: String,
-        branchId: String,
-        triggerId: TriggerID,
-        body: TriggerUpdateRequest,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> TriggerResponse {
-        try await FunctionsMethods.updateFunctionTrigger(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            triggerId: triggerId,
-            body: body,
-            requestOptions: requestOptions
-        )
+    /// Applies a partial update. The required `type` discriminator must identify the existing trigger kind. The supported types are `schedule` and `storage_object_created`. Editing an inherited trigger creates a child-local shadow with the same `trigger_id`; it remains disabled unless this request explicitly enables it. For a schedule trigger, updating the schedule or enabled state increments `version` and recomputes `next_run_at`. Disabling stops future scheduling but does not cancel occurrences already committed for delivery. For `storage_object_created`, the configuration selects one exact bucket. An omitted object-key prefix matches every key in that bucket; a present prefix is matched byte-for-byte and case-sensitively against the full key, without path normalization or a path-segment boundary. **Note**: This endpoint is currently in Beta.
+    public func updateTrigger(projectId: String, branchId: String, triggerId: TriggerID, body: TriggerUpdateRequest, requestOptions: RequestOptions? = nil) async throws -> TriggerResponse {
+        return try await FunctionsMethods.updateFunctionTrigger(config: config, projectId: projectId, branchId: branchId, triggerId: triggerId, body: body, requestOptions: requestOptions)
     }
 
-    /// Deletes a branch-local trigger or writes a branch-local tombstone for an inherited trigger so it does not
-    /// reappear. Deletion stops future scheduling or storage-event matching but does not cancel invocations already
-    /// committed for delivery. The supported trigger types are `schedule` and `storage_object_created`. **Note**: This
-    /// endpoint is currently in Beta.
-    func deleteTrigger(
-        projectId: String,
-        branchId: String,
-        triggerId: TriggerID,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await FunctionsMethods.deleteFunctionsTrigger(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            triggerId: triggerId,
-            requestOptions: requestOptions
-        )
+/// Deletes a branch-local trigger or writes a branch-local tombstone for an inherited trigger so it does not reappear. Deletion stops future scheduling or storage-event matching but does not cancel invocations already committed for delivery. The supported trigger types are `schedule` and `storage_object_created`. **Note**: This endpoint is currently in Beta.
+    public func deleteTrigger(projectId: String, branchId: String, triggerId: TriggerID, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await FunctionsMethods.deleteFunctionsTrigger(config: config, projectId: projectId, branchId: branchId, triggerId: triggerId, requestOptions: requestOptions)
     }
 
-    /// Registers a customer-owned domain (for example `dashboard.acme.com`) on the branch and points it at a target
-    /// entity, chosen by `entity_type` + `entity_id`. In v1 only `entity_type: function` is supported (an unsupported
-    /// type is rejected with `400`), where `entity_id` is the function slug and the function must already exist on the
-    /// branch (else `404`). The response includes the `cname_target` the customer must point their domain at with a
-    /// CNAME record; the domain goes live only once that DNS resolves and a certificate is issued on the first request.
-    /// A domain already registered to another resource is rejected with `409` and no detail about the owner.
-    /// Re-registering the same domain for the same entity is idempotent. **Note**: This endpoint is currently in Beta.
-    func registerCustomDomain(
-        projectId: String,
-        branchId: String,
-        domain: String,
-        entityType: String,
-        entityId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CustomDomain {
-        try await FunctionsMethods.registerFunctionsCustomDomain(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            domain: domain,
-            entityType: entityType,
-            entityId: entityId,
-            requestOptions: requestOptions
-        )
+/// Registers a customer-owned domain (for example `dashboard.acme.com`) on the branch and points it at a target entity, chosen by `entity_type` + `entity_id`. In v1 only `entity_type: function` is supported (an unsupported type is rejected with `400`), where `entity_id` is the function slug and the function must already exist on the branch (else `404`). The response includes the `cname_target` the customer must point their domain at with a CNAME record; the domain goes live only once that DNS resolves and a certificate is issued on the first request. A domain already registered to another resource is rejected with `409` and no detail about the owner. Re-registering the same domain for the same entity is idempotent. **Note**: This endpoint is currently in Beta.
+    public func registerCustomDomain(projectId: String, branchId: String, domain: String, entityType: String, entityId: String, requestOptions: RequestOptions? = nil) async throws -> CustomDomain {
+        return try await FunctionsMethods.registerFunctionsCustomDomain(config: config, projectId: projectId, branchId: branchId, domain: domain, entityType: entityType, entityId: entityId, requestOptions: requestOptions)
     }
 
-    /// Lists all custom domains registered on the branch, across every target entity. **Note**: This endpoint is
-    /// currently in Beta.
-    func listCustomDomains(
-        projectId: String,
-        branchId: String,
-        cursor: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListFunctionsCustomDomainsResponse {
-        try await FunctionsMethods.listFunctionsCustomDomains(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            cursor: cursor,
-            limit: limit,
-            requestOptions: requestOptions
-        )
+/// Lists all custom domains registered on the branch, across every target entity. **Note**: This endpoint is currently in Beta.
+    public func listCustomDomains(projectId: String, branchId: String, cursor: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> ListFunctionsCustomDomainsResponse {
+        return try await FunctionsMethods.listFunctionsCustomDomains(config: config, projectId: projectId, branchId: branchId, cursor: cursor, limit: limit, requestOptions: requestOptions)
     }
 
-    /// Removes a custom domain registered on the branch and stops routing it. **Note**: This endpoint is currently in
-    /// Beta.
-    func deleteCustomDomain(
-        projectId: String,
-        branchId: String,
-        domain: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await FunctionsMethods.deleteFunctionsCustomDomain(
-            config: config,
-            projectId: projectId,
-            branchId: branchId,
-            domain: domain,
-            requestOptions: requestOptions
-        )
+/// Removes a custom domain registered on the branch and stops routing it. **Note**: This endpoint is currently in Beta.
+    public func deleteCustomDomain(projectId: String, branchId: String, domain: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await FunctionsMethods.deleteFunctionsCustomDomain(config: config, projectId: projectId, branchId: branchId, domain: domain, requestOptions: requestOptions)
     }
 }
 
 public class Neon {
     var config: ClientConfig
-    public internal(set) lazy var project: ProjectNamespace = .init(config: config)
-    public internal(set) lazy var apiKey: ApiKeyNamespace = .init(config: config)
-    public internal(set) lazy var operation: OperationNamespace = .init(config: config)
-    public internal(set) lazy var dataApi: DataApiNamespace = .init(config: config)
-    public internal(set) lazy var authLegacy: AuthLegacyNamespace = .init(config: config)
-    public internal(set) lazy var auth: AuthNamespace = .init(config: config)
-    public internal(set) lazy var branch: BranchNamespace = .init(config: config)
-    public internal(set) lazy var realtime: RealtimeNamespace = .init(config: config)
-    public internal(set) lazy var endpoint: EndpointNamespace = .init(config: config)
-    public internal(set) lazy var consumption: ConsumptionNamespace = .init(config: config)
-    public internal(set) lazy var organizations: OrganizationsNamespace = .init(config: config)
-    public internal(set) lazy var region: RegionNamespace = .init(config: config)
-    public internal(set) lazy var users: UsersNamespace = .init(config: config)
-    public internal(set) lazy var snapshot: SnapshotNamespace = .init(config: config)
-    public internal(set) lazy var buckets: BucketsNamespace = .init(config: config)
-    public internal(set) lazy var storage: StorageNamespace = .init(config: config)
-    public internal(set) lazy var aiGateway: AiGatewayNamespace = .init(config: config)
-    public internal(set) lazy var logs: LogsNamespace = .init(config: config)
-    public internal(set) lazy var credentials: CredentialsNamespace = .init(config: config)
-    public internal(set) lazy var functions: FunctionsNamespace = .init(config: config)
+    public internal(set) lazy var project: ProjectNamespace = ProjectNamespace(config: config)
+    public internal(set) lazy var apiKey: ApiKeyNamespace = ApiKeyNamespace(config: config)
+    public internal(set) lazy var operation: OperationNamespace = OperationNamespace(config: config)
+    public internal(set) lazy var dataApi: DataApiNamespace = DataApiNamespace(config: config)
+    public internal(set) lazy var authLegacy: AuthLegacyNamespace = AuthLegacyNamespace(config: config)
+    public internal(set) lazy var auth: AuthNamespace = AuthNamespace(config: config)
+    public internal(set) lazy var branch: BranchNamespace = BranchNamespace(config: config)
+    public internal(set) lazy var realtime: RealtimeNamespace = RealtimeNamespace(config: config)
+    public internal(set) lazy var endpoint: EndpointNamespace = EndpointNamespace(config: config)
+    public internal(set) lazy var consumption: ConsumptionNamespace = ConsumptionNamespace(config: config)
+    public internal(set) lazy var organizations: OrganizationsNamespace = OrganizationsNamespace(config: config)
+    public internal(set) lazy var region: RegionNamespace = RegionNamespace(config: config)
+    public internal(set) lazy var users: UsersNamespace = UsersNamespace(config: config)
+    public internal(set) lazy var snapshot: SnapshotNamespace = SnapshotNamespace(config: config)
+    public internal(set) lazy var buckets: BucketsNamespace = BucketsNamespace(config: config)
+    public internal(set) lazy var storage: StorageNamespace = StorageNamespace(config: config)
+    public internal(set) lazy var aiGateway: AiGatewayNamespace = AiGatewayNamespace(config: config)
+    public internal(set) lazy var logs: LogsNamespace = LogsNamespace(config: config)
+    public internal(set) lazy var credentials: CredentialsNamespace = CredentialsNamespace(config: config)
+    public internal(set) lazy var functions: FunctionsNamespace = FunctionsNamespace(config: config)
     public init(config: ClientConfig) {
         self.config = config
         sdkRebuildNamespaces()
@@ -514,24 +187,12 @@ public class Neon {
     public func setLoggingConfig(_ logging: LoggingConfig? = nil) -> LoggingConfig {
         var current = config.logging ?? LoggingConfig()
         if let overrides = logging {
-            if let endpoint = overrides.endpoint {
-                current.endpoint = endpoint
-            }
-            if let apiKey = overrides.apiKey {
-                current.apiKey = apiKey
-            }
-            if let environment = overrides.environment {
-                current.environment = environment
-            }
-            if let release = overrides.release {
-                current.release = release
-            }
-            if let user = overrides.user {
-                current.user = user
-            }
-            if let tags = overrides.tags {
-                current.tags = tags
-            }
+            if let endpoint = overrides.endpoint { current.endpoint = endpoint }
+            if let apiKey = overrides.apiKey { current.apiKey = apiKey }
+            if let environment = overrides.environment { current.environment = environment }
+            if let release = overrides.release { current.release = release }
+            if let user = overrides.user { current.user = user }
+            if let tags = overrides.tags { current.tags = tags }
             current.filterPii = overrides.filterPii
         }
         // Opting in IS the point of this call, so enabled flips to true unless the

@@ -6,36 +6,17 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension RealtimeMethods {
+extension RealtimeMethods {
     /// Disables Realtime for the branch and discards its shared secret. Deprovisioning is asynchronous.
     ///
     /// - Parameters:
     /// - projectId: The project ID
     /// - branchId: The branch ID
-    static func disableRealtime(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
+    public static func disableRealtime(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "DELETE",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/realtime",
-            ].joined(),
-            config: config,
-            decoder: .empty,
-            operationId: "disableRealtime",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/realtime"].joined(), config: config, decoder: .empty, operationId: "disableRealtime", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

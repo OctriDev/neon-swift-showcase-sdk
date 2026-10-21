@@ -9,17 +9,14 @@ import Foundation
 public struct ListBranchParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let name = ListBranchParameter(rawValue: "name")
     public static let createdAt = ListBranchParameter(rawValue: "created_at")
     public static let updatedAt = ListBranchParameter(rawValue: "updated_at")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -28,21 +25,17 @@ public struct ListBranchParameter: RawRepresentable, Hashable, Codable, Sendable
     }
 }
 
-public struct ListOrganizationsMembersParameterXbc1280c2: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct ListOrganizationsMembersParameterXbc1280c2: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let email = ListOrganizationsMembersParameterXbc1280c2(rawValue: "email")
     public static let role = ListOrganizationsMembersParameterXbc1280c2(rawValue: "role")
     public static let joinedAt = ListOrganizationsMembersParameterXbc1280c2(rawValue: "joined_at")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -54,16 +47,13 @@ public struct ListOrganizationsMembersParameterXbc1280c2: RawRepresentable, Hash
 public struct ListOrganizationsMembersParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let asc = ListOrganizationsMembersParameter(rawValue: "asc")
     public static let desc = ListOrganizationsMembersParameter(rawValue: "desc")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -72,21 +62,17 @@ public struct ListOrganizationsMembersParameter: RawRepresentable, Hashable, Cod
     }
 }
 
-public struct GetProjectAdvisorSecurityIssuesParameter: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct GetProjectAdvisorSecurityIssuesParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let info = GetProjectAdvisorSecurityIssuesParameter(rawValue: "INFO")
     public static let warn = GetProjectAdvisorSecurityIssuesParameter(rawValue: "WARN")
     public static let error = GetProjectAdvisorSecurityIssuesParameter(rawValue: "ERROR")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -100,7 +86,7 @@ struct CreateProjectRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(project, forKey: SdkCodingKey("project"))
+        try keyedContainer.encode(self.project, forKey: SdkCodingKey("project"))
     }
 }
 
@@ -109,7 +95,7 @@ struct UpdateProjectRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(project, forKey: SdkCodingKey("project"))
+        try keyedContainer.encode(self.project, forKey: SdkCodingKey("project"))
     }
 }
 
@@ -118,7 +104,7 @@ struct GrantProjectPermissionRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(email, forKey: SdkCodingKey("email"))
+        try keyedContainer.encode(self.email, forKey: SdkCodingKey("email"))
     }
 }
 
@@ -127,7 +113,7 @@ struct SetProjectMemberRoleRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(role, forKey: SdkCodingKey("role"))
+        try keyedContainer.encode(self.role, forKey: SdkCodingKey("role"))
     }
 }
 
@@ -136,7 +122,7 @@ struct CreateProjectTransferRequestRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(ttlSeconds, forKey: SdkCodingKey("ttl_seconds"))
+        try keyedContainer.encodeIfPresent(self.ttlSeconds, forKey: SdkCodingKey("ttl_seconds"))
     }
 }
 
@@ -145,7 +131,7 @@ struct AcceptProjectTransferRequestRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(orgId, forKey: SdkCodingKey("org_id"))
+        try keyedContainer.encodeIfPresent(self.orgId, forKey: SdkCodingKey("org_id"))
     }
 }
 
@@ -159,12 +145,12 @@ struct AddProjectJwksRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(jwksUrl, forKey: SdkCodingKey("jwks_url"))
-        try keyedContainer.encode(providerName, forKey: SdkCodingKey("provider_name"))
-        try keyedContainer.encodeIfPresent(branchId, forKey: SdkCodingKey("branch_id"))
-        try keyedContainer.encodeIfPresent(jwtAudience, forKey: SdkCodingKey("jwt_audience"))
-        try keyedContainer.encodeIfPresent(roleNames, forKey: SdkCodingKey("role_names"))
-        try keyedContainer.encodeIfPresent(skipRoleCreation, forKey: SdkCodingKey("skip_role_creation"))
+        try keyedContainer.encode(self.jwksUrl, forKey: SdkCodingKey("jwks_url"))
+        try keyedContainer.encode(self.providerName, forKey: SdkCodingKey("provider_name"))
+        try keyedContainer.encodeIfPresent(self.branchId, forKey: SdkCodingKey("branch_id"))
+        try keyedContainer.encodeIfPresent(self.jwtAudience, forKey: SdkCodingKey("jwt_audience"))
+        try keyedContainer.encodeIfPresent(self.roleNames, forKey: SdkCodingKey("role_names"))
+        try keyedContainer.encodeIfPresent(self.skipRoleCreation, forKey: SdkCodingKey("skip_role_creation"))
     }
 }
 
@@ -173,7 +159,7 @@ struct AssignProjectVpcEndpointRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(label, forKey: SdkCodingKey("label"))
+        try keyedContainer.encode(self.label, forKey: SdkCodingKey("label"))
     }
 }
 
@@ -182,7 +168,7 @@ struct CreateApiKeyRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(keyName, forKey: SdkCodingKey("key_name"))
+        try keyedContainer.encode(self.keyName, forKey: SdkCodingKey("key_name"))
     }
 }
 
@@ -197,23 +183,23 @@ struct CreateDataApiRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(authProvider, forKey: SdkCodingKey("auth_provider"))
-        try keyedContainer.encodeIfPresent(jwksUrl, forKey: SdkCodingKey("jwks_url"))
-        try keyedContainer.encodeIfPresent(providerName, forKey: SdkCodingKey("provider_name"))
-        try keyedContainer.encodeIfPresent(jwtAudience, forKey: SdkCodingKey("jwt_audience"))
-        try keyedContainer.encodeIfPresent(addDefaultGrants, forKey: SdkCodingKey("add_default_grants"))
-        try keyedContainer.encodeIfPresent(skipAuthSchema, forKey: SdkCodingKey("skip_auth_schema"))
-        try keyedContainer.encodeIfPresent(settings, forKey: SdkCodingKey("settings"))
+        try keyedContainer.encodeIfPresent(self.authProvider, forKey: SdkCodingKey("auth_provider"))
+        try keyedContainer.encodeIfPresent(self.jwksUrl, forKey: SdkCodingKey("jwks_url"))
+        try keyedContainer.encodeIfPresent(self.providerName, forKey: SdkCodingKey("provider_name"))
+        try keyedContainer.encodeIfPresent(self.jwtAudience, forKey: SdkCodingKey("jwt_audience"))
+        try keyedContainer.encodeIfPresent(self.addDefaultGrants, forKey: SdkCodingKey("add_default_grants"))
+        try keyedContainer.encodeIfPresent(self.skipAuthSchema, forKey: SdkCodingKey("skip_auth_schema"))
+        try keyedContainer.encodeIfPresent(self.settings, forKey: SdkCodingKey("settings"))
     }
 
     init(options: DataApiMethods.CreateDataApiOptions) {
-        authProvider = options.authProvider
-        jwksUrl = options.jwksUrl
-        providerName = options.providerName
-        jwtAudience = options.jwtAudience
-        addDefaultGrants = options.addDefaultGrants
-        skipAuthSchema = options.skipAuthSchema
-        settings = options.settings
+        self.authProvider = options.authProvider
+        self.jwksUrl = options.jwksUrl
+        self.providerName = options.providerName
+        self.jwtAudience = options.jwtAudience
+        self.addDefaultGrants = options.addDefaultGrants
+        self.skipAuthSchema = options.skipAuthSchema
+        self.settings = options.settings
     }
 }
 
@@ -222,6 +208,6 @@ struct UpdateDataApiRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(settings, forKey: SdkCodingKey("settings"))
+        try keyedContainer.encodeIfPresent(self.settings, forKey: SdkCodingKey("settings"))
     }
 }

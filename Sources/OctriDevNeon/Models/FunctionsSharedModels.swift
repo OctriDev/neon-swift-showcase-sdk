@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Functions domain models
+// Functions domain models
 public indirect enum Trigger {
     case scheduleTrigger(ScheduleTrigger)
     case storageObjectCreatedTrigger(StorageObjectCreatedTrigger)
@@ -12,6 +12,7 @@ public indirect enum Trigger {
 }
 
 extension Trigger: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension Trigger: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,9 +36,9 @@ extension Trigger: Codable {
 extension Trigger {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "schedule": try .scheduleTrigger(ScheduleTrigger(from: decoder))
-        case "storage_object_created": try .storageObjectCreatedTrigger(StorageObjectCreatedTrigger(from: decoder))
-        default: nil
+        case "schedule": return .scheduleTrigger(try ScheduleTrigger(from: decoder))
+        case "storage_object_created": return .storageObjectCreatedTrigger(try StorageObjectCreatedTrigger(from: decoder))
+        default: return nil
         }
     }
 }
@@ -90,69 +87,39 @@ public struct NeonFunction: Codable {
         case activeDeployment = "active_deployment"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonFunction {
-    init(from decoder: Decoder) throws {
+extension NeonFunction {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.slug) else {
-            throw SdkValidationError(
-                field: "slug",
-                code: "required",
-                message: "Validation failed for 'slug': value is required"
-            )
+            throw SdkValidationError(field: "slug", code: "required", message: "Validation failed for 'slug': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.invocationUrl) else {
-            throw SdkValidationError(
-                field: "invocation_url",
-                code: "required",
-                message: "Validation failed for 'invocation_url': value is required"
-            )
+            throw SdkValidationError(field: "invocation_url", code: "required", message: "Validation failed for 'invocation_url': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        slug = try container.sdkDecodeRequired(.slug)
-        name = try container.sdkDecodeRequired(.name)
-        invocationUrl = try container.sdkDecodeRequired(.invocationUrl)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        currentDeployment = try container.sdkDecodeIfPresent(.currentDeployment)
-        activeDeployment = try container.sdkDecodeIfPresent(.activeDeployment)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.slug = try container.sdkDecodeRequired(.slug)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.invocationUrl = try container.sdkDecodeRequired(.invocationUrl)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.currentDeployment = try container.sdkDecodeIfPresent(.currentDeployment)
+        self.activeDeployment = try container.sdkDecodeIfPresent(.activeDeployment)
     }
 }
 
-public extension NeonFunction {
-    init(
-        id: String,
-        slug: String,
-        name: String,
-        invocationUrl: String,
-        createdAt: String,
-        currentDeployment: NeonFunctionDeployment? = nil,
-        activeDeployment: NeonFunctionDeployment? = nil
-    ) {
+extension NeonFunction {
+    public init(id: String, slug: String, name: String, invocationUrl: String, createdAt: String, currentDeployment: NeonFunctionDeployment? = nil, activeDeployment: NeonFunctionDeployment? = nil) {
         (self.id, self.slug) = (id, slug)
         (self.name, self.invocationUrl) = (name, invocationUrl)
         (self.createdAt, self.currentDeployment) = (createdAt, currentDeployment)
@@ -170,30 +137,24 @@ public struct FunctionTriggerSchedule: Codable {
         case cron
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension FunctionTriggerSchedule {
-    init(from decoder: Decoder) throws {
+extension FunctionTriggerSchedule {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.cron) else {
-            throw SdkValidationError(
-                field: "cron",
-                code: "required",
-                message: "Validation failed for 'cron': value is required"
-            )
+            throw SdkValidationError(field: "cron", code: "required", message: "Validation failed for 'cron': value is required")
         }
-        cron = try container.sdkDecodeRequired(.cron)
-        try validateLength("cron", cron, min: 1, max: 1024)
+        self.cron = try container.sdkDecodeRequired(.cron)
+            try validateLength("cron", self.cron, min: 1, max: 1024)
     }
 }
 
-public extension FunctionTriggerSchedule {
-    init(cron: String) throws {
+extension FunctionTriggerSchedule {
+    public init(cron: String) throws {
         self.cron = cron
-        try validateLength("cron", self.cron, min: 1, max: 1024)
+            try validateLength("cron", self.cron, min: 1, max: 1024)
     }
 }
 
@@ -207,27 +168,21 @@ public struct TriggerResponse: Codable {
         case trigger
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension TriggerResponse {
-    init(from decoder: Decoder) throws {
+extension TriggerResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.trigger) else {
-            throw SdkValidationError(
-                field: "trigger",
-                code: "required",
-                message: "Validation failed for 'trigger': value is required"
-            )
+            throw SdkValidationError(field: "trigger", code: "required", message: "Validation failed for 'trigger': value is required")
         }
-        trigger = try container.sdkDecodeRequired(.trigger)
+        self.trigger = try container.sdkDecodeRequired(.trigger)
     }
 }
 
-public extension TriggerResponse {
-    init(trigger: Trigger) {
+extension TriggerResponse {
+    public init(trigger: Trigger) {
         self.trigger = trigger
     }
 }
@@ -261,69 +216,39 @@ public struct NeonFunctionDeployment: Codable {
         case error
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonFunctionDeployment {
-    init(from decoder: Decoder) throws {
+extension NeonFunctionDeployment {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
         guard container.contains(.memoryMib) else {
-            throw SdkValidationError(
-                field: "memory_mib",
-                code: "required",
-                message: "Validation failed for 'memory_mib': value is required"
-            )
+            throw SdkValidationError(field: "memory_mib", code: "required", message: "Validation failed for 'memory_mib': value is required")
         }
         guard container.contains(.runtime) else {
-            throw SdkValidationError(
-                field: "runtime",
-                code: "required",
-                message: "Validation failed for 'runtime': value is required"
-            )
+            throw SdkValidationError(field: "runtime", code: "required", message: "Validation failed for 'runtime': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        status = try container.sdkDecodeRequired(.status)
-        memoryMib = try container.sdkDecodeRequired(.memoryMib)
-        runtime = try container.sdkDecodeRequired(.runtime)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        environment = try container.sdkDecodeIfPresent(.environment)
-        error = try container.sdkDecodeIfPresent(.error)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.memoryMib = try container.sdkDecodeRequired(.memoryMib)
+        self.runtime = try container.sdkDecodeRequired(.runtime)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.environment = try container.sdkDecodeIfPresent(.environment)
+        self.error = try container.sdkDecodeIfPresent(.error)
     }
 }
 
-public extension NeonFunctionDeployment {
-    init(
-        id: Int,
-        status: NeonFunctionDeploymentStatus,
-        memoryMib: Int,
-        runtime: String,
-        createdAt: String,
-        environment: [String]? = nil,
-        error: String? = nil
-    ) {
+extension NeonFunctionDeployment {
+    public init(id: Int, status: NeonFunctionDeploymentStatus, memoryMib: Int, runtime: String, createdAt: String, environment: [String]? = nil, error: String? = nil) {
         (self.id, self.status) = (id, status)
         (self.memoryMib, self.runtime) = (memoryMib, runtime)
         (self.createdAt, self.environment) = (createdAt, environment)
@@ -372,64 +297,37 @@ public struct CustomDomain: Codable {
         case statusReason = "status_reason"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CustomDomain {
-    init(from decoder: Decoder) throws {
+extension CustomDomain {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.domain) else {
-            throw SdkValidationError(
-                field: "domain",
-                code: "required",
-                message: "Validation failed for 'domain': value is required"
-            )
+            throw SdkValidationError(field: "domain", code: "required", message: "Validation failed for 'domain': value is required")
         }
         guard container.contains(.entityType) else {
-            throw SdkValidationError(
-                field: "entity_type",
-                code: "required",
-                message: "Validation failed for 'entity_type': value is required"
-            )
+            throw SdkValidationError(field: "entity_type", code: "required", message: "Validation failed for 'entity_type': value is required")
         }
         guard container.contains(.entityId) else {
-            throw SdkValidationError(
-                field: "entity_id",
-                code: "required",
-                message: "Validation failed for 'entity_id': value is required"
-            )
+            throw SdkValidationError(field: "entity_id", code: "required", message: "Validation failed for 'entity_id': value is required")
         }
         guard container.contains(.cnameTarget) else {
-            throw SdkValidationError(
-                field: "cname_target",
-                code: "required",
-                message: "Validation failed for 'cname_target': value is required"
-            )
+            throw SdkValidationError(field: "cname_target", code: "required", message: "Validation failed for 'cname_target': value is required")
         }
-        domain = try container.sdkDecodeRequired(.domain)
-        entityType = try container.sdkDecodeRequired(.entityType)
-        entityId = try container.sdkDecodeRequired(.entityId)
-        cnameTarget = try container.sdkDecodeRequired(.cnameTarget)
-        status = try container.sdkDecodeIfPresent(.status)
-        dnsStatus = try container.sdkDecodeIfPresent(.dnsStatus)
-        bindingStatus = try container.sdkDecodeIfPresent(.bindingStatus)
-        statusReason = try container.sdkDecodeIfPresent(.statusReason)
+        self.domain = try container.sdkDecodeRequired(.domain)
+        self.entityType = try container.sdkDecodeRequired(.entityType)
+        self.entityId = try container.sdkDecodeRequired(.entityId)
+        self.cnameTarget = try container.sdkDecodeRequired(.cnameTarget)
+        self.status = try container.sdkDecodeIfPresent(.status)
+        self.dnsStatus = try container.sdkDecodeIfPresent(.dnsStatus)
+        self.bindingStatus = try container.sdkDecodeIfPresent(.bindingStatus)
+        self.statusReason = try container.sdkDecodeIfPresent(.statusReason)
     }
 }
 
-public extension CustomDomain {
-    init(
-        domain: String,
-        entityType: String,
-        entityId: String,
-        cnameTarget: String,
-        status: String? = nil,
-        dnsStatus: String? = nil,
-        bindingStatus: String? = nil,
-        statusReason: String? = nil
-    ) {
+extension CustomDomain {
+    public init(domain: String, entityType: String, entityId: String, cnameTarget: String, status: String? = nil, dnsStatus: String? = nil, bindingStatus: String? = nil, statusReason: String? = nil) {
         (self.domain, self.entityType) = (domain, entityType)
         (self.entityId, self.cnameTarget) = (entityId, cnameTarget)
         (self.status, self.dnsStatus) = (status, dnsStatus)
@@ -473,67 +371,39 @@ public struct StorageObjectCreatedTrigger: Codable {
         case inherited
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension StorageObjectCreatedTrigger {
-    init(from decoder: Decoder) throws {
+extension StorageObjectCreatedTrigger {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeRequired(.type)
-        triggerId = try container.sdkDecodeRequired(.triggerId)
-        functionSlug = try container.sdkDecodeRequired(.functionSlug)
-        name = try container.sdkDecodeRequired(.name)
-        functionPath = try container.sdkDecodeRequired(.functionPath)
-        storageObjectCreated = try container.sdkDecodeRequired(.storageObjectCreated)
-        enabled = try container.sdkDecodeRequired(.enabled)
-        version = try container.sdkDecodeRequired(.version)
-        inherited = try container.sdkDecodeRequired(.inherited)
-        try sdkValidateRawEnum("type", type, StorageObjectCreatedTriggerType.allCases.map(\.rawValue))
-        try validateLength("trigger_id", sdkWireString(triggerId), min: 1, max: 128)
-        try sdkValidatePattern("trigger_id", sdkWireString(triggerId), sdkPatternf7e1717946fc)
-        try validateRange(
-            "version",
-            Double(version),
-            min: 1,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.type = try container.sdkDecodeRequired(.type)
+        self.triggerId = try container.sdkDecodeRequired(.triggerId)
+        self.functionSlug = try container.sdkDecodeRequired(.functionSlug)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.functionPath = try container.sdkDecodeRequired(.functionPath)
+        self.storageObjectCreated = try container.sdkDecodeRequired(.storageObjectCreated)
+        self.enabled = try container.sdkDecodeRequired(.enabled)
+        self.version = try container.sdkDecodeRequired(.version)
+        self.inherited = try container.sdkDecodeRequired(.inherited)
+            try sdkValidateRawEnum("type", self.type, StorageObjectCreatedTriggerType.allCases.map(\.rawValue))
+            try validateLength("trigger_id", sdkWireString(self.triggerId), min: 1, max: 128)
+            try sdkValidatePattern("trigger_id", sdkWireString(self.triggerId), sdkPatternf7e1717946fc)
+            try validateRange("version", Double(self.version), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension StorageObjectCreatedTrigger {
-    init(
-        type: StorageObjectCreatedTriggerType,
-        triggerId: TriggerID,
-        functionSlug: String,
-        name: String,
-        functionPath: String,
-        storageObjectCreated: FunctionTriggerStorageObjectCreated,
-        enabled: Bool,
-        version: Int,
-        inherited: Bool
-    ) throws {
+extension StorageObjectCreatedTrigger {
+    public init(type: StorageObjectCreatedTriggerType, triggerId: TriggerID, functionSlug: String, name: String, functionPath: String, storageObjectCreated: FunctionTriggerStorageObjectCreated, enabled: Bool, version: Int, inherited: Bool) throws {
         (self.type, self.triggerId) = (type, triggerId)
         (self.functionSlug, self.name) = (functionSlug, name)
         (self.functionPath, self.storageObjectCreated) = (functionPath, storageObjectCreated)
         (self.enabled, self.version) = (enabled, version)
         self.inherited = inherited
-        try sdkValidateRawEnum("type", self.type, StorageObjectCreatedTriggerType.allCases.map(\.rawValue))
-        try validateLength("trigger_id", sdkWireString(self.triggerId), min: 1, max: 128)
-        try sdkValidatePattern("trigger_id", sdkWireString(self.triggerId), sdkPatternf7e1717946fc)
-        try validateRange(
-            "version",
-            Double(self.version),
-            min: 1,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try sdkValidateRawEnum("type", self.type, StorageObjectCreatedTriggerType.allCases.map(\.rawValue))
+            try validateLength("trigger_id", sdkWireString(self.triggerId), min: 1, max: 128)
+            try sdkValidatePattern("trigger_id", sdkWireString(self.triggerId), sdkPatternf7e1717946fc)
+            try validateRange("version", Double(self.version), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
@@ -554,35 +424,29 @@ public struct FunctionTriggerStorageObjectCreated: Codable {
         case prefix
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension FunctionTriggerStorageObjectCreated {
-    init(from decoder: Decoder) throws {
+extension FunctionTriggerStorageObjectCreated {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.bucketName) else {
-            throw SdkValidationError(
-                field: "bucket_name",
-                code: "required",
-                message: "Validation failed for 'bucket_name': value is required"
-            )
+            throw SdkValidationError(field: "bucket_name", code: "required", message: "Validation failed for 'bucket_name': value is required")
         }
-        bucketName = try container.sdkDecodeRequired(.bucketName)
-        prefix = try container.sdkDecodeIfPresent(.prefix)
-        try validateLength("bucket_name", bucketName, min: 3, max: 63)
-        if let value = prefix {
+        self.bucketName = try container.sdkDecodeRequired(.bucketName)
+        self.prefix = try container.sdkDecodeIfPresent(.prefix)
+            try validateLength("bucket_name", self.bucketName, min: 3, max: 63)
+        if let value = self.prefix {
             try validateLength("prefix", value, min: 1, max: 1024)
             try sdkValidatePattern("prefix", value, sdkPattern19d7264b312c)
         }
     }
 }
 
-public extension FunctionTriggerStorageObjectCreated {
-    init(bucketName: String, prefix: String? = nil) throws {
+extension FunctionTriggerStorageObjectCreated {
+    public init(bucketName: String, prefix: String? = nil) throws {
         (self.bucketName, self.prefix) = (bucketName, prefix)
-        try validateLength("bucket_name", self.bucketName, min: 3, max: 63)
+            try validateLength("bucket_name", self.bucketName, min: 3, max: 63)
         if let value = self.prefix {
             try validateLength("prefix", value, min: 1, max: 1024)
             try sdkValidatePattern("prefix", value, sdkPattern19d7264b312c)
@@ -627,7 +491,5 @@ public struct ScheduleTrigger: Codable {
         case inherited
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

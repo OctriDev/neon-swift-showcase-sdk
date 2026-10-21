@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ProjectAdvisor domain models
+// ProjectAdvisor domain models
 /// Typed representation of the `AdvisorIssue` API schema.
 public struct AdvisorIssue: Codable {
     /// Unique identifier for the issue type
@@ -47,40 +47,27 @@ public struct AdvisorIssue: Codable {
         case cacheKey = "cache_key"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AdvisorIssue {
-    init(from decoder: Decoder) throws {
+extension AdvisorIssue {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        name = try container.sdkDecodeRequired(.name)
-        title = try container.sdkDecodeRequired(.title)
-        level = try container.sdkDecodeRequired(.level)
-        facing = try container.sdkDecodeRequired(.facing)
-        categories = try container.sdkDecodeRequired(.categories)
-        description = try container.sdkDecodeRequired(.description)
-        detail = try container.sdkDecodeRequired(.detail)
-        remediation = try container.sdkDecodeRequired(.remediation)
-        metadata = try container.sdkDecodeRequired(.metadata)
-        cacheKey = try container.sdkDecodeRequired(.cacheKey)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.title = try container.sdkDecodeRequired(.title)
+        self.level = try container.sdkDecodeRequired(.level)
+        self.facing = try container.sdkDecodeRequired(.facing)
+        self.categories = try container.sdkDecodeRequired(.categories)
+        self.description = try container.sdkDecodeRequired(.description)
+        self.detail = try container.sdkDecodeRequired(.detail)
+        self.remediation = try container.sdkDecodeRequired(.remediation)
+        self.metadata = try container.sdkDecodeRequired(.metadata)
+        self.cacheKey = try container.sdkDecodeRequired(.cacheKey)
     }
 }
 
-public extension AdvisorIssue {
-    init(
-        name: String,
-        title: String,
-        level: String,
-        facing: AdvisorIssueFacing,
-        categories: [AdvisorCategory],
-        description: String,
-        detail: String,
-        remediation: String,
-        metadata: [String: JSONValue],
-        cacheKey: String
-    ) {
+extension AdvisorIssue {
+    public init(name: String, title: String, level: String, facing: AdvisorIssueFacing, categories: [AdvisorCategory], description: String, detail: String, remediation: String, metadata: [String: JSONValue], cacheKey: String) {
         (self.name, self.title) = (name, title)
         (self.level, self.facing) = (level, facing)
         (self.categories, self.description) = (categories, description)
@@ -93,16 +80,13 @@ public extension AdvisorIssue {
 public struct AdvisorIssueFacing: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let external = AdvisorIssueFacing(rawValue: "EXTERNAL")
     public static let `internal` = AdvisorIssueFacing(rawValue: "INTERNAL")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -115,16 +99,13 @@ public struct AdvisorIssueFacing: RawRepresentable, Hashable, Codable, Sendable,
 public struct AdvisorCategory: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let security = AdvisorCategory(rawValue: "SECURITY")
     public static let performance = AdvisorCategory(rawValue: "PERFORMANCE")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

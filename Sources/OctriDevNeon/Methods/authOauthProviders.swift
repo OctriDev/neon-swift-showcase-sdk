@@ -6,41 +6,21 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AuthMethods {
+extension AuthMethods {
     /// Lists the OAuth providers configured for the specified branch's Neon Auth integration.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
-    static func listAuthOauthProviders(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListNeonAuthOauthProvidersResponse {
+    public static func listAuthOauthProviders(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> ListNeonAuthOauthProvidersResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "GET",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/auth/oauth_providers",
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "listAuthOauthProviders",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/oauth_providers"].joined(), config: config, decoder: .json, operationId: "listAuthOauthProviders", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Adds an OAuth provider configuration to the specified branch's Neon Auth integration. After adding, users can
-    /// authenticate using the configured provider.
+    /// Adds an OAuth provider configuration to the specified branch's Neon Auth integration. After adding, users can authenticate using the configured provider.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -53,42 +33,13 @@ public extension AuthMethods {
     /// - microsoftTenantId: Tenant ID for the Microsoft OAuth provider. Only
     ///   relevant when the OAuth provider is Microsoft; omit or leave blank for other
     ///   providers.
-    static func addAuthOauthProvider(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        id: NeonAuthOauthProviderId,
-        clientId: String? = nil,
-        clientSecret: String? = nil,
-        microsoftTenantId: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> NeonAuthOauthProvider {
+    public static func addAuthOauthProvider(config: ClientConfig, projectId: String, branchId: String, id: NeonAuthOauthProviderId, clientId: String? = nil, clientSecret: String? = nil, microsoftTenantId: String? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonAuthOauthProvider {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        let requestBody = AddAuthOauthProviderRequestBody(
-            id: id,
-            clientId: clientId,
-            clientSecret: clientSecret,
-            microsoftTenantId: microsoftTenantId
-        )
+        let requestBody = AddAuthOauthProviderRequestBody(id: id, clientId: clientId, clientSecret: clientSecret, microsoftTenantId: microsoftTenantId)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/auth/oauth_providers",
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "addAuthOauthProvider",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/oauth_providers"].joined(), config: config, body: requestBody, decoder: .json, operationId: "addAuthOauthProvider", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

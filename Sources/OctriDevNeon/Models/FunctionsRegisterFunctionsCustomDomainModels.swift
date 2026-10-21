@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Functions domain models
+// Functions domain models
 /// Typed representation of the `CustomDomainRegisterRequest` API schema.
 public struct CustomDomainRegisterRequest: Codable {
     /// The custom domain to register (for example `dashboard.acme.com`). Case-insensitive; normalized to lowercase
@@ -24,50 +24,36 @@ public struct CustomDomainRegisterRequest: Codable {
         case entityId = "entity_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CustomDomainRegisterRequest {
-    init(from decoder: Decoder) throws {
+extension CustomDomainRegisterRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.domain) else {
-            throw SdkValidationError(
-                field: "domain",
-                code: "required",
-                message: "Validation failed for 'domain': value is required"
-            )
+            throw SdkValidationError(field: "domain", code: "required", message: "Validation failed for 'domain': value is required")
         }
         guard container.contains(.entityType) else {
-            throw SdkValidationError(
-                field: "entity_type",
-                code: "required",
-                message: "Validation failed for 'entity_type': value is required"
-            )
+            throw SdkValidationError(field: "entity_type", code: "required", message: "Validation failed for 'entity_type': value is required")
         }
         guard container.contains(.entityId) else {
-            throw SdkValidationError(
-                field: "entity_id",
-                code: "required",
-                message: "Validation failed for 'entity_id': value is required"
-            )
+            throw SdkValidationError(field: "entity_id", code: "required", message: "Validation failed for 'entity_id': value is required")
         }
-        domain = try container.sdkDecodeRequired(.domain)
-        entityType = try container.sdkDecodeRequired(.entityType)
-        entityId = try container.sdkDecodeRequired(.entityId)
-        try validateLength("domain", domain, min: 3, max: 254)
-        try validateLength("entity_type", entityType, min: 1, max: 32)
-        try validateLength("entity_id", entityId, min: 1, max: 255)
+        self.domain = try container.sdkDecodeRequired(.domain)
+        self.entityType = try container.sdkDecodeRequired(.entityType)
+        self.entityId = try container.sdkDecodeRequired(.entityId)
+            try validateLength("domain", self.domain, min: 3, max: 254)
+            try validateLength("entity_type", self.entityType, min: 1, max: 32)
+            try validateLength("entity_id", self.entityId, min: 1, max: 255)
     }
 }
 
-public extension CustomDomainRegisterRequest {
-    init(domain: String, entityType: String, entityId: String) throws {
+extension CustomDomainRegisterRequest {
+    public init(domain: String, entityType: String, entityId: String) throws {
         (self.domain, self.entityType) = (domain, entityType)
         self.entityId = entityId
-        try validateLength("domain", self.domain, min: 3, max: 254)
-        try validateLength("entity_type", self.entityType, min: 1, max: 32)
-        try validateLength("entity_id", self.entityId, min: 1, max: 255)
+            try validateLength("domain", self.domain, min: 3, max: 254)
+            try validateLength("entity_type", self.entityType, min: 1, max: 32)
+            try validateLength("entity_id", self.entityId, min: 1, max: 255)
     }
 }

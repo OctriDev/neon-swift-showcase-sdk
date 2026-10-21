@@ -6,81 +6,35 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension DataApiMethods {
-    /// Updates the Neon Data API configuration for the specified branch. You can optionally provide settings to update
-    /// the Data API configuration. The schema cache is always refreshed as part of this operation.
+extension DataApiMethods {
+    /// Updates the Neon Data API configuration for the specified branch. You can optionally provide settings to update the Data API configuration. The schema cache is always refreshed as part of this operation.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
     /// - databaseName: The database name
     /// - settings: Configuration settings for the Neon Data API.
-    static func updateDataApi(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        databaseName: String,
-        settings: DataAPISettings? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EmptyResponse {
+    public static func updateDataApi(config: ClientConfig, projectId: String, branchId: String, databaseName: String, settings: DataAPISettings? = nil, requestOptions: RequestOptions? = nil) async throws -> EmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
         let requestBody = UpdateDataApiRequestBody(settings: settings)
 
-        return try await (sdkRequest(
-            "PATCH",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/data-api/",
-                sdkEncodePathSegment(sdkWireString(databaseName)),
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateDataApi",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("PATCH", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/data-api/", sdkEncodePathSegment(sdkWireString(databaseName))].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateDataApi", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 
-    /// Deletes the Neon Data API for the specified branch. Existing connections using the Data API endpoint will fail
-    /// after deletion.
+    /// Deletes the Neon Data API for the specified branch. Existing connections using the Data API endpoint will fail after deletion.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
     /// - databaseName: The database name
-    static func deleteDataApi(
-        config: ClientConfig,
-        projectId: String,
-        branchId: String,
-        databaseName: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EmptyResponse {
+    public static func deleteDataApi(config: ClientConfig, projectId: String, branchId: String, databaseName: String, requestOptions: RequestOptions? = nil) async throws -> EmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "DELETE",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/branches/",
-                sdkEncodePathSegment(sdkWireString(branchId)),
-                "/data-api/",
-                sdkEncodePathSegment(sdkWireString(databaseName)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteDataApi",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/data-api/", sdkEncodePathSegment(sdkWireString(databaseName))].joined(), config: config, decoder: .json, operationId: "deleteDataApi", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

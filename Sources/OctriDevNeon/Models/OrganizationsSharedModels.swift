@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Organizations domain models
+// Organizations domain models
 /// Typed representation of the `SpendingLimitResponse` API schema.
 public struct SpendingLimitResponse: Codable {
     /// Monthly spending cap in cents. `null` indicates that no limit is currently configured.
@@ -13,27 +13,21 @@ public struct SpendingLimitResponse: Codable {
         case spendingLimitCents = "spending_limit_cents"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SpendingLimitResponse {
-    init(from decoder: Decoder) throws {
+extension SpendingLimitResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.spendingLimitCents) else {
-            throw SdkValidationError(
-                field: "spending_limit_cents",
-                code: "required",
-                message: "Validation failed for 'spending_limit_cents': value is required"
-            )
+            throw SdkValidationError(field: "spending_limit_cents", code: "required", message: "Validation failed for 'spending_limit_cents': value is required")
         }
-        spendingLimitCents = try container.sdkDecodeNullable(.spendingLimitCents)
+        self.spendingLimitCents = try container.sdkDecodeNullable(.spendingLimitCents)
     }
 }
 
-public extension SpendingLimitResponse {
-    init(spendingLimitCents: Int?) {
+extension SpendingLimitResponse {
+    public init(spendingLimitCents: Int?) {
         self.spendingLimitCents = spendingLimitCents
     }
 }
@@ -62,64 +56,46 @@ public struct Member: Codable {
         case joinedAt = "joined_at"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension Member {
-    init(from decoder: Decoder) throws {
+extension Member {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.userId) else {
-            throw SdkValidationError(
-                field: "user_id",
-                code: "required",
-                message: "Validation failed for 'user_id': value is required"
-            )
+            throw SdkValidationError(field: "user_id", code: "required", message: "Validation failed for 'user_id': value is required")
         }
         guard container.contains(.orgId) else {
-            throw SdkValidationError(
-                field: "org_id",
-                code: "required",
-                message: "Validation failed for 'org_id': value is required"
-            )
+            throw SdkValidationError(field: "org_id", code: "required", message: "Validation failed for 'org_id': value is required")
         }
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        userId = try container.sdkDecodeRequired(.userId)
-        orgId = try container.sdkDecodeRequired(.orgId)
-        role = try container.sdkDecodeRequired(.role)
-        joinedAt = try container.sdkDecodeIfPresent(.joinedAt)
-        try sdkValidateUuid("id", id)
-        try sdkValidateUuid("user_id", userId)
-        try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
-        if let value = joinedAt {
+        self.id = try container.sdkDecodeRequired(.id)
+        self.userId = try container.sdkDecodeRequired(.userId)
+        self.orgId = try container.sdkDecodeRequired(.orgId)
+        self.role = try container.sdkDecodeRequired(.role)
+        self.joinedAt = try container.sdkDecodeIfPresent(.joinedAt)
+            try sdkValidateUuid("id", self.id)
+            try sdkValidateUuid("user_id", self.userId)
+            try sdkValidatePattern("org_id", self.orgId, sdkPatternead2b03f7a95)
+        if let value = self.joinedAt {
             try sdkValidateDateTime("joined_at", sdkWireString(value))
         }
     }
 }
 
-public extension Member {
-    init(id: String, userId: String, orgId: String, role: MemberRole, joinedAt: Date? = nil) throws {
+extension Member {
+    public init(id: String, userId: String, orgId: String, role: MemberRole, joinedAt: Date? = nil) throws {
         (self.id, self.userId) = (id, userId)
         (self.orgId, self.role) = (orgId, role)
         self.joinedAt = joinedAt
-        try sdkValidateUuid("id", self.id)
-        try sdkValidateUuid("user_id", self.userId)
-        try sdkValidatePattern("org_id", self.orgId, sdkPatternead2b03f7a95)
+            try sdkValidateUuid("id", self.id)
+            try sdkValidateUuid("user_id", self.userId)
+            try sdkValidatePattern("org_id", self.orgId, sdkPatternead2b03f7a95)
         if let value = self.joinedAt {
             try sdkValidateDateTime("joined_at", sdkWireString(value))
         }
@@ -135,27 +111,21 @@ public struct OrganizationInvitationsResponse: Codable {
         case invitations
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OrganizationInvitationsResponse {
-    init(from decoder: Decoder) throws {
+extension OrganizationInvitationsResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.invitations) else {
-            throw SdkValidationError(
-                field: "invitations",
-                code: "required",
-                message: "Validation failed for 'invitations': value is required"
-            )
+            throw SdkValidationError(field: "invitations", code: "required", message: "Validation failed for 'invitations': value is required")
         }
-        invitations = try container.sdkDecodeRequired(.invitations)
+        self.invitations = try container.sdkDecodeRequired(.invitations)
     }
 }
 
-public extension OrganizationInvitationsResponse {
-    init(invitations: [Invitation]) {
+extension OrganizationInvitationsResponse {
+    public init(invitations: [Invitation]) {
         self.invitations = invitations
     }
 }
@@ -186,82 +156,56 @@ public struct Invitation: Codable {
         case role
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension Invitation {
-    init(from decoder: Decoder) throws {
+extension Invitation {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.email) else {
-            throw SdkValidationError(
-                field: "email",
-                code: "required",
-                message: "Validation failed for 'email': value is required"
-            )
+            throw SdkValidationError(field: "email", code: "required", message: "Validation failed for 'email': value is required")
         }
         guard container.contains(.orgId) else {
-            throw SdkValidationError(
-                field: "org_id",
-                code: "required",
-                message: "Validation failed for 'org_id': value is required"
-            )
+            throw SdkValidationError(field: "org_id", code: "required", message: "Validation failed for 'org_id': value is required")
         }
         guard container.contains(.invitedBy) else {
-            throw SdkValidationError(
-                field: "invited_by",
-                code: "required",
-                message: "Validation failed for 'invited_by': value is required"
-            )
+            throw SdkValidationError(field: "invited_by", code: "required", message: "Validation failed for 'invited_by': value is required")
         }
         guard container.contains(.invitedAt) else {
-            throw SdkValidationError(
-                field: "invited_at",
-                code: "required",
-                message: "Validation failed for 'invited_at': value is required"
-            )
+            throw SdkValidationError(field: "invited_at", code: "required", message: "Validation failed for 'invited_at': value is required")
         }
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        email = try container.sdkDecodeRequired(.email)
-        orgId = try container.sdkDecodeRequired(.orgId)
-        invitedBy = try container.sdkDecodeRequired(.invitedBy)
-        invitedAt = try container.sdkDecodeRequired(.invitedAt)
-        role = try container.sdkDecodeRequired(.role)
-        try sdkValidateUuid("id", id)
-        try validateLength("email", email, min: 1, max: 256)
-        try sdkValidateEmail("email", email)
-        try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
-        try sdkValidateUuid("invited_by", invitedBy)
-        try sdkValidateDateTime("invited_at", sdkWireString(invitedAt))
+        self.id = try container.sdkDecodeRequired(.id)
+        self.email = try container.sdkDecodeRequired(.email)
+        self.orgId = try container.sdkDecodeRequired(.orgId)
+        self.invitedBy = try container.sdkDecodeRequired(.invitedBy)
+        self.invitedAt = try container.sdkDecodeRequired(.invitedAt)
+        self.role = try container.sdkDecodeRequired(.role)
+            try sdkValidateUuid("id", self.id)
+            try validateLength("email", self.email, min: 1, max: 256)
+            try sdkValidateEmail("email", self.email)
+            try sdkValidatePattern("org_id", self.orgId, sdkPatternead2b03f7a95)
+            try sdkValidateUuid("invited_by", self.invitedBy)
+            try sdkValidateDateTime("invited_at", sdkWireString(self.invitedAt))
     }
 }
 
-public extension Invitation {
-    init(id: String, email: String, orgId: String, invitedBy: String, invitedAt: Date, role: MemberRole) throws {
+extension Invitation {
+    public init(id: String, email: String, orgId: String, invitedBy: String, invitedAt: Date, role: MemberRole) throws {
         (self.id, self.email) = (id, email)
         (self.orgId, self.invitedBy) = (orgId, invitedBy)
         (self.invitedAt, self.role) = (invitedAt, role)
-        try sdkValidateUuid("id", self.id)
-        try validateLength("email", self.email, min: 1, max: 256)
-        try sdkValidateEmail("email", self.email)
-        try sdkValidatePattern("org_id", self.orgId, sdkPatternead2b03f7a95)
-        try sdkValidateUuid("invited_by", self.invitedBy)
-        try sdkValidateDateTime("invited_at", sdkWireString(self.invitedAt))
+            try sdkValidateUuid("id", self.id)
+            try validateLength("email", self.email, min: 1, max: 256)
+            try sdkValidateEmail("email", self.email)
+            try sdkValidatePattern("org_id", self.orgId, sdkPatternead2b03f7a95)
+            try sdkValidateUuid("invited_by", self.invitedBy)
+            try sdkValidateDateTime("invited_at", sdkWireString(self.invitedAt))
     }
 }
 
@@ -271,10 +215,7 @@ public extension Invitation {
 public struct MemberRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let admin = MemberRole(rawValue: "admin")
     public static let member = MemberRole(rawValue: "member")
     public static let editor = MemberRole(rawValue: "editor")
@@ -283,7 +224,7 @@ public struct MemberRole: RawRepresentable, Hashable, Codable, Sendable, SdkWire
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

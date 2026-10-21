@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Auth domain models
+// Auth domain models
 /// At least one field must be provided.
 public struct NeonAuthOAuthClientUpdateRequest: Codable {
     /// Display name of the client.
@@ -26,38 +26,32 @@ public struct NeonAuthOAuthClientUpdateRequest: Codable {
     }
 
     init() {
-        (name, redirectUris, skipConsent, disabled, resources) = (nil, nil, nil, nil, nil)
+        (self.name, self.redirectUris, self.skipConsent, self.disabled, self.resources) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension NeonAuthOAuthClientUpdateRequest {
-    init(from decoder: Decoder) throws {
+extension NeonAuthOAuthClientUpdateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        name = try container.sdkDecodeIfPresent(.name)
-        redirectUris = try container.sdkDecodeIfPresent(.redirectUris)
-        skipConsent = try container.sdkDecodeIfPresent(.skipConsent)
-        disabled = try container.sdkDecodeIfPresent(.disabled)
-        resources = try container.sdkDecodeIfPresent(.resources)
-        if let value = name {
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.redirectUris = try container.sdkDecodeIfPresent(.redirectUris)
+        self.skipConsent = try container.sdkDecodeIfPresent(.skipConsent)
+        self.disabled = try container.sdkDecodeIfPresent(.disabled)
+        self.resources = try container.sdkDecodeIfPresent(.resources)
+        if let value = self.name {
             try validateLength("name", value, min: 1, max: 100)
         }
-        if let value = redirectUris {
+        if let value = self.redirectUris {
             try validateItems("redirect_uris", value, min: nil, max: 10)
         }
-        if let value = resources {
+        if let value = self.resources {
             try validateItems("resources", value, min: nil, max: 11)
         }
     }
 }
 
-public extension NeonAuthOAuthClientUpdateRequest {
-    init(
-        name: String? = nil,
-        redirectUris: [String]? = nil,
-        skipConsent: Bool? = nil,
-        disabled: Bool? = nil,
-        resources: [String]? = nil
-    ) throws {
+extension NeonAuthOAuthClientUpdateRequest {
+    public init(name: String? = nil, redirectUris: [String]? = nil, skipConsent: Bool? = nil, disabled: Bool? = nil, resources: [String]? = nil) throws {
         self.init()
         (self.name, self.redirectUris) = (name, redirectUris)
         (self.skipConsent, self.disabled) = (skipConsent, disabled)

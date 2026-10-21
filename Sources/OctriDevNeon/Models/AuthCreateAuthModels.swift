@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Auth domain models
+// Auth domain models
 /// Typed representation of the `EnableNeonAuthIntegrationRequest` API schema.
 public struct EnableNeonAuthIntegrationRequest: Codable {
     /// Authentication provider integrated with this Neon Auth configuration. `better_auth` integrates with Better
@@ -19,28 +19,22 @@ public struct EnableNeonAuthIntegrationRequest: Codable {
         case databaseName = "database_name"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EnableNeonAuthIntegrationRequest {
-    init(from decoder: Decoder) throws {
+extension EnableNeonAuthIntegrationRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.authProvider) else {
-            throw SdkValidationError(
-                field: "auth_provider",
-                code: "required",
-                message: "Validation failed for 'auth_provider': value is required"
-            )
+            throw SdkValidationError(field: "auth_provider", code: "required", message: "Validation failed for 'auth_provider': value is required")
         }
-        authProvider = try container.sdkDecodeRequired(.authProvider)
-        databaseName = try container.sdkDecodeIfPresent(.databaseName)
+        self.authProvider = try container.sdkDecodeRequired(.authProvider)
+        self.databaseName = try container.sdkDecodeIfPresent(.databaseName)
     }
 }
 
-public extension EnableNeonAuthIntegrationRequest {
-    init(authProvider: NeonAuthSupportedAuthProvider, databaseName: String? = nil) {
+extension EnableNeonAuthIntegrationRequest {
+    public init(authProvider: NeonAuthSupportedAuthProvider, databaseName: String? = nil) {
         (self.authProvider, self.databaseName) = (authProvider, databaseName)
     }
 }

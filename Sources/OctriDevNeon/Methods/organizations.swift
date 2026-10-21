@@ -8,26 +8,14 @@ import Foundation
 #endif
 public enum OrganizationsMethods {}
 
-public extension OrganizationsMethods {
+extension OrganizationsMethods {
     /// Retrieves details for the specified organization, including its name, plan, and configuration.
     ///
     /// - Parameters:
     /// - orgId: The Neon organization ID
-    static func getOrganization(
-        config: ClientConfig,
-        orgId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Organization {
+    public static func getOrganization(config: ClientConfig, orgId: String, requestOptions: RequestOptions? = nil) async throws -> Organization {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
-        return try await (sdkRequest(
-            "GET",
-            ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "getOrganization",
-            options: requestOptions,
-            errors: ["default": GeneralError.self]
-        )).data
+        return try (await sdkRequest("GET", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId))].joined(), config: config, decoder: .json, operationId: "getOrganization", options: requestOptions, errors: ["default": GeneralError.self])).data
     }
 }

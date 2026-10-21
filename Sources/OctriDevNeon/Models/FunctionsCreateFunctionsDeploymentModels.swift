@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Functions domain models
+// Functions domain models
 /// Typed representation of the `FunctionDeployRequest` API schema.
 public struct FunctionDeployRequest: Codable {
     /// Optional ZIP archive of the function source code. Omit to reuse the latest version's bundle (a config-only
@@ -27,21 +27,21 @@ public struct FunctionDeployRequest: Codable {
     }
 
     init() {
-        (self.zip, runtime, environment) = (nil, nil, nil)
+        (self.zip, self.runtime, self.environment) = (nil, nil, nil)
     }
 }
 
-public extension FunctionDeployRequest {
-    init(from decoder: Decoder) throws {
+extension FunctionDeployRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.zip = try container.sdkDecodeIfPresent(.zip)
-        runtime = try container.sdkDecodeIfPresent(.runtime)
-        environment = try container.sdkDecodeIfPresent(.environment)
+        self.runtime = try container.sdkDecodeIfPresent(.runtime)
+        self.environment = try container.sdkDecodeIfPresent(.environment)
     }
 }
 
-public extension FunctionDeployRequest {
-    init(zip: Data? = nil, runtime: FunctionDeployRequestRuntime? = nil, environment: String? = nil) {
+extension FunctionDeployRequest {
+    public init(zip: Data? = nil, runtime: FunctionDeployRequestRuntime? = nil, environment: String? = nil) {
         self.init()
         (self.zip, self.runtime) = (zip, runtime)
         self.environment = environment
@@ -57,27 +57,21 @@ public struct NeonFunctionDeploymentResponse: Codable {
         case deployment
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NeonFunctionDeploymentResponse {
-    init(from decoder: Decoder) throws {
+extension NeonFunctionDeploymentResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.deployment) else {
-            throw SdkValidationError(
-                field: "deployment",
-                code: "required",
-                message: "Validation failed for 'deployment': value is required"
-            )
+            throw SdkValidationError(field: "deployment", code: "required", message: "Validation failed for 'deployment': value is required")
         }
-        deployment = try container.sdkDecodeRequired(.deployment)
+        self.deployment = try container.sdkDecodeRequired(.deployment)
     }
 }
 
-public extension NeonFunctionDeploymentResponse {
-    init(deployment: NeonFunctionDeployment) {
+extension NeonFunctionDeploymentResponse {
+    public init(deployment: NeonFunctionDeployment) {
         self.deployment = deployment
     }
 }
@@ -86,15 +80,12 @@ public extension NeonFunctionDeploymentResponse {
 public struct FunctionDeployRequestRuntime: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let nodejs24 = FunctionDeployRequestRuntime(rawValue: "nodejs24")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Organizations domain models
+// Organizations domain models
 /// Typed representation of the `MemberUserInfo` API schema.
 public struct MemberUserInfo: Codable {
     /// Email address of the organization member's user account.
@@ -20,38 +20,32 @@ public struct MemberUserInfo: Codable {
         case deactivatedAt = "deactivated_at"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MemberUserInfo {
-    init(from decoder: Decoder) throws {
+extension MemberUserInfo {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.email) else {
-            throw SdkValidationError(
-                field: "email",
-                code: "required",
-                message: "Validation failed for 'email': value is required"
-            )
+            throw SdkValidationError(field: "email", code: "required", message: "Validation failed for 'email': value is required")
         }
-        email = try container.sdkDecodeRequired(.email)
-        hasMfa = try container.sdkDecodeIfPresent(.hasMfa)
-        deactivatedAt = try container.sdkDecodeIfPresent(.deactivatedAt)
-        try validateLength("email", email, min: 1, max: 256)
-        try sdkValidateEmail("email", email)
-        if let value = deactivatedAt {
+        self.email = try container.sdkDecodeRequired(.email)
+        self.hasMfa = try container.sdkDecodeIfPresent(.hasMfa)
+        self.deactivatedAt = try container.sdkDecodeIfPresent(.deactivatedAt)
+            try validateLength("email", self.email, min: 1, max: 256)
+            try sdkValidateEmail("email", self.email)
+        if let value = self.deactivatedAt {
             try sdkValidateDateTime("deactivated_at", sdkWireString(value))
         }
     }
 }
 
-public extension MemberUserInfo {
-    init(email: String, hasMfa: Bool? = nil, deactivatedAt: Date? = nil) throws {
+extension MemberUserInfo {
+    public init(email: String, hasMfa: Bool? = nil, deactivatedAt: Date? = nil) throws {
         (self.email, self.hasMfa) = (email, hasMfa)
         self.deactivatedAt = deactivatedAt
-        try validateLength("email", self.email, min: 1, max: 256)
-        try sdkValidateEmail("email", self.email)
+            try validateLength("email", self.email, min: 1, max: 256)
+            try sdkValidateEmail("email", self.email)
         if let value = self.deactivatedAt {
             try sdkValidateDateTime("deactivated_at", sdkWireString(value))
         }
@@ -74,28 +68,22 @@ public struct ListOrganizationsMembersResponse: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ListOrganizationsMembersResponse {
-    init(from decoder: Decoder) throws {
+extension ListOrganizationsMembersResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.members) else {
-            throw SdkValidationError(
-                field: "members",
-                code: "required",
-                message: "Validation failed for 'members': value is required"
-            )
+            throw SdkValidationError(field: "members", code: "required", message: "Validation failed for 'members': value is required")
         }
-        members = try container.sdkDecodeRequired(.members)
-        pagination = try container.sdkDecodeIfPresent(.pagination)
+        self.members = try container.sdkDecodeRequired(.members)
+        self.pagination = try container.sdkDecodeIfPresent(.pagination)
     }
 }
 
-public extension ListOrganizationsMembersResponse {
-    init(members: [MemberWithUser], pagination: CursorPagination? = nil) {
+extension ListOrganizationsMembersResponse {
+    public init(members: [MemberWithUser], pagination: CursorPagination? = nil) {
         (self.members, self.pagination) = (members, pagination)
     }
 }
@@ -110,27 +98,21 @@ public struct OrganizationMembersResponse: Codable {
         case members
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OrganizationMembersResponse {
-    init(from decoder: Decoder) throws {
+extension OrganizationMembersResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.members) else {
-            throw SdkValidationError(
-                field: "members",
-                code: "required",
-                message: "Validation failed for 'members': value is required"
-            )
+            throw SdkValidationError(field: "members", code: "required", message: "Validation failed for 'members': value is required")
         }
-        members = try container.sdkDecodeRequired(.members)
+        self.members = try container.sdkDecodeRequired(.members)
     }
 }
 
-public extension OrganizationMembersResponse {
-    init(members: [MemberWithUser]) {
+extension OrganizationMembersResponse {
+    public init(members: [MemberWithUser]) {
         self.members = members
     }
 }
@@ -147,35 +129,25 @@ public struct MemberWithUser: Codable {
         case user
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MemberWithUser {
-    init(from decoder: Decoder) throws {
+extension MemberWithUser {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.member) else {
-            throw SdkValidationError(
-                field: "member",
-                code: "required",
-                message: "Validation failed for 'member': value is required"
-            )
+            throw SdkValidationError(field: "member", code: "required", message: "Validation failed for 'member': value is required")
         }
         guard container.contains(.user) else {
-            throw SdkValidationError(
-                field: "user",
-                code: "required",
-                message: "Validation failed for 'user': value is required"
-            )
+            throw SdkValidationError(field: "user", code: "required", message: "Validation failed for 'user': value is required")
         }
-        member = try container.sdkDecodeRequired(.member)
-        user = try container.sdkDecodeRequired(.user)
+        self.member = try container.sdkDecodeRequired(.member)
+        self.user = try container.sdkDecodeRequired(.user)
     }
 }
 
-public extension MemberWithUser {
-    init(member: Member, user: MemberUserInfo) {
+extension MemberWithUser {
+    public init(member: Member, user: MemberUserInfo) {
         (self.member, self.user) = (member, user)
     }
 }

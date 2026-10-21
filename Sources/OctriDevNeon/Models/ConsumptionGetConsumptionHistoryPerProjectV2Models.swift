@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Consumption domain models
+// Consumption domain models
 /// Typed representation of the `ConsumptionHistoryPerProjectV2Response` API schema.
 public struct ConsumptionHistoryPerProjectV2Response: Codable {
     /// Per-project consumption history entries for the requested time range.
@@ -13,27 +13,21 @@ public struct ConsumptionHistoryPerProjectV2Response: Codable {
         case projects
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConsumptionHistoryPerProjectV2Response {
-    init(from decoder: Decoder) throws {
+extension ConsumptionHistoryPerProjectV2Response {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.projects) else {
-            throw SdkValidationError(
-                field: "projects",
-                code: "required",
-                message: "Validation failed for 'projects': value is required"
-            )
+            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
         }
-        projects = try container.sdkDecodeRequired(.projects)
+        self.projects = try container.sdkDecodeRequired(.projects)
     }
 }
 
-public extension ConsumptionHistoryPerProjectV2Response {
-    init(projects: [ConsumptionHistoryPerProjectV2]) {
+extension ConsumptionHistoryPerProjectV2Response {
+    public init(projects: [ConsumptionHistoryPerProjectV2]) {
         self.projects = projects
     }
 }
@@ -50,38 +44,28 @@ public struct ConsumptionHistoryPerProjectV2: Codable {
         case periods
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConsumptionHistoryPerProjectV2 {
-    init(from decoder: Decoder) throws {
+extension ConsumptionHistoryPerProjectV2 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.projectId) else {
-            throw SdkValidationError(
-                field: "project_id",
-                code: "required",
-                message: "Validation failed for 'project_id': value is required"
-            )
+            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
         }
         guard container.contains(.periods) else {
-            throw SdkValidationError(
-                field: "periods",
-                code: "required",
-                message: "Validation failed for 'periods': value is required"
-            )
+            throw SdkValidationError(field: "periods", code: "required", message: "Validation failed for 'periods': value is required")
         }
-        projectId = try container.sdkDecodeRequired(.projectId)
-        periods = try container.sdkDecodeRequired(.periods)
-        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
+        self.projectId = try container.sdkDecodeRequired(.projectId)
+        self.periods = try container.sdkDecodeRequired(.periods)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
     }
 }
 
-public extension ConsumptionHistoryPerProjectV2 {
-    init(projectId: String, periods: [ConsumptionHistoryPerPeriodV2]) throws {
+extension ConsumptionHistoryPerProjectV2 {
+    public init(projectId: String, periods: [ConsumptionHistoryPerPeriodV2]) throws {
         (self.projectId, self.periods) = (projectId, periods)
-        try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
     }
 }
 
@@ -99,28 +83,22 @@ public struct GetConsumptionHistoryPerProjectV2Response: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension GetConsumptionHistoryPerProjectV2Response {
-    init(from decoder: Decoder) throws {
+extension GetConsumptionHistoryPerProjectV2Response {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.projects) else {
-            throw SdkValidationError(
-                field: "projects",
-                code: "required",
-                message: "Validation failed for 'projects': value is required"
-            )
+            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
         }
-        projects = try container.sdkDecodeRequired(.projects)
-        pagination = try container.sdkDecodeIfPresent(.pagination)
+        self.projects = try container.sdkDecodeRequired(.projects)
+        self.pagination = try container.sdkDecodeIfPresent(.pagination)
     }
 }
 
-public extension GetConsumptionHistoryPerProjectV2Response {
-    init(projects: [ConsumptionHistoryPerProjectV2], pagination: Pagination? = nil) {
+extension GetConsumptionHistoryPerProjectV2Response {
+    public init(projects: [ConsumptionHistoryPerProjectV2], pagination: Pagination? = nil) {
         (self.projects, self.pagination) = (projects, pagination)
     }
 }

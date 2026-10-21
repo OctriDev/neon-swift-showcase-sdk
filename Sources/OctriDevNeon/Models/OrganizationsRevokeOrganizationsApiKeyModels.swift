@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Organizations domain models
+// Organizations domain models
 /// Typed representation of the `OrgApiKeyRevokeResponse` API schema.
 public struct OrgApiKeyRevokeResponse: Codable {
     /// The API key's unique numeric ID. Distinct from the API key token (`key`).
@@ -34,92 +34,57 @@ public struct OrgApiKeyRevokeResponse: Codable {
         case projectId = "project_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OrgApiKeyRevokeResponse {
-    init(from decoder: Decoder) throws {
+extension OrgApiKeyRevokeResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.createdBy) else {
-            throw SdkValidationError(
-                field: "created_by",
-                code: "required",
-                message: "Validation failed for 'created_by': value is required"
-            )
+            throw SdkValidationError(field: "created_by", code: "required", message: "Validation failed for 'created_by': value is required")
         }
         guard container.contains(.lastUsedFromAddr) else {
-            throw SdkValidationError(
-                field: "last_used_from_addr",
-                code: "required",
-                message: "Validation failed for 'last_used_from_addr': value is required"
-            )
+            throw SdkValidationError(field: "last_used_from_addr", code: "required", message: "Validation failed for 'last_used_from_addr': value is required")
         }
         guard container.contains(.revoked) else {
-            throw SdkValidationError(
-                field: "revoked",
-                code: "required",
-                message: "Validation failed for 'revoked': value is required"
-            )
+            throw SdkValidationError(field: "revoked", code: "required", message: "Validation failed for 'revoked': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        name = try container.sdkDecodeRequired(.name)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        createdBy = try container.sdkDecodeRequired(.createdBy)
-        lastUsedFromAddr = try container.sdkDecodeRequired(.lastUsedFromAddr)
-        revoked = try container.sdkDecodeRequired(.revoked)
-        lastUsedAt = try container.sdkDecodeIfPresent(.lastUsedAt)
-        projectId = try container.sdkDecodeIfPresent(.projectId)
-        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
-        try sdkValidateUuid("created_by", createdBy)
-        if let value = lastUsedAt {
+        self.id = try container.sdkDecodeRequired(.id)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.createdBy = try container.sdkDecodeRequired(.createdBy)
+        self.lastUsedFromAddr = try container.sdkDecodeRequired(.lastUsedFromAddr)
+        self.revoked = try container.sdkDecodeRequired(.revoked)
+        self.lastUsedAt = try container.sdkDecodeIfPresent(.lastUsedAt)
+        self.projectId = try container.sdkDecodeIfPresent(.projectId)
+            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+            try sdkValidateUuid("created_by", self.createdBy)
+        if let value = self.lastUsedAt {
             try sdkValidateDateTime("last_used_at", sdkWireString(value))
         }
-        if let value = projectId {
+        if let value = self.projectId {
             try sdkValidatePattern("project_id", value, sdkPatternead2b03f7a95)
         }
     }
 }
 
-public extension OrgApiKeyRevokeResponse {
-    init(
-        id: Int,
-        name: String,
-        createdAt: Date,
-        createdBy: String,
-        lastUsedFromAddr: String,
-        revoked: Bool,
-        lastUsedAt: Date? = nil,
-        projectId: String? = nil
-    ) throws {
+extension OrgApiKeyRevokeResponse {
+    public init(id: Int, name: String, createdAt: Date, createdBy: String, lastUsedFromAddr: String, revoked: Bool, lastUsedAt: Date? = nil, projectId: String? = nil) throws {
         (self.id, self.name) = (id, name)
         (self.createdAt, self.createdBy) = (createdAt, createdBy)
         (self.lastUsedFromAddr, self.revoked) = (lastUsedFromAddr, revoked)
         (self.lastUsedAt, self.projectId) = (lastUsedAt, projectId)
-        try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-        try sdkValidateUuid("created_by", self.createdBy)
+            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+            try sdkValidateUuid("created_by", self.createdBy)
         if let value = self.lastUsedAt {
             try sdkValidateDateTime("last_used_at", sdkWireString(value))
         }
@@ -138,22 +103,22 @@ public struct OrgApiKeyRevokeResponseVariant1: Codable {
     }
 
     init() {
-        projectId = nil
+        self.projectId = nil
     }
 }
 
-public extension OrgApiKeyRevokeResponseVariant1 {
-    init(from decoder: Decoder) throws {
+extension OrgApiKeyRevokeResponseVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        projectId = try container.sdkDecodeIfPresent(.projectId)
-        if let value = projectId {
+        self.projectId = try container.sdkDecodeIfPresent(.projectId)
+        if let value = self.projectId {
             try sdkValidatePattern("project_id", value, sdkPatternead2b03f7a95)
         }
     }
 }
 
-public extension OrgApiKeyRevokeResponseVariant1 {
-    init(projectId: String? = nil) throws {
+extension OrgApiKeyRevokeResponseVariant1 {
+    public init(projectId: String? = nil) throws {
         self.init()
         self.projectId = projectId
         if let value = self.projectId {

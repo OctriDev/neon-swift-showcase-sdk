@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Organizations domain models
+// Organizations domain models
 /// Typed representation of the `SpendingLimitUpdateRequest` API schema.
 public struct SpendingLimitUpdateRequest: Codable {
     /// Monthly spending cap in cents. Must be positive. To remove a previously configured limit, send a DELETE
@@ -16,45 +16,23 @@ public struct SpendingLimitUpdateRequest: Codable {
         case spendingLimitCents = "spending_limit_cents"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SpendingLimitUpdateRequest {
-    init(from decoder: Decoder) throws {
+extension SpendingLimitUpdateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.spendingLimitCents) else {
-            throw SdkValidationError(
-                field: "spending_limit_cents",
-                code: "required",
-                message: "Validation failed for 'spending_limit_cents': value is required"
-            )
+            throw SdkValidationError(field: "spending_limit_cents", code: "required", message: "Validation failed for 'spending_limit_cents': value is required")
         }
-        spendingLimitCents = try container.sdkDecodeRequired(.spendingLimitCents)
-        try validateRange(
-            "spending_limit_cents",
-            Double(spendingLimitCents),
-            min: 1,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.spendingLimitCents = try container.sdkDecodeRequired(.spendingLimitCents)
+            try validateRange("spending_limit_cents", Double(self.spendingLimitCents), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension SpendingLimitUpdateRequest {
-    init(spendingLimitCents: Int) throws {
+extension SpendingLimitUpdateRequest {
+    public init(spendingLimitCents: Int) throws {
         self.spendingLimitCents = spendingLimitCents
-        try validateRange(
-            "spending_limit_cents",
-            Double(self.spendingLimitCents),
-            min: 1,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try validateRange("spending_limit_cents", Double(self.spendingLimitCents), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }

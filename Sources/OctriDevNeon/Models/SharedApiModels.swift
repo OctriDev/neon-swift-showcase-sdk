@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedApi domain models
+// SharedApi domain models
 /// Typed representation of the `ApiKeysListResponseItem` API schema.
 public struct ApiKeysListResponseItem: Codable {
     /// The API key's unique numeric ID. Distinct from the API key token (`key`).
@@ -28,75 +28,46 @@ public struct ApiKeysListResponseItem: Codable {
         case lastUsedAt = "last_used_at"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ApiKeysListResponseItem {
-    init(from decoder: Decoder) throws {
+extension ApiKeysListResponseItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.createdBy) else {
-            throw SdkValidationError(
-                field: "created_by",
-                code: "required",
-                message: "Validation failed for 'created_by': value is required"
-            )
+            throw SdkValidationError(field: "created_by", code: "required", message: "Validation failed for 'created_by': value is required")
         }
         guard container.contains(.lastUsedFromAddr) else {
-            throw SdkValidationError(
-                field: "last_used_from_addr",
-                code: "required",
-                message: "Validation failed for 'last_used_from_addr': value is required"
-            )
+            throw SdkValidationError(field: "last_used_from_addr", code: "required", message: "Validation failed for 'last_used_from_addr': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        name = try container.sdkDecodeRequired(.name)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        createdBy = try container.sdkDecodeRequired(.createdBy)
-        lastUsedFromAddr = try container.sdkDecodeRequired(.lastUsedFromAddr)
-        lastUsedAt = try container.sdkDecodeIfPresent(.lastUsedAt)
-        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
-        if let value = lastUsedAt {
+        self.id = try container.sdkDecodeRequired(.id)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.createdBy = try container.sdkDecodeRequired(.createdBy)
+        self.lastUsedFromAddr = try container.sdkDecodeRequired(.lastUsedFromAddr)
+        self.lastUsedAt = try container.sdkDecodeIfPresent(.lastUsedAt)
+            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+        if let value = self.lastUsedAt {
             try sdkValidateDateTime("last_used_at", sdkWireString(value))
         }
     }
 }
 
-public extension ApiKeysListResponseItem {
-    init(
-        id: Int,
-        name: String,
-        createdAt: Date,
-        createdBy: ApiKeyCreatorData,
-        lastUsedFromAddr: String,
-        lastUsedAt: Date? = nil
-    ) throws {
+extension ApiKeysListResponseItem {
+    public init(id: Int, name: String, createdAt: Date, createdBy: ApiKeyCreatorData, lastUsedFromAddr: String, lastUsedAt: Date? = nil) throws {
         (self.id, self.name) = (id, name)
         (self.createdAt, self.createdBy) = (createdAt, createdBy)
         (self.lastUsedFromAddr, self.lastUsedAt) = (lastUsedFromAddr, lastUsedAt)
-        try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
         if let value = self.lastUsedAt {
             try sdkValidateDateTime("last_used_at", sdkWireString(value))
         }
@@ -130,87 +101,53 @@ public struct ApiKeyRevokeResponse: Codable {
         case lastUsedAt = "last_used_at"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ApiKeyRevokeResponse {
-    init(from decoder: Decoder) throws {
+extension ApiKeyRevokeResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.createdBy) else {
-            throw SdkValidationError(
-                field: "created_by",
-                code: "required",
-                message: "Validation failed for 'created_by': value is required"
-            )
+            throw SdkValidationError(field: "created_by", code: "required", message: "Validation failed for 'created_by': value is required")
         }
         guard container.contains(.lastUsedFromAddr) else {
-            throw SdkValidationError(
-                field: "last_used_from_addr",
-                code: "required",
-                message: "Validation failed for 'last_used_from_addr': value is required"
-            )
+            throw SdkValidationError(field: "last_used_from_addr", code: "required", message: "Validation failed for 'last_used_from_addr': value is required")
         }
         guard container.contains(.revoked) else {
-            throw SdkValidationError(
-                field: "revoked",
-                code: "required",
-                message: "Validation failed for 'revoked': value is required"
-            )
+            throw SdkValidationError(field: "revoked", code: "required", message: "Validation failed for 'revoked': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        name = try container.sdkDecodeRequired(.name)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        createdBy = try container.sdkDecodeRequired(.createdBy)
-        lastUsedFromAddr = try container.sdkDecodeRequired(.lastUsedFromAddr)
-        revoked = try container.sdkDecodeRequired(.revoked)
-        lastUsedAt = try container.sdkDecodeIfPresent(.lastUsedAt)
-        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
-        try sdkValidateUuid("created_by", createdBy)
-        if let value = lastUsedAt {
+        self.id = try container.sdkDecodeRequired(.id)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.createdBy = try container.sdkDecodeRequired(.createdBy)
+        self.lastUsedFromAddr = try container.sdkDecodeRequired(.lastUsedFromAddr)
+        self.revoked = try container.sdkDecodeRequired(.revoked)
+        self.lastUsedAt = try container.sdkDecodeIfPresent(.lastUsedAt)
+            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+            try sdkValidateUuid("created_by", self.createdBy)
+        if let value = self.lastUsedAt {
             try sdkValidateDateTime("last_used_at", sdkWireString(value))
         }
     }
 }
 
-public extension ApiKeyRevokeResponse {
-    init(
-        id: Int,
-        name: String,
-        createdAt: Date,
-        createdBy: String,
-        lastUsedFromAddr: String,
-        revoked: Bool,
-        lastUsedAt: Date? = nil
-    ) throws {
+extension ApiKeyRevokeResponse {
+    public init(id: Int, name: String, createdAt: Date, createdBy: String, lastUsedFromAddr: String, revoked: Bool, lastUsedAt: Date? = nil) throws {
         (self.id, self.name) = (id, name)
         (self.createdAt, self.createdBy) = (createdAt, createdBy)
         (self.lastUsedFromAddr, self.revoked) = (lastUsedFromAddr, revoked)
         self.lastUsedAt = lastUsedAt
-        try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-        try sdkValidateUuid("created_by", self.createdBy)
+            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+            try sdkValidateUuid("created_by", self.createdBy)
         if let value = self.lastUsedAt {
             try sdkValidateDateTime("last_used_at", sdkWireString(value))
         }
@@ -226,30 +163,24 @@ public struct ApiKeyCreateRequest: Codable {
         case keyName = "key_name"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ApiKeyCreateRequest {
-    init(from decoder: Decoder) throws {
+extension ApiKeyCreateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.keyName) else {
-            throw SdkValidationError(
-                field: "key_name",
-                code: "required",
-                message: "Validation failed for 'key_name': value is required"
-            )
+            throw SdkValidationError(field: "key_name", code: "required", message: "Validation failed for 'key_name': value is required")
         }
-        keyName = try container.sdkDecodeRequired(.keyName)
-        try validateLength("key_name", keyName, min: nil, max: 64)
+        self.keyName = try container.sdkDecodeRequired(.keyName)
+            try validateLength("key_name", self.keyName, min: nil, max: 64)
     }
 }
 
-public extension ApiKeyCreateRequest {
-    init(keyName: String) throws {
+extension ApiKeyCreateRequest {
+    public init(keyName: String) throws {
         self.keyName = keyName
-        try validateLength("key_name", self.keyName, min: nil, max: 64)
+            try validateLength("key_name", self.keyName, min: nil, max: 64)
     }
 }
 
@@ -268,47 +199,33 @@ public struct ApiKeyCreatorData: Codable {
         case image
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ApiKeyCreatorData {
-    init(from decoder: Decoder) throws {
+extension ApiKeyCreatorData {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.image) else {
-            throw SdkValidationError(
-                field: "image",
-                code: "required",
-                message: "Validation failed for 'image': value is required"
-            )
+            throw SdkValidationError(field: "image", code: "required", message: "Validation failed for 'image': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        name = try container.sdkDecodeRequired(.name)
-        image = try container.sdkDecodeRequired(.image)
-        try sdkValidateUuid("id", id)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.image = try container.sdkDecodeRequired(.image)
+            try sdkValidateUuid("id", self.id)
     }
 }
 
-public extension ApiKeyCreatorData {
-    init(id: String, name: String, image: String) throws {
+extension ApiKeyCreatorData {
+    public init(id: String, name: String, image: String) throws {
         (self.id, self.name) = (id, name)
         self.image = image
-        try sdkValidateUuid("id", self.id)
+            try sdkValidateUuid("id", self.id)
     }
 }
 
@@ -333,65 +250,43 @@ public struct ApiKeyCreateResponse: Codable {
         case createdBy = "created_by"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ApiKeyCreateResponse {
-    init(from decoder: Decoder) throws {
+extension ApiKeyCreateResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.key) else {
-            throw SdkValidationError(
-                field: "key",
-                code: "required",
-                message: "Validation failed for 'key': value is required"
-            )
+            throw SdkValidationError(field: "key", code: "required", message: "Validation failed for 'key': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.createdBy) else {
-            throw SdkValidationError(
-                field: "created_by",
-                code: "required",
-                message: "Validation failed for 'created_by': value is required"
-            )
+            throw SdkValidationError(field: "created_by", code: "required", message: "Validation failed for 'created_by': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        key = try container.sdkDecodeRequired(.key)
-        name = try container.sdkDecodeRequired(.name)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        createdBy = try container.sdkDecodeRequired(.createdBy)
-        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
-        try sdkValidateUuid("created_by", createdBy)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.key = try container.sdkDecodeRequired(.key)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.createdBy = try container.sdkDecodeRequired(.createdBy)
+            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+            try sdkValidateUuid("created_by", self.createdBy)
     }
 }
 
-public extension ApiKeyCreateResponse {
-    init(id: Int, key: String, name: String, createdAt: Date, createdBy: String) throws {
+extension ApiKeyCreateResponse {
+    public init(id: Int, key: String, name: String, createdAt: Date, createdBy: String) throws {
         (self.id, self.key) = (id, key)
         (self.name, self.createdAt) = (name, createdAt)
         self.createdBy = createdBy
-        try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-        try sdkValidateUuid("created_by", self.createdBy)
+            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+            try sdkValidateUuid("created_by", self.createdBy)
     }
 }

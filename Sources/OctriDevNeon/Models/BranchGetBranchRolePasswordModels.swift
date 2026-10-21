@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Branch domain models
+// Branch domain models
 /// Typed representation of the `RolePasswordResponse` API schema.
 public struct RolePasswordResponse: Codable {
     /// The role password
@@ -13,27 +13,21 @@ public struct RolePasswordResponse: Codable {
         case password
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RolePasswordResponse {
-    init(from decoder: Decoder) throws {
+extension RolePasswordResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.password) else {
-            throw SdkValidationError(
-                field: "password",
-                code: "required",
-                message: "Validation failed for 'password': value is required"
-            )
+            throw SdkValidationError(field: "password", code: "required", message: "Validation failed for 'password': value is required")
         }
-        password = try container.sdkDecodeRequired(.password)
+        self.password = try container.sdkDecodeRequired(.password)
     }
 }
 
-public extension RolePasswordResponse {
-    init(password: String) {
+extension RolePasswordResponse {
+    public init(password: String) {
         self.password = password
     }
 }

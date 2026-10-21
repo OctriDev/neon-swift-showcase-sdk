@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Organizations domain models
+// Organizations domain models
 /// Typed representation of the `OrganizationInviteCreateRequest` API schema.
 public struct OrganizationInviteCreateRequest: Codable {
     /// Email address of the person to invite to the organization.
@@ -18,40 +18,30 @@ public struct OrganizationInviteCreateRequest: Codable {
         case role
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OrganizationInviteCreateRequest {
-    init(from decoder: Decoder) throws {
+extension OrganizationInviteCreateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.email) else {
-            throw SdkValidationError(
-                field: "email",
-                code: "required",
-                message: "Validation failed for 'email': value is required"
-            )
+            throw SdkValidationError(field: "email", code: "required", message: "Validation failed for 'email': value is required")
         }
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
-        email = try container.sdkDecodeRequired(.email)
-        role = try container.sdkDecodeRequired(.role)
-        try validateLength("email", email, min: 1, max: 256)
-        try sdkValidateEmail("email", email)
+        self.email = try container.sdkDecodeRequired(.email)
+        self.role = try container.sdkDecodeRequired(.role)
+            try validateLength("email", self.email, min: 1, max: 256)
+            try sdkValidateEmail("email", self.email)
     }
 }
 
-public extension OrganizationInviteCreateRequest {
-    init(email: String, role: MemberRole) throws {
+extension OrganizationInviteCreateRequest {
+    public init(email: String, role: MemberRole) throws {
         (self.email, self.role) = (email, role)
-        try validateLength("email", self.email, min: 1, max: 256)
-        try sdkValidateEmail("email", self.email)
+            try validateLength("email", self.email, min: 1, max: 256)
+            try sdkValidateEmail("email", self.email)
     }
 }
 
@@ -64,27 +54,21 @@ public struct OrganizationInvitesCreateRequest: Codable {
         case invitations
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OrganizationInvitesCreateRequest {
-    init(from decoder: Decoder) throws {
+extension OrganizationInvitesCreateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.invitations) else {
-            throw SdkValidationError(
-                field: "invitations",
-                code: "required",
-                message: "Validation failed for 'invitations': value is required"
-            )
+            throw SdkValidationError(field: "invitations", code: "required", message: "Validation failed for 'invitations': value is required")
         }
-        invitations = try container.sdkDecodeRequired(.invitations)
+        self.invitations = try container.sdkDecodeRequired(.invitations)
     }
 }
 
-public extension OrganizationInvitesCreateRequest {
-    init(invitations: [OrganizationInviteCreateRequest]) {
+extension OrganizationInvitesCreateRequest {
+    public init(invitations: [OrganizationInviteCreateRequest]) {
         self.invitations = invitations
     }
 }

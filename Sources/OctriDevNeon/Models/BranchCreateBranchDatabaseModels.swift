@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Branch domain models
+// Branch domain models
 /// Configuration for the new Postgres database.
 public struct DatabaseCreateRequestDatabase: Codable {
     /// Name of the database to create.
@@ -16,35 +16,25 @@ public struct DatabaseCreateRequestDatabase: Codable {
         case ownerName = "owner_name"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension DatabaseCreateRequestDatabase {
-    init(from decoder: Decoder) throws {
+extension DatabaseCreateRequestDatabase {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.ownerName) else {
-            throw SdkValidationError(
-                field: "owner_name",
-                code: "required",
-                message: "Validation failed for 'owner_name': value is required"
-            )
+            throw SdkValidationError(field: "owner_name", code: "required", message: "Validation failed for 'owner_name': value is required")
         }
-        name = try container.sdkDecodeRequired(.name)
-        ownerName = try container.sdkDecodeRequired(.ownerName)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.ownerName = try container.sdkDecodeRequired(.ownerName)
     }
 }
 
-public extension DatabaseCreateRequestDatabase {
-    init(name: String, ownerName: String) {
+extension DatabaseCreateRequestDatabase {
+    public init(name: String, ownerName: String) {
         (self.name, self.ownerName) = (name, ownerName)
     }
 }
@@ -58,27 +48,21 @@ public struct DatabaseCreateRequest: Codable {
         case database
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension DatabaseCreateRequest {
-    init(from decoder: Decoder) throws {
+extension DatabaseCreateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.database) else {
-            throw SdkValidationError(
-                field: "database",
-                code: "required",
-                message: "Validation failed for 'database': value is required"
-            )
+            throw SdkValidationError(field: "database", code: "required", message: "Validation failed for 'database': value is required")
         }
-        database = try container.sdkDecodeRequired(.database)
+        self.database = try container.sdkDecodeRequired(.database)
     }
 }
 
-public extension DatabaseCreateRequest {
-    init(database: DatabaseCreateRequestDatabase) {
+extension DatabaseCreateRequest {
+    public init(database: DatabaseCreateRequestDatabase) {
         self.database = database
     }
 }

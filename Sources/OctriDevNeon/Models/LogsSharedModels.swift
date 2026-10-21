@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Logs domain models
+// Logs domain models
 public typealias ProjectBranchLogDuration = String
 
 /// Typed representation of the `ProjectBranchLogsNotAvailable` API schema.
@@ -24,43 +24,29 @@ public struct ProjectBranchLogsNotAvailable: Codable {
         case reason
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectBranchLogsNotAvailable {
-    init(from decoder: Decoder) throws {
+extension ProjectBranchLogsNotAvailable {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
         guard container.contains(.message) else {
-            throw SdkValidationError(
-                field: "message",
-                code: "required",
-                message: "Validation failed for 'message': value is required"
-            )
+            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
         }
         guard container.contains(.reason) else {
-            throw SdkValidationError(
-                field: "reason",
-                code: "required",
-                message: "Validation failed for 'reason': value is required"
-            )
+            throw SdkValidationError(field: "reason", code: "required", message: "Validation failed for 'reason': value is required")
         }
-        code = try container.sdkDecodeRequired(.code)
-        message = try container.sdkDecodeRequired(.message)
-        reason = try container.sdkDecodeRequired(.reason)
+        self.code = try container.sdkDecodeRequired(.code)
+        self.message = try container.sdkDecodeRequired(.message)
+        self.reason = try container.sdkDecodeRequired(.reason)
     }
 }
 
-public extension ProjectBranchLogsNotAvailable {
-    init(code: String, message: String, reason: ProjectBranchLogsNotAvailableReason) {
+extension ProjectBranchLogsNotAvailable {
+    public init(code: String, message: String, reason: ProjectBranchLogsNotAvailableReason) {
         (self.code, self.message) = (code, message)
         self.reason = reason
     }
@@ -86,43 +72,29 @@ public struct ProjectBranchLogsInvalidQuery: Codable {
         case reason
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectBranchLogsInvalidQuery {
-    init(from decoder: Decoder) throws {
+extension ProjectBranchLogsInvalidQuery {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
         guard container.contains(.message) else {
-            throw SdkValidationError(
-                field: "message",
-                code: "required",
-                message: "Validation failed for 'message': value is required"
-            )
+            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
         }
         guard container.contains(.reason) else {
-            throw SdkValidationError(
-                field: "reason",
-                code: "required",
-                message: "Validation failed for 'reason': value is required"
-            )
+            throw SdkValidationError(field: "reason", code: "required", message: "Validation failed for 'reason': value is required")
         }
-        code = try container.sdkDecodeRequired(.code)
-        message = try container.sdkDecodeRequired(.message)
-        reason = try container.sdkDecodeRequired(.reason)
+        self.code = try container.sdkDecodeRequired(.code)
+        self.message = try container.sdkDecodeRequired(.message)
+        self.reason = try container.sdkDecodeRequired(.reason)
     }
 }
 
-public extension ProjectBranchLogsInvalidQuery {
-    init(code: String, message: String, reason: ProjectBranchLogsInvalidQueryReason) {
+extension ProjectBranchLogsInvalidQuery {
+    public init(code: String, message: String, reason: ProjectBranchLogsInvalidQueryReason) {
         (self.code, self.message) = (code, message)
         self.reason = reason
     }
@@ -134,16 +106,13 @@ public extension ProjectBranchLogsInvalidQuery {
 public struct ProjectBranchLogsNotAvailableReason: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let branchNotFound = ProjectBranchLogsNotAvailableReason(rawValue: "branch_not_found")
     public static let telemetryNotEnabled = ProjectBranchLogsNotAvailableReason(rawValue: "telemetry_not_enabled")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -160,10 +129,7 @@ public struct ProjectBranchLogsNotAvailableReason: RawRepresentable, Hashable, C
 public struct ProjectBranchLogsInvalidQueryReason: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let timeRangeTooLarge = ProjectBranchLogsInvalidQueryReason(rawValue: "time_range_too_large")
     public static let invalidTimeRange = ProjectBranchLogsInvalidQueryReason(rawValue: "invalid_time_range")
     public static let conflictingTimeRange = ProjectBranchLogsInvalidQueryReason(rawValue: "conflicting_time_range")
@@ -174,7 +140,7 @@ public struct ProjectBranchLogsInvalidQueryReason: RawRepresentable, Hashable, C
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -187,17 +153,14 @@ public struct ProjectBranchLogsInvalidQueryReason: RawRepresentable, Hashable, C
 public struct ProjectBranchLogSource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let function = ProjectBranchLogSource(rawValue: "function")
     public static let storage = ProjectBranchLogSource(rawValue: "storage")
     public static let pgEndpoint = ProjectBranchLogSource(rawValue: "pg_endpoint")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
