@@ -15,19 +15,19 @@ struct UpdateAuthOAuthClientRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(self.redirectUris, forKey: SdkCodingKey("redirect_uris"))
-        try keyedContainer.encodeIfPresent(self.skipConsent, forKey: SdkCodingKey("skip_consent"))
-        try keyedContainer.encodeIfPresent(self.disabled, forKey: SdkCodingKey("disabled"))
-        try keyedContainer.encodeIfPresent(self.resources, forKey: SdkCodingKey("resources"))
+        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(redirectUris, forKey: SdkCodingKey("redirect_uris"))
+        try keyedContainer.encodeIfPresent(skipConsent, forKey: SdkCodingKey("skip_consent"))
+        try keyedContainer.encodeIfPresent(disabled, forKey: SdkCodingKey("disabled"))
+        try keyedContainer.encodeIfPresent(resources, forKey: SdkCodingKey("resources"))
     }
 
     init(options: AuthMethods.UpdateAuthOAuthClientOptions) {
-        self.name = options.name
-        self.redirectUris = options.redirectUris
-        self.skipConsent = options.skipConsent
-        self.disabled = options.disabled
-        self.resources = options.resources
+        name = options.name
+        redirectUris = options.redirectUris
+        skipConsent = options.skipConsent
+        disabled = options.disabled
+        resources = options.resources
     }
 }
 
@@ -39,10 +39,10 @@ struct UpdateAuthWebhookConfigRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.enabled, forKey: SdkCodingKey("enabled"))
-        try keyedContainer.encodeIfPresent(self.webhookUrl, forKey: SdkCodingKey("webhook_url"))
-        try keyedContainer.encodeIfPresent(self.enabledEvents, forKey: SdkCodingKey("enabled_events"))
-        try keyedContainer.encodeIfPresent(self.timeoutSeconds, forKey: SdkCodingKey("timeout_seconds"))
+        try keyedContainer.encode(enabled, forKey: SdkCodingKey("enabled"))
+        try keyedContainer.encodeIfPresent(webhookUrl, forKey: SdkCodingKey("webhook_url"))
+        try keyedContainer.encodeIfPresent(enabledEvents, forKey: SdkCodingKey("enabled_events"))
+        try keyedContainer.encodeIfPresent(timeoutSeconds, forKey: SdkCodingKey("timeout_seconds"))
     }
 }
 
@@ -51,7 +51,7 @@ struct UpdateBranchRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.branch, forKey: SdkCodingKey("branch"))
+        try keyedContainer.encode(branch, forKey: SdkCodingKey("branch"))
     }
 }
 
@@ -63,10 +63,10 @@ struct RestoreBranchRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.sourceBranchId, forKey: SdkCodingKey("source_branch_id"))
-        try keyedContainer.encodeIfPresent(self.sourceLsn, forKey: SdkCodingKey("source_lsn"))
-        try keyedContainer.encodeIfPresent(self.sourceTimestamp, forKey: SdkCodingKey("source_timestamp"))
-        try keyedContainer.encodeIfPresent(self.preserveUnderName, forKey: SdkCodingKey("preserve_under_name"))
+        try keyedContainer.encode(sourceBranchId, forKey: SdkCodingKey("source_branch_id"))
+        try keyedContainer.encodeIfPresent(sourceLsn, forKey: SdkCodingKey("source_lsn"))
+        try keyedContainer.encodeIfPresent(sourceTimestamp, forKey: SdkCodingKey("source_timestamp"))
+        try keyedContainer.encodeIfPresent(preserveUnderName, forKey: SdkCodingKey("preserve_under_name"))
     }
 }
 
@@ -75,7 +75,7 @@ struct UpdateMaskingRulesRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.maskingRules, forKey: SdkCodingKey("masking_rules"))
+        try keyedContainer.encode(maskingRules, forKey: SdkCodingKey("masking_rules"))
     }
 }
 
@@ -84,7 +84,7 @@ struct FinalizeRestoreBranchRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
     }
 }
 
@@ -93,7 +93,7 @@ struct CreateBranchDatabaseRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.database, forKey: SdkCodingKey("database"))
+        try keyedContainer.encode(database, forKey: SdkCodingKey("database"))
     }
 }
 
@@ -102,7 +102,7 @@ struct UpdateBranchDatabaseRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.database, forKey: SdkCodingKey("database"))
+        try keyedContainer.encode(database, forKey: SdkCodingKey("database"))
     }
 }
 
@@ -111,7 +111,7 @@ struct CreateBranchRoleRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.role, forKey: SdkCodingKey("role"))
+        try keyedContainer.encode(role, forKey: SdkCodingKey("role"))
     }
 }
 
@@ -120,7 +120,7 @@ struct EnableRealtimeRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.allowedOrigins, forKey: SdkCodingKey("allowed_origins"))
+        try keyedContainer.encodeIfPresent(allowedOrigins, forKey: SdkCodingKey("allowed_origins"))
     }
 }
 
@@ -129,7 +129,7 @@ struct CreateEndpointRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.endpoint, forKey: SdkCodingKey("endpoint"))
+        try keyedContainer.encode(endpoint, forKey: SdkCodingKey("endpoint"))
     }
 }
 
@@ -138,7 +138,7 @@ struct UpdateEndpointRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.endpoint, forKey: SdkCodingKey("endpoint"))
+        try keyedContainer.encode(endpoint, forKey: SdkCodingKey("endpoint"))
     }
 }
 
@@ -147,7 +147,7 @@ struct SetOrganizationSpendingLimitRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.spendingLimitCents, forKey: SdkCodingKey("spending_limit_cents"))
+        try keyedContainer.encode(spendingLimitCents, forKey: SdkCodingKey("spending_limit_cents"))
     }
 }
 
@@ -156,7 +156,7 @@ struct UpdateOrganizationMemberRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.role, forKey: SdkCodingKey("role"))
+        try keyedContainer.encode(role, forKey: SdkCodingKey("role"))
     }
 }
 
@@ -165,7 +165,7 @@ struct CreateOrganizationInvitationsRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.invitations, forKey: SdkCodingKey("invitations"))
+        try keyedContainer.encode(invitations, forKey: SdkCodingKey("invitations"))
     }
 }
 
@@ -175,8 +175,8 @@ struct TransferOrganizationsProjectsRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.destinationOrgId, forKey: SdkCodingKey("destination_org_id"))
-        try keyedContainer.encode(self.projectIds, forKey: SdkCodingKey("project_ids"))
+        try keyedContainer.encode(destinationOrgId, forKey: SdkCodingKey("destination_org_id"))
+        try keyedContainer.encode(projectIds, forKey: SdkCodingKey("project_ids"))
     }
 }
 
@@ -185,7 +185,7 @@ struct AssignOrganizationVpcEndpointRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.label, forKey: SdkCodingKey("label"))
+        try keyedContainer.encode(label, forKey: SdkCodingKey("label"))
     }
 }
 
@@ -195,8 +195,8 @@ struct TransferUsersProjectsRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.destinationOrgId, forKey: SdkCodingKey("destination_org_id"))
-        try keyedContainer.encode(self.projectIds, forKey: SdkCodingKey("project_ids"))
+        try keyedContainer.encode(destinationOrgId, forKey: SdkCodingKey("destination_org_id"))
+        try keyedContainer.encode(projectIds, forKey: SdkCodingKey("project_ids"))
     }
 }
 
@@ -205,6 +205,6 @@ struct UpdateSnapshotRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.snapshot, forKey: SdkCodingKey("snapshot"))
+        try keyedContainer.encode(snapshot, forKey: SdkCodingKey("snapshot"))
     }
 }

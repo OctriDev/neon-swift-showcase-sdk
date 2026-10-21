@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Auth domain models
+/// Auth domain models
 /// Typed representation of the `UpdateNeonAuthUserRoleResponse` API schema.
 public struct UpdateNeonAuthUserRoleResponse: Codable {
     /// ID of the updated user
@@ -13,21 +13,27 @@ public struct UpdateNeonAuthUserRoleResponse: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension UpdateNeonAuthUserRoleResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension UpdateNeonAuthUserRoleResponse {
-    public init(id: String) {
+public extension UpdateNeonAuthUserRoleResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+    }
+}
+
+public extension UpdateNeonAuthUserRoleResponse {
+    init(id: String) {
         self.id = id
     }
 }
@@ -43,23 +49,29 @@ public struct UpdateNeonAuthUserRoleRequest: Codable {
         case roles
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension UpdateNeonAuthUserRoleRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.roles) else {
-            throw SdkValidationError(field: "roles", code: "required", message: "Validation failed for 'roles': value is required")
-        }
-        self.roles = try container.sdkDecodeRequired(.roles)
-            try validateItems("roles", self.roles, min: 1, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension UpdateNeonAuthUserRoleRequest {
-    public init(roles: [String]) throws {
+public extension UpdateNeonAuthUserRoleRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.roles) else {
+            throw SdkValidationError(
+                field: "roles",
+                code: "required",
+                message: "Validation failed for 'roles': value is required"
+            )
+        }
+        roles = try container.sdkDecodeRequired(.roles)
+        try validateItems("roles", roles, min: 1, max: nil)
+    }
+}
+
+public extension UpdateNeonAuthUserRoleRequest {
+    init(roles: [String]) throws {
         self.roles = roles
-            try validateItems("roles", self.roles, min: 1, max: nil)
+        try validateItems("roles", self.roles, min: 1, max: nil)
     }
 }

@@ -6,34 +6,76 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension BranchMethods {
-    /// Retrieves the masking rules for the specified anonymized branch. Masking rules define how sensitive data should be anonymized using PostgreSQL Anonymizer. **Note**: This endpoint is currently in Beta.
+public extension BranchMethods {
+    /// Retrieves the masking rules for the specified anonymized branch. Masking rules define how sensitive data should
+    /// be anonymized using PostgreSQL Anonymizer. **Note**: This endpoint is currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The branch ID
-    public static func getMaskingRules(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> MaskingRulesResponse {
+    static func getMaskingRules(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> MaskingRulesResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/masking_rules"].joined(), config: config, decoder: .json, operationId: "getMaskingRules", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/masking_rules",
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getMaskingRules",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
-    /// Updates the masking rules for the specified anonymized branch. Masking rules define how sensitive data should be anonymized using PostgreSQL Anonymizer. **Note**: This endpoint is currently in Beta.
+    /// Updates the masking rules for the specified anonymized branch. Masking rules define how sensitive data should be
+    /// anonymized using PostgreSQL Anonymizer. **Note**: This endpoint is currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The branch ID
     /// - maskingRules: List of masking rules to apply to the branch. This will
     ///   replace all existing masking rules for the branch.
-    public static func updateMaskingRules(config: ClientConfig, projectId: String, branchId: String, maskingRules: [MaskingRule], requestOptions: RequestOptions? = nil) async throws -> MaskingRulesResponse {
+    static func updateMaskingRules(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        maskingRules: [MaskingRule],
+        requestOptions: RequestOptions? = nil
+    ) async throws -> MaskingRulesResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
         let requestBody = UpdateMaskingRulesRequestBody(maskingRules: maskingRules)
 
-        return try (await sdkRequest("PATCH", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/masking_rules"].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateMaskingRules", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "PATCH",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/masking_rules",
+            ].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "updateMaskingRules",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

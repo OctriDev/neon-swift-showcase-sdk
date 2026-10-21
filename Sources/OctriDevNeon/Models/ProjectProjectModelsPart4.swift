@@ -3,41 +3,57 @@
 
 import Foundation
 
-// ProjectProject domain models
-extension ProjectTransferRequestResponse {
-    public init(from decoder: Decoder) throws {
+/// ProjectProject domain models
+public extension ProjectTransferRequestResponse {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
         }
         guard container.contains(.projectId) else {
-            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
+            throw SdkValidationError(
+                field: "project_id",
+                code: "required",
+                message: "Validation failed for 'project_id': value is required"
+            )
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
         }
         guard container.contains(.expiresAt) else {
-            throw SdkValidationError(field: "expires_at", code: "required", message: "Validation failed for 'expires_at': value is required")
+            throw SdkValidationError(
+                field: "expires_at",
+                code: "required",
+                message: "Validation failed for 'expires_at': value is required"
+            )
         }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.projectId = try container.sdkDecodeRequired(.projectId)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.expiresAt = try container.sdkDecodeRequired(.expiresAt)
-            try sdkValidateUuid("id", self.id)
-            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-            try sdkValidateDateTime("expires_at", sdkWireString(self.expiresAt))
+        id = try container.sdkDecodeRequired(.id)
+        projectId = try container.sdkDecodeRequired(.projectId)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        expiresAt = try container.sdkDecodeRequired(.expiresAt)
+        try sdkValidateUuid("id", id)
+        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
+        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
+        try sdkValidateDateTime("expires_at", sdkWireString(expiresAt))
     }
 }
 
-extension ProjectTransferRequestResponse {
-    public init(id: String, projectId: String, createdAt: Date, expiresAt: Date) throws {
+public extension ProjectTransferRequestResponse {
+    init(id: String, projectId: String, createdAt: Date, expiresAt: Date) throws {
         (self.id, self.projectId) = (id, projectId)
         (self.createdAt, self.expiresAt) = (createdAt, expiresAt)
-            try sdkValidateUuid("id", self.id)
-            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-            try sdkValidateDateTime("expires_at", sdkWireString(self.expiresAt))
+        try sdkValidateUuid("id", self.id)
+        try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+        try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+        try sdkValidateDateTime("expires_at", sdkWireString(self.expiresAt))
     }
 }
 
@@ -59,41 +75,55 @@ public struct ProjectPermission: Codable {
         case revokedAt = "revoked_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension ProjectPermission {
-    public init(from decoder: Decoder) throws {
+public extension ProjectPermission {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
         }
         guard container.contains(.grantedToEmail) else {
-            throw SdkValidationError(field: "granted_to_email", code: "required", message: "Validation failed for 'granted_to_email': value is required")
+            throw SdkValidationError(
+                field: "granted_to_email",
+                code: "required",
+                message: "Validation failed for 'granted_to_email': value is required"
+            )
         }
         guard container.contains(.grantedAt) else {
-            throw SdkValidationError(field: "granted_at", code: "required", message: "Validation failed for 'granted_at': value is required")
+            throw SdkValidationError(
+                field: "granted_at",
+                code: "required",
+                message: "Validation failed for 'granted_at': value is required"
+            )
         }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.grantedToEmail = try container.sdkDecodeRequired(.grantedToEmail)
-        self.grantedAt = try container.sdkDecodeRequired(.grantedAt)
-        self.revokedAt = try container.sdkDecodeIfPresent(.revokedAt)
-            try validateLength("granted_to_email", self.grantedToEmail, min: 1, max: 256)
-            try sdkValidateEmail("granted_to_email", self.grantedToEmail)
-            try sdkValidateDateTime("granted_at", sdkWireString(self.grantedAt))
-        if let value = self.revokedAt {
+        id = try container.sdkDecodeRequired(.id)
+        grantedToEmail = try container.sdkDecodeRequired(.grantedToEmail)
+        grantedAt = try container.sdkDecodeRequired(.grantedAt)
+        revokedAt = try container.sdkDecodeIfPresent(.revokedAt)
+        try validateLength("granted_to_email", grantedToEmail, min: 1, max: 256)
+        try sdkValidateEmail("granted_to_email", grantedToEmail)
+        try sdkValidateDateTime("granted_at", sdkWireString(grantedAt))
+        if let value = revokedAt {
             try sdkValidateDateTime("revoked_at", sdkWireString(value))
         }
     }
 }
 
-extension ProjectPermission {
-    public init(id: String, grantedToEmail: String, grantedAt: Date, revokedAt: Date? = nil) throws {
+public extension ProjectPermission {
+    init(id: String, grantedToEmail: String, grantedAt: Date, revokedAt: Date? = nil) throws {
         (self.id, self.grantedToEmail) = (id, grantedToEmail)
         (self.grantedAt, self.revokedAt) = (grantedAt, revokedAt)
-            try validateLength("granted_to_email", self.grantedToEmail, min: 1, max: 256)
-            try sdkValidateEmail("granted_to_email", self.grantedToEmail)
-            try sdkValidateDateTime("granted_at", sdkWireString(self.grantedAt))
+        try validateLength("granted_to_email", self.grantedToEmail, min: 1, max: 256)
+        try sdkValidateEmail("granted_to_email", self.grantedToEmail)
+        try sdkValidateDateTime("granted_at", sdkWireString(self.grantedAt))
         if let value = self.revokedAt {
             try sdkValidateDateTime("revoked_at", sdkWireString(value))
         }
@@ -106,14 +136,17 @@ extension ProjectPermission {
 public struct ProjectPermissionLevel: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let viewer = ProjectPermissionLevel(rawValue: "VIEWER")
     public static let editor = ProjectPermissionLevel(rawValue: "EDITOR")
     public static let admin = ProjectPermissionLevel(rawValue: "ADMIN")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -126,7 +159,10 @@ public struct ProjectPermissionLevel: RawRepresentable, Hashable, Codable, Senda
 public struct ProjectMemberOrgRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let admin = ProjectMemberOrgRole(rawValue: "admin")
     public static let member = ProjectMemberOrgRole(rawValue: "member")
     public static let editor = ProjectMemberOrgRole(rawValue: "editor")
@@ -135,7 +171,7 @@ public struct ProjectMemberOrgRole: RawRepresentable, Hashable, Codable, Sendabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -148,7 +184,10 @@ public struct ProjectMemberOrgRole: RawRepresentable, Hashable, Codable, Sendabl
 public struct ProjectMemberGrantSource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let explicit = ProjectMemberGrantSource(rawValue: "explicit")
     public static let orgRoleDefault = ProjectMemberGrantSource(rawValue: "org_role_default")
     public static let orgAdminOverride = ProjectMemberGrantSource(rawValue: "org_admin_override")
@@ -156,7 +195,7 @@ public struct ProjectMemberGrantSource: RawRepresentable, Hashable, Codable, Sen
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -169,14 +208,17 @@ public struct ProjectMemberGrantSource: RawRepresentable, Hashable, Codable, Sen
 public struct ProjectAuditLogLevel: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let base = ProjectAuditLogLevel(rawValue: "base")
     public static let extended = ProjectAuditLogLevel(rawValue: "extended")
     public static let full = ProjectAuditLogLevel(rawValue: "full")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -189,14 +231,17 @@ public struct ProjectAuditLogLevel: RawRepresentable, Hashable, Codable, Sendabl
 public struct ProjectRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let viewer = ProjectRole(rawValue: "viewer")
     public static let editor = ProjectRole(rawValue: "editor")
     public static let admin = ProjectRole(rawValue: "admin")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

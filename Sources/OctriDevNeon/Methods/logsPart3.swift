@@ -6,17 +6,39 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension LogsMethods {
-    /// Lists the low-cardinality log fields observed on this branch whose distinct values can be discovered with the log field-values endpoint. The set is computed per branch and grows as new fields are observed, so treat it as data rather than a fixed list: discover a field here, then pass it as `field_name` to the field-values endpoint. **Note**: This endpoint is currently in Private Beta.
+public extension LogsMethods {
+    /// Lists the low-cardinality log fields observed on this branch whose distinct values can be discovered with the
+    /// log field-values endpoint. The set is computed per branch and grows as new fields are observed, so treat it as
+    /// data rather than a fixed list: discover a field here, then pass it as `field_name` to the field-values endpoint.
+    /// **Note**: This endpoint is currently in Private Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
-    public static func listLogsFields(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectBranchLogFieldsResponse {
+    static func listLogsFields(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectBranchLogFieldsResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/logs/fields"].joined(), config: config, decoder: .json, operationId: "listLogsFields", options: requestOptions, errors: ["404": ProjectBranchLogsNotAvailable.self, "default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/logs/fields",
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "listLogsFields",
+            options: requestOptions,
+            errors: ["404": ProjectBranchLogsNotAvailable.self, "default": GeneralError.self]
+        )).data
     }
 }

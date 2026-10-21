@@ -3,9 +3,15 @@
 
 import Foundation
 
-// Auth domain models
-extension NeonAuthOAuthClientUpdateRequest {
-    public init(name: String? = nil, redirectUris: [String]? = nil, skipConsent: Bool? = nil, disabled: Bool? = nil, resources: [String]? = nil) throws {
+/// Auth domain models
+public extension NeonAuthOAuthClientUpdateRequest {
+    init(
+        name: String? = nil,
+        redirectUris: [String]? = nil,
+        skipConsent: Bool? = nil,
+        disabled: Bool? = nil,
+        resources: [String]? = nil
+    ) throws {
         self.init()
         (self.name, self.redirectUris) = (name, redirectUris)
         (self.skipConsent, self.disabled) = (skipConsent, disabled)
@@ -31,19 +37,19 @@ public struct NeonAuthOAuthClientCreatedVariant1: Codable {
     }
 
     init() {
-        self.clientSecret = nil
+        clientSecret = nil
     }
 }
 
-extension NeonAuthOAuthClientCreatedVariant1 {
-    public init(from decoder: Decoder) throws {
+public extension NeonAuthOAuthClientCreatedVariant1 {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.clientSecret = try container.sdkDecodeIfPresent(.clientSecret)
+        clientSecret = try container.sdkDecodeIfPresent(.clientSecret)
     }
 }
 
-extension NeonAuthOAuthClientCreatedVariant1 {
-    public init(clientSecret: String? = nil) {
+public extension NeonAuthOAuthClientCreatedVariant1 {
+    init(clientSecret: String? = nil) {
         self.init()
         self.clientSecret = clientSecret
     }
@@ -77,45 +83,83 @@ public struct NeonAuthEmailAndPasswordConfig: Codable {
         case disableSignUp = "disable_sign_up"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension NeonAuthEmailAndPasswordConfig {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.enabled) else {
-            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
-        }
-        guard container.contains(.emailVerificationMethod) else {
-            throw SdkValidationError(field: "email_verification_method", code: "required", message: "Validation failed for 'email_verification_method': value is required")
-        }
-        guard container.contains(.requireEmailVerification) else {
-            throw SdkValidationError(field: "require_email_verification", code: "required", message: "Validation failed for 'require_email_verification': value is required")
-        }
-        guard container.contains(.autoSignInAfterVerification) else {
-            throw SdkValidationError(field: "auto_sign_in_after_verification", code: "required", message: "Validation failed for 'auto_sign_in_after_verification': value is required")
-        }
-        guard container.contains(.sendVerificationEmailOnSignUp) else {
-            throw SdkValidationError(field: "send_verification_email_on_sign_up", code: "required", message: "Validation failed for 'send_verification_email_on_sign_up': value is required")
-        }
-        guard container.contains(.sendVerificationEmailOnSignIn) else {
-            throw SdkValidationError(field: "send_verification_email_on_sign_in", code: "required", message: "Validation failed for 'send_verification_email_on_sign_in': value is required")
-        }
-        guard container.contains(.disableSignUp) else {
-            throw SdkValidationError(field: "disable_sign_up", code: "required", message: "Validation failed for 'disable_sign_up': value is required")
-        }
-        self.enabled = try container.sdkDecodeRequired(.enabled)
-        self.emailVerificationMethod = try container.sdkDecodeRequired(.emailVerificationMethod)
-        self.requireEmailVerification = try container.sdkDecodeRequired(.requireEmailVerification)
-        self.autoSignInAfterVerification = try container.sdkDecodeRequired(.autoSignInAfterVerification)
-        self.sendVerificationEmailOnSignUp = try container.sdkDecodeRequired(.sendVerificationEmailOnSignUp)
-        self.sendVerificationEmailOnSignIn = try container.sdkDecodeRequired(.sendVerificationEmailOnSignIn)
-        self.disableSignUp = try container.sdkDecodeRequired(.disableSignUp)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension NeonAuthEmailAndPasswordConfig {
-    public init(enabled: Bool, emailVerificationMethod: NeonAuthEmailVerificationMethod, requireEmailVerification: Bool, autoSignInAfterVerification: Bool, sendVerificationEmailOnSignUp: Bool, sendVerificationEmailOnSignIn: Bool, disableSignUp: Bool) {
+public extension NeonAuthEmailAndPasswordConfig {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.enabled) else {
+            throw SdkValidationError(
+                field: "enabled",
+                code: "required",
+                message: "Validation failed for 'enabled': value is required"
+            )
+        }
+        guard container.contains(.emailVerificationMethod) else {
+            throw SdkValidationError(
+                field: "email_verification_method",
+                code: "required",
+                message: "Validation failed for 'email_verification_method': value is required"
+            )
+        }
+        guard container.contains(.requireEmailVerification) else {
+            throw SdkValidationError(
+                field: "require_email_verification",
+                code: "required",
+                message: "Validation failed for 'require_email_verification': value is required"
+            )
+        }
+        guard container.contains(.autoSignInAfterVerification) else {
+            throw SdkValidationError(
+                field: "auto_sign_in_after_verification",
+                code: "required",
+                message: "Validation failed for 'auto_sign_in_after_verification': value is required"
+            )
+        }
+        guard container.contains(.sendVerificationEmailOnSignUp) else {
+            throw SdkValidationError(
+                field: "send_verification_email_on_sign_up",
+                code: "required",
+                message: "Validation failed for 'send_verification_email_on_sign_up': value is required"
+            )
+        }
+        guard container.contains(.sendVerificationEmailOnSignIn) else {
+            throw SdkValidationError(
+                field: "send_verification_email_on_sign_in",
+                code: "required",
+                message: "Validation failed for 'send_verification_email_on_sign_in': value is required"
+            )
+        }
+        guard container.contains(.disableSignUp) else {
+            throw SdkValidationError(
+                field: "disable_sign_up",
+                code: "required",
+                message: "Validation failed for 'disable_sign_up': value is required"
+            )
+        }
+        enabled = try container.sdkDecodeRequired(.enabled)
+        emailVerificationMethod = try container.sdkDecodeRequired(.emailVerificationMethod)
+        requireEmailVerification = try container.sdkDecodeRequired(.requireEmailVerification)
+        autoSignInAfterVerification = try container.sdkDecodeRequired(.autoSignInAfterVerification)
+        sendVerificationEmailOnSignUp = try container.sdkDecodeRequired(.sendVerificationEmailOnSignUp)
+        sendVerificationEmailOnSignIn = try container.sdkDecodeRequired(.sendVerificationEmailOnSignIn)
+        disableSignUp = try container.sdkDecodeRequired(.disableSignUp)
+    }
+}
+
+public extension NeonAuthEmailAndPasswordConfig {
+    init(
+        enabled: Bool,
+        emailVerificationMethod: NeonAuthEmailVerificationMethod,
+        requireEmailVerification: Bool,
+        autoSignInAfterVerification: Bool,
+        sendVerificationEmailOnSignUp: Bool,
+        sendVerificationEmailOnSignIn: Bool,
+        disableSignUp: Bool
+    ) {
         (self.enabled, self.emailVerificationMethod) = (enabled, emailVerificationMethod)
         self.requireEmailVerification = requireEmailVerification
         self.autoSignInAfterVerification = autoSignInAfterVerification
@@ -134,21 +178,27 @@ public struct UpdateNeonAuthAllowLocalhostRequest: Codable {
         case allowLocalhost = "allow_localhost"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension UpdateNeonAuthAllowLocalhostRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.allowLocalhost) else {
-            throw SdkValidationError(field: "allow_localhost", code: "required", message: "Validation failed for 'allow_localhost': value is required")
-        }
-        self.allowLocalhost = try container.sdkDecodeRequired(.allowLocalhost)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension UpdateNeonAuthAllowLocalhostRequest {
-    public init(allowLocalhost: Bool) {
+public extension UpdateNeonAuthAllowLocalhostRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.allowLocalhost) else {
+            throw SdkValidationError(
+                field: "allow_localhost",
+                code: "required",
+                message: "Validation failed for 'allow_localhost': value is required"
+            )
+        }
+        allowLocalhost = try container.sdkDecodeRequired(.allowLocalhost)
+    }
+}
+
+public extension UpdateNeonAuthAllowLocalhostRequest {
+    init(allowLocalhost: Bool) {
         self.allowLocalhost = allowLocalhost
     }
 }
@@ -183,26 +233,40 @@ public struct NeonAuthEmailAndPasswordConfigUpdate: Codable {
     }
 
     init() {
-        (self.enabled, self.emailVerificationMethod, self.requireEmailVerification, self.autoSignInAfterVerification, self.sendVerificationEmailOnSignUp) = (nil, nil, nil, nil, nil)
-        (self.sendVerificationEmailOnSignIn, self.disableSignUp) = (nil, nil)
+        (
+            enabled,
+            emailVerificationMethod,
+            requireEmailVerification,
+            autoSignInAfterVerification,
+            sendVerificationEmailOnSignUp
+        ) = (nil, nil, nil, nil, nil)
+        (sendVerificationEmailOnSignIn, disableSignUp) = (nil, nil)
     }
 }
 
-extension NeonAuthEmailAndPasswordConfigUpdate {
-    public init(from decoder: Decoder) throws {
+public extension NeonAuthEmailAndPasswordConfigUpdate {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.enabled = try container.sdkDecodeIfPresent(.enabled)
-        self.emailVerificationMethod = try container.sdkDecodeIfPresent(.emailVerificationMethod)
-        self.requireEmailVerification = try container.sdkDecodeIfPresent(.requireEmailVerification)
-        self.autoSignInAfterVerification = try container.sdkDecodeIfPresent(.autoSignInAfterVerification)
-        self.sendVerificationEmailOnSignUp = try container.sdkDecodeIfPresent(.sendVerificationEmailOnSignUp)
-        self.sendVerificationEmailOnSignIn = try container.sdkDecodeIfPresent(.sendVerificationEmailOnSignIn)
-        self.disableSignUp = try container.sdkDecodeIfPresent(.disableSignUp)
+        enabled = try container.sdkDecodeIfPresent(.enabled)
+        emailVerificationMethod = try container.sdkDecodeIfPresent(.emailVerificationMethod)
+        requireEmailVerification = try container.sdkDecodeIfPresent(.requireEmailVerification)
+        autoSignInAfterVerification = try container.sdkDecodeIfPresent(.autoSignInAfterVerification)
+        sendVerificationEmailOnSignUp = try container.sdkDecodeIfPresent(.sendVerificationEmailOnSignUp)
+        sendVerificationEmailOnSignIn = try container.sdkDecodeIfPresent(.sendVerificationEmailOnSignIn)
+        disableSignUp = try container.sdkDecodeIfPresent(.disableSignUp)
     }
 }
 
-extension NeonAuthEmailAndPasswordConfigUpdate {
-    public init(enabled: Bool? = nil, emailVerificationMethod: NeonAuthEmailVerificationMethod? = nil, requireEmailVerification: Bool? = nil, autoSignInAfterVerification: Bool? = nil, sendVerificationEmailOnSignUp: Bool? = nil, sendVerificationEmailOnSignIn: Bool? = nil, disableSignUp: Bool? = nil) {
+public extension NeonAuthEmailAndPasswordConfigUpdate {
+    init(
+        enabled: Bool? = nil,
+        emailVerificationMethod: NeonAuthEmailVerificationMethod? = nil,
+        requireEmailVerification: Bool? = nil,
+        autoSignInAfterVerification: Bool? = nil,
+        sendVerificationEmailOnSignUp: Bool? = nil,
+        sendVerificationEmailOnSignIn: Bool? = nil,
+        disableSignUp: Bool? = nil
+    ) {
         self.init()
         (self.enabled, self.emailVerificationMethod) = (enabled, emailVerificationMethod)
         self.requireEmailVerification = requireEmailVerification
@@ -229,29 +293,45 @@ public struct NeonAuthMagicLinkConfigUpdate: Codable {
     }
 
     init() {
-        (self.enabled, self.expiresIn, self.disableSignUp) = (nil, nil, nil)
+        (enabled, expiresIn, disableSignUp) = (nil, nil, nil)
     }
 }
 
-extension NeonAuthMagicLinkConfigUpdate {
-    public init(from decoder: Decoder) throws {
+public extension NeonAuthMagicLinkConfigUpdate {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.enabled = try container.sdkDecodeIfPresent(.enabled)
-        self.expiresIn = try container.sdkDecodeIfPresent(.expiresIn)
-        self.disableSignUp = try container.sdkDecodeIfPresent(.disableSignUp)
-        if let value = self.expiresIn {
-            try validateRange("expires_in", Double(value), min: 5, max: 1440, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        enabled = try container.sdkDecodeIfPresent(.enabled)
+        expiresIn = try container.sdkDecodeIfPresent(.expiresIn)
+        disableSignUp = try container.sdkDecodeIfPresent(.disableSignUp)
+        if let value = expiresIn {
+            try validateRange(
+                "expires_in",
+                Double(value),
+                min: 5,
+                max: 1440,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension NeonAuthMagicLinkConfigUpdate {
-    public init(enabled: Bool? = nil, expiresIn: Int? = nil, disableSignUp: Bool? = nil) throws {
+public extension NeonAuthMagicLinkConfigUpdate {
+    init(enabled: Bool? = nil, expiresIn: Int? = nil, disableSignUp: Bool? = nil) throws {
         self.init()
         (self.enabled, self.expiresIn) = (enabled, expiresIn)
         self.disableSignUp = disableSignUp
         if let value = self.expiresIn {
-            try validateRange("expires_in", Double(value), min: 5, max: 1440, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "expires_in",
+                Double(value),
+                min: 5,
+                max: 1440,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -275,31 +355,58 @@ public struct NeonAuthWebhookConfig: Codable {
         case timeoutSeconds = "timeout_seconds"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension NeonAuthWebhookConfig {
-    public init(from decoder: Decoder) throws {
+public extension NeonAuthWebhookConfig {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.enabled) else {
-            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
+            throw SdkValidationError(
+                field: "enabled",
+                code: "required",
+                message: "Validation failed for 'enabled': value is required"
+            )
         }
-        self.enabled = try container.sdkDecodeRequired(.enabled)
-        self.webhookUrl = try container.sdkDecodeIfPresent(.webhookUrl)
-        self.enabledEvents = try container.sdkDecodeIfPresent(.enabledEvents)
-        self.timeoutSeconds = try container.sdkDecodeIfPresent(.timeoutSeconds)
-        if let value = self.timeoutSeconds {
-            try validateRange("timeout_seconds", Double(value), min: 1, max: 10, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        enabled = try container.sdkDecodeRequired(.enabled)
+        webhookUrl = try container.sdkDecodeIfPresent(.webhookUrl)
+        enabledEvents = try container.sdkDecodeIfPresent(.enabledEvents)
+        timeoutSeconds = try container.sdkDecodeIfPresent(.timeoutSeconds)
+        if let value = timeoutSeconds {
+            try validateRange(
+                "timeout_seconds",
+                Double(value),
+                min: 1,
+                max: 10,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension NeonAuthWebhookConfig {
-    public init(enabled: Bool, webhookUrl: String? = nil, enabledEvents: [NeonAuthWebhookConfigEnabledEventsItem]? = nil, timeoutSeconds: Int? = nil) throws {
+public extension NeonAuthWebhookConfig {
+    init(
+        enabled: Bool,
+        webhookUrl: String? = nil,
+        enabledEvents: [NeonAuthWebhookConfigEnabledEventsItem]? = nil,
+        timeoutSeconds: Int? = nil
+    ) throws {
         (self.enabled, self.webhookUrl) = (enabled, webhookUrl)
         (self.enabledEvents, self.timeoutSeconds) = (enabledEvents, timeoutSeconds)
         if let value = self.timeoutSeconds {
-            try validateRange("timeout_seconds", Double(value), min: 1, max: 10, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "timeout_seconds",
+                Double(value),
+                min: 1,
+                max: 10,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -337,50 +444,90 @@ public struct NeonAuthOAuthClientCreated: Codable {
         case clientSecret = "client_secret"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension NeonAuthOAuthClientCreated {
-    public init(from decoder: Decoder) throws {
+public extension NeonAuthOAuthClientCreated {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.clientId) else {
-            throw SdkValidationError(field: "client_id", code: "required", message: "Validation failed for 'client_id': value is required")
+            throw SdkValidationError(
+                field: "client_id",
+                code: "required",
+                message: "Validation failed for 'client_id': value is required"
+            )
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.redirectUris) else {
-            throw SdkValidationError(field: "redirect_uris", code: "required", message: "Validation failed for 'redirect_uris': value is required")
+            throw SdkValidationError(
+                field: "redirect_uris",
+                code: "required",
+                message: "Validation failed for 'redirect_uris': value is required"
+            )
         }
         guard container.contains(.resources) else {
-            throw SdkValidationError(field: "resources", code: "required", message: "Validation failed for 'resources': value is required")
+            throw SdkValidationError(
+                field: "resources",
+                code: "required",
+                message: "Validation failed for 'resources': value is required"
+            )
         }
         guard container.contains(.skipConsent) else {
-            throw SdkValidationError(field: "skip_consent", code: "required", message: "Validation failed for 'skip_consent': value is required")
+            throw SdkValidationError(
+                field: "skip_consent",
+                code: "required",
+                message: "Validation failed for 'skip_consent': value is required"
+            )
         }
         guard container.contains(.disabled) else {
-            throw SdkValidationError(field: "disabled", code: "required", message: "Validation failed for 'disabled': value is required")
+            throw SdkValidationError(
+                field: "disabled",
+                code: "required",
+                message: "Validation failed for 'disabled': value is required"
+            )
         }
-        self.clientId = try container.sdkDecodeRequired(.clientId)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.redirectUris = try container.sdkDecodeRequired(.redirectUris)
-        self.resources = try container.sdkDecodeRequired(.resources)
-        self.skipConsent = try container.sdkDecodeRequired(.skipConsent)
-        self.disabled = try container.sdkDecodeRequired(.disabled)
-        self.createdAt = try container.sdkDecodeIfPresent(.createdAt)
-        self.clientSecret = try container.sdkDecodeIfPresent(.clientSecret)
-        if let value = self.createdAt {
+        clientId = try container.sdkDecodeRequired(.clientId)
+        name = try container.sdkDecodeRequired(.name)
+        type = try container.sdkDecodeRequired(.type)
+        redirectUris = try container.sdkDecodeRequired(.redirectUris)
+        resources = try container.sdkDecodeRequired(.resources)
+        skipConsent = try container.sdkDecodeRequired(.skipConsent)
+        disabled = try container.sdkDecodeRequired(.disabled)
+        createdAt = try container.sdkDecodeIfPresent(.createdAt)
+        clientSecret = try container.sdkDecodeIfPresent(.clientSecret)
+        if let value = createdAt {
             try sdkValidateDateTime("created_at", sdkWireString(value))
         }
     }
 }
 
-extension NeonAuthOAuthClientCreated {
-    public init(clientId: String, name: String, type: NeonAuthOAuthClientType, redirectUris: [String], resources: [String], skipConsent: Bool, disabled: Bool, createdAt: Date? = nil, clientSecret: String? = nil) throws {
+public extension NeonAuthOAuthClientCreated {
+    init(
+        clientId: String,
+        name: String,
+        type: NeonAuthOAuthClientType,
+        redirectUris: [String],
+        resources: [String],
+        skipConsent: Bool,
+        disabled: Bool,
+        createdAt: Date? = nil,
+        clientSecret: String? = nil
+    ) throws {
         (self.clientId, self.name) = (clientId, name)
         (self.type, self.redirectUris) = (type, redirectUris)
         (self.resources, self.skipConsent) = (resources, skipConsent)
@@ -407,20 +554,20 @@ public struct NeonAuthOAuthProviderMcp: Codable {
     }
 
     init() {
-        (self.resource, self.dynamicRegistration) = (nil, nil)
+        (resource, dynamicRegistration) = (nil, nil)
     }
 }
 
-extension NeonAuthOAuthProviderMcp {
-    public init(from decoder: Decoder) throws {
+public extension NeonAuthOAuthProviderMcp {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.resource = try container.sdkDecodeIfPresent(.resource)
-        self.dynamicRegistration = try container.sdkDecodeIfPresent(.dynamicRegistration)
+        resource = try container.sdkDecodeIfPresent(.resource)
+        dynamicRegistration = try container.sdkDecodeIfPresent(.dynamicRegistration)
     }
 }
 
-extension NeonAuthOAuthProviderMcp {
-    public init(resource: String? = nil, dynamicRegistration: Bool? = nil) {
+public extension NeonAuthOAuthProviderMcp {
+    init(resource: String? = nil, dynamicRegistration: Bool? = nil) {
         self.init()
         (self.resource, self.dynamicRegistration) = (resource, dynamicRegistration)
     }
@@ -456,5 +603,7 @@ public struct NeonAuthOAuthClient: Codable {
         case createdAt = "created_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }

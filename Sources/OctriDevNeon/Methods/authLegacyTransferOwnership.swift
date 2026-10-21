@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AuthLegacyMethods {
+public extension AuthLegacyMethods {
     /// Transfers ownership of your Neon-managed auth project to your own auth provider account.
     ///
     /// - Parameters:
@@ -15,11 +15,25 @@ extension AuthLegacyMethods {
     ///   configuration. `better_auth` integrates with Better Auth (the current,
     ///   recommended provider). `stack` integrates with Stack Auth (deprecated).
     ///   `mock` is a simulated provider for local development and testing only.
-    public static func transferAuthLegacyProvider(config: ClientConfig, projectId: String, authProvider: NeonAuthSupportedAuthProvider, requestOptions: RequestOptions? = nil) async throws -> NeonAuthTransferAuthProviderProjectResponse {
+    static func transferAuthLegacyProvider(
+        config: ClientConfig,
+        projectId: String,
+        authProvider: NeonAuthSupportedAuthProvider,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthTransferAuthProviderProjectResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         let requestBody = TransferAuthLegacyProviderRequestBody(projectId: projectId, authProvider: authProvider)
 
-        return try (await sdkRequest("POST", "/projects/auth/transfer_ownership", config: config, body: requestBody, decoder: .json, operationId: "transferAuthLegacyProvider", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/projects/auth/transfer_ownership",
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "transferAuthLegacyProvider",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Auth domain models
+/// Auth domain models
 /// Typed representation of the `NeonAuthConfigUpdate` API schema.
 public struct NeonAuthConfigUpdate: Codable {
     /// The application name used in auth emails and communications.
@@ -13,24 +13,30 @@ public struct NeonAuthConfigUpdate: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension NeonAuthConfigUpdate {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
-            try validateLength("name", self.name, min: 1, max: 256)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension NeonAuthConfigUpdate {
-    public init(name: String) throws {
+public extension NeonAuthConfigUpdate {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+        try validateLength("name", name, min: 1, max: 256)
+    }
+}
+
+public extension NeonAuthConfigUpdate {
+    init(name: String) throws {
         self.name = name
-            try validateLength("name", self.name, min: 1, max: 256)
+        try validateLength("name", self.name, min: 1, max: 256)
     }
 }
 
@@ -43,21 +49,27 @@ public struct NeonAuthConfigResponse: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension NeonAuthConfigResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension NeonAuthConfigResponse {
-    public init(name: String) {
+public extension NeonAuthConfigResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+    }
+}
+
+public extension NeonAuthConfigResponse {
+    init(name: String) {
         self.name = name
     }
 }

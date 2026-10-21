@@ -6,21 +6,42 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AuthMethods {
+public extension AuthMethods {
     /// Lists the OAuth clients registered for the branch's Neon Auth OAuth provider. Client secrets are never returned.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
-    public static func listAuthOAuthClients(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> ListNeonAuthOAuthClientsResponse {
+    static func listAuthOAuthClients(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListNeonAuthOAuthClientsResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/oauth-provider/clients"].joined(), config: config, decoder: .json, operationId: "listAuthOAuthClients", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/auth/oauth-provider/clients",
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "listAuthOAuthClients",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
-    /// Registers an OAuth client with the branch's Neon Auth OAuth provider. For `confidential` clients the response includes the `client_secret`, which is shown only once. Every entry in `resources` must be configured on the OAuth provider plugin.
+    /// Registers an OAuth client with the branch's Neon Auth OAuth provider. For `confidential` clients the response
+    /// includes the `client_secret`, which is shown only once. Every entry in `resources` must be configured on the
+    /// OAuth provider plugin.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -33,7 +54,17 @@ extension AuthMethods {
     /// - resources: Identifiers of the protected resources to link the client to.
     ///   Each must be configured on the OAuth provider plugin.
     /// - skipConsent: Whether to skip the consent prompt for this client.
-    public static func createAuthOAuthClient(config: ClientConfig, projectId: String, branchId: String, name: String, redirectUris: [String], type: NeonAuthOAuthClientType, resources: [String], skipConsent: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonAuthOAuthClientCreated {
+    static func createAuthOAuthClient(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        name: String,
+        redirectUris: [String],
+        type: NeonAuthOAuthClientType,
+        resources: [String],
+        skipConsent: Bool? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthOAuthClientCreated {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -44,8 +75,29 @@ extension AuthMethods {
 
         try validateItems("resources", resources, min: 1, max: 11)
 
-        let requestBody = CreateAuthOAuthClientRequestBody(name: name, redirectUris: redirectUris, type: type, resources: resources, skipConsent: skipConsent)
+        let requestBody = CreateAuthOAuthClientRequestBody(
+            name: name,
+            redirectUris: redirectUris,
+            type: type,
+            resources: resources,
+            skipConsent: skipConsent
+        )
 
-        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/oauth-provider/clients"].joined(), config: config, body: requestBody, decoder: .json, operationId: "createAuthOAuthClient", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "POST",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/auth/oauth-provider/clients",
+            ].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createAuthOAuthClient",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Branch domain models
+/// Branch domain models
 /// Typed representation of the `BranchSchemaResponse` API schema.
 public struct BranchSchemaResponse: Codable {
     /// Branch schema expressed as SQL DDL statements.
@@ -17,20 +17,20 @@ public struct BranchSchemaResponse: Codable {
     }
 
     init() {
-        (self.sql, self.json) = (nil, nil)
+        (sql, json) = (nil, nil)
     }
 }
 
-extension BranchSchemaResponse {
-    public init(from decoder: Decoder) throws {
+public extension BranchSchemaResponse {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.sql = try container.sdkDecodeIfPresent(.sql)
-        self.json = try container.sdkDecodeIfPresent(.json)
+        sql = try container.sdkDecodeIfPresent(.sql)
+        json = try container.sdkDecodeIfPresent(.json)
     }
 }
 
-extension BranchSchemaResponse {
-    public init(sql: String? = nil, json: BranchSchemaJSON? = nil) {
+public extension BranchSchemaResponse {
+    init(sql: String? = nil, json: BranchSchemaJSON? = nil) {
         self.init()
         (self.sql, self.json) = (sql, json)
     }
@@ -54,27 +54,37 @@ public struct BranchSchemaJSONTablesItemColumnsItem: Codable {
         case generated
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchSchemaJSONTablesItemColumnsItem {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.nullable = try container.sdkDecodeIfPresent(.nullable)
-        self.generated = try container.sdkDecodeIfPresent(.generated)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchSchemaJSONTablesItemColumnsItem {
-    public init(name: String, type: String, nullable: Bool? = nil, generated: Bool? = nil) {
+public extension BranchSchemaJSONTablesItemColumnsItem {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+        type = try container.sdkDecodeRequired(.type)
+        nullable = try container.sdkDecodeIfPresent(.nullable)
+        generated = try container.sdkDecodeIfPresent(.generated)
+    }
+}
+
+public extension BranchSchemaJSONTablesItemColumnsItem {
+    init(name: String, type: String, nullable: Bool? = nil, generated: Bool? = nil) {
         (self.name, self.type) = (name, type)
         (self.nullable, self.generated) = (nullable, generated)
     }
@@ -98,31 +108,46 @@ public struct BranchSchemaJSONTablesItemConstraintsItem: Codable {
         case referencedTable = "referenced_table"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchSchemaJSONTablesItemConstraintsItem {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.columns) else {
-            throw SdkValidationError(field: "columns", code: "required", message: "Validation failed for 'columns': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.columns = try container.sdkDecodeRequired(.columns)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.referencedTable = try container.sdkDecodeIfPresent(.referencedTable)
-            try validateItems("columns", self.columns, min: 1, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchSchemaJSONTablesItemConstraintsItem {
-    public init(type: String, columns: [String], name: String? = nil, referencedTable: BranchSchemaJSONTablesItemConstraintsItemReferencedTable? = nil) throws {
+public extension BranchSchemaJSONTablesItemConstraintsItem {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.columns) else {
+            throw SdkValidationError(
+                field: "columns",
+                code: "required",
+                message: "Validation failed for 'columns': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        columns = try container.sdkDecodeRequired(.columns)
+        name = try container.sdkDecodeIfPresent(.name)
+        referencedTable = try container.sdkDecodeIfPresent(.referencedTable)
+        try validateItems("columns", columns, min: 1, max: nil)
+    }
+}
+
+public extension BranchSchemaJSONTablesItemConstraintsItem {
+    init(
+        type: String,
+        columns: [String],
+        name: String? = nil,
+        referencedTable: BranchSchemaJSONTablesItemConstraintsItemReferencedTable? = nil
+    ) throws {
         (self.type, self.columns) = (type, columns)
         (self.name, self.referencedTable) = (name, referencedTable)
-            try validateItems("columns", self.columns, min: 1, max: nil)
+        try validateItems("columns", self.columns, min: 1, max: nil)
     }
 }
 
@@ -145,30 +170,49 @@ public struct BranchSchemaJSONTablesItem: Codable {
         case constraints
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchSchemaJSONTablesItem {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.schema) else {
-            throw SdkValidationError(field: "schema", code: "required", message: "Validation failed for 'schema': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.columns) else {
-            throw SdkValidationError(field: "columns", code: "required", message: "Validation failed for 'columns': value is required")
-        }
-        self.schema = try container.sdkDecodeRequired(.schema)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.columns = try container.sdkDecodeRequired(.columns)
-        self.constraints = try container.sdkDecodeIfPresent(.constraints)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchSchemaJSONTablesItem {
-    public init(schema: String, name: String, columns: [BranchSchemaJSONTablesItemColumnsItem], constraints: [BranchSchemaJSONTablesItemConstraintsItem]? = nil) {
+public extension BranchSchemaJSONTablesItem {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.schema) else {
+            throw SdkValidationError(
+                field: "schema",
+                code: "required",
+                message: "Validation failed for 'schema': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.columns) else {
+            throw SdkValidationError(
+                field: "columns",
+                code: "required",
+                message: "Validation failed for 'columns': value is required"
+            )
+        }
+        schema = try container.sdkDecodeRequired(.schema)
+        name = try container.sdkDecodeRequired(.name)
+        columns = try container.sdkDecodeRequired(.columns)
+        constraints = try container.sdkDecodeIfPresent(.constraints)
+    }
+}
+
+public extension BranchSchemaJSONTablesItem {
+    init(
+        schema: String,
+        name: String,
+        columns: [BranchSchemaJSONTablesItemColumnsItem],
+        constraints: [BranchSchemaJSONTablesItemConstraintsItem]? = nil
+    ) {
         (self.schema, self.name) = (schema, name)
         (self.columns, self.constraints) = (columns, constraints)
     }
@@ -189,29 +233,43 @@ public struct BranchSchemaJSONTablesItemConstraintsItemReferencedTable: Codable 
         case columns
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchSchemaJSONTablesItemConstraintsItemReferencedTable {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.schema) else {
-            throw SdkValidationError(field: "schema", code: "required", message: "Validation failed for 'schema': value is required")
-        }
-        guard container.contains(.table) else {
-            throw SdkValidationError(field: "table", code: "required", message: "Validation failed for 'table': value is required")
-        }
-        guard container.contains(.columns) else {
-            throw SdkValidationError(field: "columns", code: "required", message: "Validation failed for 'columns': value is required")
-        }
-        self.schema = try container.sdkDecodeRequired(.schema)
-        self.table = try container.sdkDecodeRequired(.table)
-        self.columns = try container.sdkDecodeRequired(.columns)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchSchemaJSONTablesItemConstraintsItemReferencedTable {
-    public init(schema: String, table: String, columns: [String]) {
+public extension BranchSchemaJSONTablesItemConstraintsItemReferencedTable {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.schema) else {
+            throw SdkValidationError(
+                field: "schema",
+                code: "required",
+                message: "Validation failed for 'schema': value is required"
+            )
+        }
+        guard container.contains(.table) else {
+            throw SdkValidationError(
+                field: "table",
+                code: "required",
+                message: "Validation failed for 'table': value is required"
+            )
+        }
+        guard container.contains(.columns) else {
+            throw SdkValidationError(
+                field: "columns",
+                code: "required",
+                message: "Validation failed for 'columns': value is required"
+            )
+        }
+        schema = try container.sdkDecodeRequired(.schema)
+        table = try container.sdkDecodeRequired(.table)
+        columns = try container.sdkDecodeRequired(.columns)
+    }
+}
+
+public extension BranchSchemaJSONTablesItemConstraintsItemReferencedTable {
+    init(schema: String, table: String, columns: [String]) {
         (self.schema, self.table) = (schema, table)
         self.columns = columns
     }
@@ -226,21 +284,27 @@ public struct BranchSchemaJSON: Codable {
         case tables
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchSchemaJSON {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.tables) else {
-            throw SdkValidationError(field: "tables", code: "required", message: "Validation failed for 'tables': value is required")
-        }
-        self.tables = try container.sdkDecodeRequired(.tables)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchSchemaJSON {
-    public init(tables: [BranchSchemaJSONTablesItem]) {
+public extension BranchSchemaJSON {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.tables) else {
+            throw SdkValidationError(
+                field: "tables",
+                code: "required",
+                message: "Validation failed for 'tables': value is required"
+            )
+        }
+        tables = try container.sdkDecodeRequired(.tables)
+    }
+}
+
+public extension BranchSchemaJSON {
+    init(tables: [BranchSchemaJSONTablesItem]) {
         self.tables = tables
     }
 }

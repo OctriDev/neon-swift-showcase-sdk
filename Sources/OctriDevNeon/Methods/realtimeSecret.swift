@@ -6,17 +6,38 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension RealtimeMethods {
-    /// Retrieves the secret the application backend issues Realtime tokens with. Requires permission to read the project's credentials. Returns 404 while Realtime is disabled or before the secret is provisioned. After a rotation, this returns the previous secret until `pending` is false.
+public extension RealtimeMethods {
+    /// Retrieves the secret the application backend issues Realtime tokens with. Requires permission to read the
+    /// project's credentials. Returns 404 while Realtime is disabled or before the secret is provisioned. After a
+    /// rotation, this returns the previous secret until `pending` is false.
     ///
     /// - Parameters:
     /// - projectId: The project ID
     /// - branchId: The branch ID
-    public static func getRealtimeSecret(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> RealtimeSecret {
+    static func getRealtimeSecret(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> RealtimeSecret {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/realtime/secret"].joined(), config: config, decoder: .json, operationId: "getRealtimeSecret", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/realtime/secret",
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getRealtimeSecret",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

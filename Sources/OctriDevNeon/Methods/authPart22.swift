@@ -6,14 +6,21 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AuthMethods {
-    /// Returns an OAuth client registered with the branch's Neon Auth OAuth provider. The client secret is never returned.
+public extension AuthMethods {
+    /// Returns an OAuth client registered with the branch's Neon Auth OAuth provider. The client secret is never
+    /// returned.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
     /// - clientId: The OAuth client ID
-    public static func getAuthOAuthClient(config: ClientConfig, projectId: String, branchId: String, clientId: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthOAuthClient {
+    static func getAuthOAuthClient(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        clientId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthOAuthClient {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -21,6 +28,21 @@ extension AuthMethods {
         try validateLength("client_id", clientId, max: 64)
         try sdkValidatePattern("client_id", clientId, sdkPattern3ecc8fcd9733)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/oauth-provider/clients/", sdkEncodePathSegment(sdkWireString(clientId))].joined(), config: config, decoder: .json, operationId: "getAuthOAuthClient", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/auth/oauth-provider/clients/",
+                sdkEncodePathSegment(sdkWireString(clientId)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getAuthOAuthClient",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

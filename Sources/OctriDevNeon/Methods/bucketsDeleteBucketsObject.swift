@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension BucketsMethods {
-    /// Deletes the named object from the bucket on the specified branch. Served by the user's session (no customer S3 credentials required). **Note**: This endpoint is currently in Beta.
+public extension BucketsMethods {
+    /// Deletes the named object from the bucket on the specified branch. Served by the user's session (no customer S3
+    /// credentials required). **Note**: This endpoint is currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -15,7 +16,14 @@ extension BucketsMethods {
     /// - bucketName: The bucket name
     /// - objectKey: The object key. Keys may contain `/`; the `/` characters of
     ///   nested keys must be percent-encoded (`%2F`) in the path segment.
-    public static func deleteBucketsObject(config: ClientConfig, projectId: String, branchId: String, bucketName: String, objectKey: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+    static func deleteBucketsObject(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        bucketName: String,
+        objectKey: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -24,10 +32,34 @@ extension BucketsMethods {
 
         try validateLength("object_key", objectKey, min: 1, max: 1024)
 
-        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/buckets/", sdkEncodePathSegment(sdkWireString(bucketName)), "/objects/", sdkEncodePathSegment(sdkWireString(objectKey))].joined(), config: config, decoder: .empty, operationId: "deleteBucketsObject", options: requestOptions, errors: ["404": GeneralError.self, "default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "DELETE",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/buckets/",
+                sdkEncodePathSegment(sdkWireString(bucketName)),
+                "/objects/",
+                sdkEncodePathSegment(sdkWireString(objectKey)),
+            ].joined(),
+            config: config,
+            decoder: .empty,
+            operationId: "deleteBucketsObject",
+            options: requestOptions,
+            errors: ["404": GeneralError.self, "default": GeneralError.self]
+        )).data
     }
 
-    /// Streams the raw bytes of the named object from the bucket on the specified branch, including objects inherited from ancestor branches. Served by the user's session (no customer S3 credentials required). The body is returned as `application/octet-stream` so a browser treats it as a download; the `Content-Length` and `ETag` response headers echo the stored object metadata. BINARY-STREAM EXCEPTION TO THE BUILD-GENERATED-TYPES RULE (#7029): the successful 200 body is the raw object stream, proxied verbatim from the platform object storage admin endpoint. It is modeled as an `application/octet-stream` binary body (not a JSON response schema) and is streamed without buffering the whole object in memory. Error responses still use the generated `GeneralError` shape. **Note**: This endpoint is currently in Beta.
+    /// Streams the raw bytes of the named object from the bucket on the specified branch, including objects inherited
+    /// from ancestor branches. Served by the user's session (no customer S3 credentials required). The body is returned
+    /// as `application/octet-stream` so a browser treats it as a download; the `Content-Length` and `ETag` response
+    /// headers echo the stored object metadata. BINARY-STREAM EXCEPTION TO THE BUILD-GENERATED-TYPES RULE (#7029): the
+    /// successful 200 body is the raw object stream, proxied verbatim from the platform object storage admin endpoint.
+    /// It is modeled as an `application/octet-stream` binary body (not a JSON response schema) and is streamed without
+    /// buffering the whole object in memory. Error responses still use the generated `GeneralError` shape. **Note**:
+    /// This endpoint is currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -35,7 +67,14 @@ extension BucketsMethods {
     /// - bucketName: The bucket name
     /// - objectKey: The object key. Keys may contain `/`; the `/` characters of
     ///   nested keys must be percent-encoded (`%2F`) in the path segment.
-    public static func getBucketsObject(config: ClientConfig, projectId: String, branchId: String, bucketName: String, objectKey: String, requestOptions: RequestOptions? = nil) async throws -> Data {
+    static func getBucketsObject(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        bucketName: String,
+        objectKey: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Data {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -44,6 +83,24 @@ extension BucketsMethods {
 
         try validateLength("object_key", objectKey, min: 1, max: 1024)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/buckets/", sdkEncodePathSegment(sdkWireString(bucketName)), "/objects/", sdkEncodePathSegment(sdkWireString(objectKey)), "/download"].joined(), config: config, decoder: .bytes, operationId: "getBucketsObject", options: requestOptions, errors: ["404": GeneralError.self, "default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/buckets/",
+                sdkEncodePathSegment(sdkWireString(bucketName)),
+                "/objects/",
+                sdkEncodePathSegment(sdkWireString(objectKey)),
+                "/download",
+            ].joined(),
+            config: config,
+            decoder: .bytes,
+            operationId: "getBucketsObject",
+            options: requestOptions,
+            errors: ["404": GeneralError.self, "default": GeneralError.self]
+        )).data
     }
 }

@@ -6,18 +6,35 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension OrganizationsMethods {
-    /// Returns the configured monthly spending limit for the specified organization. `spending_limit_cents: null` indicates that no limit is currently set. Available to organization members with read access on Launch and Scale plans only.
+public extension OrganizationsMethods {
+    /// Returns the configured monthly spending limit for the specified organization. `spending_limit_cents: null`
+    /// indicates that no limit is currently set. Available to organization members with read access on Launch and Scale
+    /// plans only.
     ///
     /// - Parameters:
     /// - orgId: The Neon organization ID
-    public static func getOrganizationSpendingLimit(config: ClientConfig, orgId: String, requestOptions: RequestOptions? = nil) async throws -> SpendingLimitResponse {
+    static func getOrganizationSpendingLimit(
+        config: ClientConfig,
+        orgId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SpendingLimitResponse {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/billing/spending_limit"].joined(), config: config, decoder: .json, operationId: "getOrganizationSpendingLimit", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/billing/spending_limit"].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getOrganizationSpendingLimit",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
-    /// Sets the monthly spending limit for the specified organization. To remove a previously configured limit, send a DELETE request to this endpoint. When a limit is configured, email notifications are sent at 80% and 100% of the limit. Computes are not suspended when the limit is reached. Available to organization admins on Launch and Scale plans only.
+    /// Sets the monthly spending limit for the specified organization. To remove a previously configured limit, send a
+    /// DELETE request to this endpoint. When a limit is configured, email notifications are sent at 80% and 100% of the
+    /// limit. Computes are not suspended when the limit is reached. Available to organization admins on Launch and
+    /// Scale plans only.
     ///
     /// - Parameters:
     /// - orgId: The Neon organization ID
@@ -28,13 +45,27 @@ extension OrganizationsMethods {
     ///   suspended. Setting a cap below the period's already-accrued spend is
     ///   permitted and will trigger the over-limit notification on the next worker
     ///   run.
-    public static func setOrganizationSpendingLimit(config: ClientConfig, orgId: String, spendingLimitCents: Int, requestOptions: RequestOptions? = nil) async throws -> SpendingLimitResponse {
+    static func setOrganizationSpendingLimit(
+        config: ClientConfig,
+        orgId: String,
+        spendingLimitCents: Int,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SpendingLimitResponse {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
         try validateRange("spending_limit_cents", Double(spendingLimitCents), min: 1)
 
         let requestBody = SetOrganizationSpendingLimitRequestBody(spendingLimitCents: spendingLimitCents)
 
-        return try (await sdkRequest("PUT", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/billing/spending_limit"].joined(), config: config, body: requestBody, decoder: .json, operationId: "setOrganizationSpendingLimit", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "PUT",
+            ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/billing/spending_limit"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "setOrganizationSpendingLimit",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

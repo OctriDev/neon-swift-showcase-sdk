@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Project domain models
+/// Project domain models
 /// Typed representation of the `JWKSResponse` API schema.
 public struct JWKSResponse: Codable {
     /// JWKS configuration associated with the project.
@@ -13,21 +13,27 @@ public struct JWKSResponse: Codable {
         case jwks
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension JWKSResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.jwks) else {
-            throw SdkValidationError(field: "jwks", code: "required", message: "Validation failed for 'jwks': value is required")
-        }
-        self.jwks = try container.sdkDecodeRequired(.jwks)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension JWKSResponse {
-    public init(jwks: JWKS) {
+public extension JWKSResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.jwks) else {
+            throw SdkValidationError(
+                field: "jwks",
+                code: "required",
+                message: "Validation failed for 'jwks': value is required"
+            )
+        }
+        jwks = try container.sdkDecodeRequired(.jwks)
+    }
+}
+
+public extension JWKSResponse {
+    init(jwks: JWKS) {
         self.jwks = jwks
     }
 }
@@ -58,35 +64,52 @@ public struct AddProjectJWKSRequest: Codable {
         case skipRoleCreation = "skip_role_creation"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension AddProjectJWKSRequest {
-    public init(from decoder: Decoder) throws {
+public extension AddProjectJWKSRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.jwksUrl) else {
-            throw SdkValidationError(field: "jwks_url", code: "required", message: "Validation failed for 'jwks_url': value is required")
+            throw SdkValidationError(
+                field: "jwks_url",
+                code: "required",
+                message: "Validation failed for 'jwks_url': value is required"
+            )
         }
         guard container.contains(.providerName) else {
-            throw SdkValidationError(field: "provider_name", code: "required", message: "Validation failed for 'provider_name': value is required")
+            throw SdkValidationError(
+                field: "provider_name",
+                code: "required",
+                message: "Validation failed for 'provider_name': value is required"
+            )
         }
-        self.jwksUrl = try container.sdkDecodeRequired(.jwksUrl)
-        self.providerName = try container.sdkDecodeRequired(.providerName)
-        self.branchId = try container.sdkDecodeIfPresent(.branchId)
-        self.jwtAudience = try container.sdkDecodeIfPresent(.jwtAudience)
-        self.roleNames = try container.sdkDecodeIfPresent(.roleNames)
-        self.skipRoleCreation = try container.sdkDecodeIfPresent(.skipRoleCreation)
-        if let value = self.branchId {
+        jwksUrl = try container.sdkDecodeRequired(.jwksUrl)
+        providerName = try container.sdkDecodeRequired(.providerName)
+        branchId = try container.sdkDecodeIfPresent(.branchId)
+        jwtAudience = try container.sdkDecodeIfPresent(.jwtAudience)
+        roleNames = try container.sdkDecodeIfPresent(.roleNames)
+        skipRoleCreation = try container.sdkDecodeIfPresent(.skipRoleCreation)
+        if let value = branchId {
             try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
         }
-        if let value = self.roleNames {
+        if let value = roleNames {
             try validateItems("role_names", value, min: 0, max: 10)
         }
     }
 }
 
-extension AddProjectJWKSRequest {
-    public init(jwksUrl: String, providerName: String, branchId: String? = nil, jwtAudience: String? = nil, roleNames: [String]? = nil, skipRoleCreation: Bool? = nil) throws {
+public extension AddProjectJWKSRequest {
+    init(
+        jwksUrl: String,
+        providerName: String,
+        branchId: String? = nil,
+        jwtAudience: String? = nil,
+        roleNames: [String]? = nil,
+        skipRoleCreation: Bool? = nil
+    ) throws {
         (self.jwksUrl, self.providerName) = (jwksUrl, providerName)
         (self.branchId, self.jwtAudience) = (branchId, jwtAudience)
         (self.roleNames, self.skipRoleCreation) = (roleNames, skipRoleCreation)
@@ -111,25 +134,35 @@ public struct JWKSCreationOperation: Codable {
         case operations
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension JWKSCreationOperation {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.jwks) else {
-            throw SdkValidationError(field: "jwks", code: "required", message: "Validation failed for 'jwks': value is required")
-        }
-        guard container.contains(.operations) else {
-            throw SdkValidationError(field: "operations", code: "required", message: "Validation failed for 'operations': value is required")
-        }
-        self.jwks = try container.sdkDecodeRequired(.jwks)
-        self.operations = try container.sdkDecodeRequired(.operations)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension JWKSCreationOperation {
-    public init(jwks: JWKS, operations: [Operation]) {
+public extension JWKSCreationOperation {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.jwks) else {
+            throw SdkValidationError(
+                field: "jwks",
+                code: "required",
+                message: "Validation failed for 'jwks': value is required"
+            )
+        }
+        guard container.contains(.operations) else {
+            throw SdkValidationError(
+                field: "operations",
+                code: "required",
+                message: "Validation failed for 'operations': value is required"
+            )
+        }
+        jwks = try container.sdkDecodeRequired(.jwks)
+        operations = try container.sdkDecodeRequired(.operations)
+    }
+}
+
+public extension JWKSCreationOperation {
+    init(jwks: JWKS, operations: [Operation]) {
         (self.jwks, self.operations) = (jwks, operations)
     }
 }

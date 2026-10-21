@@ -6,14 +6,21 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AuthMethods {
-    /// Updates the auth configuration for the branch. Currently supports updating the application name used in auth emails.
+public extension AuthMethods {
+    /// Updates the auth configuration for the branch. Currently supports updating the application name used in auth
+    /// emails.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
     /// - name: The application name used in auth emails and communications.
-    public static func updateAuthConfig(config: ClientConfig, projectId: String, branchId: String, name: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthConfigResponse {
+    static func updateAuthConfig(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        name: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthConfigResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -22,6 +29,21 @@ extension AuthMethods {
 
         let requestBody = UpdateAuthConfigRequestBody(name: name)
 
-        return try (await sdkRequest("PATCH", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/config"].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateAuthConfig", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "PATCH",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/auth/config",
+            ].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "updateAuthConfig",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

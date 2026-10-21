@@ -6,16 +6,28 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AuthLegacyMethods {
+public extension AuthLegacyMethods {
     /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth` instead. Removal scheduled for March 1, 2026.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public static func listAuthLegacyIntegrations(config: ClientConfig, projectId: String, requestOptions: RequestOptions? = nil) async throws -> ListNeonAuthIntegrationsResponse {
+    static func listAuthLegacyIntegrations(
+        config: ClientConfig,
+        projectId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListNeonAuthIntegrationsResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/integrations"].joined(), config: config, decoder: .json, operationId: "listAuthLegacyIntegrations", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/integrations"].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "listAuthLegacyIntegrations",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

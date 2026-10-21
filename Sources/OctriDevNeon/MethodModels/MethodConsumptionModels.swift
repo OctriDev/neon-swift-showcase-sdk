@@ -7,7 +7,7 @@ import Foundation
     import FoundationNetworking
 #endif
 
-// Canonical consumption operation model declarations
+/// Canonical consumption operation model declarations
 public struct GetConsumptionHistoryPerProjectResponse: Codable {
     /// Per-project consumption history records included in the response.
     public var projects: [ConsumptionHistoryPerProject]
@@ -21,22 +21,28 @@ public struct GetConsumptionHistoryPerProjectResponse: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension GetConsumptionHistoryPerProjectResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projects) else {
-            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
-        }
-        self.projects = try container.sdkDecodeRequired(.projects)
-        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension GetConsumptionHistoryPerProjectResponse {
-    public init(projects: [ConsumptionHistoryPerProject], pagination: Pagination? = nil) {
+public extension GetConsumptionHistoryPerProjectResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.projects) else {
+            throw SdkValidationError(
+                field: "projects",
+                code: "required",
+                message: "Validation failed for 'projects': value is required"
+            )
+        }
+        projects = try container.sdkDecodeRequired(.projects)
+        pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+public extension GetConsumptionHistoryPerProjectResponse {
+    init(projects: [ConsumptionHistoryPerProject], pagination: Pagination? = nil) {
         (self.projects, self.pagination) = (projects, pagination)
     }
 }
@@ -54,22 +60,28 @@ public struct GetConsumptionHistoryPerBranchV2Response: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension GetConsumptionHistoryPerBranchV2Response {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.branches) else {
-            throw SdkValidationError(field: "branches", code: "required", message: "Validation failed for 'branches': value is required")
-        }
-        self.branches = try container.sdkDecodeRequired(.branches)
-        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension GetConsumptionHistoryPerBranchV2Response {
-    public init(branches: [ConsumptionHistoryPerBranchV2], pagination: Pagination? = nil) {
+public extension GetConsumptionHistoryPerBranchV2Response {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.branches) else {
+            throw SdkValidationError(
+                field: "branches",
+                code: "required",
+                message: "Validation failed for 'branches': value is required"
+            )
+        }
+        branches = try container.sdkDecodeRequired(.branches)
+        pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+public extension GetConsumptionHistoryPerBranchV2Response {
+    init(branches: [ConsumptionHistoryPerBranchV2], pagination: Pagination? = nil) {
         (self.branches, self.pagination) = (branches, pagination)
     }
 }
@@ -87,22 +99,28 @@ public struct GetConsumptionHistoryPerProjectV2Response: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension GetConsumptionHistoryPerProjectV2Response {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projects) else {
-            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
-        }
-        self.projects = try container.sdkDecodeRequired(.projects)
-        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension GetConsumptionHistoryPerProjectV2Response {
-    public init(projects: [ConsumptionHistoryPerProjectV2], pagination: Pagination? = nil) {
+public extension GetConsumptionHistoryPerProjectV2Response {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.projects) else {
+            throw SdkValidationError(
+                field: "projects",
+                code: "required",
+                message: "Validation failed for 'projects': value is required"
+            )
+        }
+        projects = try container.sdkDecodeRequired(.projects)
+        pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+public extension GetConsumptionHistoryPerProjectV2Response {
+    init(projects: [ConsumptionHistoryPerProjectV2], pagination: Pagination? = nil) {
         (self.projects, self.pagination) = (projects, pagination)
     }
 }

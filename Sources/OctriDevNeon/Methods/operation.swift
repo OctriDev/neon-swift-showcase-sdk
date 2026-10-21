@@ -12,14 +12,36 @@ public enum OperationMethods {
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - operationId: The operation ID
-    public static func getOperation(config: ClientConfig, projectId: String, operationId: String, requestOptions: RequestOptions? = nil) async throws -> OperationResponse {
+    public static func getOperation(
+        config: ClientConfig,
+        projectId: String,
+        operationId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> OperationResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidateUuid("operation_id", operationId)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/operations/", sdkEncodePathSegment(sdkWireString(operationId))].joined(), config: config, decoder: .json, operationId: "getOperation", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/operations/",
+                sdkEncodePathSegment(sdkWireString(operationId)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getOperation",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
-    /// Retrieves a list of operations for the specified Neon project. The number of operations returned can be large. To paginate the response, issue an initial request with a `limit` value. Then, add the `cursor` value that was returned in the response to the next request. Operations older than 6 months may be deleted from our systems. If you need more history than that, you should store your own history.
+
+    /// Retrieves a list of operations for the specified Neon project. The number of operations returned can be large.
+    /// To paginate the response, issue an initial request with a `limit` value. Then, add the `cursor` value that was
+    /// returned in the response to the next request. Operations older than 6 months may be deleted from our systems. If
+    /// you need more history than that, you should store your own history.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -27,16 +49,31 @@ public enum OperationMethods {
     ///   next batch of operations
     /// - limit: Specify a value from 1 to 1000 to limit number of operations in the
     ///   response
-    public static func listOperation(config: ClientConfig, projectId: String, cursor: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> ListOperationResponse {
+    public static func listOperation(
+        config: ClientConfig,
+        projectId: String,
+        cursor: String? = nil,
+        limit: Int? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListOperationResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        if let limit = limit {
+        if let limit {
             try validateRange("limit", Double(limit), min: 1, max: 1000)
         }
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/operations"].joined(), config: config, query: [
-            SdkQueryParameter("cursor", value: cursor),
-            SdkQueryParameter("limit", value: limit),
-        ], decoder: .json, operationId: "listOperation", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/operations"].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("cursor", value: cursor),
+                SdkQueryParameter("limit", value: limit),
+            ],
+            decoder: .json,
+            operationId: "listOperation",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

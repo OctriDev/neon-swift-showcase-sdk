@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Logs domain models
+/// Logs domain models
 /// Typed representation of the `ProjectBranchLogRecord` API schema.
 public struct ProjectBranchLogRecord: Codable {
     /// The OpenTelemetry record timestamp in UTC.
@@ -46,50 +46,92 @@ public struct ProjectBranchLogRecord: Codable {
         case spanId = "span_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension ProjectBranchLogRecord {
-    public init(from decoder: Decoder) throws {
+public extension ProjectBranchLogRecord {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.timestamp) else {
-            throw SdkValidationError(field: "timestamp", code: "required", message: "Validation failed for 'timestamp': value is required")
+            throw SdkValidationError(
+                field: "timestamp",
+                code: "required",
+                message: "Validation failed for 'timestamp': value is required"
+            )
         }
         guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
         }
         guard container.contains(.attributes) else {
-            throw SdkValidationError(field: "attributes", code: "required", message: "Validation failed for 'attributes': value is required")
+            throw SdkValidationError(
+                field: "attributes",
+                code: "required",
+                message: "Validation failed for 'attributes': value is required"
+            )
         }
-        self.timestamp = try container.sdkDecodeRequired(.timestamp)
-        self.message = try container.sdkDecodeRequired(.message)
-        self.attributes = try container.sdkDecodeRequired(.attributes)
-        self.source = try container.sdkDecodeIfPresent(.source)
-        self.entityId = try container.sdkDecodeIfPresent(.entityId)
-        self.serviceName = try container.sdkDecodeIfPresent(.serviceName)
-        self.scopeName = try container.sdkDecodeIfPresent(.scopeName)
-        self.severityNumber = try container.sdkDecodeIfPresent(.severityNumber)
-        self.severityText = try container.sdkDecodeIfPresent(.severityText)
-        self.traceId = try container.sdkDecodeIfPresent(.traceId)
-        self.spanId = try container.sdkDecodeIfPresent(.spanId)
-            try sdkValidateDateTime("timestamp", sdkWireString(self.timestamp))
-        if let value = self.severityNumber {
-            try validateRange("severity_number", Double(value), min: 0, max: 24, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        timestamp = try container.sdkDecodeRequired(.timestamp)
+        message = try container.sdkDecodeRequired(.message)
+        attributes = try container.sdkDecodeRequired(.attributes)
+        source = try container.sdkDecodeIfPresent(.source)
+        entityId = try container.sdkDecodeIfPresent(.entityId)
+        serviceName = try container.sdkDecodeIfPresent(.serviceName)
+        scopeName = try container.sdkDecodeIfPresent(.scopeName)
+        severityNumber = try container.sdkDecodeIfPresent(.severityNumber)
+        severityText = try container.sdkDecodeIfPresent(.severityText)
+        traceId = try container.sdkDecodeIfPresent(.traceId)
+        spanId = try container.sdkDecodeIfPresent(.spanId)
+        try sdkValidateDateTime("timestamp", sdkWireString(timestamp))
+        if let value = severityNumber {
+            try validateRange(
+                "severity_number",
+                Double(value),
+                min: 0,
+                max: 24,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension ProjectBranchLogRecord {
-    public init(timestamp: Date, message: String, attributes: [String: JSONValue], source: ProjectBranchLogSource? = nil, entityId: String? = nil, serviceName: String? = nil, scopeName: String? = nil, severityNumber: Int? = nil, severityText: String? = nil, traceId: String? = nil, spanId: String? = nil) throws {
+public extension ProjectBranchLogRecord {
+    init(
+        timestamp: Date,
+        message: String,
+        attributes: [String: JSONValue],
+        source: ProjectBranchLogSource? = nil,
+        entityId: String? = nil,
+        serviceName: String? = nil,
+        scopeName: String? = nil,
+        severityNumber: Int? = nil,
+        severityText: String? = nil,
+        traceId: String? = nil,
+        spanId: String? = nil
+    ) throws {
         (self.timestamp, self.message) = (timestamp, message)
         (self.attributes, self.source) = (attributes, source)
         (self.entityId, self.serviceName) = (entityId, serviceName)
         (self.scopeName, self.severityNumber) = (scopeName, severityNumber)
         (self.severityText, self.traceId) = (severityText, traceId)
         self.spanId = spanId
-            try sdkValidateDateTime("timestamp", sdkWireString(self.timestamp))
+        try sdkValidateDateTime("timestamp", sdkWireString(self.timestamp))
         if let value = self.severityNumber {
-            try validateRange("severity_number", Double(value), min: 0, max: 24, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "severity_number",
+                Double(value),
+                min: 0,
+                max: 24,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -158,35 +200,50 @@ public struct ProjectBranchLogsQueryRequest: Codable {
     }
 
     init() {
-        (self.since, self.startTime, self.endTime, self.limit, self.cursor) = (nil, nil, nil, nil, nil)
-        (self.sortOrder, self.source, self.serviceName, self.scopeName, self.minimumSeverity) = (nil, nil, nil, nil, nil)
-        (self.severityText, self.bodyContains, self.traceId, self.logql) = (nil, nil, nil, nil)
+        (since, startTime, endTime, limit, cursor) = (nil, nil, nil, nil, nil)
+        (sortOrder, source, serviceName, scopeName, minimumSeverity) = (nil, nil, nil, nil, nil)
+        (severityText, bodyContains, traceId, logql) = (nil, nil, nil, nil)
     }
 }
 
-extension ProjectBranchLogsQueryRequest {
-    public init(from decoder: Decoder) throws {
+public extension ProjectBranchLogsQueryRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.since = try container.sdkDecodeIfPresent(.since)
-        self.startTime = try container.sdkDecodeIfPresent(.startTime)
-        self.endTime = try container.sdkDecodeIfPresent(.endTime)
-        self.limit = try container.sdkDecodeIfPresent(.limit)
-        self.cursor = try container.sdkDecodeIfPresent(.cursor)
-        self.sortOrder = try container.sdkDecodeIfPresent(.sortOrder)
-        self.source = try container.sdkDecodeIfPresent(.source)
-        self.serviceName = try container.sdkDecodeIfPresent(.serviceName)
-        self.scopeName = try container.sdkDecodeIfPresent(.scopeName)
-        self.minimumSeverity = try container.sdkDecodeIfPresent(.minimumSeverity)
-        self.severityText = try container.sdkDecodeIfPresent(.severityText)
-        self.bodyContains = try container.sdkDecodeIfPresent(.bodyContains)
-        self.traceId = try container.sdkDecodeIfPresent(.traceId)
-        self.logql = try container.sdkDecodeIfPresent(.logql)
+        since = try container.sdkDecodeIfPresent(.since)
+        startTime = try container.sdkDecodeIfPresent(.startTime)
+        endTime = try container.sdkDecodeIfPresent(.endTime)
+        limit = try container.sdkDecodeIfPresent(.limit)
+        cursor = try container.sdkDecodeIfPresent(.cursor)
+        sortOrder = try container.sdkDecodeIfPresent(.sortOrder)
+        source = try container.sdkDecodeIfPresent(.source)
+        serviceName = try container.sdkDecodeIfPresent(.serviceName)
+        scopeName = try container.sdkDecodeIfPresent(.scopeName)
+        minimumSeverity = try container.sdkDecodeIfPresent(.minimumSeverity)
+        severityText = try container.sdkDecodeIfPresent(.severityText)
+        bodyContains = try container.sdkDecodeIfPresent(.bodyContains)
+        traceId = try container.sdkDecodeIfPresent(.traceId)
+        logql = try container.sdkDecodeIfPresent(.logql)
         try sdkValidateConstraints()
     }
 }
 
-extension ProjectBranchLogsQueryRequest {
-    public init(since: ProjectBranchLogDuration? = nil, startTime: Date? = nil, endTime: Date? = nil, limit: Int? = nil, cursor: String? = nil, sortOrder: ProjectBranchLogsQueryRequestSortOrder? = nil, source: ProjectBranchLogSource? = nil, serviceName: String? = nil, scopeName: String? = nil, minimumSeverity: ProjectBranchLogSeverity? = nil, severityText: String? = nil, bodyContains: String? = nil, traceId: String? = nil, logql: String? = nil) throws {
+public extension ProjectBranchLogsQueryRequest {
+    init(
+        since: ProjectBranchLogDuration? = nil,
+        startTime: Date? = nil,
+        endTime: Date? = nil,
+        limit: Int? = nil,
+        cursor: String? = nil,
+        sortOrder: ProjectBranchLogsQueryRequestSortOrder? = nil,
+        source: ProjectBranchLogSource? = nil,
+        serviceName: String? = nil,
+        scopeName: String? = nil,
+        minimumSeverity: ProjectBranchLogSeverity? = nil,
+        severityText: String? = nil,
+        bodyContains: String? = nil,
+        traceId: String? = nil,
+        logql: String? = nil
+    ) throws {
         self.init()
         (self.since, self.startTime) = (since, startTime)
         (self.endTime, self.limit) = (endTime, limit)
@@ -201,31 +258,39 @@ extension ProjectBranchLogsQueryRequest {
 
 extension ProjectBranchLogsQueryRequest {
     func sdkValidateConstraints() throws {
-        if let value = self.startTime {
+        if let value = startTime {
             try sdkValidateDateTime("start_time", sdkWireString(value))
         }
-        if let value = self.endTime {
+        if let value = endTime {
             try sdkValidateDateTime("end_time", sdkWireString(value))
         }
-        if let value = self.limit {
-            try validateRange("limit", Double(value), min: 1, max: 1000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = limit {
+            try validateRange(
+                "limit",
+                Double(value),
+                min: 1,
+                max: 1000,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.serviceName {
+        if let value = serviceName {
             try validateLength("service_name", value, min: 1, max: nil)
         }
-        if let value = self.scopeName {
+        if let value = scopeName {
             try validateLength("scope_name", value, min: 1, max: nil)
         }
-        if let value = self.severityText {
+        if let value = severityText {
             try validateLength("severity_text", value, min: 1, max: nil)
         }
-        if let value = self.bodyContains {
+        if let value = bodyContains {
             try validateLength("body_contains", value, min: 1, max: nil)
         }
-        if let value = self.traceId {
+        if let value = traceId {
             try sdkValidatePattern("trace_id", value, sdkPattern9cc47ef3f9f1)
         }
-        if let value = self.logql {
+        if let value = logql {
             try validateLength("logql", value, min: 1, max: nil)
         }
     }
@@ -246,26 +311,36 @@ public struct ProjectBranchLogsQueryResponse: Codable {
         case nextCursor = "next_cursor"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectBranchLogsQueryResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.logs) else {
-            throw SdkValidationError(field: "logs", code: "required", message: "Validation failed for 'logs': value is required")
-        }
-        guard container.contains(.isTruncated) else {
-            throw SdkValidationError(field: "is_truncated", code: "required", message: "Validation failed for 'is_truncated': value is required")
-        }
-        self.logs = try container.sdkDecodeRequired(.logs)
-        self.isTruncated = try container.sdkDecodeRequired(.isTruncated)
-        self.nextCursor = try container.sdkDecodeIfPresent(.nextCursor)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectBranchLogsQueryResponse {
-    public init(logs: [ProjectBranchLogRecord], isTruncated: Bool, nextCursor: String? = nil) {
+public extension ProjectBranchLogsQueryResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.logs) else {
+            throw SdkValidationError(
+                field: "logs",
+                code: "required",
+                message: "Validation failed for 'logs': value is required"
+            )
+        }
+        guard container.contains(.isTruncated) else {
+            throw SdkValidationError(
+                field: "is_truncated",
+                code: "required",
+                message: "Validation failed for 'is_truncated': value is required"
+            )
+        }
+        logs = try container.sdkDecodeRequired(.logs)
+        isTruncated = try container.sdkDecodeRequired(.isTruncated)
+        nextCursor = try container.sdkDecodeIfPresent(.nextCursor)
+    }
+}
+
+public extension ProjectBranchLogsQueryResponse {
+    init(logs: [ProjectBranchLogRecord], isTruncated: Bool, nextCursor: String? = nil) {
         (self.logs, self.isTruncated) = (logs, isTruncated)
         self.nextCursor = nextCursor
     }
@@ -276,7 +351,10 @@ extension ProjectBranchLogsQueryResponse {
 public struct ProjectBranchLogSeverity: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let trace = ProjectBranchLogSeverity(rawValue: "trace")
     public static let debug = ProjectBranchLogSeverity(rawValue: "debug")
     public static let info = ProjectBranchLogSeverity(rawValue: "info")
@@ -286,7 +364,7 @@ public struct ProjectBranchLogSeverity: RawRepresentable, Hashable, Codable, Sen
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -296,16 +374,20 @@ public struct ProjectBranchLogSeverity: RawRepresentable, Hashable, Codable, Sen
 }
 
 /// Order matching records by timestamp. `desc`, the default, returns the newest records first.
-public struct ProjectBranchLogsQueryRequestSortOrder: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct ProjectBranchLogsQueryRequestSortOrder: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let asc = ProjectBranchLogsQueryRequestSortOrder(rawValue: "asc")
     public static let desc = ProjectBranchLogsQueryRequestSortOrder(rawValue: "desc")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

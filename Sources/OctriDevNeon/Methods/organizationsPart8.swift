@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension OrganizationsMethods {
+public extension OrganizationsMethods {
     /// Transfers selected projects, identified by their IDs, from your organization to another specified organization.
     ///
     /// - Parameters:
@@ -15,26 +15,60 @@ extension OrganizationsMethods {
     /// - destinationOrgId: The destination organization identifier
     /// - projectIds: The list of projects ids to transfer. Maximum of 400 project
     ///   ids
-    public static func transferOrganizationsProjects(config: ClientConfig, sourceOrgId: String, destinationOrgId: String, projectIds: [String], requestOptions: RequestOptions? = nil) async throws -> EmptyResponse {
+    static func transferOrganizationsProjects(
+        config: ClientConfig,
+        sourceOrgId: String,
+        destinationOrgId: String,
+        projectIds: [String],
+        requestOptions: RequestOptions? = nil
+    ) async throws -> EmptyResponse {
         try sdkValidatePattern("source_org_id", sourceOrgId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("destination_org_id", destinationOrgId, sdkPatternead2b03f7a95)
 
         try validateItems("project_ids", projectIds, min: 1, max: 400)
 
-        let requestBody = TransferOrganizationsProjectsRequestBody(destinationOrgId: destinationOrgId, projectIds: projectIds)
+        let requestBody = TransferOrganizationsProjectsRequestBody(
+            destinationOrgId: destinationOrgId,
+            projectIds: projectIds
+        )
 
-        return try (await sdkRequest("POST", ["/organizations/", sdkEncodePathSegment(sdkWireString(sourceOrgId)), "/projects/transfer"].joined(), config: config, body: requestBody, decoder: .json, operationId: "transferOrganizationsProjects", options: requestOptions, errors: ["406": LimitsUnsatisfiedResponse.self, "422": ProjectsWithIntegrationResponse.self, "default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/organizations/", sdkEncodePathSegment(sdkWireString(sourceOrgId)), "/projects/transfer"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "transferOrganizationsProjects",
+            options: requestOptions,
+            errors: [
+                "406": LimitsUnsatisfiedResponse.self,
+                "422": ProjectsWithIntegrationResponse.self,
+                "default": GeneralError.self,
+            ]
+        )).data
     }
 
     /// Retrieves the list of VPC endpoints for the specified Neon organization across all regions.
     ///
     /// - Parameters:
     /// - orgId: The Neon organization ID
-    public static func listOrganizationVpcEndpointsAllRegions(config: ClientConfig, orgId: String, requestOptions: RequestOptions? = nil) async throws -> VPCEndpointsWithRegionResponse {
+    static func listOrganizationVpcEndpointsAllRegions(
+        config: ClientConfig,
+        orgId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VPCEndpointsWithRegionResponse {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/vpc/vpc_endpoints"].joined(), config: config, decoder: .json, operationId: "listOrganizationVPCEndpointsAllRegions", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/vpc/vpc_endpoints"].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "listOrganizationVPCEndpointsAllRegions",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
     /// Retrieves the list of VPC endpoints for the specified Neon organization.
@@ -42,9 +76,28 @@ extension OrganizationsMethods {
     /// - Parameters:
     /// - orgId: The Neon organization ID
     /// - regionId: The Neon region ID
-    public static func listOrganizationVpcEndpoints(config: ClientConfig, orgId: String, regionId: String, requestOptions: RequestOptions? = nil) async throws -> VPCEndpointsResponse {
+    static func listOrganizationVpcEndpoints(
+        config: ClientConfig,
+        orgId: String,
+        regionId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VPCEndpointsResponse {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/vpc/region/", sdkEncodePathSegment(sdkWireString(regionId)), "/vpc_endpoints"].joined(), config: config, decoder: .json, operationId: "listOrganizationVPCEndpoints", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/organizations/",
+                sdkEncodePathSegment(sdkWireString(orgId)),
+                "/vpc/region/",
+                sdkEncodePathSegment(sdkWireString(regionId)),
+                "/vpc_endpoints",
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "listOrganizationVPCEndpoints",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

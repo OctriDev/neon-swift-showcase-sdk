@@ -6,17 +6,36 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AuthLegacyMethods {
-    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/users/{auth_user_id}` instead. Removal scheduled for March 1, 2026.
+public extension AuthLegacyMethods {
+    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/users/{auth_user_id}` instead. Removal
+    /// scheduled for March 1, 2026.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - authUserId: The Neon user ID
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public static func deleteAuthLegacyUser(config: ClientConfig, projectId: String, authUserId: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+    static func deleteAuthLegacyUser(
+        config: ClientConfig,
+        projectId: String,
+        authUserId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/users/", sdkEncodePathSegment(sdkWireString(authUserId))].joined(), config: config, decoder: .empty, operationId: "deleteAuthLegacyUser", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "DELETE",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/auth/users/",
+                sdkEncodePathSegment(sdkWireString(authUserId)),
+            ].joined(),
+            config: config,
+            decoder: .empty,
+            operationId: "deleteAuthLegacyUser",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

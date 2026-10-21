@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Organizations domain models
+/// Organizations domain models
 /// Typed representation of the `VPCEndpointWithRegion` API schema.
 public struct VPCEndpointWithRegion: Codable {
     /// Cloud provider identifier for the VPC endpoint.
@@ -19,29 +19,43 @@ public struct VPCEndpointWithRegion: Codable {
         case regionId = "region_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension VPCEndpointWithRegion {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.vpcEndpointId) else {
-            throw SdkValidationError(field: "vpc_endpoint_id", code: "required", message: "Validation failed for 'vpc_endpoint_id': value is required")
-        }
-        guard container.contains(.label) else {
-            throw SdkValidationError(field: "label", code: "required", message: "Validation failed for 'label': value is required")
-        }
-        guard container.contains(.regionId) else {
-            throw SdkValidationError(field: "region_id", code: "required", message: "Validation failed for 'region_id': value is required")
-        }
-        self.vpcEndpointId = try container.sdkDecodeRequired(.vpcEndpointId)
-        self.label = try container.sdkDecodeRequired(.label)
-        self.regionId = try container.sdkDecodeRequired(.regionId)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension VPCEndpointWithRegion {
-    public init(vpcEndpointId: String, label: String, regionId: String) {
+public extension VPCEndpointWithRegion {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.vpcEndpointId) else {
+            throw SdkValidationError(
+                field: "vpc_endpoint_id",
+                code: "required",
+                message: "Validation failed for 'vpc_endpoint_id': value is required"
+            )
+        }
+        guard container.contains(.label) else {
+            throw SdkValidationError(
+                field: "label",
+                code: "required",
+                message: "Validation failed for 'label': value is required"
+            )
+        }
+        guard container.contains(.regionId) else {
+            throw SdkValidationError(
+                field: "region_id",
+                code: "required",
+                message: "Validation failed for 'region_id': value is required"
+            )
+        }
+        vpcEndpointId = try container.sdkDecodeRequired(.vpcEndpointId)
+        label = try container.sdkDecodeRequired(.label)
+        regionId = try container.sdkDecodeRequired(.regionId)
+    }
+}
+
+public extension VPCEndpointWithRegion {
+    init(vpcEndpointId: String, label: String, regionId: String) {
         (self.vpcEndpointId, self.label) = (vpcEndpointId, label)
         self.regionId = regionId
     }
@@ -56,21 +70,27 @@ public struct VPCEndpointWithRegionVariant1: Codable {
         case regionId = "region_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension VPCEndpointWithRegionVariant1 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.regionId) else {
-            throw SdkValidationError(field: "region_id", code: "required", message: "Validation failed for 'region_id': value is required")
-        }
-        self.regionId = try container.sdkDecodeRequired(.regionId)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension VPCEndpointWithRegionVariant1 {
-    public init(regionId: String) {
+public extension VPCEndpointWithRegionVariant1 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.regionId) else {
+            throw SdkValidationError(
+                field: "region_id",
+                code: "required",
+                message: "Validation failed for 'region_id': value is required"
+            )
+        }
+        regionId = try container.sdkDecodeRequired(.regionId)
+    }
+}
+
+public extension VPCEndpointWithRegionVariant1 {
+    init(regionId: String) {
         self.regionId = regionId
     }
 }
@@ -84,21 +104,27 @@ public struct VPCEndpointsWithRegionResponse: Codable {
         case endpoints
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension VPCEndpointsWithRegionResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.endpoints) else {
-            throw SdkValidationError(field: "endpoints", code: "required", message: "Validation failed for 'endpoints': value is required")
-        }
-        self.endpoints = try container.sdkDecodeRequired(.endpoints)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension VPCEndpointsWithRegionResponse {
-    public init(endpoints: [VPCEndpointWithRegion]) {
+public extension VPCEndpointsWithRegionResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.endpoints) else {
+            throw SdkValidationError(
+                field: "endpoints",
+                code: "required",
+                message: "Validation failed for 'endpoints': value is required"
+            )
+        }
+        endpoints = try container.sdkDecodeRequired(.endpoints)
+    }
+}
+
+public extension VPCEndpointsWithRegionResponse {
+    init(endpoints: [VPCEndpointWithRegion]) {
         self.endpoints = endpoints
     }
 }

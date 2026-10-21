@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Auth domain models
+/// Auth domain models
 /// Typed representation of the `NeonAuthMagicLinkConfigUpdate` API schema.
 public struct NeonAuthMagicLinkConfigUpdate: Codable {
     /// Whether to enable the magic link plugin.
@@ -20,29 +20,45 @@ public struct NeonAuthMagicLinkConfigUpdate: Codable {
     }
 
     init() {
-        (self.enabled, self.expiresIn, self.disableSignUp) = (nil, nil, nil)
+        (enabled, expiresIn, disableSignUp) = (nil, nil, nil)
     }
 }
 
-extension NeonAuthMagicLinkConfigUpdate {
-    public init(from decoder: Decoder) throws {
+public extension NeonAuthMagicLinkConfigUpdate {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.enabled = try container.sdkDecodeIfPresent(.enabled)
-        self.expiresIn = try container.sdkDecodeIfPresent(.expiresIn)
-        self.disableSignUp = try container.sdkDecodeIfPresent(.disableSignUp)
-        if let value = self.expiresIn {
-            try validateRange("expires_in", Double(value), min: 5, max: 1440, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        enabled = try container.sdkDecodeIfPresent(.enabled)
+        expiresIn = try container.sdkDecodeIfPresent(.expiresIn)
+        disableSignUp = try container.sdkDecodeIfPresent(.disableSignUp)
+        if let value = expiresIn {
+            try validateRange(
+                "expires_in",
+                Double(value),
+                min: 5,
+                max: 1440,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension NeonAuthMagicLinkConfigUpdate {
-    public init(enabled: Bool? = nil, expiresIn: Int? = nil, disableSignUp: Bool? = nil) throws {
+public extension NeonAuthMagicLinkConfigUpdate {
+    init(enabled: Bool? = nil, expiresIn: Int? = nil, disableSignUp: Bool? = nil) throws {
         self.init()
         (self.enabled, self.expiresIn) = (enabled, expiresIn)
         self.disableSignUp = disableSignUp
         if let value = self.expiresIn {
-            try validateRange("expires_in", Double(value), min: 5, max: 1440, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "expires_in",
+                Double(value),
+                min: 5,
+                max: 1440,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
