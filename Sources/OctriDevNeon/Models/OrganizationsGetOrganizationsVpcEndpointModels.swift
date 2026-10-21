@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Organizations domain models
+/// Organizations domain models
 /// Typed representation of the `VPCEndpointDetails` API schema.
 public struct VPCEndpointDetails: Codable {
     /// Cloud provider identifier for the VPC endpoint.
@@ -28,37 +28,65 @@ public struct VPCEndpointDetails: Codable {
         case exampleRestrictedProjects = "example_restricted_projects"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension VPCEndpointDetails {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.vpcEndpointId) else {
-            throw SdkValidationError(field: "vpc_endpoint_id", code: "required", message: "Validation failed for 'vpc_endpoint_id': value is required")
-        }
-        guard container.contains(.label) else {
-            throw SdkValidationError(field: "label", code: "required", message: "Validation failed for 'label': value is required")
-        }
-        guard container.contains(.state) else {
-            throw SdkValidationError(field: "state", code: "required", message: "Validation failed for 'state': value is required")
-        }
-        guard container.contains(.numRestrictedProjects) else {
-            throw SdkValidationError(field: "num_restricted_projects", code: "required", message: "Validation failed for 'num_restricted_projects': value is required")
-        }
-        guard container.contains(.exampleRestrictedProjects) else {
-            throw SdkValidationError(field: "example_restricted_projects", code: "required", message: "Validation failed for 'example_restricted_projects': value is required")
-        }
-        self.vpcEndpointId = try container.sdkDecodeRequired(.vpcEndpointId)
-        self.label = try container.sdkDecodeRequired(.label)
-        self.state = try container.sdkDecodeRequired(.state)
-        self.numRestrictedProjects = try container.sdkDecodeRequired(.numRestrictedProjects)
-        self.exampleRestrictedProjects = try container.sdkDecodeRequired(.exampleRestrictedProjects)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension VPCEndpointDetails {
-    public init(vpcEndpointId: String, label: String, state: String, numRestrictedProjects: Int, exampleRestrictedProjects: [String]) {
+public extension VPCEndpointDetails {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.vpcEndpointId) else {
+            throw SdkValidationError(
+                field: "vpc_endpoint_id",
+                code: "required",
+                message: "Validation failed for 'vpc_endpoint_id': value is required"
+            )
+        }
+        guard container.contains(.label) else {
+            throw SdkValidationError(
+                field: "label",
+                code: "required",
+                message: "Validation failed for 'label': value is required"
+            )
+        }
+        guard container.contains(.state) else {
+            throw SdkValidationError(
+                field: "state",
+                code: "required",
+                message: "Validation failed for 'state': value is required"
+            )
+        }
+        guard container.contains(.numRestrictedProjects) else {
+            throw SdkValidationError(
+                field: "num_restricted_projects",
+                code: "required",
+                message: "Validation failed for 'num_restricted_projects': value is required"
+            )
+        }
+        guard container.contains(.exampleRestrictedProjects) else {
+            throw SdkValidationError(
+                field: "example_restricted_projects",
+                code: "required",
+                message: "Validation failed for 'example_restricted_projects': value is required"
+            )
+        }
+        vpcEndpointId = try container.sdkDecodeRequired(.vpcEndpointId)
+        label = try container.sdkDecodeRequired(.label)
+        state = try container.sdkDecodeRequired(.state)
+        numRestrictedProjects = try container.sdkDecodeRequired(.numRestrictedProjects)
+        exampleRestrictedProjects = try container.sdkDecodeRequired(.exampleRestrictedProjects)
+    }
+}
+
+public extension VPCEndpointDetails {
+    init(
+        vpcEndpointId: String,
+        label: String,
+        state: String,
+        numRestrictedProjects: Int,
+        exampleRestrictedProjects: [String]
+    ) {
         (self.vpcEndpointId, self.label) = (vpcEndpointId, label)
         (self.state, self.numRestrictedProjects) = (state, numRestrictedProjects)
         self.exampleRestrictedProjects = exampleRestrictedProjects

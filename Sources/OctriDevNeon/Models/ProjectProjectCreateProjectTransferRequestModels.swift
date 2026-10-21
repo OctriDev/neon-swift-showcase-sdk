@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ProjectProject domain models
+/// ProjectProject domain models
 /// Typed representation of the `ProjectTransferRequestResponse` API schema.
 public struct ProjectTransferRequestResponse: Codable {
     /// The unique identifier for the transfer request
@@ -22,42 +22,60 @@ public struct ProjectTransferRequestResponse: Codable {
         case expiresAt = "expires_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectTransferRequestResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.projectId) else {
-            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.expiresAt) else {
-            throw SdkValidationError(field: "expires_at", code: "required", message: "Validation failed for 'expires_at': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.projectId = try container.sdkDecodeRequired(.projectId)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.expiresAt = try container.sdkDecodeRequired(.expiresAt)
-            try sdkValidateUuid("id", self.id)
-            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-            try sdkValidateDateTime("expires_at", sdkWireString(self.expiresAt))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectTransferRequestResponse {
-    public init(id: String, projectId: String, createdAt: Date, expiresAt: Date) throws {
+public extension ProjectTransferRequestResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.projectId) else {
+            throw SdkValidationError(
+                field: "project_id",
+                code: "required",
+                message: "Validation failed for 'project_id': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.expiresAt) else {
+            throw SdkValidationError(
+                field: "expires_at",
+                code: "required",
+                message: "Validation failed for 'expires_at': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        projectId = try container.sdkDecodeRequired(.projectId)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        expiresAt = try container.sdkDecodeRequired(.expiresAt)
+        try sdkValidateUuid("id", id)
+        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
+        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
+        try sdkValidateDateTime("expires_at", sdkWireString(expiresAt))
+    }
+}
+
+public extension ProjectTransferRequestResponse {
+    init(id: String, projectId: String, createdAt: Date, expiresAt: Date) throws {
         (self.id, self.projectId) = (id, projectId)
         (self.createdAt, self.expiresAt) = (createdAt, expiresAt)
-            try sdkValidateUuid("id", self.id)
-            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-            try sdkValidateDateTime("expires_at", sdkWireString(self.expiresAt))
+        try sdkValidateUuid("id", self.id)
+        try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+        try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+        try sdkValidateDateTime("expires_at", sdkWireString(self.expiresAt))
     }
 }

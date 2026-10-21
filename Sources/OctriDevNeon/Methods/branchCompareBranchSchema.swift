@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension BranchMethods {
-    public struct CompareBranchSchemaOptions: Codable {
+public extension BranchMethods {
+    struct CompareBranchSchemaOptions: Codable {
         public var projectId: String
         public var branchId: String
         public var dbName: String
@@ -35,7 +35,11 @@ extension BranchMethods {
     /// - timestamp: The point in time for which the schema is retrieved
     /// - baseLsn: The Log Sequence Number (LSN) for the base branch schema
     /// - baseTimestamp: The point in time for the base branch schema
-    public static func compareBranchSchema(config: ClientConfig, options: CompareBranchSchemaOptions, requestOptions: RequestOptions? = nil) async throws -> BranchSchemaCompareResponse {
+    static func compareBranchSchema(
+        config: ClientConfig,
+        options: CompareBranchSchemaOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> BranchSchemaCompareResponse {
         try sdkValidatePattern("project_id", options.projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", options.branchId, sdkPatternead2b03f7a95)
@@ -52,13 +56,28 @@ extension BranchMethods {
             try sdkValidateDateTime("base_timestamp", baseTimestamp)
         }
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(options.projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(options.branchId)), "/compare_schema"].joined(), config: config, query: [
-            SdkQueryParameter("db_name", value: options.dbName),
-            SdkQueryParameter("base_branch_id", value: options.baseBranchId),
-            SdkQueryParameter("lsn", value: options.lsn),
-            SdkQueryParameter("timestamp", value: options.timestamp),
-            SdkQueryParameter("base_lsn", value: options.baseLsn),
-            SdkQueryParameter("base_timestamp", value: options.baseTimestamp),
-        ], decoder: .json, operationId: "compareBranchSchema", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(options.projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(options.branchId)),
+                "/compare_schema",
+            ].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("db_name", value: options.dbName),
+                SdkQueryParameter("base_branch_id", value: options.baseBranchId),
+                SdkQueryParameter("lsn", value: options.lsn),
+                SdkQueryParameter("timestamp", value: options.timestamp),
+                SdkQueryParameter("base_lsn", value: options.baseLsn),
+                SdkQueryParameter("base_timestamp", value: options.baseTimestamp),
+            ],
+            decoder: .json,
+            operationId: "compareBranchSchema",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

@@ -6,17 +6,37 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AuthMethods {
-    /// Retrieves the email and password authentication configuration for the specified branch's Neon Auth integration, including whether it is enabled and the email verification method.
+public extension AuthMethods {
+    /// Retrieves the email and password authentication configuration for the specified branch's Neon Auth integration,
+    /// including whether it is enabled and the email verification method.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
-    public static func getAuthEmailAndPasswordConfig(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthEmailAndPasswordConfig {
+    static func getAuthEmailAndPasswordConfig(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthEmailAndPasswordConfig {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth/email_and_password"].joined(), config: config, decoder: .json, operationId: "getAuthEmailAndPasswordConfig", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/auth/email_and_password",
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getAuthEmailAndPasswordConfig",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

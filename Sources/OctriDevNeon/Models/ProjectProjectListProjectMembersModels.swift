@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ProjectProject domain models
+/// ProjectProject domain models
 /// Typed representation of the `ProjectMember` API schema.
 public struct ProjectMember: Codable {
     /// The organization member ID.
@@ -46,50 +46,75 @@ public struct ProjectMember: Codable {
         case grantSource = "grant_source"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension ProjectMember {
-    public init(from decoder: Decoder) throws {
+public extension ProjectMember {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.memberId) else {
-            throw SdkValidationError(field: "member_id", code: "required", message: "Validation failed for 'member_id': value is required")
+            throw SdkValidationError(
+                field: "member_id",
+                code: "required",
+                message: "Validation failed for 'member_id': value is required"
+            )
         }
         guard container.contains(.userId) else {
-            throw SdkValidationError(field: "user_id", code: "required", message: "Validation failed for 'user_id': value is required")
+            throw SdkValidationError(
+                field: "user_id",
+                code: "required",
+                message: "Validation failed for 'user_id': value is required"
+            )
         }
         guard container.contains(.orgRole) else {
-            throw SdkValidationError(field: "org_role", code: "required", message: "Validation failed for 'org_role': value is required")
+            throw SdkValidationError(
+                field: "org_role",
+                code: "required",
+                message: "Validation failed for 'org_role': value is required"
+            )
         }
-        self.memberId = try container.sdkDecodeRequired(.memberId)
-        self.userId = try container.sdkDecodeRequired(.userId)
-        self.orgRole = try container.sdkDecodeRequired(.orgRole)
-        self.email = try container.sdkDecodeIfPresent(.email)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.projectRole = try container.sdkDecodeIfPresent(.projectRole)
-        self.orgDefaultProjectPermission = try container.sdkDecodeIfPresent(.orgDefaultProjectPermission)
-        self.explicitProjectPermission = try container.sdkDecodeIfPresent(.explicitProjectPermission)
-        self.effectiveProjectPermission = try container.sdkDecodeIfPresent(.effectiveProjectPermission)
-        self.grantSource = try container.sdkDecodeIfPresent(.grantSource)
-            try sdkValidateUuid("member_id", self.memberId)
-            try sdkValidateUuid("user_id", self.userId)
-        if let value = self.email {
+        memberId = try container.sdkDecodeRequired(.memberId)
+        userId = try container.sdkDecodeRequired(.userId)
+        orgRole = try container.sdkDecodeRequired(.orgRole)
+        email = try container.sdkDecodeIfPresent(.email)
+        name = try container.sdkDecodeIfPresent(.name)
+        projectRole = try container.sdkDecodeIfPresent(.projectRole)
+        orgDefaultProjectPermission = try container.sdkDecodeIfPresent(.orgDefaultProjectPermission)
+        explicitProjectPermission = try container.sdkDecodeIfPresent(.explicitProjectPermission)
+        effectiveProjectPermission = try container.sdkDecodeIfPresent(.effectiveProjectPermission)
+        grantSource = try container.sdkDecodeIfPresent(.grantSource)
+        try sdkValidateUuid("member_id", memberId)
+        try sdkValidateUuid("user_id", userId)
+        if let value = email {
             try validateLength("email", value, min: 1, max: 256)
             try sdkValidateEmail("email", value)
         }
     }
 }
 
-extension ProjectMember {
-    public init(memberId: String, userId: String, orgRole: ProjectMemberOrgRole, email: String? = nil, name: String? = nil, projectRole: ProjectRole? = nil, orgDefaultProjectPermission: ProjectPermissionLevel? = nil, explicitProjectPermission: ProjectPermissionLevel? = nil, effectiveProjectPermission: ProjectPermissionLevel? = nil, grantSource: ProjectMemberGrantSource? = nil) throws {
+public extension ProjectMember {
+    init(
+        memberId: String,
+        userId: String,
+        orgRole: ProjectMemberOrgRole,
+        email: String? = nil,
+        name: String? = nil,
+        projectRole: ProjectRole? = nil,
+        orgDefaultProjectPermission: ProjectPermissionLevel? = nil,
+        explicitProjectPermission: ProjectPermissionLevel? = nil,
+        effectiveProjectPermission: ProjectPermissionLevel? = nil,
+        grantSource: ProjectMemberGrantSource? = nil
+    ) throws {
         (self.memberId, self.userId) = (memberId, userId)
         (self.orgRole, self.email) = (orgRole, email)
         (self.name, self.projectRole) = (name, projectRole)
         self.orgDefaultProjectPermission = orgDefaultProjectPermission
         self.explicitProjectPermission = explicitProjectPermission
         (self.effectiveProjectPermission, self.grantSource) = (effectiveProjectPermission, grantSource)
-            try sdkValidateUuid("member_id", self.memberId)
-            try sdkValidateUuid("user_id", self.userId)
+        try sdkValidateUuid("member_id", self.memberId)
+        try sdkValidateUuid("user_id", self.userId)
         if let value = self.email {
             try validateLength("email", value, min: 1, max: 256)
             try sdkValidateEmail("email", value)
@@ -112,22 +137,28 @@ public struct ProjectMembers: Codable {
         case pagination
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectMembers {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projectMembers) else {
-            throw SdkValidationError(field: "project_members", code: "required", message: "Validation failed for 'project_members': value is required")
-        }
-        self.projectMembers = try container.sdkDecodeRequired(.projectMembers)
-        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectMembers {
-    public init(projectMembers: [ProjectMember], pagination: CursorPagination? = nil) {
+public extension ProjectMembers {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.projectMembers) else {
+            throw SdkValidationError(
+                field: "project_members",
+                code: "required",
+                message: "Validation failed for 'project_members': value is required"
+            )
+        }
+        projectMembers = try container.sdkDecodeRequired(.projectMembers)
+        pagination = try container.sdkDecodeIfPresent(.pagination)
+    }
+}
+
+public extension ProjectMembers {
+    init(projectMembers: [ProjectMember], pagination: CursorPagination? = nil) {
         (self.projectMembers, self.pagination) = (projectMembers, pagination)
     }
 }
@@ -136,7 +167,10 @@ extension ProjectMembers {
 public struct ProjectMemberGrantSource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let explicit = ProjectMemberGrantSource(rawValue: "explicit")
     public static let orgRoleDefault = ProjectMemberGrantSource(rawValue: "org_role_default")
     public static let orgAdminOverride = ProjectMemberGrantSource(rawValue: "org_admin_override")
@@ -144,7 +178,7 @@ public struct ProjectMemberGrantSource: RawRepresentable, Hashable, Codable, Sen
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Auth domain models
+/// Auth domain models
 /// Typed representation of the `NeonAuthOrganizationConfigUpdate` API schema.
 public struct NeonAuthOrganizationConfigUpdate: Codable {
     /// Controls whether the organization plugin is active for the organization.
@@ -29,54 +29,96 @@ public struct NeonAuthOrganizationConfigUpdate: Codable {
     }
 
     init() {
-        (self.enabled, self.organizationLimit, self.membershipLimit, self.creatorRole, self.sendInvitationEmail) = (nil, nil, nil, nil, nil)
+        (enabled, organizationLimit, membershipLimit, creatorRole, sendInvitationEmail) = (nil, nil, nil, nil, nil)
     }
 }
 
-extension NeonAuthOrganizationConfigUpdate {
-    public init(from decoder: Decoder) throws {
+public extension NeonAuthOrganizationConfigUpdate {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.enabled = try container.sdkDecodeIfPresent(.enabled)
-        self.organizationLimit = try container.sdkDecodeIfPresent(.organizationLimit)
-        self.membershipLimit = try container.sdkDecodeIfPresent(.membershipLimit)
-        self.creatorRole = try container.sdkDecodeIfPresent(.creatorRole)
-        self.sendInvitationEmail = try container.sdkDecodeIfPresent(.sendInvitationEmail)
-        if let value = self.organizationLimit {
-            try validateRange("organization_limit", Double(value), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        enabled = try container.sdkDecodeIfPresent(.enabled)
+        organizationLimit = try container.sdkDecodeIfPresent(.organizationLimit)
+        membershipLimit = try container.sdkDecodeIfPresent(.membershipLimit)
+        creatorRole = try container.sdkDecodeIfPresent(.creatorRole)
+        sendInvitationEmail = try container.sdkDecodeIfPresent(.sendInvitationEmail)
+        if let value = organizationLimit {
+            try validateRange(
+                "organization_limit",
+                Double(value),
+                min: 1,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.membershipLimit {
-            try validateRange("membership_limit", Double(value), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = membershipLimit {
+            try validateRange(
+                "membership_limit",
+                Double(value),
+                min: 1,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension NeonAuthOrganizationConfigUpdate {
-    public init(enabled: Bool? = nil, organizationLimit: Int? = nil, membershipLimit: Int? = nil, creatorRole: NeonAuthOrganizationConfigUpdateCreatorRole? = nil, sendInvitationEmail: Bool? = nil) throws {
+public extension NeonAuthOrganizationConfigUpdate {
+    init(
+        enabled: Bool? = nil,
+        organizationLimit: Int? = nil,
+        membershipLimit: Int? = nil,
+        creatorRole: NeonAuthOrganizationConfigUpdateCreatorRole? = nil,
+        sendInvitationEmail: Bool? = nil
+    ) throws {
         self.init()
         (self.enabled, self.organizationLimit) = (enabled, organizationLimit)
         (self.membershipLimit, self.creatorRole) = (membershipLimit, creatorRole)
         self.sendInvitationEmail = sendInvitationEmail
         if let value = self.organizationLimit {
-            try validateRange("organization_limit", Double(value), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "organization_limit",
+                Double(value),
+                min: 1,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.membershipLimit {
-            try validateRange("membership_limit", Double(value), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "membership_limit",
+                Double(value),
+                min: 1,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
 /// Role of the organization's creator. `owner`: full control, including deleting the org and transferring
 /// ownership. `admin`: manage members and settings only.
-public struct NeonAuthOrganizationConfigUpdateCreatorRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct NeonAuthOrganizationConfigUpdateCreatorRole: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let admin = NeonAuthOrganizationConfigUpdateCreatorRole(rawValue: "admin")
     public static let owner = NeonAuthOrganizationConfigUpdateCreatorRole(rawValue: "owner")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

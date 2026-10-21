@@ -6,30 +6,64 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ProjectMethods {
+public extension ProjectMethods {
     /// Lists VPC endpoint restrictions for the specified Neon project.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
-    public static func listProjectVpcEndpoints(config: ClientConfig, projectId: String, requestOptions: RequestOptions? = nil) async throws -> VPCEndpointsResponse {
+    static func listProjectVpcEndpoints(
+        config: ClientConfig,
+        projectId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VPCEndpointsResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/vpc_endpoints"].joined(), config: config, decoder: .json, operationId: "listProjectVPCEndpoints", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/vpc_endpoints"].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "listProjectVPCEndpoints",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
-    /// Sets or updates a VPC endpoint restriction for a Neon project. When a VPC endpoint restriction is set, the project only accepts connections from the specified VPC. A VPC endpoint can be set as a restriction only after it is assigned to the parent organization of the Neon project.
+    /// Sets or updates a VPC endpoint restriction for a Neon project. When a VPC endpoint restriction is set, the
+    /// project only accepts connections from the specified VPC. A VPC endpoint can be set as a restriction only after
+    /// it is assigned to the parent organization of the Neon project.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - vpcEndpointId: The VPC endpoint ID
     /// - label: Human-readable name for the VPC endpoint assignment, used to
     ///   identify it within the organization.
-    public static func assignProjectVpcEndpoint(config: ClientConfig, projectId: String, vpcEndpointId: String, label: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+    static func assignProjectVpcEndpoint(
+        config: ClientConfig,
+        projectId: String,
+        vpcEndpointId: String,
+        label: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         let requestBody = AssignProjectVpcEndpointRequestBody(label: label)
 
-        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/vpc_endpoints/", sdkEncodePathSegment(sdkWireString(vpcEndpointId))].joined(), config: config, body: requestBody, decoder: .empty, operationId: "assignProjectVPCEndpoint", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "POST",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/vpc_endpoints/",
+                sdkEncodePathSegment(sdkWireString(vpcEndpointId)),
+            ].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .empty,
+            operationId: "assignProjectVPCEndpoint",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
     /// Removes the specified VPC endpoint restriction from a Neon project.
@@ -37,9 +71,27 @@ extension ProjectMethods {
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - vpcEndpointId: The VPC endpoint ID
-    public static func deleteProjectVpcEndpoint(config: ClientConfig, projectId: String, vpcEndpointId: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+    static func deleteProjectVpcEndpoint(
+        config: ClientConfig,
+        projectId: String,
+        vpcEndpointId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/vpc_endpoints/", sdkEncodePathSegment(sdkWireString(vpcEndpointId))].joined(), config: config, decoder: .empty, operationId: "deleteProjectVPCEndpoint", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "DELETE",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/vpc_endpoints/",
+                sdkEncodePathSegment(sdkWireString(vpcEndpointId)),
+            ].joined(),
+            config: config,
+            decoder: .empty,
+            operationId: "deleteProjectVPCEndpoint",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

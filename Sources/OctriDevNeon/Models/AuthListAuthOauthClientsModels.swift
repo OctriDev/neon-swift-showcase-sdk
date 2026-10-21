@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Auth domain models
+/// Auth domain models
 /// Typed representation of the `ListNeonAuthOAuthClientsResponse` API schema.
 public struct ListNeonAuthOAuthClientsResponse: Codable {
     /// OAuth clients registered for the branch.
@@ -13,21 +13,27 @@ public struct ListNeonAuthOAuthClientsResponse: Codable {
         case clients
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ListNeonAuthOAuthClientsResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.clients) else {
-            throw SdkValidationError(field: "clients", code: "required", message: "Validation failed for 'clients': value is required")
-        }
-        self.clients = try container.sdkDecodeRequired(.clients)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ListNeonAuthOAuthClientsResponse {
-    public init(clients: [NeonAuthOAuthClient]) {
+public extension ListNeonAuthOAuthClientsResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.clients) else {
+            throw SdkValidationError(
+                field: "clients",
+                code: "required",
+                message: "Validation failed for 'clients': value is required"
+            )
+        }
+        clients = try container.sdkDecodeRequired(.clients)
+    }
+}
+
+public extension ListNeonAuthOAuthClientsResponse {
+    init(clients: [NeonAuthOAuthClient]) {
         self.clients = clients
     }
 }

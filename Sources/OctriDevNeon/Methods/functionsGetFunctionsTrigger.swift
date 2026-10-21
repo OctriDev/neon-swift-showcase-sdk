@@ -6,14 +6,21 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension FunctionsMethods {
-    /// Returns the trigger visible on the branch. The supported trigger types are `schedule` and `storage_object_created`. **Note**: This endpoint is currently in Beta.
+public extension FunctionsMethods {
+    /// Returns the trigger visible on the branch. The supported trigger types are `schedule` and
+    /// `storage_object_created`. **Note**: This endpoint is currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
     /// - triggerId: The opaque, project-wide trigger ID
-    public static func getFunctionsTrigger(config: ClientConfig, projectId: String, branchId: String, triggerId: TriggerID, requestOptions: RequestOptions? = nil) async throws -> TriggerResponse {
+    static func getFunctionsTrigger(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        triggerId: TriggerID,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> TriggerResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -21,18 +28,50 @@ extension FunctionsMethods {
         try validateLength("trigger_id", triggerId, min: 1, max: 128)
         try sdkValidatePattern("trigger_id", triggerId, sdkPatternf7e1717946fc)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/triggers/", sdkEncodePathSegment(sdkWireString(triggerId))].joined(), config: config, decoder: .json, operationId: "getFunctionsTrigger", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/triggers/",
+                sdkEncodePathSegment(sdkWireString(triggerId)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getFunctionsTrigger",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
-    /// Updates a branch trigger using a partial configuration. Set `type` to the existing trigger kind and provide at least one other field to change; supported kinds are `schedule` and `storage_object_created`. Editing an inherited trigger creates a child-local shadow that remains disabled unless you explicitly enable it; disabling a trigger does not cancel occurrences already committed for delivery.
+    /// Updates a branch trigger using a partial configuration. Set `type` to the existing trigger kind and provide at
+    /// least one other field to change; supported kinds are `schedule` and `storage_object_created`. Editing an
+    /// inherited trigger creates a child-local shadow that remains disabled unless you explicitly enable it; disabling
+    /// a trigger does not cancel occurrences already committed for delivery.
     ///
-    /// Applies a partial update. The required `type` discriminator must identify the existing trigger kind. The supported types are `schedule` and `storage_object_created`. Editing an inherited trigger creates a child-local shadow with the same `trigger_id`; it remains disabled unless this request explicitly enables it. For a schedule trigger, updating the schedule or enabled state increments `version` and recomputes `next_run_at`. Disabling stops future scheduling but does not cancel occurrences already committed for delivery. For `storage_object_created`, the configuration selects one exact bucket. An omitted object-key prefix matches every key in that bucket; a present prefix is matched byte-for-byte and case-sensitively against the full key, without path normalization or a path-segment boundary. **Note**: This endpoint is currently in Beta.
+    /// Applies a partial update. The required `type` discriminator must identify the existing trigger kind. The
+    /// supported types are `schedule` and `storage_object_created`. Editing an inherited trigger creates a child-local
+    /// shadow with the same `trigger_id`; it remains disabled unless this request explicitly enables it. For a schedule
+    /// trigger, updating the schedule or enabled state increments `version` and recomputes `next_run_at`. Disabling
+    /// stops future scheduling but does not cancel occurrences already committed for delivery. For
+    /// `storage_object_created`, the configuration selects one exact bucket. An omitted object-key prefix matches every
+    /// key in that bucket; a present prefix is matched byte-for-byte and case-sensitively against the full key, without
+    /// path normalization or a path-segment boundary. **Note**: This endpoint is currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
     /// - triggerId: The opaque, project-wide trigger ID
-    public static func updateFunctionTrigger(config: ClientConfig, projectId: String, branchId: String, triggerId: TriggerID, body: TriggerUpdateRequest, requestOptions: RequestOptions? = nil) async throws -> TriggerResponse {
+    static func updateFunctionTrigger(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        triggerId: TriggerID,
+        body: TriggerUpdateRequest,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> TriggerResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -40,6 +79,22 @@ extension FunctionsMethods {
         try validateLength("trigger_id", triggerId, min: 1, max: 128)
         try sdkValidatePattern("trigger_id", triggerId, sdkPatternf7e1717946fc)
 
-        return try (await sdkRequest("PATCH", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/triggers/", sdkEncodePathSegment(sdkWireString(triggerId))].joined(), config: config, rawBody: (try sdkEncodeBody(body, contentType: "application/json")), decoder: .json, operationId: "updateFunctionTrigger", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "PATCH",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/triggers/",
+                sdkEncodePathSegment(sdkWireString(triggerId)),
+            ].joined(),
+            config: config,
+            rawBody: sdkEncodeBody(body, contentType: "application/json"),
+            decoder: .json,
+            operationId: "updateFunctionTrigger",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

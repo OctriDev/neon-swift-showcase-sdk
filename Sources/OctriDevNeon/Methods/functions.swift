@@ -8,7 +8,7 @@ import Foundation
 #endif
 public enum FunctionsMethods {}
 
-extension FunctionsMethods {
+public extension FunctionsMethods {
     /// Lists functions on the specified branch. **Note**: This endpoint is currently in Beta.
     ///
     /// - Parameters:
@@ -19,19 +19,41 @@ extension FunctionsMethods {
     ///   fetch next page of the list.
     /// - limit: Specify a value from 1 to 1000 to limit number of functions in the
     ///   response
-    public static func listFunctions(config: ClientConfig, projectId: String, branchId: String, cursor: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> ListFunctionsResponse {
+    static func listFunctions(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        cursor: String? = nil,
+        limit: Int? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListFunctionsResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        if let limit = limit {
+        if let limit {
             try validateRange("limit", Double(limit), min: 1, max: 1000)
         }
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/functions"].joined(), config: config, query: [
-            SdkQueryParameter("cursor", value: cursor),
-            SdkQueryParameter("limit", value: limit),
-        ], decoder: .json, operationId: "listFunctions", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/functions",
+            ].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("cursor", value: cursor),
+                SdkQueryParameter("limit", value: limit),
+            ],
+            decoder: .json,
+            operationId: "listFunctions",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
     /// Returns the function identified by its slug. **Note**: This endpoint is currently in Beta.
@@ -40,13 +62,34 @@ extension FunctionsMethods {
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
     /// - slug: The function slug
-    public static func getFunctions(config: ClientConfig, projectId: String, branchId: String, slug: String, requestOptions: RequestOptions? = nil) async throws -> NeonFunctionResponse {
+    static func getFunctions(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        slug: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonFunctionResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("slug", slug, sdkPatternacaa1d52e8e2)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/functions/", sdkEncodePathSegment(sdkWireString(slug))].joined(), config: config, decoder: .json, operationId: "getFunctions", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/functions/",
+                sdkEncodePathSegment(sdkWireString(slug)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getFunctions",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

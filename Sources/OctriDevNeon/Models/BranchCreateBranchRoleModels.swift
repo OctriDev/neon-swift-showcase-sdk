@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Branch domain models
+/// Branch domain models
 /// Properties of the role to create.
 public struct RoleCreateRequestRole: Codable {
     /// The role name. Cannot exceed 63 bytes in length.
@@ -16,22 +16,28 @@ public struct RoleCreateRequestRole: Codable {
         case noLogin = "no_login"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RoleCreateRequestRole {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.noLogin = try container.sdkDecodeIfPresent(.noLogin)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RoleCreateRequestRole {
-    public init(name: String, noLogin: Bool? = nil) {
+public extension RoleCreateRequestRole {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+        noLogin = try container.sdkDecodeIfPresent(.noLogin)
+    }
+}
+
+public extension RoleCreateRequestRole {
+    init(name: String, noLogin: Bool? = nil) {
         (self.name, self.noLogin) = (name, noLogin)
     }
 }
@@ -45,21 +51,27 @@ public struct RoleCreateRequest: Codable {
         case role
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RoleCreateRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.role) else {
-            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
-        }
-        self.role = try container.sdkDecodeRequired(.role)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RoleCreateRequest {
-    public init(role: RoleCreateRequestRole) {
+public extension RoleCreateRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.role) else {
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
+        }
+        role = try container.sdkDecodeRequired(.role)
+    }
+}
+
+public extension RoleCreateRequest {
+    init(role: RoleCreateRequestRole) {
         self.role = role
     }
 }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Functions domain models
+/// Functions domain models
 public indirect enum TriggerCreateRequest {
     case scheduleTriggerCreateRequest(ScheduleTriggerCreateRequest)
     case storageObjectCreatedTriggerCreateRequest(StorageObjectCreatedTriggerCreateRequest)
@@ -12,7 +12,6 @@ public indirect enum TriggerCreateRequest {
 }
 
 extension TriggerCreateRequest: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,12 +19,16 @@ extension TriggerCreateRequest: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -36,10 +39,10 @@ extension TriggerCreateRequest: Codable {
 extension TriggerCreateRequest {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "schedule": return .scheduleTriggerCreateRequest(try ScheduleTriggerCreateRequest(from: decoder))
+        case "schedule": try .scheduleTriggerCreateRequest(ScheduleTriggerCreateRequest(from: decoder))
         case "storage_object_created":
-        return .storageObjectCreatedTriggerCreateRequest(try StorageObjectCreatedTriggerCreateRequest(from: decoder))
-        default: return nil
+            try .storageObjectCreatedTriggerCreateRequest(StorageObjectCreatedTriggerCreateRequest(from: decoder))
+        default: nil
         }
     }
 }
@@ -79,47 +82,72 @@ public struct ScheduleTriggerCreateRequest: Codable {
         case enabled
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension ScheduleTriggerCreateRequest {
-    public init(from decoder: Decoder) throws {
+public extension ScheduleTriggerCreateRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.functionSlug) else {
-            throw SdkValidationError(field: "function_slug", code: "required", message: "Validation failed for 'function_slug': value is required")
+            throw SdkValidationError(
+                field: "function_slug",
+                code: "required",
+                message: "Validation failed for 'function_slug': value is required"
+            )
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
         }
         guard container.contains(.schedule) else {
-            throw SdkValidationError(field: "schedule", code: "required", message: "Validation failed for 'schedule': value is required")
+            throw SdkValidationError(
+                field: "schedule",
+                code: "required",
+                message: "Validation failed for 'schedule': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.functionSlug = try container.sdkDecodeRequired(.functionSlug)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.schedule = try container.sdkDecodeRequired(.schedule)
-        self.functionPath = try container.sdkDecodeIfPresent(.functionPath)
-        self.enabled = try container.sdkDecodeIfPresent(.enabled)
-            try sdkValidateRawEnum("type", self.type, ScheduleTriggerCreateRequestType.allCases.map(\.rawValue))
-            try sdkValidatePattern("function_slug", self.functionSlug, sdkPatternacaa1d52e8e2)
-            try validateLength("name", self.name, min: 1, max: 256)
-        if let value = self.functionPath {
+        type = try container.sdkDecodeRequired(.type)
+        functionSlug = try container.sdkDecodeRequired(.functionSlug)
+        name = try container.sdkDecodeRequired(.name)
+        schedule = try container.sdkDecodeRequired(.schedule)
+        functionPath = try container.sdkDecodeIfPresent(.functionPath)
+        enabled = try container.sdkDecodeIfPresent(.enabled)
+        try sdkValidateRawEnum("type", type, ScheduleTriggerCreateRequestType.allCases.map(\.rawValue))
+        try sdkValidatePattern("function_slug", functionSlug, sdkPatternacaa1d52e8e2)
+        try validateLength("name", name, min: 1, max: 256)
+        if let value = functionPath {
             try validateLength("function_path", value, min: 1, max: 2048)
         }
     }
 }
 
-extension ScheduleTriggerCreateRequest {
-    public init(type: ScheduleTriggerCreateRequestType, functionSlug: String, name: String, schedule: FunctionTriggerSchedule, functionPath: String? = nil, enabled: Bool? = nil) throws {
+public extension ScheduleTriggerCreateRequest {
+    init(
+        type: ScheduleTriggerCreateRequestType,
+        functionSlug: String,
+        name: String,
+        schedule: FunctionTriggerSchedule,
+        functionPath: String? = nil,
+        enabled: Bool? = nil
+    ) throws {
         (self.type, self.functionSlug) = (type, functionSlug)
         (self.name, self.schedule) = (name, schedule)
         (self.functionPath, self.enabled) = (functionPath, enabled)
-            try sdkValidateRawEnum("type", self.type, ScheduleTriggerCreateRequestType.allCases.map(\.rawValue))
-            try sdkValidatePattern("function_slug", self.functionSlug, sdkPatternacaa1d52e8e2)
-            try validateLength("name", self.name, min: 1, max: 256)
+        try sdkValidateRawEnum("type", self.type, ScheduleTriggerCreateRequestType.allCases.map(\.rawValue))
+        try sdkValidatePattern("function_slug", self.functionSlug, sdkPatternacaa1d52e8e2)
+        try validateLength("name", self.name, min: 1, max: 256)
         if let value = self.functionPath {
             try validateLength("function_path", value, min: 1, max: 2048)
         }
@@ -152,47 +180,72 @@ public struct StorageObjectCreatedTriggerCreateRequest: Codable {
         case enabled
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension StorageObjectCreatedTriggerCreateRequest {
-    public init(from decoder: Decoder) throws {
+public extension StorageObjectCreatedTriggerCreateRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.functionSlug) else {
-            throw SdkValidationError(field: "function_slug", code: "required", message: "Validation failed for 'function_slug': value is required")
+            throw SdkValidationError(
+                field: "function_slug",
+                code: "required",
+                message: "Validation failed for 'function_slug': value is required"
+            )
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
         }
         guard container.contains(.storageObjectCreated) else {
-            throw SdkValidationError(field: "storage_object_created", code: "required", message: "Validation failed for 'storage_object_created': value is required")
+            throw SdkValidationError(
+                field: "storage_object_created",
+                code: "required",
+                message: "Validation failed for 'storage_object_created': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.functionSlug = try container.sdkDecodeRequired(.functionSlug)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.storageObjectCreated = try container.sdkDecodeRequired(.storageObjectCreated)
-        self.functionPath = try container.sdkDecodeIfPresent(.functionPath)
-        self.enabled = try container.sdkDecodeIfPresent(.enabled)
-            try sdkValidateRawEnum("type", self.type, StorageObjectCreatedTriggerCreateRequestType.allCases.map(\.rawValue))
-            try sdkValidatePattern("function_slug", self.functionSlug, sdkPatternacaa1d52e8e2)
-            try validateLength("name", self.name, min: 1, max: 256)
-        if let value = self.functionPath {
+        type = try container.sdkDecodeRequired(.type)
+        functionSlug = try container.sdkDecodeRequired(.functionSlug)
+        name = try container.sdkDecodeRequired(.name)
+        storageObjectCreated = try container.sdkDecodeRequired(.storageObjectCreated)
+        functionPath = try container.sdkDecodeIfPresent(.functionPath)
+        enabled = try container.sdkDecodeIfPresent(.enabled)
+        try sdkValidateRawEnum("type", type, StorageObjectCreatedTriggerCreateRequestType.allCases.map(\.rawValue))
+        try sdkValidatePattern("function_slug", functionSlug, sdkPatternacaa1d52e8e2)
+        try validateLength("name", name, min: 1, max: 256)
+        if let value = functionPath {
             try validateLength("function_path", value, min: 1, max: 2048)
         }
     }
 }
 
-extension StorageObjectCreatedTriggerCreateRequest {
-    public init(type: StorageObjectCreatedTriggerCreateRequestType, functionSlug: String, name: String, storageObjectCreated: FunctionTriggerStorageObjectCreated, functionPath: String? = nil, enabled: Bool? = nil) throws {
+public extension StorageObjectCreatedTriggerCreateRequest {
+    init(
+        type: StorageObjectCreatedTriggerCreateRequestType,
+        functionSlug: String,
+        name: String,
+        storageObjectCreated: FunctionTriggerStorageObjectCreated,
+        functionPath: String? = nil,
+        enabled: Bool? = nil
+    ) throws {
         (self.type, self.functionSlug) = (type, functionSlug)
         (self.name, self.storageObjectCreated) = (name, storageObjectCreated)
         (self.functionPath, self.enabled) = (functionPath, enabled)
-            try sdkValidateRawEnum("type", self.type, StorageObjectCreatedTriggerCreateRequestType.allCases.map(\.rawValue))
-            try sdkValidatePattern("function_slug", self.functionSlug, sdkPatternacaa1d52e8e2)
-            try validateLength("name", self.name, min: 1, max: 256)
+        try sdkValidateRawEnum("type", self.type, StorageObjectCreatedTriggerCreateRequestType.allCases.map(\.rawValue))
+        try sdkValidatePattern("function_slug", self.functionSlug, sdkPatternacaa1d52e8e2)
+        try validateLength("name", self.name, min: 1, max: 256)
         if let value = self.functionPath {
             try validateLength("function_path", value, min: 1, max: 2048)
         }

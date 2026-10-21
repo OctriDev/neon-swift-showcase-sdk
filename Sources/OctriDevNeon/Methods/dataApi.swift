@@ -8,8 +8,8 @@ import Foundation
 #endif
 public enum DataApiMethods {}
 
-extension DataApiMethods {
-    public struct CreateDataApiOptions: Codable {
+public extension DataApiMethods {
+    struct CreateDataApiOptions: Codable {
         public var projectId: String
         public var branchId: String
         public var databaseName: String
@@ -28,7 +28,8 @@ extension DataApiMethods {
         }
     }
 
-    /// Creates a new instance of Neon Data API in the specified branch. The Data API exposes a REST interface over the branch database. The `database_name` path parameter determines which database the API serves.
+    /// Creates a new instance of Neon Data API in the specified branch. The Data API exposes a REST interface over the
+    /// branch database. The `database_name` path parameter determines which database the API serves.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
@@ -51,7 +52,11 @@ extension DataApiMethods {
     ///   to authenticated users
     /// - skipAuthSchema: Skip creating the auth schema and RLS functions
     /// - settings: Auth and schema configuration for the Data API.
-    public static func createDataApi(config: ClientConfig, options: CreateDataApiOptions, requestOptions: RequestOptions? = nil) async throws -> DataAPICreateResponse {
+    static func createDataApi(
+        config: ClientConfig,
+        options: CreateDataApiOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DataAPICreateResponse {
         try sdkValidatePattern("project_id", options.projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", options.branchId, sdkPatternead2b03f7a95)
@@ -62,6 +67,22 @@ extension DataApiMethods {
 
         let requestBody = CreateDataApiRequestBody(options: options)
 
-        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(options.projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(options.branchId)), "/data-api/", sdkEncodePathSegment(sdkWireString(options.databaseName))].joined(), config: config, body: requestBody, decoder: .json, operationId: "createDataApi", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "POST",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(options.projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(options.branchId)),
+                "/data-api/",
+                sdkEncodePathSegment(sdkWireString(options.databaseName)),
+            ].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createDataApi",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

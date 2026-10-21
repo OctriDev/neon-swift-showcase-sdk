@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ProjectProject domain models
+/// ProjectProject domain models
 /// Typed representation of the `ProjectPermissions` API schema.
 public struct ProjectPermissions: Codable {
     /// Required array value serialized in the `project_permissions` wire field.
@@ -13,21 +13,27 @@ public struct ProjectPermissions: Codable {
         case projectPermissions = "project_permissions"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectPermissions {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projectPermissions) else {
-            throw SdkValidationError(field: "project_permissions", code: "required", message: "Validation failed for 'project_permissions': value is required")
-        }
-        self.projectPermissions = try container.sdkDecodeRequired(.projectPermissions)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectPermissions {
-    public init(projectPermissions: [ProjectPermission]) {
+public extension ProjectPermissions {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.projectPermissions) else {
+            throw SdkValidationError(
+                field: "project_permissions",
+                code: "required",
+                message: "Validation failed for 'project_permissions': value is required"
+            )
+        }
+        projectPermissions = try container.sdkDecodeRequired(.projectPermissions)
+    }
+}
+
+public extension ProjectPermissions {
+    init(projectPermissions: [ProjectPermission]) {
         self.projectPermissions = projectPermissions
     }
 }

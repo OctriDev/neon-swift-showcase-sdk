@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Project domain models
+/// Project domain models
 public typealias PgVersion = Int
 
 /// A maintenance window is a time period during which Neon may perform maintenance on the project's infrastructure.
@@ -23,29 +23,43 @@ public struct MaintenanceWindow: Codable {
         case endTime = "end_time"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension MaintenanceWindow {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.weekdays) else {
-            throw SdkValidationError(field: "weekdays", code: "required", message: "Validation failed for 'weekdays': value is required")
-        }
-        guard container.contains(.startTime) else {
-            throw SdkValidationError(field: "start_time", code: "required", message: "Validation failed for 'start_time': value is required")
-        }
-        guard container.contains(.endTime) else {
-            throw SdkValidationError(field: "end_time", code: "required", message: "Validation failed for 'end_time': value is required")
-        }
-        self.weekdays = try container.sdkDecodeRequired(.weekdays)
-        self.startTime = try container.sdkDecodeRequired(.startTime)
-        self.endTime = try container.sdkDecodeRequired(.endTime)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension MaintenanceWindow {
-    public init(weekdays: [Int], startTime: String, endTime: String) {
+public extension MaintenanceWindow {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.weekdays) else {
+            throw SdkValidationError(
+                field: "weekdays",
+                code: "required",
+                message: "Validation failed for 'weekdays': value is required"
+            )
+        }
+        guard container.contains(.startTime) else {
+            throw SdkValidationError(
+                field: "start_time",
+                code: "required",
+                message: "Validation failed for 'start_time': value is required"
+            )
+        }
+        guard container.contains(.endTime) else {
+            throw SdkValidationError(
+                field: "end_time",
+                code: "required",
+                message: "Validation failed for 'end_time': value is required"
+            )
+        }
+        weekdays = try container.sdkDecodeRequired(.weekdays)
+        startTime = try container.sdkDecodeRequired(.startTime)
+        endTime = try container.sdkDecodeRequired(.endTime)
+    }
+}
+
+public extension MaintenanceWindow {
+    init(weekdays: [Int], startTime: String, endTime: String) {
         (self.weekdays, self.startTime) = (weekdays, startTime)
         self.endTime = endTime
     }
@@ -65,22 +79,28 @@ public struct ProjectsResponse: Codable {
         case unavailableProjectIds = "unavailable_project_ids"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectsResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projects) else {
-            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
-        }
-        self.projects = try container.sdkDecodeRequired(.projects)
-        self.unavailableProjectIds = try container.sdkDecodeIfPresent(.unavailableProjectIds)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectsResponse {
-    public init(projects: [ProjectListItem], unavailableProjectIds: [String]? = nil) {
+public extension ProjectsResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.projects) else {
+            throw SdkValidationError(
+                field: "projects",
+                code: "required",
+                message: "Validation failed for 'projects': value is required"
+            )
+        }
+        projects = try container.sdkDecodeRequired(.projects)
+        unavailableProjectIds = try container.sdkDecodeIfPresent(.unavailableProjectIds)
+    }
+}
+
+public extension ProjectsResponse {
+    init(projects: [ProjectListItem], unavailableProjectIds: [String]? = nil) {
         (self.projects, self.unavailableProjectIds) = (projects, unavailableProjectIds)
     }
 }
@@ -118,58 +138,94 @@ public struct JWKS: Codable {
         case roleNames = "role_names"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension JWKS {
-    public init(from decoder: Decoder) throws {
+public extension JWKS {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
         }
         guard container.contains(.projectId) else {
-            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
+            throw SdkValidationError(
+                field: "project_id",
+                code: "required",
+                message: "Validation failed for 'project_id': value is required"
+            )
         }
         guard container.contains(.jwksUrl) else {
-            throw SdkValidationError(field: "jwks_url", code: "required", message: "Validation failed for 'jwks_url': value is required")
+            throw SdkValidationError(
+                field: "jwks_url",
+                code: "required",
+                message: "Validation failed for 'jwks_url': value is required"
+            )
         }
         guard container.contains(.providerName) else {
-            throw SdkValidationError(field: "provider_name", code: "required", message: "Validation failed for 'provider_name': value is required")
+            throw SdkValidationError(
+                field: "provider_name",
+                code: "required",
+                message: "Validation failed for 'provider_name': value is required"
+            )
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
         }
         guard container.contains(.updatedAt) else {
-            throw SdkValidationError(field: "updated_at", code: "required", message: "Validation failed for 'updated_at': value is required")
+            throw SdkValidationError(
+                field: "updated_at",
+                code: "required",
+                message: "Validation failed for 'updated_at': value is required"
+            )
         }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.projectId = try container.sdkDecodeRequired(.projectId)
-        self.jwksUrl = try container.sdkDecodeRequired(.jwksUrl)
-        self.providerName = try container.sdkDecodeRequired(.providerName)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.updatedAt = try container.sdkDecodeRequired(.updatedAt)
-        self.branchId = try container.sdkDecodeIfPresent(.branchId)
-        self.jwtAudience = try container.sdkDecodeIfPresent(.jwtAudience)
-        self.roleNames = try container.sdkDecodeIfPresent(.roleNames)
-            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-            try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
-        if let value = self.branchId {
+        id = try container.sdkDecodeRequired(.id)
+        projectId = try container.sdkDecodeRequired(.projectId)
+        jwksUrl = try container.sdkDecodeRequired(.jwksUrl)
+        providerName = try container.sdkDecodeRequired(.providerName)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        updatedAt = try container.sdkDecodeRequired(.updatedAt)
+        branchId = try container.sdkDecodeIfPresent(.branchId)
+        jwtAudience = try container.sdkDecodeIfPresent(.jwtAudience)
+        roleNames = try container.sdkDecodeIfPresent(.roleNames)
+        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
+        try sdkValidateDateTime("created_at", sdkWireString(createdAt))
+        try sdkValidateDateTime("updated_at", sdkWireString(updatedAt))
+        if let value = branchId {
             try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
         }
     }
 }
 
-extension JWKS {
-    public init(id: String, projectId: String, jwksUrl: String, providerName: String, createdAt: Date, updatedAt: Date, branchId: String? = nil, jwtAudience: String? = nil, roleNames: [String]? = nil) throws {
+public extension JWKS {
+    init(
+        id: String,
+        projectId: String,
+        jwksUrl: String,
+        providerName: String,
+        createdAt: Date,
+        updatedAt: Date,
+        branchId: String? = nil,
+        jwtAudience: String? = nil,
+        roleNames: [String]? = nil
+    ) throws {
         (self.id, self.projectId) = (id, projectId)
         (self.jwksUrl, self.providerName) = (jwksUrl, providerName)
         (self.createdAt, self.updatedAt) = (createdAt, updatedAt)
         (self.branchId, self.jwtAudience) = (branchId, jwtAudience)
         self.roleNames = roleNames
-            try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
-            try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
-            try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
+        try sdkValidatePattern("project_id", self.projectId, sdkPatternead2b03f7a95)
+        try sdkValidateDateTime("created_at", sdkWireString(self.createdAt))
+        try sdkValidateDateTime("updated_at", sdkWireString(self.updatedAt))
         if let value = self.branchId {
             try sdkValidatePattern("branch_id", value, sdkPatternead2b03f7a95)
         }
@@ -191,20 +247,20 @@ public struct AllowedIps: Codable {
     }
 
     init() {
-        (self.ips, self.protectedBranchesOnly) = (nil, nil)
+        (ips, protectedBranchesOnly) = (nil, nil)
     }
 }
 
-extension AllowedIps {
-    public init(from decoder: Decoder) throws {
+public extension AllowedIps {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.ips = try container.sdkDecodeIfPresent(.ips)
-        self.protectedBranchesOnly = try container.sdkDecodeIfPresent(.protectedBranchesOnly)
+        ips = try container.sdkDecodeIfPresent(.ips)
+        protectedBranchesOnly = try container.sdkDecodeIfPresent(.protectedBranchesOnly)
     }
 }
 
-extension AllowedIps {
-    public init(ips: [String]? = nil, protectedBranchesOnly: Bool? = nil) {
+public extension AllowedIps {
+    init(ips: [String]? = nil, protectedBranchesOnly: Bool? = nil) {
         self.init()
         (self.ips, self.protectedBranchesOnly) = (ips, protectedBranchesOnly)
     }
@@ -236,45 +292,105 @@ public struct DefaultEndpointSettings: Codable {
     }
 
     init() {
-        (self.pgSettings, self.pgbouncerSettings, self.autoscalingLimitMinCu, self.autoscalingLimitMaxCu, self.suspendTimeoutSeconds) = (nil, nil, nil, nil, nil)
+        (pgSettings, pgbouncerSettings, autoscalingLimitMinCu, autoscalingLimitMaxCu, suspendTimeoutSeconds) = (
+            nil,
+            nil,
+            nil,
+            nil,
+            nil
+        )
     }
 }
 
-extension DefaultEndpointSettings {
-    public init(from decoder: Decoder) throws {
+public extension DefaultEndpointSettings {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.pgSettings = try container.sdkDecodeIfPresent(.pgSettings)
-        self.pgbouncerSettings = try container.sdkDecodeIfPresent(.pgbouncerSettings)
-        self.autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
-        self.autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
-        self.suspendTimeoutSeconds = try container.sdkDecodeIfPresent(.suspendTimeoutSeconds)
-        if let value = self.autoscalingLimitMinCu {
-            try validateRange("autoscaling_limit_min_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        pgSettings = try container.sdkDecodeIfPresent(.pgSettings)
+        pgbouncerSettings = try container.sdkDecodeIfPresent(.pgbouncerSettings)
+        autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
+        autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
+        suspendTimeoutSeconds = try container.sdkDecodeIfPresent(.suspendTimeoutSeconds)
+        if let value = autoscalingLimitMinCu {
+            try validateRange(
+                "autoscaling_limit_min_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.autoscalingLimitMaxCu {
-            try validateRange("autoscaling_limit_max_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = autoscalingLimitMaxCu {
+            try validateRange(
+                "autoscaling_limit_max_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.suspendTimeoutSeconds {
-            try validateRange("suspend_timeout_seconds", Double(value), min: -1, max: 604800, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = suspendTimeoutSeconds {
+            try validateRange(
+                "suspend_timeout_seconds",
+                Double(value),
+                min: -1,
+                max: 604_800,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension DefaultEndpointSettings {
-    public init(pgSettings: PgSettingsData? = nil, pgbouncerSettings: PgbouncerSettingsData? = nil, autoscalingLimitMinCu: ComputeUnit? = nil, autoscalingLimitMaxCu: ComputeUnit? = nil, suspendTimeoutSeconds: SuspendTimeoutSeconds? = nil) throws {
+public extension DefaultEndpointSettings {
+    init(
+        pgSettings: PgSettingsData? = nil,
+        pgbouncerSettings: PgbouncerSettingsData? = nil,
+        autoscalingLimitMinCu: ComputeUnit? = nil,
+        autoscalingLimitMaxCu: ComputeUnit? = nil,
+        suspendTimeoutSeconds: SuspendTimeoutSeconds? = nil
+    ) throws {
         self.init()
         (self.pgSettings, self.pgbouncerSettings) = (pgSettings, pgbouncerSettings)
         self.autoscalingLimitMinCu = autoscalingLimitMinCu
         self.autoscalingLimitMaxCu = autoscalingLimitMaxCu
         self.suspendTimeoutSeconds = suspendTimeoutSeconds
         if let value = self.autoscalingLimitMinCu {
-            try validateRange("autoscaling_limit_min_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "autoscaling_limit_min_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.autoscalingLimitMaxCu {
-            try validateRange("autoscaling_limit_max_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "autoscaling_limit_max_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.suspendTimeoutSeconds {
-            try validateRange("suspend_timeout_seconds", Double(value), min: -1, max: 604800, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "suspend_timeout_seconds",
+                Double(value),
+                min: -1,
+                max: 604_800,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }

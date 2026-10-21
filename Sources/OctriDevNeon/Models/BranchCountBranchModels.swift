@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Branch domain models
+/// Branch domain models
 /// Typed representation of the `BranchesCountResponse` API schema.
 public struct BranchesCountResponse: Codable {
     /// Total number of branches in the project.
@@ -13,21 +13,27 @@ public struct BranchesCountResponse: Codable {
         case count
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchesCountResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.count) else {
-            throw SdkValidationError(field: "count", code: "required", message: "Validation failed for 'count': value is required")
-        }
-        self.count = try container.sdkDecodeRequired(.count)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchesCountResponse {
-    public init(count: Int) {
+public extension BranchesCountResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.count) else {
+            throw SdkValidationError(
+                field: "count",
+                code: "required",
+                message: "Validation failed for 'count': value is required"
+            )
+        }
+        count = try container.sdkDecodeRequired(.count)
+    }
+}
+
+public extension BranchesCountResponse {
+    init(count: Int) {
         self.count = count
     }
 }

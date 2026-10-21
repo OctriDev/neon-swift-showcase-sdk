@@ -6,30 +6,59 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AuthLegacyMethods {
-    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/email_provider` instead. Removal scheduled for March 1, 2026.
+public extension AuthLegacyMethods {
+    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/email_provider` instead. Removal scheduled for
+    /// March 1, 2026.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public static func getAuthLegacyEmailServer(config: ClientConfig, projectId: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthEmailServerConfigResponse {
+    static func getAuthLegacyEmailServer(
+        config: ClientConfig,
+        projectId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthEmailServerConfigResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/email_server"].joined(), config: config, decoder: .json, operationId: "getAuthLegacyEmailServer", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "GET",
+            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/email_server"].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getAuthLegacyEmailServer",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 
-    /// Updates the email server configuration for a Neon project. This operation is closing down and will be removed on March 1, 2026. Use `PATCH /projects/{project_id}/branches/{branch_id}/auth/email_provider` instead.
+    /// Updates the email server configuration for a Neon project. This operation is closing down and will be removed on
+    /// March 1, 2026. Use `PATCH /projects/{project_id}/branches/{branch_id}/auth/email_provider` instead.
     ///
-    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/email_provider` instead. Removal scheduled for March 1, 2026.
+    /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth/email_provider` instead. Removal scheduled for
+    /// March 1, 2026.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public static func updateAuthLegacyEmailServer(config: ClientConfig, projectId: String, body: NeonAuthEmailServerConfig, requestOptions: RequestOptions? = nil) async throws -> NeonAuthEmailServerConfigResponse {
+    static func updateAuthLegacyEmailServer(
+        config: ClientConfig,
+        projectId: String,
+        body: NeonAuthEmailServerConfig,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthEmailServerConfigResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("PATCH", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/email_server"].joined(), config: config, rawBody: (try sdkEncodeBody(body, contentType: "application/json")), decoder: .json, operationId: "updateAuthLegacyEmailServer", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "PATCH",
+            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/email_server"].joined(),
+            config: config,
+            rawBody: sdkEncodeBody(body, contentType: "application/json"),
+            decoder: .json,
+            operationId: "updateAuthLegacyEmailServer",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }
