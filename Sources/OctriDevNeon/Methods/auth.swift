@@ -7,3 +7,39 @@ import Foundation
     import FoundationNetworking
 #endif
 public enum AuthMethods {}
+
+extension AuthMethods {
+    /// Retrieves the Neon Auth integration details for the specified branch, including the auth provider type and integration status.
+    ///
+    /// - Parameters:
+    /// - projectId: The Neon project ID
+    /// - branchId: The Neon branch ID
+    public static func getAuth(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthIntegration {
+        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
+
+        try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
+
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth"].joined(), config: config, decoder: .json, operationId: "getAuth", options: requestOptions, errors: ["default": GeneralError.self])).data
+    }
+
+    /// Enables Neon Auth for the specified branch by connecting it to an authentication provider. Creating the integration provisions the `neon_auth` schema in the branch database, which stores user identity data synchronized from the provider.
+    ///
+    /// - Parameters:
+    /// - projectId: The Neon project ID
+    /// - branchId: The Neon branch ID
+    /// - authProvider: Authentication provider integrated with this Neon Auth
+    ///   configuration. `better_auth` integrates with Better Auth (the current,
+    ///   recommended provider). `stack` integrates with Stack Auth (deprecated).
+    ///   `mock` is a simulated provider for local development and testing only.
+    /// - databaseName: Name of the database to enable Neon Auth on. When omitted,
+    ///   the integration uses the project's default database.
+    public static func createAuth(config: ClientConfig, projectId: String, branchId: String, authProvider: NeonAuthSupportedAuthProvider, databaseName: String? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonAuthCreateIntegrationResponse {
+        try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
+
+        try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
+
+        let requestBody = CreateAuthRequestBody(authProvider: authProvider, databaseName: databaseName)
+
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/auth"].joined(), config: config, body: requestBody, decoder: .json, operationId: "createAuth", options: requestOptions, errors: ["default": GeneralError.self])).data
+    }
+}

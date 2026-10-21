@@ -212,7 +212,7 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testUpdateFunctionsTriggerUpdateFunctionsTriggerReachesMockAndDecodesResponse() async throws {
+    func testUpdateFunctionTriggerUpdateFunctionTriggerReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -233,7 +233,7 @@ extension SdkMethodTests {
         )
     }
 
-    func testUpdateFunctionsTriggerUpdateFunctionsTrigger418ReachesMockAndDecodesResponse() async throws {
+    func testUpdateFunctionTriggerUpdateFunctionTrigger418ReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/418") else {
             return
         }
