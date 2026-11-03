@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Organizations domain models
+/// Organizations domain models
 /// Typed representation of the `OrganizationMemberUpdateRequest` API schema.
 public struct OrganizationMemberUpdateRequest: Codable {
     /// Organization member's role. `admin`: full administrative access. `editor` (and its legacy alias `member`):
@@ -15,21 +15,27 @@ public struct OrganizationMemberUpdateRequest: Codable {
         case role
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension OrganizationMemberUpdateRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.role) else {
-            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
-        }
-        self.role = try container.sdkDecodeRequired(.role)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension OrganizationMemberUpdateRequest {
-    public init(role: MemberRole) {
+public extension OrganizationMemberUpdateRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.role) else {
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
+        }
+        role = try container.sdkDecodeRequired(.role)
+    }
+}
+
+public extension OrganizationMemberUpdateRequest {
+    init(role: MemberRole) {
         self.role = role
     }
 }

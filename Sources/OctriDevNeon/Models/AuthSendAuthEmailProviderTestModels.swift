@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Auth domain models
+/// Auth domain models
 /// Request to test the branch's saved email provider. Only the recipient is supplied; the stored SMTP settings and
 /// password are used server-side.
 public struct SendNeonAuthEmailProviderTestRequest: Codable {
@@ -14,25 +14,31 @@ public struct SendNeonAuthEmailProviderTestRequest: Codable {
         case recipientEmail = "recipient_email"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SendNeonAuthEmailProviderTestRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.recipientEmail) else {
-            throw SdkValidationError(field: "recipient_email", code: "required", message: "Validation failed for 'recipient_email': value is required")
-        }
-        self.recipientEmail = try container.sdkDecodeRequired(.recipientEmail)
-            try validateLength("recipient_email", self.recipientEmail, min: 1, max: 256)
-            try sdkValidateEmail("recipient_email", self.recipientEmail)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SendNeonAuthEmailProviderTestRequest {
-    public init(recipientEmail: String) throws {
+public extension SendNeonAuthEmailProviderTestRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.recipientEmail) else {
+            throw SdkValidationError(
+                field: "recipient_email",
+                code: "required",
+                message: "Validation failed for 'recipient_email': value is required"
+            )
+        }
+        recipientEmail = try container.sdkDecodeRequired(.recipientEmail)
+        try validateLength("recipient_email", recipientEmail, min: 1, max: 256)
+        try sdkValidateEmail("recipient_email", recipientEmail)
+    }
+}
+
+public extension SendNeonAuthEmailProviderTestRequest {
+    init(recipientEmail: String) throws {
         self.recipientEmail = recipientEmail
-            try validateLength("recipient_email", self.recipientEmail, min: 1, max: 256)
-            try sdkValidateEmail("recipient_email", self.recipientEmail)
+        try validateLength("recipient_email", self.recipientEmail, min: 1, max: 256)
+        try sdkValidateEmail("recipient_email", self.recipientEmail)
     }
 }

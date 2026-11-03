@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedCursor domain models
+/// SharedCursor domain models
 /// To paginate the response, issue an initial request with `limit` value. Then, add the value returned in the
 /// response `.pagination.next` attribute into the request under the `cursor` query parameter to the subsequent
 /// request to retrieve next page in pagination. The contents on cursor `next` are opaque, clients are not expected
@@ -25,21 +25,21 @@ public struct CursorPagination: Codable {
     }
 
     init() {
-        (self.next, self.sortBy, self.sortOrder) = (nil, nil, nil)
+        (next, sortBy, sortOrder) = (nil, nil, nil)
     }
 }
 
-extension CursorPagination {
-    public init(from decoder: Decoder) throws {
+public extension CursorPagination {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.next = try container.sdkDecodeIfPresent(.next)
-        self.sortBy = try container.sdkDecodeIfPresent(.sortBy)
-        self.sortOrder = try container.sdkDecodeIfPresent(.sortOrder)
+        next = try container.sdkDecodeIfPresent(.next)
+        sortBy = try container.sdkDecodeIfPresent(.sortBy)
+        sortOrder = try container.sdkDecodeIfPresent(.sortOrder)
     }
 }
 
-extension CursorPagination {
-    public init(next: String? = nil, sortBy: String? = nil, sortOrder: String? = nil) {
+public extension CursorPagination {
+    init(next: String? = nil, sortBy: String? = nil, sortOrder: String? = nil) {
         self.init()
         (self.next, self.sortBy) = (next, sortBy)
         self.sortOrder = sortOrder
@@ -59,19 +59,19 @@ public struct CursorPaginationResponse: Codable {
     }
 
     init() {
-        self.pagination = nil
+        pagination = nil
     }
 }
 
-extension CursorPaginationResponse {
-    public init(from decoder: Decoder) throws {
+public extension CursorPaginationResponse {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.pagination = try container.sdkDecodeIfPresent(.pagination)
+        pagination = try container.sdkDecodeIfPresent(.pagination)
     }
 }
 
-extension CursorPaginationResponse {
-    public init(pagination: CursorPagination? = nil) {
+public extension CursorPaginationResponse {
+    init(pagination: CursorPagination? = nil) {
         self.init()
         self.pagination = pagination
     }

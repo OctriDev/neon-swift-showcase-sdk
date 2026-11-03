@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ProjectProject domain models
+/// ProjectProject domain models
 /// Configuration for the initial branch created with the project.
 public struct ProjectCreateRequestProjectBranch: Codable {
     /// The default branch name. If not specified, the default branch name, `main`, will be used.
@@ -24,25 +24,30 @@ public struct ProjectCreateRequestProjectBranch: Codable {
     }
 
     init() {
-        (self.name, self.roleName, self.databaseName, self.annotations) = (nil, nil, nil, nil)
+        (name, roleName, databaseName, annotations) = (nil, nil, nil, nil)
     }
 }
 
-extension ProjectCreateRequestProjectBranch {
-    public init(from decoder: Decoder) throws {
+public extension ProjectCreateRequestProjectBranch {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.roleName = try container.sdkDecodeIfPresent(.roleName)
-        self.databaseName = try container.sdkDecodeIfPresent(.databaseName)
-        self.annotations = try container.sdkDecodeIfPresent(.annotations)
-        if let value = self.name {
+        name = try container.sdkDecodeIfPresent(.name)
+        roleName = try container.sdkDecodeIfPresent(.roleName)
+        databaseName = try container.sdkDecodeIfPresent(.databaseName)
+        annotations = try container.sdkDecodeIfPresent(.annotations)
+        if let value = name {
             try validateLength("name", value, min: 1, max: 256)
         }
     }
 }
 
-extension ProjectCreateRequestProjectBranch {
-    public init(name: String? = nil, roleName: String? = nil, databaseName: String? = nil, annotations: AnnotationValueData? = nil) throws {
+public extension ProjectCreateRequestProjectBranch {
+    init(
+        name: String? = nil,
+        roleName: String? = nil,
+        databaseName: String? = nil,
+        annotations: AnnotationValueData? = nil
+    ) throws {
         self.init()
         (self.name, self.roleName) = (name, roleName)
         (self.databaseName, self.annotations) = (databaseName, annotations)
@@ -109,51 +114,97 @@ public struct ProjectCreateRequestProject: Codable {
     }
 
     init() {
-        (self.settings, self.name, self.realtime, self.branch, self.autoscalingLimitMinCu) = (nil, nil, nil, nil, nil)
-        (self.autoscalingLimitMaxCu, self.provisioner, self.regionId, self.defaultEndpointSettings, self.pgVersion) = (nil, nil, nil, nil, nil)
-        (self.storePasswords, self.historyRetentionSeconds, self.orgId) = (nil, nil, nil)
+        (settings, name, realtime, branch, autoscalingLimitMinCu) = (nil, nil, nil, nil, nil)
+        (autoscalingLimitMaxCu, provisioner, regionId, defaultEndpointSettings, pgVersion) = (nil, nil, nil, nil, nil)
+        (storePasswords, historyRetentionSeconds, orgId) = (nil, nil, nil)
     }
 }
 
-extension ProjectCreateRequestProject {
-    public init(from decoder: Decoder) throws {
+public extension ProjectCreateRequestProject {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.settings = try container.sdkDecodeIfPresent(.settings)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.realtime = try container.sdkDecodeIfPresent(.realtime)
-        self.branch = try container.sdkDecodeIfPresent(.branch)
-        self.autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
-        self.autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
-        self.provisioner = try container.sdkDecodeIfPresent(.provisioner)
-        self.regionId = try container.sdkDecodeIfPresent(.regionId)
-        self.defaultEndpointSettings = try container.sdkDecodeIfPresent(.defaultEndpointSettings)
-        self.pgVersion = try container.sdkDecodeIfPresent(.pgVersion)
-        self.storePasswords = try container.sdkDecodeIfPresent(.storePasswords)
-        self.historyRetentionSeconds = try container.sdkDecodeIfPresent(.historyRetentionSeconds)
-        self.orgId = try container.sdkDecodeIfPresent(.orgId)
-        if let value = self.name {
+        settings = try container.sdkDecodeIfPresent(.settings)
+        name = try container.sdkDecodeIfPresent(.name)
+        realtime = try container.sdkDecodeIfPresent(.realtime)
+        branch = try container.sdkDecodeIfPresent(.branch)
+        autoscalingLimitMinCu = try container.sdkDecodeIfPresent(.autoscalingLimitMinCu)
+        autoscalingLimitMaxCu = try container.sdkDecodeIfPresent(.autoscalingLimitMaxCu)
+        provisioner = try container.sdkDecodeIfPresent(.provisioner)
+        regionId = try container.sdkDecodeIfPresent(.regionId)
+        defaultEndpointSettings = try container.sdkDecodeIfPresent(.defaultEndpointSettings)
+        pgVersion = try container.sdkDecodeIfPresent(.pgVersion)
+        storePasswords = try container.sdkDecodeIfPresent(.storePasswords)
+        historyRetentionSeconds = try container.sdkDecodeIfPresent(.historyRetentionSeconds)
+        orgId = try container.sdkDecodeIfPresent(.orgId)
+        if let value = name {
             try validateLength("name", value, min: 1, max: 256)
         }
-        if let value = self.autoscalingLimitMinCu {
-            try validateRange("autoscaling_limit_min_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = autoscalingLimitMinCu {
+            try validateRange(
+                "autoscaling_limit_min_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.autoscalingLimitMaxCu {
-            try validateRange("autoscaling_limit_max_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = autoscalingLimitMaxCu {
+            try validateRange(
+                "autoscaling_limit_max_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.pgVersion {
-            try validateRange("pg_version", Double(value), min: 14, max: 19, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = pgVersion {
+            try validateRange(
+                "pg_version",
+                Double(value),
+                min: 14,
+                max: 19,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.historyRetentionSeconds {
-            try validateRange("history_retention_seconds", Double(value), min: 0, max: 2592000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = historyRetentionSeconds {
+            try validateRange(
+                "history_retention_seconds",
+                Double(value),
+                min: 0,
+                max: 2_592_000,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.orgId {
+        if let value = orgId {
             try sdkValidatePattern("org_id", value, sdkPatternead2b03f7a95)
         }
     }
 }
 
-extension ProjectCreateRequestProject {
-    public init(settings: ProjectSettingsData? = nil, name: String? = nil, realtime: RealtimeOptions? = nil, branch: ProjectCreateRequestProjectBranch? = nil, autoscalingLimitMinCu: ComputeUnit? = nil, autoscalingLimitMaxCu: ComputeUnit? = nil, provisioner: Provisioner? = nil, regionId: String? = nil, defaultEndpointSettings: DefaultEndpointSettings? = nil, pgVersion: PgVersion? = nil, storePasswords: Bool? = nil, historyRetentionSeconds: Int? = nil, orgId: String? = nil) throws {
+public extension ProjectCreateRequestProject {
+    init(
+        settings: ProjectSettingsData? = nil,
+        name: String? = nil,
+        realtime: RealtimeOptions? = nil,
+        branch: ProjectCreateRequestProjectBranch? = nil,
+        autoscalingLimitMinCu: ComputeUnit? = nil,
+        autoscalingLimitMaxCu: ComputeUnit? = nil,
+        provisioner: Provisioner? = nil,
+        regionId: String? = nil,
+        defaultEndpointSettings: DefaultEndpointSettings? = nil,
+        pgVersion: PgVersion? = nil,
+        storePasswords: Bool? = nil,
+        historyRetentionSeconds: Int? = nil,
+        orgId: String? = nil
+    ) throws {
         self.init()
         (self.settings, self.name) = (settings, name)
         (self.realtime, self.branch) = (realtime, branch)
@@ -166,16 +217,48 @@ extension ProjectCreateRequestProject {
             try validateLength("name", value, min: 1, max: 256)
         }
         if let value = self.autoscalingLimitMinCu {
-            try validateRange("autoscaling_limit_min_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "autoscaling_limit_min_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.autoscalingLimitMaxCu {
-            try validateRange("autoscaling_limit_max_cu", Double(value), min: 0.25, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "autoscaling_limit_max_cu",
+                Double(value),
+                min: 0.25,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.pgVersion {
-            try validateRange("pg_version", Double(value), min: 14, max: 19, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "pg_version",
+                Double(value),
+                min: 14,
+                max: 19,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.historyRetentionSeconds {
-            try validateRange("history_retention_seconds", Double(value), min: 0, max: 2592000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "history_retention_seconds",
+                Double(value),
+                min: 0,
+                max: 2_592_000,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.orgId {
             try sdkValidatePattern("org_id", value, sdkPatternead2b03f7a95)
@@ -192,21 +275,27 @@ public struct ProjectCreateRequest: Codable {
         case project
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectCreateRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.project) else {
-            throw SdkValidationError(field: "project", code: "required", message: "Validation failed for 'project': value is required")
-        }
-        self.project = try container.sdkDecodeRequired(.project)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectCreateRequest {
-    public init(project: ProjectCreateRequestProject) {
+public extension ProjectCreateRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.project) else {
+            throw SdkValidationError(
+                field: "project",
+                code: "required",
+                message: "Validation failed for 'project': value is required"
+            )
+        }
+        project = try container.sdkDecodeRequired(.project)
+    }
+}
+
+public extension ProjectCreateRequest {
+    init(project: ProjectCreateRequestProject) {
         self.project = project
     }
 }

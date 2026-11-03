@@ -17,10 +17,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.snapshot.setSchedule(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            schedule: decoded(sdkMethodFixture324Value1)
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                schedule: decoded(sdkMethodFixture324Value1)
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -66,9 +66,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.branch.startAnonymization(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -114,9 +114,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.endpoint.start(
-            projectId: decoded("\"a\""),
-            endpointId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                endpointId: decoded("\"a\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -162,9 +162,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.endpoint.suspend(
-            projectId: decoded("\"a\""),
-            endpointId: decoded("\"a\"")
-        )
+                projectId: decoded("\"a\""),
+                endpointId: decoded("\"a\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -210,9 +210,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.authLegacy.transferProvider(
-            projectId: decoded("\"a\""),
-            authProvider: decoded("\"mock\"")
-        )
+                projectId: decoded("\"a\""),
+                authProvider: decoded("\"mock\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -259,10 +259,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.organizations.transferProjects(
-            sourceOrgId: decoded("\"a\""),
-            destinationOrgId: decoded("\"a\""),
-            projectIds: decoded("[\"a\"]")
-        )
+                sourceOrgId: decoded("\"a\""),
+                destinationOrgId: decoded("\"a\""),
+                projectIds: decoded("[\"a\"]")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 406)
@@ -308,9 +308,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.users.transferProjects(
-            destinationOrgId: decoded("\"a\""),
-            projectIds: decoded("[\"a\"]")
-        )
+                destinationOrgId: decoded("\"a\""),
+                projectIds: decoded("[\"a\"]")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 406)
@@ -357,10 +357,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.updateAllowLocalhost(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            allowLocalhost: decoded("false")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                allowLocalhost: decoded("false")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -407,10 +407,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.updateConfig(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            name: decoded("\"Example Name\"")
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                name: decoded("\"Example Name\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -426,12 +426,16 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testUpdateAuthEmailAndPasswordConfigUpdateAuthEmailAndPasswordConfigReachesMockAndDecodesResponse() async throws {
+    func testUpdateAuthEmailAndPasswordConfigUpdateAuthEmailAndPasswordConfigReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
         _ = client
-        var options = try AuthMethods.UpdateAuthEmailAndPasswordConfigOptions(projectId: decoded("\"a\""), branchId: decoded("\"a\""))
+        var options = try AuthMethods.UpdateAuthEmailAndPasswordConfigOptions(
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\"")
+        )
         options.enabled = try decoded("false")
         options.emailVerificationMethod = try decoded("\"link\"")
         options.requireEmailVerification = try decoded("false")
@@ -452,12 +456,16 @@ extension SdkMethodTests {
         )
     }
 
-    func testUpdateAuthEmailAndPasswordConfigUpdateAuthEmailAndPasswordConfig418ReachesMockAndDecodesResponse() async throws {
+    func testUpdateAuthEmailAndPasswordConfigUpdateAuthEmailAndPasswordConfig418ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/418") else {
             return
         }
         _ = client
-        var options = try AuthMethods.UpdateAuthEmailAndPasswordConfigOptions(projectId: decoded("\"a\""), branchId: decoded("\"a\""))
+        var options = try AuthMethods.UpdateAuthEmailAndPasswordConfigOptions(
+            projectId: decoded("\"a\""),
+            branchId: decoded("\"a\"")
+        )
         options.enabled = try decoded("false")
         options.emailVerificationMethod = try decoded("\"link\"")
         options.requireEmailVerification = try decoded("false")
@@ -471,8 +479,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.updateEmailAndPasswordConfig(
-            options: options
-        )
+                options: options
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)
@@ -519,10 +527,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.auth.updateEmailProvider(
-            projectId: decoded("\"a\""),
-            branchId: decoded("\"a\""),
-            body: decoded(sdkMethodFixture344Value1)
-        )
+                projectId: decoded("\"a\""),
+                branchId: decoded("\"a\""),
+                body: decoded(sdkMethodFixture344Value1)
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 418)

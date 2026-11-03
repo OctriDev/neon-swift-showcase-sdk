@@ -3,12 +3,15 @@
 
 import Foundation
 
-// ProjectProject domain models
+/// ProjectProject domain models
 /// Organization-level role used by project member role management.
 public struct ProjectMemberOrgRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let admin = ProjectMemberOrgRole(rawValue: "admin")
     public static let member = ProjectMemberOrgRole(rawValue: "member")
     public static let editor = ProjectMemberOrgRole(rawValue: "editor")
@@ -17,7 +20,7 @@ public struct ProjectMemberOrgRole: RawRepresentable, Hashable, Codable, Sendabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -30,14 +33,17 @@ public struct ProjectMemberOrgRole: RawRepresentable, Hashable, Codable, Sendabl
 public struct ProjectAuditLogLevel: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let base = ProjectAuditLogLevel(rawValue: "base")
     public static let extended = ProjectAuditLogLevel(rawValue: "extended")
     public static let full = ProjectAuditLogLevel(rawValue: "full")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -50,14 +56,17 @@ public struct ProjectAuditLogLevel: RawRepresentable, Hashable, Codable, Sendabl
 public struct ProjectRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let viewer = ProjectRole(rawValue: "viewer")
     public static let editor = ProjectRole(rawValue: "editor")
     public static let admin = ProjectRole(rawValue: "admin")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

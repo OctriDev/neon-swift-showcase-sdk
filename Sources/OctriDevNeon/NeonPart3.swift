@@ -3,116 +3,388 @@
 
 import Foundation
 
-extension AuthNamespace {
-/// Updates the email and password authentication configuration for the specified branch's Neon Auth integration. Only the fields provided in the request body are updated.
-    public func updateEmailAndPasswordConfig(options: AuthMethods.UpdateAuthEmailAndPasswordConfigOptions, requestOptions: RequestOptions? = nil) async throws -> NeonAuthEmailAndPasswordConfig {
-        return try await AuthMethods.updateAuthEmailAndPasswordConfig(config: config, options: options, requestOptions: requestOptions)
+public extension AuthNamespace {
+    /// Updates the email and password authentication configuration for the specified branch's Neon Auth integration.
+    /// Only the fields provided in the request body are updated.
+    func updateEmailAndPasswordConfig(
+        options: AuthMethods.UpdateAuthEmailAndPasswordConfigOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthEmailAndPasswordConfig {
+        try await AuthMethods.updateAuthEmailAndPasswordConfig(
+            config: config,
+            options: options,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves the email provider configuration for the specified branch's Neon Auth integration, including the provider type and server settings.
-    public func getEmailProvider(projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthEmailServerConfigResponse {
-        return try await AuthMethods.getAuthEmailProvider(config: config, projectId: projectId, branchId: branchId, requestOptions: requestOptions)
+    /// Retrieves the email provider configuration for the specified branch's Neon Auth integration, including the
+    /// provider type and server settings.
+    func getEmailProvider(
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthEmailServerConfigResponse {
+        try await AuthMethods.getAuthEmailProvider(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Updates the email provider configuration for a branch's Neon Auth integration. Use the `standard` fields to configure SMTP settings and the sender identity; Better Auth integrations merge omitted fields, while Legacy Stack Auth integrations require all six standard fields on each update. Returns the updated email provider configuration.
+    /// Updates the email provider configuration for a branch's Neon Auth integration. Use the `standard` fields to
+    /// configure SMTP settings and the sender identity; Better Auth integrations merge omitted fields, while Legacy
+    /// Stack Auth integrations require all six standard fields on each update. Returns the updated email provider
+    /// configuration.
     ///
-    /// Updates the email provider configuration for the specified branch's Neon Auth integration. The email provider handles transactional messages such as verification emails and password reset links. Partial `standard` updates — omitting fields to keep their stored values — are supported only for Better Auth integrations, which merge omitted fields server-side. Legacy Stack Auth integrations do not merge and require all six `standard` fields (`host`, `port`, `username`, `password`, `sender_email`, `sender_name`) on every update; a partial `standard` body is rejected with 400.
-    public func updateEmailProvider(projectId: String, branchId: String, body: NeonAuthEmailServerConfig, requestOptions: RequestOptions? = nil) async throws -> NeonAuthEmailServerConfigResponse {
-        return try await AuthMethods.updateAuthEmailProvider(config: config, projectId: projectId, branchId: branchId, body: body, requestOptions: requestOptions)
+    /// Updates the email provider configuration for the specified branch's Neon Auth integration. The email provider
+    /// handles transactional messages such as verification emails and password reset links. Partial `standard` updates
+    /// — omitting fields to keep their stored values — are supported only for Better Auth integrations, which merge
+    /// omitted fields server-side. Legacy Stack Auth integrations do not merge and require all six `standard` fields
+    /// (`host`, `port`, `username`, `password`, `sender_email`, `sender_name`) on every update; a partial `standard`
+    /// body is rejected with 400.
+    func updateEmailProvider(
+        projectId: String,
+        branchId: String,
+        body: NeonAuthEmailServerConfig,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthEmailServerConfigResponse {
+        try await AuthMethods.updateAuthEmailProvider(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            body: body,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves the localhost allow setting for the specified branch's Neon Auth integration. When enabled, authentication flows work from `localhost` without adding it to the redirect URI whitelist.
-    public func getAllowLocalhost(projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthAllowLocalhostResponse {
-        return try await AuthMethods.getAuthAllowLocalhost(config: config, projectId: projectId, branchId: branchId, requestOptions: requestOptions)
+    /// Retrieves the localhost allow setting for the specified branch's Neon Auth integration. When enabled,
+    /// authentication flows work from `localhost` without adding it to the redirect URI whitelist.
+    func getAllowLocalhost(
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthAllowLocalhostResponse {
+        try await AuthMethods.getAuthAllowLocalhost(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Updates the localhost allow setting for the specified branch's Neon Auth integration. When enabled, authentication flows work from `localhost` without adding it to the redirect URI whitelist.
-    public func updateAllowLocalhost(projectId: String, branchId: String, allowLocalhost: Bool, requestOptions: RequestOptions? = nil) async throws -> NeonAuthAllowLocalhostResponse {
-        return try await AuthMethods.updateAuthAllowLocalhost(config: config, projectId: projectId, branchId: branchId, allowLocalhost: allowLocalhost, requestOptions: requestOptions)
+    /// Updates the localhost allow setting for the specified branch's Neon Auth integration. When enabled,
+    /// authentication flows work from `localhost` without adding it to the redirect URI whitelist.
+    func updateAllowLocalhost(
+        projectId: String,
+        branchId: String,
+        allowLocalhost: Bool,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthAllowLocalhostResponse {
+        try await AuthMethods.updateAuthAllowLocalhost(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            allowLocalhost: allowLocalhost,
+            requestOptions: requestOptions
+        )
     }
 
-/// Returns all plugin configurations for Neon Auth in a single response. This endpoint aggregates organization, email provider, email and password, OAuth providers, and localhost settings.
-    public func getPluginConfigs(projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthPluginConfigs {
-        return try await AuthMethods.getAuthPluginConfigs(config: config, projectId: projectId, branchId: branchId, requestOptions: requestOptions)
+    /// Returns all plugin configurations for Neon Auth in a single response. This endpoint aggregates organization,
+    /// email provider, email and password, OAuth providers, and localhost settings.
+    func getPluginConfigs(
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthPluginConfigs {
+        try await AuthMethods.getAuthPluginConfigs(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Updates the organization plugin configuration for Neon Auth. The organization plugin enables multi-tenant organization support.
-    public func updateOrganizationPlugin(projectId: String, branchId: String, enabled: Bool? = nil, organizationLimit: Int? = nil, membershipLimit: Int? = nil, creatorRole: NeonAuthOrganizationConfigUpdateCreatorRole? = nil, sendInvitationEmail: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonAuthOrganizationConfig {
-        return try await AuthMethods.updateAuthOrganizationPlugin(config: config, projectId: projectId, branchId: branchId, enabled: enabled, organizationLimit: organizationLimit, membershipLimit: membershipLimit, creatorRole: creatorRole, sendInvitationEmail: sendInvitationEmail, requestOptions: requestOptions)
+    /// Updates the organization plugin configuration for Neon Auth. The organization plugin enables multi-tenant
+    /// organization support.
+    func updateOrganizationPlugin(
+        projectId: String,
+        branchId: String,
+        enabled: Bool? = nil,
+        organizationLimit: Int? = nil,
+        membershipLimit: Int? = nil,
+        creatorRole: NeonAuthOrganizationConfigUpdateCreatorRole? = nil,
+        sendInvitationEmail: Bool? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthOrganizationConfig {
+        try await AuthMethods.updateAuthOrganizationPlugin(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            enabled: enabled,
+            organizationLimit: organizationLimit,
+            membershipLimit: membershipLimit,
+            creatorRole: creatorRole,
+            sendInvitationEmail: sendInvitationEmail,
+            requestOptions: requestOptions
+        )
     }
 
-/// Updates the auth configuration for the branch. Currently supports updating the application name used in auth emails.
-    public func updateConfig(projectId: String, branchId: String, name: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthConfigResponse {
-        return try await AuthMethods.updateAuthConfig(config: config, projectId: projectId, branchId: branchId, name: name, requestOptions: requestOptions)
+    /// Updates the auth configuration for the branch. Currently supports updating the application name used in auth
+    /// emails.
+    func updateConfig(
+        projectId: String,
+        branchId: String,
+        name: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthConfigResponse {
+        try await AuthMethods.updateAuthConfig(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            name: name,
+            requestOptions: requestOptions
+        )
     }
 }
 
-extension AuthNamespace {
-/// Updates the magic link plugin configuration for Neon Auth. The magic link plugin enables passwordless authentication via email magic links.
-    public func updateMagicLinkPlugin(projectId: String, branchId: String, enabled: Bool? = nil, expiresIn: Int? = nil, disableSignUp: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonAuthMagicLinkConfig {
-        return try await AuthMethods.updateAuthMagicLinkPlugin(config: config, projectId: projectId, branchId: branchId, enabled: enabled, expiresIn: expiresIn, disableSignUp: disableSignUp, requestOptions: requestOptions)
+public extension AuthNamespace {
+    /// Updates the magic link plugin configuration for Neon Auth. The magic link plugin enables passwordless
+    /// authentication via email magic links.
+    func updateMagicLinkPlugin(
+        projectId: String,
+        branchId: String,
+        enabled: Bool? = nil,
+        expiresIn: Int? = nil,
+        disableSignUp: Bool? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthMagicLinkConfig {
+        try await AuthMethods.updateAuthMagicLinkPlugin(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            enabled: enabled,
+            expiresIn: expiresIn,
+            disableSignUp: disableSignUp,
+            requestOptions: requestOptions
+        )
     }
 
-/// Returns the phone number plugin configuration for Neon Auth. The phone number plugin enables phone-based OTP authentication.
-    public func getPhoneNumberPlugin(projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthPhoneNumberConfig {
-        return try await AuthMethods.getAuthPhoneNumberPlugin(config: config, projectId: projectId, branchId: branchId, requestOptions: requestOptions)
+    /// Returns the phone number plugin configuration for Neon Auth. The phone number plugin enables phone-based OTP
+    /// authentication.
+    func getPhoneNumberPlugin(
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthPhoneNumberConfig {
+        try await AuthMethods.getAuthPhoneNumberPlugin(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Updates the phone number plugin configuration for Neon Auth. Only the fields provided in the request body are updated; omitted fields retain their current values. The phone number plugin enables phone-based OTP authentication. OTP codes are delivered via the `send.otp` webhook event with `delivery_preference: "sms"`. A webhook must be configured with the `send.otp` event enabled for SMS delivery to work.
-    public func updatePhoneNumberPlugin(projectId: String, branchId: String, enabled: Bool? = nil, otpExpiresIn: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonAuthPhoneNumberConfig {
-        return try await AuthMethods.updateAuthPhoneNumberPlugin(config: config, projectId: projectId, branchId: branchId, enabled: enabled, otpExpiresIn: otpExpiresIn, requestOptions: requestOptions)
+    /// Updates the phone number plugin configuration for Neon Auth. Only the fields provided in the request body are
+    /// updated; omitted fields retain their current values. The phone number plugin enables phone-based OTP
+    /// authentication. OTP codes are delivered via the `send.otp` webhook event with `delivery_preference: "sms"`. A
+    /// webhook must be configured with the `send.otp` event enabled for SMS delivery to work.
+    func updatePhoneNumberPlugin(
+        projectId: String,
+        branchId: String,
+        enabled: Bool? = nil,
+        otpExpiresIn: Int? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthPhoneNumberConfig {
+        try await AuthMethods.updateAuthPhoneNumberPlugin(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            enabled: enabled,
+            otpExpiresIn: otpExpiresIn,
+            requestOptions: requestOptions
+        )
     }
 
-/// Returns the OAuth provider plugin configuration for Neon Auth. The OAuth provider plugin lets Neon Auth act as an OAuth 2.1 authorization server for your own clients, such as MCP clients.
-    public func getOAuthProviderPlugin(projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthOAuthProviderConfig {
-        return try await AuthMethods.getAuthOAuthProviderPlugin(config: config, projectId: projectId, branchId: branchId, requestOptions: requestOptions)
+    /// Returns the OAuth provider plugin configuration for Neon Auth. The OAuth provider plugin lets Neon Auth act as
+    /// an OAuth 2.1 authorization server for your own clients, such as MCP clients.
+    func getOAuthProviderPlugin(
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthOAuthProviderConfig {
+        try await AuthMethods.getAuthOAuthProviderPlugin(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Updates the OAuth provider plugin configuration for Neon Auth. Only the fields provided in the request body are updated; omitted fields retain their current values. A provided `resources` list replaces the stored list. A provided `mcp` object replaces the stored MCP configuration and must include `resource`. The plugin can only be enabled on the project's root branch.
-    public func updateOAuthProviderPlugin(projectId: String, branchId: String, enabled: Bool? = nil, loginPage: String? = nil, consentPage: String? = nil, mcp: NeonAuthOAuthProviderMcpUpdate? = nil, resources: [NeonAuthOAuthProviderResource]? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonAuthOAuthProviderConfig {
-        return try await AuthMethods.updateAuthOAuthProviderPlugin(config: config, projectId: projectId, branchId: branchId, enabled: enabled, loginPage: loginPage, consentPage: consentPage, mcp: mcp, resources: resources, requestOptions: requestOptions)
+    /// Updates the OAuth provider plugin configuration for Neon Auth. Only the fields provided in the request body are
+    /// updated; omitted fields retain their current values. A provided `resources` list replaces the stored list. A
+    /// provided `mcp` object replaces the stored MCP configuration and must include `resource`. The plugin can only be
+    /// enabled on the project's root branch.
+    func updateOAuthProviderPlugin(
+        projectId: String,
+        branchId: String,
+        enabled: Bool? = nil,
+        loginPage: String? = nil,
+        consentPage: String? = nil,
+        mcp: NeonAuthOAuthProviderMcpUpdate? = nil,
+        resources: [NeonAuthOAuthProviderResource]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthOAuthProviderConfig {
+        try await AuthMethods.updateAuthOAuthProviderPlugin(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            enabled: enabled,
+            loginPage: loginPage,
+            consentPage: consentPage,
+            mcp: mcp,
+            resources: resources,
+            requestOptions: requestOptions
+        )
     }
 
-/// Lists the OAuth clients registered for the branch's Neon Auth OAuth provider. Client secrets are never returned.
-    public func listOAuthClients(projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> ListNeonAuthOAuthClientsResponse {
-        return try await AuthMethods.listAuthOAuthClients(config: config, projectId: projectId, branchId: branchId, requestOptions: requestOptions)
+    /// Lists the OAuth clients registered for the branch's Neon Auth OAuth provider. Client secrets are never returned.
+    func listOAuthClients(
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListNeonAuthOAuthClientsResponse {
+        try await AuthMethods.listAuthOAuthClients(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Registers an OAuth client with the branch's Neon Auth OAuth provider. For `confidential` clients the response includes the `client_secret`, which is shown only once. Every entry in `resources` must be configured on the OAuth provider plugin.
-    public func createOAuthClient(projectId: String, branchId: String, name: String, redirectUris: [String], type: NeonAuthOAuthClientType, resources: [String], skipConsent: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonAuthOAuthClientCreated {
-        return try await AuthMethods.createAuthOAuthClient(config: config, projectId: projectId, branchId: branchId, name: name, redirectUris: redirectUris, type: type, resources: resources, skipConsent: skipConsent, requestOptions: requestOptions)
+    /// Registers an OAuth client with the branch's Neon Auth OAuth provider. For `confidential` clients the response
+    /// includes the `client_secret`, which is shown only once. Every entry in `resources` must be configured on the
+    /// OAuth provider plugin.
+    func createOAuthClient(
+        projectId: String,
+        branchId: String,
+        name: String,
+        redirectUris: [String],
+        type: NeonAuthOAuthClientType,
+        resources: [String],
+        skipConsent: Bool? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthOAuthClientCreated {
+        try await AuthMethods.createAuthOAuthClient(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            name: name,
+            redirectUris: redirectUris,
+            type: type,
+            resources: resources,
+            skipConsent: skipConsent,
+            requestOptions: requestOptions
+        )
     }
 
-/// Returns an OAuth client registered with the branch's Neon Auth OAuth provider. The client secret is never returned.
-    public func getOAuthClient(projectId: String, branchId: String, clientId: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthOAuthClient {
-        return try await AuthMethods.getAuthOAuthClient(config: config, projectId: projectId, branchId: branchId, clientId: clientId, requestOptions: requestOptions)
+    /// Returns an OAuth client registered with the branch's Neon Auth OAuth provider. The client secret is never
+    /// returned.
+    func getOAuthClient(
+        projectId: String,
+        branchId: String,
+        clientId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthOAuthClient {
+        try await AuthMethods.getAuthOAuthClient(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            clientId: clientId,
+            requestOptions: requestOptions
+        )
     }
 }
 
-extension AuthNamespace {
-/// Updates an OAuth client. Only the fields provided in the request body are updated. A provided `resources` list replaces the client's stored list. The client `type` cannot be changed.
-    public func updateOAuthClient(options: AuthMethods.UpdateAuthOAuthClientOptions, requestOptions: RequestOptions? = nil) async throws -> NeonAuthOAuthClient {
-        return try await AuthMethods.updateAuthOAuthClient(config: config, options: options, requestOptions: requestOptions)
+public extension AuthNamespace {
+    /// Updates an OAuth client. Only the fields provided in the request body are updated. A provided `resources` list
+    /// replaces the client's stored list. The client `type` cannot be changed.
+    func updateOAuthClient(
+        options: AuthMethods.UpdateAuthOAuthClientOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthOAuthClient {
+        try await AuthMethods.updateAuthOAuthClient(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Deletes an OAuth client. Tokens already issued to the client are not revoked.
-    public func deleteOAuthClient(projectId: String, branchId: String, clientId: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
-        return try await AuthMethods.deleteAuthOAuthClient(config: config, projectId: projectId, branchId: branchId, clientId: clientId, requestOptions: requestOptions)
+    /// Deletes an OAuth client. Tokens already issued to the client are not revoked.
+    func deleteOAuthClient(
+        projectId: String,
+        branchId: String,
+        clientId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SdkEmptyResponse {
+        try await AuthMethods.deleteAuthOAuthClient(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            clientId: clientId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Generates a new secret for a confidential OAuth client and invalidates the previous one. The new secret is shown only once.
-    public func rotateOAuthClientSecret(projectId: String, branchId: String, clientId: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthOAuthClientSecret {
-        return try await AuthMethods.rotateAuthOAuthClientSecret(config: config, projectId: projectId, branchId: branchId, clientId: clientId, requestOptions: requestOptions)
+    /// Generates a new secret for a confidential OAuth client and invalidates the previous one. The new secret is shown
+    /// only once.
+    func rotateOAuthClientSecret(
+        projectId: String,
+        branchId: String,
+        clientId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthOAuthClientSecret {
+        try await AuthMethods.rotateAuthOAuthClientSecret(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            clientId: clientId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Returns the webhook configuration for the specified branch's Neon Auth integration, including the endpoint URL and the events that trigger it.
-    public func getWebhookConfig(projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> NeonAuthWebhookConfig {
-        return try await AuthMethods.getAuthWebhookConfig(config: config, projectId: projectId, branchId: branchId, requestOptions: requestOptions)
+    /// Returns the webhook configuration for the specified branch's Neon Auth integration, including the endpoint URL
+    /// and the events that trigger it.
+    func getWebhookConfig(
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthWebhookConfig {
+        try await AuthMethods.getAuthWebhookConfig(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Updates the webhook configuration for the specified branch's Neon Auth integration. Webhooks notify an external endpoint when auth events occur, such as user creation or sign-in.
-    public func updateWebhookConfig(projectId: String, branchId: String, enabled: Bool, webhookUrl: String? = nil, enabledEvents: [NeonAuthWebhookConfigEnabledEventsItem]? = nil, timeoutSeconds: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> NeonAuthWebhookConfig {
-        return try await AuthMethods.updateAuthWebhookConfig(config: config, projectId: projectId, branchId: branchId, enabled: enabled, webhookUrl: webhookUrl, enabledEvents: enabledEvents, timeoutSeconds: timeoutSeconds, requestOptions: requestOptions)
+    /// Updates the webhook configuration for the specified branch's Neon Auth integration. Webhooks notify an external
+    /// endpoint when auth events occur, such as user creation or sign-in.
+    func updateWebhookConfig(
+        projectId: String,
+        branchId: String,
+        enabled: Bool,
+        webhookUrl: String? = nil,
+        enabledEvents: [NeonAuthWebhookConfigEnabledEventsItem]? = nil,
+        timeoutSeconds: Int? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> NeonAuthWebhookConfig {
+        try await AuthMethods.updateAuthWebhookConfig(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            enabled: enabled,
+            webhookUrl: webhookUrl,
+            enabledEvents: enabledEvents,
+            timeoutSeconds: timeoutSeconds,
+            requestOptions: requestOptions
+        )
     }
 }
 
@@ -122,45 +394,160 @@ public class BranchNamespace {
         self.config = config
     }
 
-/// Creates a branch in the specified project. No request body is required, but you can specify one to create a compute endpoint or select a non-default parent branch. By default, the branch is created from the project's default branch with no compute endpoint, and the branch name is auto-generated. To access the branch, add a `read_write` endpoint. Each branch supports one read-write endpoint and multiple read-only endpoints. For related information, see [Manage branches](https://neon.com/docs/manage/branches/).
-    public func create(projectId: String, body: CreateBranchRequestBody? = nil, requestOptions: RequestOptions? = nil) async throws -> CreateBranchResponse {
-        return try await BranchMethods.createBranch(config: config, projectId: projectId, body: body, requestOptions: requestOptions)
+    /// Creates a branch in the specified project. No request body is required, but you can specify one to create a
+    /// compute endpoint or select a non-default parent branch. By default, the branch is created from the project's
+    /// default branch with no compute endpoint, and the branch name is auto-generated. To access the branch, add a
+    /// `read_write` endpoint. Each branch supports one read-write endpoint and multiple read-only endpoints. For
+    /// related information, see [Manage branches](https://neon.com/docs/manage/branches/).
+    public func create(
+        projectId: String,
+        body: CreateBranchRequestBody? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> CreateBranchResponse {
+        try await BranchMethods.createBranch(
+            config: config,
+            projectId: projectId,
+            body: body,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves a list of branches for the specified project. Each Neon project has a root branch named `main`. A `branch_id` value has a `br-` prefix. A project may contain child branches that were branched from `main` or from another branch. A parent branch is identified by the `parent_id` value, which is the `id` of the parent branch. For related information, see [Manage branches](https://neon.com/docs/manage/branches/).
-    public func list(projectId: String, search: String? = nil, sortBy: ListBranchParameter? = nil, cursor: String? = nil, sortOrder: ListOrganizationsMembersParameter? = nil, limit: Int? = nil, includeDeleted: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> ListBranchResponse {
-        return try await BranchMethods.listBranch(config: config, projectId: projectId, search: search, sortBy: sortBy, cursor: cursor, sortOrder: sortOrder, limit: limit, includeDeleted: includeDeleted, requestOptions: requestOptions)
+    /// Retrieves a list of branches for the specified project. Each Neon project has a root branch named `main`. A
+    /// `branch_id` value has a `br-` prefix. A project may contain child branches that were branched from `main` or
+    /// from another branch. A parent branch is identified by the `parent_id` value, which is the `id` of the parent
+    /// branch. For related information, see [Manage branches](https://neon.com/docs/manage/branches/).
+    public func list(
+        projectId: String,
+        search: String? = nil,
+        sortBy: ListBranchParameter? = nil,
+        cursor: String? = nil,
+        sortOrder: ListOrganizationsMembersParameter? = nil,
+        limit: Int? = nil,
+        includeDeleted: Bool? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListBranchResponse {
+        try await BranchMethods.listBranch(
+            config: config,
+            projectId: projectId,
+            search: search,
+            sortBy: sortBy,
+            cursor: cursor,
+            sortOrder: sortOrder,
+            limit: limit,
+            includeDeleted: includeDeleted,
+            requestOptions: requestOptions
+        )
     }
 
-/// Creates a branch with anonymized data using PostgreSQL Anonymizer for static masking. Supply `branch_create` to configure the branch and optionally provide `masking_rules` or set `start_anonymization` to true to apply masking rules and start anonymization during creation. This endpoint is in beta; the response includes the created branch, operations, and any endpoints specified in the request.
+    /// Creates a branch with anonymized data using PostgreSQL Anonymizer for static masking. Supply `branch_create` to
+    /// configure the branch and optionally provide `masking_rules` or set `start_anonymization` to true to apply
+    /// masking rules and start anonymization during creation. This endpoint is in beta; the response includes the
+    /// created branch, operations, and any endpoints specified in the request.
     ///
-    /// Creates a new branch with anonymized data using PostgreSQL Anonymizer for static masking. This allows developers to work with masked production data. Optionally, provide `masking_rules` to set initial masking rules for the branch and `start_anonymization` to automatically start anonymization after creation. This combines functionality of updating masking rules and starting anonymization into the branch creation request. **Note**: This endpoint is currently in Beta.
-    public func createAnonymized(projectId: String, body: BranchAnonymizedCreateRequest, requestOptions: RequestOptions? = nil) async throws -> CreateBranchResponse {
-        return try await BranchMethods.createBranchAnonymized(config: config, projectId: projectId, body: body, requestOptions: requestOptions)
+    /// Creates a new branch with anonymized data using PostgreSQL Anonymizer for static masking. This allows developers
+    /// to work with masked production data. Optionally, provide `masking_rules` to set initial masking rules for the
+    /// branch and `start_anonymization` to automatically start anonymization after creation. This combines
+    /// functionality of updating masking rules and starting anonymization into the branch creation request. **Note**:
+    /// This endpoint is currently in Beta.
+    public func createAnonymized(
+        projectId: String,
+        body: BranchAnonymizedCreateRequest,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> CreateBranchResponse {
+        try await BranchMethods.createBranchAnonymized(
+            config: config,
+            projectId: projectId,
+            body: body,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves the total number of branches in the specified project. Supports an optional `search` parameter to count branches matching a name filter.
-    public func count(projectId: String, search: String? = nil, requestOptions: RequestOptions? = nil) async throws -> BranchesCountResponse {
-        return try await BranchMethods.countBranch(config: config, projectId: projectId, search: search, requestOptions: requestOptions)
+    /// Retrieves the total number of branches in the specified project. Supports an optional `search` parameter to
+    /// count branches matching a name filter.
+    public func count(
+        projectId: String,
+        search: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> BranchesCountResponse {
+        try await BranchMethods.countBranch(
+            config: config,
+            projectId: projectId,
+            search: search,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves information about the specified branch. A `branch_id` value has a `br-` prefix. Each Neon project is initially created with a root and default branch named `main`. A project can contain one or more branches. A parent branch is identified by a `parent_id` value, which is the `id` of the parent branch. For related information, see [Manage branches](https://neon.com/docs/manage/branches/).
-    public func get(projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> GetBranchResponse {
-        return try await BranchMethods.getBranch(config: config, projectId: projectId, branchId: branchId, requestOptions: requestOptions)
+    /// Retrieves information about the specified branch. A `branch_id` value has a `br-` prefix. Each Neon project is
+    /// initially created with a root and default branch named `main`. A project can contain one or more branches. A
+    /// parent branch is identified by a `parent_id` value, which is the `id` of the parent branch. For related
+    /// information, see [Manage branches](https://neon.com/docs/manage/branches/).
+    public func get(
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> GetBranchResponse {
+        try await BranchMethods.getBranch(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Deletes the specified branch from a project and places all compute endpoints into an idle state, breaking existing client connections. The deletion completes after all operations finish. You cannot delete a project's root or default branch, or a branch that has a child branch. A project must have at least one branch. For related information, see [Manage branches](https://neon.com/docs/manage/branches/).
-    public func delete(projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> BranchOperations {
-        return try await BranchMethods.deleteBranch(config: config, projectId: projectId, branchId: branchId, requestOptions: requestOptions)
+    /// Deletes the specified branch from a project and places all compute endpoints into an idle state, breaking
+    /// existing client connections. The deletion completes after all operations finish. You cannot delete a project's
+    /// root or default branch, or a branch that has a child branch. A project must have at least one branch. For
+    /// related information, see [Manage branches](https://neon.com/docs/manage/branches/).
+    public func delete(
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> BranchOperations {
+        try await BranchMethods.deleteBranch(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Updates the specified branch. For more information, see [Manage branches](https://neon.com/docs/manage/branches/).
-    public func update(projectId: String, branchId: String, branch: BranchUpdateRequestBranch, requestOptions: RequestOptions? = nil) async throws -> BranchOperations {
-        return try await BranchMethods.updateBranch(config: config, projectId: projectId, branchId: branchId, branch: branch, requestOptions: requestOptions)
+    /// Updates the specified branch. For more information, see [Manage
+    /// branches](https://neon.com/docs/manage/branches/).
+    public func update(
+        projectId: String,
+        branchId: String,
+        branch: BranchUpdateRequestBranch,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> BranchOperations {
+        try await BranchMethods.updateBranch(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            branch: branch,
+            requestOptions: requestOptions
+        )
     }
 
-/// Restores a branch to an earlier state in its own or another branch's history by specifying an LSN or timestamp. Creates a new branch from the historical state.
-    public func restore(projectId: String, branchId: String, sourceBranchId: String, sourceLsn: String? = nil, sourceTimestamp: Date? = nil, preserveUnderName: String? = nil, requestOptions: RequestOptions? = nil) async throws -> BranchOperations {
-        return try await BranchMethods.restoreBranch(config: config, projectId: projectId, branchId: branchId, sourceBranchId: sourceBranchId, sourceLsn: sourceLsn, sourceTimestamp: sourceTimestamp, preserveUnderName: preserveUnderName, requestOptions: requestOptions)
+    /// Restores a branch to an earlier state in its own or another branch's history by specifying an LSN or timestamp.
+    /// Creates a new branch from the historical state.
+    public func restore(
+        projectId: String,
+        branchId: String,
+        sourceBranchId: String,
+        sourceLsn: String? = nil,
+        sourceTimestamp: Date? = nil,
+        preserveUnderName: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> BranchOperations {
+        try await BranchMethods.restoreBranch(
+            config: config,
+            projectId: projectId,
+            branchId: branchId,
+            sourceBranchId: sourceBranchId,
+            sourceLsn: sourceLsn,
+            sourceTimestamp: sourceTimestamp,
+            preserveUnderName: preserveUnderName,
+            requestOptions: requestOptions
+        )
     }
 }

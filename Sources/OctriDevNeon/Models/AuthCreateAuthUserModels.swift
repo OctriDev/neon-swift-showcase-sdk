@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Auth domain models
+/// Auth domain models
 /// Typed representation of the `CreateBranchNeonAuthNewUserRequest` API schema.
 public struct CreateBranchNeonAuthNewUserRequest: Codable {
     /// Email address of the new Neon Auth user to create.
@@ -16,30 +16,36 @@ public struct CreateBranchNeonAuthNewUserRequest: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CreateBranchNeonAuthNewUserRequest {
-    public init(from decoder: Decoder) throws {
+public extension CreateBranchNeonAuthNewUserRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.email) else {
-            throw SdkValidationError(field: "email", code: "required", message: "Validation failed for 'email': value is required")
+            throw SdkValidationError(
+                field: "email",
+                code: "required",
+                message: "Validation failed for 'email': value is required"
+            )
         }
-        self.email = try container.sdkDecodeRequired(.email)
-        self.name = try container.sdkDecodeIfPresent(.name)
-            try validateLength("email", self.email, min: 1, max: 256)
-            try sdkValidateEmail("email", self.email)
-        if let value = self.name {
+        email = try container.sdkDecodeRequired(.email)
+        name = try container.sdkDecodeIfPresent(.name)
+        try validateLength("email", email, min: 1, max: 256)
+        try sdkValidateEmail("email", email)
+        if let value = name {
             try validateLength("name", value, min: 1, max: 255)
         }
     }
 }
 
-extension CreateBranchNeonAuthNewUserRequest {
-    public init(email: String, name: String? = nil) throws {
+public extension CreateBranchNeonAuthNewUserRequest {
+    init(email: String, name: String? = nil) throws {
         (self.email, self.name) = (email, name)
-            try validateLength("email", self.email, min: 1, max: 256)
-            try sdkValidateEmail("email", self.email)
+        try validateLength("email", self.email, min: 1, max: 256)
+        try sdkValidateEmail("email", self.email)
         if let value = self.name {
             try validateLength("name", value, min: 1, max: 255)
         }

@@ -3,12 +3,15 @@
 
 import Foundation
 
-// Project domain models
+/// Project domain models
 /// Type of application integration
 public struct ApplicationType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let vercel = ApplicationType(rawValue: "vercel")
     public static let github = ApplicationType(rawValue: "github")
     public static let datadog = ApplicationType(rawValue: "datadog")
@@ -16,7 +19,7 @@ public struct ApplicationType: RawRepresentable, Hashable, Codable, Sendable, Sd
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

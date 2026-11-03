@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ProjectProject domain models
+/// ProjectProject domain models
 /// Required object value serialized in the `project` wire field.
 public struct ProjectUpdateRequestProject: Codable {
     /// Project-level settings, for example `quota`, `allowed_ips`, `enable_logical_replication`, and
@@ -26,28 +26,41 @@ public struct ProjectUpdateRequestProject: Codable {
     }
 
     init() {
-        (self.settings, self.name, self.defaultEndpointSettings, self.historyRetentionSeconds) = (nil, nil, nil, nil)
+        (settings, name, defaultEndpointSettings, historyRetentionSeconds) = (nil, nil, nil, nil)
     }
 }
 
-extension ProjectUpdateRequestProject {
-    public init(from decoder: Decoder) throws {
+public extension ProjectUpdateRequestProject {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.settings = try container.sdkDecodeIfPresent(.settings)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.defaultEndpointSettings = try container.sdkDecodeIfPresent(.defaultEndpointSettings)
-        self.historyRetentionSeconds = try container.sdkDecodeIfPresent(.historyRetentionSeconds)
-        if let value = self.name {
+        settings = try container.sdkDecodeIfPresent(.settings)
+        name = try container.sdkDecodeIfPresent(.name)
+        defaultEndpointSettings = try container.sdkDecodeIfPresent(.defaultEndpointSettings)
+        historyRetentionSeconds = try container.sdkDecodeIfPresent(.historyRetentionSeconds)
+        if let value = name {
             try validateLength("name", value, min: 1, max: 256)
         }
-        if let value = self.historyRetentionSeconds {
-            try validateRange("history_retention_seconds", Double(value), min: 0, max: 2592000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = historyRetentionSeconds {
+            try validateRange(
+                "history_retention_seconds",
+                Double(value),
+                min: 0,
+                max: 2_592_000,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension ProjectUpdateRequestProject {
-    public init(settings: ProjectSettingsData? = nil, name: String? = nil, defaultEndpointSettings: DefaultEndpointSettings? = nil, historyRetentionSeconds: Int? = nil) throws {
+public extension ProjectUpdateRequestProject {
+    init(
+        settings: ProjectSettingsData? = nil,
+        name: String? = nil,
+        defaultEndpointSettings: DefaultEndpointSettings? = nil,
+        historyRetentionSeconds: Int? = nil
+    ) throws {
         self.init()
         (self.settings, self.name) = (settings, name)
         self.defaultEndpointSettings = defaultEndpointSettings
@@ -56,7 +69,15 @@ extension ProjectUpdateRequestProject {
             try validateLength("name", value, min: 1, max: 256)
         }
         if let value = self.historyRetentionSeconds {
-            try validateRange("history_retention_seconds", Double(value), min: 0, max: 2592000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "history_retention_seconds",
+                Double(value),
+                min: 0,
+                max: 2_592_000,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -70,21 +91,27 @@ public struct ProjectUpdateRequest: Codable {
         case project
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectUpdateRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.project) else {
-            throw SdkValidationError(field: "project", code: "required", message: "Validation failed for 'project': value is required")
-        }
-        self.project = try container.sdkDecodeRequired(.project)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectUpdateRequest {
-    public init(project: ProjectUpdateRequestProject) {
+public extension ProjectUpdateRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.project) else {
+            throw SdkValidationError(
+                field: "project",
+                code: "required",
+                message: "Validation failed for 'project': value is required"
+            )
+        }
+        project = try container.sdkDecodeRequired(.project)
+    }
+}
+
+public extension ProjectUpdateRequest {
+    init(project: ProjectUpdateRequestProject) {
         self.project = project
     }
 }

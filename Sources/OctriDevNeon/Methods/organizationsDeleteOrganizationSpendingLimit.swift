@@ -6,14 +6,27 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension OrganizationsMethods {
-    /// Removes the configured monthly spending limit for the specified organization. Idempotent — removing an already-unset limit still succeeds. Available to organization admins on Launch and Scale plans only.
+public extension OrganizationsMethods {
+    /// Removes the configured monthly spending limit for the specified organization. Idempotent — removing an
+    /// already-unset limit still succeeds. Available to organization admins on Launch and Scale plans only.
     ///
     /// - Parameters:
     /// - orgId: The Neon organization ID
-    public static func deleteOrganizationSpendingLimit(config: ClientConfig, orgId: String, requestOptions: RequestOptions? = nil) async throws -> EmptyResponse {
+    static func deleteOrganizationSpendingLimit(
+        config: ClientConfig,
+        orgId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> EmptyResponse {
         try sdkValidatePattern("org_id", orgId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("DELETE", ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/billing/spending_limit"].joined(), config: config, decoder: .json, operationId: "deleteOrganizationSpendingLimit", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "DELETE",
+            ["/organizations/", sdkEncodePathSegment(sdkWireString(orgId)), "/billing/spending_limit"].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "deleteOrganizationSpendingLimit",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

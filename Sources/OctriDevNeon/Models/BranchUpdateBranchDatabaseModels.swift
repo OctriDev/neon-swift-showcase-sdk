@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Branch domain models
+/// Branch domain models
 /// Properties to update on the database.
 public struct DatabaseUpdateRequestDatabase: Codable {
     /// Name of the database to update.
@@ -17,20 +17,20 @@ public struct DatabaseUpdateRequestDatabase: Codable {
     }
 
     init() {
-        (self.name, self.ownerName) = (nil, nil)
+        (name, ownerName) = (nil, nil)
     }
 }
 
-extension DatabaseUpdateRequestDatabase {
-    public init(from decoder: Decoder) throws {
+public extension DatabaseUpdateRequestDatabase {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.ownerName = try container.sdkDecodeIfPresent(.ownerName)
+        name = try container.sdkDecodeIfPresent(.name)
+        ownerName = try container.sdkDecodeIfPresent(.ownerName)
     }
 }
 
-extension DatabaseUpdateRequestDatabase {
-    public init(name: String? = nil, ownerName: String? = nil) {
+public extension DatabaseUpdateRequestDatabase {
+    init(name: String? = nil, ownerName: String? = nil) {
         self.init()
         (self.name, self.ownerName) = (name, ownerName)
     }
@@ -45,21 +45,27 @@ public struct DatabaseUpdateRequest: Codable {
         case database
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DatabaseUpdateRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.database) else {
-            throw SdkValidationError(field: "database", code: "required", message: "Validation failed for 'database': value is required")
-        }
-        self.database = try container.sdkDecodeRequired(.database)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DatabaseUpdateRequest {
-    public init(database: DatabaseUpdateRequestDatabase) {
+public extension DatabaseUpdateRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.database) else {
+            throw SdkValidationError(
+                field: "database",
+                code: "required",
+                message: "Validation failed for 'database': value is required"
+            )
+        }
+        database = try container.sdkDecodeRequired(.database)
+    }
+}
+
+public extension DatabaseUpdateRequest {
+    init(database: DatabaseUpdateRequestDatabase) {
         self.database = database
     }
 }

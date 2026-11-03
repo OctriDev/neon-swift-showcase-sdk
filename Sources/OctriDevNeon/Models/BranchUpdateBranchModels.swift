@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Branch domain models
+/// Branch domain models
 /// Branch attributes to update. Supply only the fields you want to change, for example `name` or `protected`.
 public struct BranchUpdateRequestBranch: Codable {
     /// New display name for the branch.
@@ -27,27 +27,27 @@ public struct BranchUpdateRequestBranch: Codable {
     }
 
     init() {
-        (self.name, self.protected, self.expiresAt) = (nil, nil, nil)
+        (name, protected, expiresAt) = (nil, nil, nil)
     }
 }
 
-extension BranchUpdateRequestBranch {
-    public init(from decoder: Decoder) throws {
+public extension BranchUpdateRequestBranch {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.protected = try container.sdkDecodeIfPresent(.protected)
-        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
-        if let value = self.name {
+        name = try container.sdkDecodeIfPresent(.name)
+        protected = try container.sdkDecodeIfPresent(.protected)
+        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        if let value = name {
             try validateLength("name", value, min: 1, max: 256)
         }
-        if let value = self.expiresAt {
+        if let value = expiresAt {
             try sdkValidateDateTime("expires_at", sdkWireString(value))
         }
     }
 }
 
-extension BranchUpdateRequestBranch {
-    public init(name: String? = nil, protected: Bool? = nil, expiresAt: Date? = nil) throws {
+public extension BranchUpdateRequestBranch {
+    init(name: String? = nil, protected: Bool? = nil, expiresAt: Date? = nil) throws {
         self.init()
         (self.name, self.protected) = (name, protected)
         self.expiresAt = expiresAt
@@ -69,21 +69,27 @@ public struct BranchUpdateRequest: Codable {
         case branch
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BranchUpdateRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.branch) else {
-            throw SdkValidationError(field: "branch", code: "required", message: "Validation failed for 'branch': value is required")
-        }
-        self.branch = try container.sdkDecodeRequired(.branch)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BranchUpdateRequest {
-    public init(branch: BranchUpdateRequestBranch) {
+public extension BranchUpdateRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.branch) else {
+            throw SdkValidationError(
+                field: "branch",
+                code: "required",
+                message: "Validation failed for 'branch': value is required"
+            )
+        }
+        branch = try container.sdkDecodeRequired(.branch)
+    }
+}
+
+public extension BranchUpdateRequest {
+    init(branch: BranchUpdateRequestBranch) {
         self.branch = branch
     }
 }

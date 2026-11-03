@@ -6,8 +6,10 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension SnapshotMethods {
-    /// Updates the name or expiration time of a project snapshot. Supply the `snapshot` object with the fields to change; omitting `expires_at` leaves the current expiration unchanged, while sending `null` clears it. A 200 response returns the updated snapshot.
+public extension SnapshotMethods {
+    /// Updates the name or expiration time of a project snapshot. Supply the `snapshot` object with the fields to
+    /// change; omitting `expires_at` leaves the current expiration unchanged, while sending `null` clears it. A 200
+    /// response returns the updated snapshot.
     ///
     /// Updates the specified snapshot.
     ///
@@ -16,13 +18,33 @@ extension SnapshotMethods {
     /// - snapshotId: The snapshot ID
     /// - snapshot: Fields to update on the snapshot. Updatable fields include
     ///   `name` and `expires_at`.
-    public static func updateSnapshot(config: ClientConfig, projectId: String, snapshotId: String, snapshot: SnapshotUpdateRequestSnapshot, requestOptions: RequestOptions? = nil) async throws -> UpdateSnapshotResponse {
+    static func updateSnapshot(
+        config: ClientConfig,
+        projectId: String,
+        snapshotId: String,
+        snapshot: SnapshotUpdateRequestSnapshot,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> UpdateSnapshotResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("snapshot_id", snapshotId, sdkPatternead2b03f7a95)
 
         let requestBody = UpdateSnapshotRequestBody(snapshot: snapshot)
 
-        return try (await sdkRequest("PATCH", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/snapshots/", sdkEncodePathSegment(sdkWireString(snapshotId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateSnapshot", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "PATCH",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/snapshots/",
+                sdkEncodePathSegment(sdkWireString(snapshotId)),
+            ].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "updateSnapshot",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

@@ -6,17 +6,38 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension RealtimeMethods {
-    /// Replaces the branch's Realtime shared secret. Rotation is asynchronous: once the Realtime state is no longer pending, the previous secret stops working and `GET /projects/{project_id}/branches/{branch_id}/realtime/secret` returns the new one.
+public extension RealtimeMethods {
+    /// Replaces the branch's Realtime shared secret. Rotation is asynchronous: once the Realtime state is no longer
+    /// pending, the previous secret stops working and `GET /projects/{project_id}/branches/{branch_id}/realtime/secret`
+    /// returns the new one.
     ///
     /// - Parameters:
     /// - projectId: The project ID
     /// - branchId: The branch ID
-    public static func rotateRealtimeSecret(config: ClientConfig, projectId: String, branchId: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+    static func rotateRealtimeSecret(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
 
-        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/realtime/rotate_secret"].joined(), config: config, decoder: .empty, operationId: "rotateRealtimeSecret", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "POST",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/realtime/rotate_secret",
+            ].joined(),
+            config: config,
+            decoder: .empty,
+            operationId: "rotateRealtimeSecret",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

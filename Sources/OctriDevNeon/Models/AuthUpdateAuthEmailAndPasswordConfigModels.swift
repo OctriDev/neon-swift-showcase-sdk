@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Auth domain models
+/// Auth domain models
 /// Typed representation of the `NeonAuthEmailAndPasswordConfigUpdate` API schema.
 public struct NeonAuthEmailAndPasswordConfigUpdate: Codable {
     /// Controls whether email and password authentication is enabled for this project. When omitted from an update
@@ -34,26 +34,40 @@ public struct NeonAuthEmailAndPasswordConfigUpdate: Codable {
     }
 
     init() {
-        (self.enabled, self.emailVerificationMethod, self.requireEmailVerification, self.autoSignInAfterVerification, self.sendVerificationEmailOnSignUp) = (nil, nil, nil, nil, nil)
-        (self.sendVerificationEmailOnSignIn, self.disableSignUp) = (nil, nil)
+        (
+            enabled,
+            emailVerificationMethod,
+            requireEmailVerification,
+            autoSignInAfterVerification,
+            sendVerificationEmailOnSignUp
+        ) = (nil, nil, nil, nil, nil)
+        (sendVerificationEmailOnSignIn, disableSignUp) = (nil, nil)
     }
 }
 
-extension NeonAuthEmailAndPasswordConfigUpdate {
-    public init(from decoder: Decoder) throws {
+public extension NeonAuthEmailAndPasswordConfigUpdate {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.enabled = try container.sdkDecodeIfPresent(.enabled)
-        self.emailVerificationMethod = try container.sdkDecodeIfPresent(.emailVerificationMethod)
-        self.requireEmailVerification = try container.sdkDecodeIfPresent(.requireEmailVerification)
-        self.autoSignInAfterVerification = try container.sdkDecodeIfPresent(.autoSignInAfterVerification)
-        self.sendVerificationEmailOnSignUp = try container.sdkDecodeIfPresent(.sendVerificationEmailOnSignUp)
-        self.sendVerificationEmailOnSignIn = try container.sdkDecodeIfPresent(.sendVerificationEmailOnSignIn)
-        self.disableSignUp = try container.sdkDecodeIfPresent(.disableSignUp)
+        enabled = try container.sdkDecodeIfPresent(.enabled)
+        emailVerificationMethod = try container.sdkDecodeIfPresent(.emailVerificationMethod)
+        requireEmailVerification = try container.sdkDecodeIfPresent(.requireEmailVerification)
+        autoSignInAfterVerification = try container.sdkDecodeIfPresent(.autoSignInAfterVerification)
+        sendVerificationEmailOnSignUp = try container.sdkDecodeIfPresent(.sendVerificationEmailOnSignUp)
+        sendVerificationEmailOnSignIn = try container.sdkDecodeIfPresent(.sendVerificationEmailOnSignIn)
+        disableSignUp = try container.sdkDecodeIfPresent(.disableSignUp)
     }
 }
 
-extension NeonAuthEmailAndPasswordConfigUpdate {
-    public init(enabled: Bool? = nil, emailVerificationMethod: NeonAuthEmailVerificationMethod? = nil, requireEmailVerification: Bool? = nil, autoSignInAfterVerification: Bool? = nil, sendVerificationEmailOnSignUp: Bool? = nil, sendVerificationEmailOnSignIn: Bool? = nil, disableSignUp: Bool? = nil) {
+public extension NeonAuthEmailAndPasswordConfigUpdate {
+    init(
+        enabled: Bool? = nil,
+        emailVerificationMethod: NeonAuthEmailVerificationMethod? = nil,
+        requireEmailVerification: Bool? = nil,
+        autoSignInAfterVerification: Bool? = nil,
+        sendVerificationEmailOnSignUp: Bool? = nil,
+        sendVerificationEmailOnSignIn: Bool? = nil,
+        disableSignUp: Bool? = nil
+    ) {
         self.init()
         (self.enabled, self.emailVerificationMethod) = (enabled, emailVerificationMethod)
         self.requireEmailVerification = requireEmailVerification

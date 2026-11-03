@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Auth domain models
+/// Auth domain models
 /// Typed representation of the `SendNeonAuthTestEmailRequest` API schema.
 public struct SendNeonAuthTestEmailRequest: Codable {
     /// Hostname of the email server.
@@ -31,52 +31,90 @@ public struct SendNeonAuthTestEmailRequest: Codable {
         case recipientEmail = "recipient_email"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SendNeonAuthTestEmailRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.host) else {
-            throw SdkValidationError(field: "host", code: "required", message: "Validation failed for 'host': value is required")
-        }
-        guard container.contains(.port) else {
-            throw SdkValidationError(field: "port", code: "required", message: "Validation failed for 'port': value is required")
-        }
-        guard container.contains(.username) else {
-            throw SdkValidationError(field: "username", code: "required", message: "Validation failed for 'username': value is required")
-        }
-        guard container.contains(.password) else {
-            throw SdkValidationError(field: "password", code: "required", message: "Validation failed for 'password': value is required")
-        }
-        guard container.contains(.senderEmail) else {
-            throw SdkValidationError(field: "sender_email", code: "required", message: "Validation failed for 'sender_email': value is required")
-        }
-        guard container.contains(.senderName) else {
-            throw SdkValidationError(field: "sender_name", code: "required", message: "Validation failed for 'sender_name': value is required")
-        }
-        guard container.contains(.recipientEmail) else {
-            throw SdkValidationError(field: "recipient_email", code: "required", message: "Validation failed for 'recipient_email': value is required")
-        }
-        self.host = try container.sdkDecodeRequired(.host)
-        self.port = try container.sdkDecodeRequired(.port)
-        self.username = try container.sdkDecodeRequired(.username)
-        self.password = try container.sdkDecodeRequired(.password)
-        self.senderEmail = try container.sdkDecodeRequired(.senderEmail)
-        self.senderName = try container.sdkDecodeRequired(.senderName)
-        self.recipientEmail = try container.sdkDecodeRequired(.recipientEmail)
-            try validateLength("recipient_email", self.recipientEmail, min: 1, max: 256)
-            try sdkValidateEmail("recipient_email", self.recipientEmail)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SendNeonAuthTestEmailRequest {
-    public init(host: String, port: Int, username: String, password: String, senderEmail: String, senderName: String, recipientEmail: String) throws {
+public extension SendNeonAuthTestEmailRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.host) else {
+            throw SdkValidationError(
+                field: "host",
+                code: "required",
+                message: "Validation failed for 'host': value is required"
+            )
+        }
+        guard container.contains(.port) else {
+            throw SdkValidationError(
+                field: "port",
+                code: "required",
+                message: "Validation failed for 'port': value is required"
+            )
+        }
+        guard container.contains(.username) else {
+            throw SdkValidationError(
+                field: "username",
+                code: "required",
+                message: "Validation failed for 'username': value is required"
+            )
+        }
+        guard container.contains(.password) else {
+            throw SdkValidationError(
+                field: "password",
+                code: "required",
+                message: "Validation failed for 'password': value is required"
+            )
+        }
+        guard container.contains(.senderEmail) else {
+            throw SdkValidationError(
+                field: "sender_email",
+                code: "required",
+                message: "Validation failed for 'sender_email': value is required"
+            )
+        }
+        guard container.contains(.senderName) else {
+            throw SdkValidationError(
+                field: "sender_name",
+                code: "required",
+                message: "Validation failed for 'sender_name': value is required"
+            )
+        }
+        guard container.contains(.recipientEmail) else {
+            throw SdkValidationError(
+                field: "recipient_email",
+                code: "required",
+                message: "Validation failed for 'recipient_email': value is required"
+            )
+        }
+        host = try container.sdkDecodeRequired(.host)
+        port = try container.sdkDecodeRequired(.port)
+        username = try container.sdkDecodeRequired(.username)
+        password = try container.sdkDecodeRequired(.password)
+        senderEmail = try container.sdkDecodeRequired(.senderEmail)
+        senderName = try container.sdkDecodeRequired(.senderName)
+        recipientEmail = try container.sdkDecodeRequired(.recipientEmail)
+        try validateLength("recipient_email", recipientEmail, min: 1, max: 256)
+        try sdkValidateEmail("recipient_email", recipientEmail)
+    }
+}
+
+public extension SendNeonAuthTestEmailRequest {
+    init(
+        host: String,
+        port: Int,
+        username: String,
+        password: String,
+        senderEmail: String,
+        senderName: String,
+        recipientEmail: String
+    ) throws {
         (self.host, self.port) = (host, port)
         (self.username, self.password) = (username, password)
         (self.senderEmail, self.senderName) = (senderEmail, senderName)
         self.recipientEmail = recipientEmail
-            try validateLength("recipient_email", self.recipientEmail, min: 1, max: 256)
-            try sdkValidateEmail("recipient_email", self.recipientEmail)
+        try validateLength("recipient_email", self.recipientEmail, min: 1, max: 256)
+        try sdkValidateEmail("recipient_email", self.recipientEmail)
     }
 }

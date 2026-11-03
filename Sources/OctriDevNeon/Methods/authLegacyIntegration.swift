@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AuthLegacyMethods {
+public extension AuthLegacyMethods {
     /// Deprecated. Use `/projects/{project_id}/branches/{branch_id}/auth` instead. Removal scheduled for March 1, 2026.
     ///
     /// - Parameters:
@@ -15,11 +15,31 @@ extension AuthLegacyMethods {
     /// - deleteData: If true, deletes the `neon_auth` schema from the database
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public static func deleteAuthLegacyIntegration(config: ClientConfig, projectId: String, authProvider: NeonAuthSupportedAuthProvider, deleteData: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+    static func deleteAuthLegacyIntegration(
+        config: ClientConfig,
+        projectId: String,
+        authProvider: NeonAuthSupportedAuthProvider,
+        deleteData: Bool? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         let requestBody = DeleteAuthLegacyIntegrationRequestBody(deleteData: deleteData)
 
-        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/auth/integration/", sdkEncodePathSegment(sdkWireString(authProvider))].joined(), config: config, body: requestBody, decoder: .empty, operationId: "deleteAuthLegacyIntegration", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "DELETE",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/auth/integration/",
+                sdkEncodePathSegment(sdkWireString(authProvider)),
+            ].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .empty,
+            operationId: "deleteAuthLegacyIntegration",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }

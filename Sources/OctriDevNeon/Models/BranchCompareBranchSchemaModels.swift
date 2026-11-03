@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Branch domain models
+/// Branch domain models
 /// Typed representation of the `BranchSchemaCompareResponse` API schema.
 public struct BranchSchemaCompareResponse: Codable, SdkResource {
     /// Unified diff of the SQL schema changes between the compared branches.
@@ -15,19 +15,19 @@ public struct BranchSchemaCompareResponse: Codable, SdkResource {
     }
 
     init() {
-        self.diff = nil
+        diff = nil
     }
 }
 
-extension BranchSchemaCompareResponse {
-    public init(from decoder: Decoder) throws {
+public extension BranchSchemaCompareResponse {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.diff = try container.sdkDecodeIfPresent(.diff)
+        diff = try container.sdkDecodeIfPresent(.diff)
     }
 }
 
-extension BranchSchemaCompareResponse {
-    public init(diff: String? = nil) {
+public extension BranchSchemaCompareResponse {
+    init(diff: String? = nil) {
         self.init()
         self.diff = diff
     }

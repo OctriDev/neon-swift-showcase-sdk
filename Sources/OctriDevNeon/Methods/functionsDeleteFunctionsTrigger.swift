@@ -6,14 +6,23 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension FunctionsMethods {
-    /// Deletes a branch-local trigger or writes a branch-local tombstone for an inherited trigger so it does not reappear. Deletion stops future scheduling or storage-event matching but does not cancel invocations already committed for delivery. The supported trigger types are `schedule` and `storage_object_created`. **Note**: This endpoint is currently in Beta.
+public extension FunctionsMethods {
+    /// Deletes a branch-local trigger or writes a branch-local tombstone for an inherited trigger so it does not
+    /// reappear. Deletion stops future scheduling or storage-event matching but does not cancel invocations already
+    /// committed for delivery. The supported trigger types are `schedule` and `storage_object_created`. **Note**: This
+    /// endpoint is currently in Beta.
     ///
     /// - Parameters:
     /// - projectId: The Neon project ID
     /// - branchId: The Neon branch ID
     /// - triggerId: The opaque, project-wide trigger ID
-    public static func deleteFunctionsTrigger(config: ClientConfig, projectId: String, branchId: String, triggerId: TriggerID, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+    static func deleteFunctionsTrigger(
+        config: ClientConfig,
+        projectId: String,
+        branchId: String,
+        triggerId: TriggerID,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SdkEmptyResponse {
         try sdkValidatePattern("project_id", projectId, sdkPatternead2b03f7a95)
 
         try sdkValidatePattern("branch_id", branchId, sdkPatternead2b03f7a95)
@@ -21,6 +30,21 @@ extension FunctionsMethods {
         try validateLength("trigger_id", triggerId, min: 1, max: 128)
         try sdkValidatePattern("trigger_id", triggerId, sdkPatternf7e1717946fc)
 
-        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/branches/", sdkEncodePathSegment(sdkWireString(branchId)), "/triggers/", sdkEncodePathSegment(sdkWireString(triggerId))].joined(), config: config, decoder: .empty, operationId: "deleteFunctionsTrigger", options: requestOptions, errors: ["default": GeneralError.self])).data
+        return try await (sdkRequest(
+            "DELETE",
+            [
+                "/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/branches/",
+                sdkEncodePathSegment(sdkWireString(branchId)),
+                "/triggers/",
+                sdkEncodePathSegment(sdkWireString(triggerId)),
+            ].joined(),
+            config: config,
+            decoder: .empty,
+            operationId: "deleteFunctionsTrigger",
+            options: requestOptions,
+            errors: ["default": GeneralError.self]
+        )).data
     }
 }
